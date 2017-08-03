@@ -1,0 +1,5 @@
+Django==1.11.3
+django-authtools
+django-csvimport
+django-material
+psycopg2

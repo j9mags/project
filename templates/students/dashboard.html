@@ -1,0 +1,41 @@
+{% extends 'layout/dashboard.html' %}
+
+{% load static %}
+
+{% block title %}| Home{% endblock %}
+
+{% block content %}
+        <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+          <h3>{{ sf_account.name }}</h3>
+        </div>
+        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+          <div class="mdl-tabs__tab-bar">
+              <a href="#contacts-panel" class="mdl-tabs__tab is-active">Contacts</a>
+              <a href="#contracts-panel" class="mdl-tabs__tab">Contracts</a>
+              <a href="#invoices-panel" class="mdl-tabs__tab">Invoices</a>
+          </div>
+
+          <div class="mdl-tabs__panel is-active" id="contacts-panel">
+            <div class="demo-cards mdl-cell mdl-cell--12-col mdl-grid">
+              {% for contact in sf_contacts %}
+                {% include "snippets/contact_card.html" %}
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="mdl-tabs__panel" id="contracts-panel">
+            <div class="mdl-cell mdl-cell--12-col mdl-grid">
+              {% for contract in sf_contracts %}
+                {{ contract.university_ref }}
+                {{ contract.payment_interval }}
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="mdl-tabs__panel" id="invoices-panel">
+            <div class="mdl-cell mdl-cell--12-col mdl-grid">
+              <span>Invoices pending...</span>
+            </div>
+          </div>
+        </div>
+{% endblock %}
