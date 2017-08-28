@@ -1,0 +1,64 @@
+{% load i18n %}
+
+<div class="mdl-card mdl-card-account mdl-shadow--6dp {{ class }}">
+  {% if form %}
+    <form method="post">
+      {% csrf_token %}
+  {% endif %}
+
+    <div class="mdl-card__title relative mdl-color--light-green-200">
+      <h2 class="mdl-card__title-text">{{ account.name }}</h2>
+    </div>
+
+    <div class="mdl-card__supporting-text mdl-grid">
+      <div class="mdl-cell--12-col">
+        <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label='University' value=account.hochschule_ref.name %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label='Matriculation number' value=account.immatrikulationsnummer %}
+      </div>
+      <div class="mdl-cell">
+        {% if form %}
+          {% include 'snippets/select.html' with field=form.status %}
+        {% else %}
+          {% include 'snippets/field-text.html' with label='Status' value=account.status %}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="mdl-card__supporting-text mdl-grid">
+      <div class="mdl-cell--12-col">
+        <h5 class="mdl-typography--headline">{% trans 'Personal data' %}</h5>
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Birth day') value=account.geburtsdatum %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Birth city') value=account.geburtsort %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Birth country') value=account.geburtsland %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Gender') value=account.geschlecht %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Nationality') value=account.staatsangehoerigkeit %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Language') value=account.kommunikationssprache %}
+      </div>
+    </div>
+
+  {% if form %}
+    <div class="mdl-card__actions mdl-card--border">
+      <div class="mdl-grid">
+        <input type="submit" class="mdl-cell mdl-cell--9-offset mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white" value="{% trans 'Confirm changes' %}">
+      </div>
+    </div>
+    </form>
+  {% endif %}
+</div>

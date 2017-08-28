@@ -1,5 +1,6 @@
-{% extends 'layout/base.html' %}
+{% extends 'layout/errors_base.html' %}
 
-{% block layout %}
-    <h1 class="mdl-typography--display-4-color-contrast">These are not the drones you are looking for</h1>
-{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans 'These are not the drones you are looking for...' %}{% endblock %}
+{% block subtitle %}{% endblock %}

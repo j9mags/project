@@ -1,6 +1,153 @@
 {% extends 'layout/dashboard.html' %}
 
 {% load static %}
+{% load i18n %}
+
+
+{% block extrahead %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
+{% endblock %}
+
+{% block title %}
+{% trans 'Displaying' %} {{ students.object_list | length }} / {{ students.paginator.count}}
+{% endblock %}
 
 {% block content %}
+  <div class="mdl-cell mdl-cell--8-col">
+    {% for f in filters %}
+      {% include 'snippets/chip.html' with field=f.0 value=f.1 %}
+    {% endfor %}
+  </div>
+
+  <div class="mdl-cell mdl-cell--4-col mdl-cell--4-offset-tablet mdl-typography--text-right">
+    <button id="bulk-form--btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white" disabled="disabled">{% trans 'Bulk update' %}</button>
+  </div>
+
+  <div class="mdl-cell mdl-cell--12-col">
+    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp csp--full-width">
+      <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Matriculation' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Student name' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'University email' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Mobile phone' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Gender' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Language' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Course' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Status' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+            <tr data-student="{{ student.pk }}">
+                <td class="mdl-data-table__cell">
+                  <a href="{% url 'integration:student_review' student.pk %}">{{ student.immatrikulationsnummer | default:"--" }}</a>
+                </td> 
+                <td class="mdl-data-table__cell--non-numeric">{{ student.name }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ student.unimailadresse }}</td>
+                <td class="mdl-data-table__cell">{{ student.get_master_contact.mobile_phone | default:"--" }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ student.geschlecht | default:"--" }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ student.kommunikationssprache | default:"--" }}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <a class="filter" href="#" data-filter="course" data-filter-value="{{ student.get_course.pk }}">{{ student.get_course.name }}</a>
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <a class="filter" href="#" data-filter="status" data-filter-value="{{ student.status }}">{{ student.status | default:"--" }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% include 'snippets/paginator_basic.html' with class="mdl-cell mdl-cell--12-col" page=students %}
+  </div>
+
+  <div id="dlg-add-students" class="mdl-dialog {% if display_st %}is-showing-dialog{% endif %}">
+      <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
+      <form enctype="multipart/form-data" method="post" 
+            onsubmit="document.getElementById('upload-progress').classList.add('is-active')"
+            onabort="document.getElementById('upload-progress').classList.remove('is-active')">
+
+          {% csrf_token %}
+      
+          <div class="mdl-dialog__content">
+              {% include 'snippets/select.html' with field=st_form.course %}
+              {% include 'snippets/input-file.html' with field=st_form.csv type='file'%}
+              <div id="upload-progress" class="mdl-spinner mdl-js-spinner"></div>
+          </div>
+          <div class="mdl-dialog__actions">
+              <input type="submit" 
+                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" 
+                     value="Upload">
+          </div>
+      </form>
+  </div>
+
+  <div id="dlg-add-courses" class="mdl-dialog {% if display_cs %}is-showing-dialog{% endif %}">
+    <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
+    <form enctype="multipart/form-data" method="post" 
+          onsubmit="document.getElementById('upload-progress').classList.add('is-active')"
+          onabort="document.getElementById('upload-progress').classList.remove('is-active')">
+
+      {% csrf_token %}
+  
+      <div class="mdl-dialog__content">
+        {% include 'snippets/input-file.html' with field=cs_form.csv type='file'%}
+        <div id="upload-progress" class="mdl-spinner mdl-js-spinner"></div>
+      </div>
+      <div class="mdl-dialog__actions">
+        <input type="submit" 
+               class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" 
+               value="Upload">
+      </div>
+    </form>
+  </div>
+
+  <div id="dlg-bulk-actions" class="mdl-dialog {% if display_bulk %}is-showing-dialog{% endif %}">
+      <h4 class="mdl-dialog__title">{% trans 'Changes will apply to selected rows' %}</h4>
+      <form action="{% url 'integration:students_bulk' %}" method="post">
+        {% csrf_token %}
+
+        <div class="mdl-dialog__content">
+          <input id="selected_students" type="hidden" name="students" value="" />
+          {% include 'snippets/select.html' with field=bulk_form.status %}
+          {% include 'snippets/select.html' with field=bulk_form.course %}
+        </div>
+        <div class="mdl-dialog__actions">
+            <input type="submit" 
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" 
+                   value="Confirm">
+        </div>
+      </form>
+  </div>
+
+  {% if form.non_field_errors %}
+  <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+      <div class="mdl-snackbar__text">{{ form.non_field_errors | first }}</div>
+      <button class="mdl-snackbar__action" type="button"></button>
+  </div>
+  {% endif %}
+
+{% endblock %}
+
+{% block fab_options %}
+    <button id="fab-add-students" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+      <i class="material-icons">person_outline</i>
+    </button>
+    <button id="fab-add-courses" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+      <i class="material-icons">school</i>
+    </button>
+    <div class="mdl-tooltip mdl-tooltip--left" data-mdl-for="fab-add-students">
+      {% trans 'Students' %}
+    </div>
+    <div class="mdl-tooltip mdl-tooltip--left" data-mdl-for="fab-add-courses">
+      {% trans 'Courses' %}
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  <script src="{% static '/js/mdl-selectfield.min.js' %}"></script>
+  <script src="{% static '/js/dashboard-staff.js' %}"></script>
 {% endblock %}

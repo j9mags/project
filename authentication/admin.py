@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext_lazy as _
+
 from django.contrib import admin
 
 from django import forms
@@ -8,7 +10,7 @@ from django.utils.crypto import get_random_string
 from authtools.admin import StrippedUserAdmin
 from authtools.forms import UserCreationForm
 
-from .models import PerishableToken
+from .models import PerishableToken, CsvUpload
 
 
 User = get_user_model()
@@ -39,7 +41,7 @@ class UserCreationForm(UserCreationForm):
         password1 = self.cleaned_data.get("password1")
         password2 = super(UserCreationForm, self).clean_password2()
         if bool(password1) ^ bool(password2):
-            raise forms.ValidationError("Fill out both fields")
+            raise forms.ValidationError(_("Fill out both fields"))
         return password2
 
 
@@ -52,9 +54,9 @@ class UserAdmin(StrippedUserAdmin):
     add_fieldsets = (
         (None, {
             'description': (
-                "Enter the new user's name and email address and click save."
-                " The user will be emailed a link allowing them to login to"
-                " the site and set their password (optionally)."
+                _("Enter the new user's name and email address and click save. "
+                  "The user will be emailed a link allowing them to login to "
+                  "the site and set their password (optionally).")
             ),
             'fields': ('email', 'password1', 'password2'),
         }),
@@ -81,3 +83,4 @@ class UserAdmin(StrippedUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(CsvUpload)

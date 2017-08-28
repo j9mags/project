@@ -1,12 +1,16 @@
 from django.db import models
 from django.utils import timezone
+from django.core import exceptions
+from django.contrib.auth import get_user_model
 
 from datetime import timedelta
 from uuid import uuid4
 
 from authtools.models import AbstractEmailUser
 
-from integration.models import Account, Contact
+from integration.models import RecordType, Account, Contact, Contract
+
+import csv
 
 
 class User(AbstractEmailUser):
@@ -18,14 +22,23 @@ class User(AbstractEmailUser):
         return Account.students.filter(unimailadresse=self.email).exists()
 
     def is_unistaff(self):
-        # Todo: check properly
-        return Contact.objects.filter(email=self.email)
+        return Contact.university_staff.filter(email=self.email).exists()
+
+    def get_srecord(self):
+        rc = None
+        if self.is_unistaff():
+            rc = Contact.university_staff.get(email=self.email)
+        elif self.is_student():
+            rc = Account.students.get(unimailadresse=self.email)
+        return rc
 
     def create_token(self, token=None, hours=48):
-        token = token or uuid4()
+        token = str(token or uuid4())
         exipiry_date = timezone.now() + timedelta(hours=hours)
 
-        self.perishabletoken_set.create(token=token, expires_at=exipiry_date)
+        pt = self.perishabletoken_set.create(token=token, expires_at=exipiry_date)
+
+        return pt
 
 
 class PerishableToken(models.Model):
@@ -36,3 +49,127 @@ class PerishableToken(models.Model):
 
     def is_expired(self):
         return self.expires_at < timezone.now()
+
+
+class CsvUpload(models.Model):
+    user = models.ForeignKey(User)
+    course = models.CharField(max_length=18, null=True, blank=True)
+    uuid = models.CharField(max_length=50)
+    content = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return "{course} by {user}".format(course=self.course, user=self.user)
+
+    def get_data(self, page):
+        min = (page - 1) * 20
+        max = page * 20
+        data = self.content.split('\n')
+        lines = [data.pop(0)] + data[min + 1: max + 1]
+        return csv.DictReader(lines)
+
+    def has_more_data(self, page):
+        data = self.content.split('\n')
+        max = page * 20
+
+        return len(data) > max + 2
+
+    def process(self):
+        if self.course:
+            self._create_students()
+
+        self.delete()
+
+    def _create_students(self):
+        if not self.user.is_unistaff:
+            raise exceptions.PermissionDenied()
+
+        if not self.content:
+            raise exceptions.ObjectDoesNotExist()
+
+        UserModel = get_user_model()
+
+        lines = self.content.split('\n')
+
+        accs = []
+        contacts = {}
+        contracts = {}
+        user_ids = []
+        acc_mns = []
+
+        acc_rt = RecordType.objects.get(sobject_type='Account', developer_name='Sofortzahler').id
+        ctc_rt = RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler').id
+        ctr_id = RecordType.objects.get(sobject_type='Contract', developer_name='Sofortzahler').id
+
+        university = self.get_srecord().account
+        course = university.degreecourse_set.get(pk=self.course)
+
+        reader = csv.DictReader(lines)
+        desc_skipped = False
+        for row in reader:
+            if not desc_skipped:
+                desc_skipped = True
+                continue
+
+            acc = Account()
+            acc.record_type_id = acc_rt
+            acc.hochschule_ref = university
+
+            acc.billing_street = row.get('Adresse')
+            acc.billing_postal_code = row.get('PLZ')
+            acc.billing_city = row.get('Stadt')
+
+            acc.name = "{Vorname} {Name}".format(**row)
+            acc.immatrikulationsnummer = row.get('Immatrikulationsnummer')
+            acc.geburtsdatum = row.get('Geburtsdatum')
+            acc.unimailadresse = row.get('Unimailadresse')
+
+            new_user = UserModel(email=acc.unimailadresse, is_active=False)
+            new_user.save()
+            user_ids.append(new_user.pk)
+            pt = new_user.create_token()
+            acc.cspassword_token = pt.token
+
+            accs.append(acc)
+            acc_mns.append(acc.immatrikulationsnummer)
+
+            ctc = Contact(
+                last_name=row.get('Name'),
+                first_name=row.get('Vorname'),
+                email=row.get('private Emailadresse'),
+                mobile_phone=row.get('Handynummer'),
+                mailing_street=acc.billing_street,
+                mailing_city=acc.billing_city,
+                mailing_postal_code=acc.billing_postal_code,
+                record_type_id=ctc_rt,
+            )
+            contacts.update({acc.immatrikulationsnummer: ctc})
+
+            ctr = Contract(
+                university_ref=acc.hochschule_ref,
+                studiengang_ref=course,
+                record_type_id=ctr_id,
+            )
+            contracts.update({acc.immatrikulationsnummer: ctr})
+
+        try:
+            Account.objects.bulk_create(accs)
+
+            accounts = Account.students.filter(immatrikulationsnummer__in=acc_mns)
+
+            # Maybe insert contacts outside the try clause?
+            ctc_to_insert = []
+            ctr_to_insert = []
+            for acc in accounts:
+                ctc = contacts[acc.immatrikulationsnummer]
+                ctc.account = acc
+                ctc_to_insert.append(ctc)
+
+                ctr = contracts[acc.immatrikulationsnummer]
+                ctr.account = acc
+                ctr_to_insert.append(ctr)
+
+            Contact.objects.bulk_create(ctc_to_insert)
+            Contract.objects.bulk_create(ctr_to_insert)
+        except Exception as e:
+            print(e)
+            UserModel.objects.filter(pk__in=user_ids).delete()

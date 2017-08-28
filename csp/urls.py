@@ -16,11 +16,10 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from material.frontend import urls as frontend_urls
 
 urlpatterns = [
-    url(r'^authentication/', include('authentication.urls')),
+    url(r'^authentication/', include('authentication.urls', namespace='authentication')),
     url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('authtools.urls')),
-    url(r'', include('integration.urls')),
+    url(r'', include('integration.urls', namespace='integration')),
 ]

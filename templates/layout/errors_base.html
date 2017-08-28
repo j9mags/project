@@ -1,0 +1,18 @@
+{% extends 'layout/base.html' %}
+
+{% load static %}
+
+{% block extrahead %}
+ <link rel="stylesheet" href="{% static '/css/errors.css' %}" />
+{% endblock %}
+
+{% block layout %}
+<div class="demo-layout mdl-layout mdl-js-layout">
+    <div class="mdl-layout__content">
+        <div class="error-section mdl-typography--text-center">
+          <div class="logo-font error-title">{% block title %}{% endblock %}</div>
+          <div class="logo-font error-subtitle">{% block subtitle %}{% endblock %}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

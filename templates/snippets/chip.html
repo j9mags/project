@@ -1,0 +1,5 @@
+<span class="mdl-chip mdl-chip--contact mdl-chip--deletable chancen-filter">
+    <span class="mdl-chip__contact mdl-color--accent mdl-color-text--white">{{ field.0 }}</span>
+    <span class="mdl-chip__text">{{ value | default:"--"}}</span>
+    <a href="#" class="mdl-chip__action" data-filter={{ field | lower }}><i class="material-icons">cancel</i></a>
+</span>

@@ -1,5 +1,6 @@
-{% extends 'layout/base.html' %}
+{% extends 'layout/errors_base.html' %}
 
-{% block layout %}
-    <h1 class="mdl-typography--display-4-color-contrast">You shall not pass!</h1>
-{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans 'You shall not pass!' %}{% endblock %}
+{% block subtitle %}{% endblock %}

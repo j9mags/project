@@ -1,0 +1,25 @@
+.error-section {
+  position: relative;
+  height: 800px;
+  width: auto;
+  background-color: #f3f3f3;
+  background: url('images/slide01.jpg') center 30% no-repeat;
+  background-size: cover;
+}
+
+.error-title {
+  font-size: 60px;
+  padding-top: 160px;
+}
+
+.error-subtitle {
+  font-size: 21px;
+  padding-top: 24px;
+}
+
+@media (max-width: 900px) {
+    .error-section {
+        height: 350px;
+    }
+}
+

@@ -1,0 +1,273 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-22 16:34+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: authentication/admin.py:44
+msgid "Fill out both fields"
+msgstr ""
+
+#: authentication/admin.py:57
+msgid ""
+"Enter the new user's name and email address and click save. The user will be "
+"emailed a link allowing them to login to the site and set their password "
+"(optionally)."
+msgstr ""
+
+#: authentication/forms.py:8
+msgid "Password"
+msgstr "Passwort"
+
+#: authentication/forms.py:9
+msgid "Confirm password"
+msgstr ""
+
+#: authentication/forms.py:18
+msgid "Passwords mismatch"
+msgstr ""
+
+#: authentication/forms.py:25
+msgid "Email address"
+msgstr ""
+
+#: csp/settings.py:141
+msgid "German"
+msgstr "Deutsch"
+
+#: csp/settings.py:142
+msgid "English"
+msgstr "Englisch"
+
+#: integration/forms.py:88 integration/forms.py:93
+msgid "Street address"
+msgstr "Adresse"
+
+#: integration/forms.py:89 integration/forms.py:94
+msgid "City"
+msgstr "Stadt"
+
+#: integration/forms.py:90 integration/forms.py:95
+msgid "Postal code"
+msgstr "PLZ"
+
+#: integration/forms.py:91 integration/forms.py:96
+msgid "Country"
+msgstr "Land"
+
+#: templates/400.html:5
+msgid "Something seems off"
+msgstr ""
+
+#: templates/400.html:6
+msgid "I have no idea what you meant by that"
+msgstr ""
+
+#: templates/403.html:5
+msgid "You shall not pass!"
+msgstr ""
+
+#: templates/404.html:5
+msgid "These are not the drones you are looking for..."
+msgstr ""
+
+#: templates/generic/failure.html:6
+msgid "Something went wrong with your request."
+msgstr ""
+
+#: templates/generic/success.html:6
+msgid "Your request has been successfully processed."
+msgstr ""
+
+#: templates/layout/base.html:6
+msgid "Chancen Services"
+msgstr ""
+
+#: templates/layout/dashboard.html:51 templates/students/onboarding.html:69
+msgid "Home"
+msgstr ""
+
+#: templates/layout/dashboard.html:52
+msgid "Logout"
+msgstr ""
+
+#: templates/layout/dashboard.html:54
+msgid "Help"
+msgstr ""
+
+#: templates/registration/login.html:28
+msgid "Sign in"
+msgstr ""
+
+#: templates/registration/login.html:44
+msgid "Forgot your Password?"
+msgstr ""
+
+#: templates/registration/login.html:63
+msgid "Lost Password"
+msgstr ""
+
+#: templates/registration/login.html:74
+msgid "Reset Password"
+msgstr ""
+
+#: templates/registration/password_set.html:24
+msgid "Congratulations!"
+msgstr ""
+
+#: templates/registration/password_set.html:28
+msgid "Your new password has been successfully set."
+msgstr ""
+
+#: templates/registration/password_set.html:34
+msgid "Proceed to login"
+msgstr ""
+
+#: templates/registration/set_password.html:29
+msgid "Choose a new password"
+msgstr ""
+
+#: templates/snippets/address.html:5
+#, python-format
+msgid "%(title)s address"
+msgstr ""
+
+#: templates/snippets/contact_card.html:14
+msgid "Edit"
+msgstr ""
+
+#: templates/snippets/student_account.html:10
+msgid "Matriculation data"
+msgstr ""
+
+#: templates/snippets/student_account.html:25
+#: templates/snippets/student_contact.html:5
+#: templates/students/onboarding.html:25
+msgid "Personal data"
+msgstr ""
+
+#: templates/snippets/student_account.html:28
+msgid "Birth day"
+msgstr "Geburtsdatum"
+
+#: templates/snippets/student_account.html:31
+msgid "Birth city"
+msgstr "Geburtsort"
+
+#: templates/snippets/student_account.html:34
+msgid "Birth country"
+msgstr "Geburtsland"
+
+#: templates/snippets/student_account.html:37 templates/staff/dashboard.html:14
+msgid "Gender"
+msgstr "Geschlecht"
+
+#: templates/snippets/student_account.html:40
+msgid "Nationality"
+msgstr "Staatsangehoerigkeit"
+
+#: templates/snippets/student_account.html:43 templates/staff/dashboard.html:15
+msgid "Language"
+msgstr "Kommunikationssprache"
+
+#: templates/snippets/student_contact.html:10
+msgid "Salutation"
+msgstr ""
+
+#: templates/snippets/student_contact.html:13
+msgid "First name"
+msgstr ""
+
+#: templates/snippets/student_contact.html:16
+msgid "Last name"
+msgstr ""
+
+#: templates/snippets/student_contact.html:22 templates/staff/dashboard.html:12
+msgid "Personal email"
+msgstr ""
+
+#: templates/snippets/student_contact.html:25
+msgid "Mobile phone"
+msgstr ""
+
+#: templates/snippets/student_contact.html:28
+msgid "Other phone"
+msgstr ""
+
+#: templates/staff/dashboard.html:10
+msgid "Student name"
+msgstr ""
+
+#: templates/staff/dashboard.html:11
+msgid "University email"
+msgstr ""
+
+#: templates/staff/dashboard.html:13
+msgid "Matriculation"
+msgstr ""
+
+#: templates/staff/dashboard.html:33
+msgid "Upload from your computer"
+msgstr ""
+
+#: templates/staff/dashboard.html:64
+msgid "Students"
+msgstr ""
+
+#: templates/students/dashboard.html:6
+msgid "My Chancen"
+msgstr ""
+
+#: templates/students/dashboard.html:11
+msgid "Account"
+msgstr ""
+
+#: templates/students/dashboard.html:12
+msgid "Contacts"
+msgstr ""
+
+#: templates/students/dashboard.html:13
+msgid "Contracts"
+msgstr ""
+
+#: templates/students/dashboard.html:14
+msgid "Invoices"
+msgstr ""
+
+#: templates/students/dashboard.html:25
+msgid "No contact information found"
+msgstr ""
+
+#: templates/students/dashboard.html:49
+msgid "No invoices found"
+msgstr ""
+
+#: templates/students/onboarding.html:20
+msgid "Complete your registration!"
+msgstr ""
+
+#: templates/students/onboarding.html:55
+msgid "Contact data"
+msgstr ""
+
+#: templates/students/onboarding.html:73
+msgid "Billing data"
+msgstr ""
+
+#: templates/students/onboarding.html:81
+msgid "Billing"
+msgstr ""

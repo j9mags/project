@@ -1,0 +1,20 @@
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--file mdl-textfield--floating-label {% if field.errors %}is-invalid{% endif %}">
+  <input class="mdl-textfield__input" 
+         placeholder="No file chosen" 
+         type="text" 
+         id="{{ field.id_for_label }}--text" 
+         readonly />
+  <label for="{{ field.id_for_label }}" class="mdl-button  mdl-button--mini-fab mdl-button--file mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+      <i class="material-icons">attach_file</i>
+      <input type="file" 
+             name="{{ field.html_name }}" 
+             id="{{ field.id_for_label }}" 
+             onchange="document.getElementById('{{ field.id_for_label }}--text').value=this.files[0].name;" />
+  </label>
+
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <span class="mdl-textfield__error">{{ error | escape }}</span>
+        {% endfor%}
+    {% endif %}
+</div>

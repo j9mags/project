@@ -1,5 +1,6 @@
-{% extends 'layout/base.html' %}
+{% extends 'layout/errors_base.html' %}
 
-{% block layout %}
-    <h1 class="mdl-typography--display-4-color-contrast">No idea what you meant by that</h1>
-{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans 'Something seems off' %}{% endblock %}
+{% block subtitle %}{% trans 'I have no idea what you meant by that' %}{% endblock %}

@@ -1,100 +1,85 @@
 {% extends 'layout/base.html' %}
 
 {% load static %}
+{% load i18n %}
 
 {% block extrahead %}
     <link rel="stylesheet" href="{% static "/css/login.css" %}"/>
 {% endblock %}
 
 {% block layout %}
-
-<div class="mdl-layout mdl-js-layout">
-    {% if form.errors %}
+<div class="chancen-layout mdl-layout mdl-js-layout">
+  {% if form.non_field_errors %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
-        <div class="mdl-snackbar__text">{{ form.non_field_errors | first }}</div>
-        <button class="mdl-snackbar__action" type="button"></button>
+      <div class="mdl-snackbar__text">{{ form.non_field_errors | first }}</div>
+      <button class="mdl-snackbar__action" type="button"></button>
     </div>
-    {% endif %}
-    <section class="container">
-        <div id="cube" class="show-front">
-            <figure class="front">
-                <form method="POST">
+  {% endif %}
+  <section class="container">
+    <div id="cube" class="show-front">
+      <figure class="front">
+        <form method="post">
 
-                    {% csrf_token %}
+          {% csrf_token %}
 
-                    <div class="mdl-card mdl-shadow--6dp">
-                        <div class="mdl-card__title mdl-color--primary mdl-color-text--white relative">
-                            <h2 class="mdl-card__title-text">Sign in</h2>
-                        </div>
+          <div class="mdl-card mdl-shadow--6dp">
+            <div class="mdl-card__title mdl-color--primary mdl-color-text--white relative">
+              <h2 class="mdl-card__title-text">{% trans 'Sign in' %}</h2>
+            </div>
 
-                        <div class="mdl-card__supporting-text mdl-card--expand">
-                            {% include 'snippets/input.html' with field=form.username type='email'%}
-                            {% include 'snippets/input.html' with field=form.password type='password'%}
-                            <!-- div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input class="mdl-textfield__input" type="email" id="id_username" name="username"/>
-                                <label class="mdl-textfield__label" for="id_username">Email</label>
-                            </div>
-                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input class="mdl-textfield__input" type="password" id="password" name="password"/>
-                                <label class="mdl-textfield__label" for="password">Password</label>
-                            </div -->
-                        </div>
+            <div class="mdl-card__supporting-text mdl-card--expand">
+              {% include 'snippets/input.html' with field=form.username type='email'%}
+              {% include 'snippets/input.html' with field=form.password type='password'%}
+            </div>
 
-                        <div class="mdl-card__actions mdl-card--border">
-                            <div class="mdl-grid">
-                                <input type="submit" class="mdl-cell mdl-cell--12-col mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white" value="Login">
+            <div class="mdl-card__actions mdl-card--border">
+              <div class="mdl-grid">
+                <input type="submit" class="mdl-cell mdl-cell--12-col mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white" value="Login">
+              </div>
 
-                            </div>
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--12-col">
+                  <a onClick='flip("show-left")' class="mdl-color-text--primary" style="float: right">{% trans 'Forgot your Password?' %}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </figure>
 
-                            <div class="mdl-grid">
-                                <div class="mdl-cell mdl-cell--12-col">
-                                    <!-- a onClick='flip("show-left")' class="mdl-color-text--primary">Sign up!</a -->
-                                    <a onClick='flip("show-left")' class="mdl-color-text--primary" style="float: right">Forgot your Password?</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </figure>
+      <figure class="left">
+        <form method="post" action="{% url 'authentication:password-change' %}">
 
-            <figure class="left">
-                <form method="post" action="">
-                    <div class="mdl-card mdl-shadow--6dp">
-                        <div class="mdl-card__title mdl-color--primary mdl-color-text--white relative">
-                            <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
-                               onClick='flip("show-front")'>
-                                <i class="material-icons">arrow_back</i>
-                            </a>
-                            <h2 class="mdl-card__title-text">Lost Password</h2>
-                        </div>
+          {% csrf_token %}
+      
+          <div class="mdl-card mdl-shadow--6dp">
+            <div class="mdl-card__title mdl-color--primary mdl-color-text--white relative">
+              <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+                 onClick='flip("show-front")'>
+                <i class="material-icons">arrow_back</i>
+              </a>
+              <h2 class="mdl-card__title-text">{% trans 'Lost Password' %}</h2>
+            </div>
 
+            <div class="mdl-card__supporting-text  mdl-card--expand">
+              {% include 'snippets/input.html' with field=forgot_form.email type='email'%}
+            </div>
 
-                        <div class="mdl-card__supporting-text  mdl-card--expand">
-                            {% include 'snippets/input.html' with field=form.email type='email'%}
-                            <!-- div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input class="mdl-textfield__input" type="email" id="email"/>
-                                <label class="mdl-textfield__label" for="email">E-Mail</label>
-                            </div -->
-                        </div>
-
-                        <div class="mdl-card__actions mdl-card--border">
-                            <div class="mdl-grid">
-                                <button class="mdl-cell mdl-cell--12-col mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
-                                    Reset Password
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </figure>
-        </div>
-    </section>
+            <div class="mdl-card__actions mdl-card--border">
+              <div class="mdl-grid">
+                <button class="mdl-cell mdl-cell--12-col mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                  {% trans 'Reset Password' %}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </figure>
+    </div>
+  </section>
 </div>
-
 {% endblock %}
 
 {% block extrajs %}
-
-    <script src="{% static '/js/login.js' %}"></script>
-
+  <script src="{% static '/js/login.js' %}"></script>
 {% endblock %}

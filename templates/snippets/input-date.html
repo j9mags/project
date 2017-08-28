@@ -1,0 +1,17 @@
+<div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label {% if field.errors %} is-dirty {% endif %}">
+    <input class="mdl-date-textfield__input" 
+           type="text" 
+           id="{{ field.id_for_label }}" 
+           name="{{ field.html_name }}" 
+           value="{{ field.value | default:"" | date:"Y-m-d" }}"/>
+    <label class="mdl-date-textfield__label" 
+           for="{{ field.id_for_label }}">
+        {{ field.label }}
+    </label>
+    
+    {% if field.errors %}
+      {% for error in field.errors %}
+        <span class="mdl-date-textfield__error">{{ error | escape }}</span>
+      {% endfor%}
+    {% endif %}
+</div>
