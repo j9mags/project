@@ -29,7 +29,11 @@ img {
   border-radius: 24px;
 }
 
-.chancen-layout .mdl-layout__header, 
+.chancen-layout {
+  background: url(/static/material/imgs/background.svg);
+}
+
+.chancen-layout .mdl-layout__header,
 .chancen-layout .mdl-layout__header .mdl-layout__drawer-button {
   color: white;
 }
@@ -72,7 +76,16 @@ img {
           justify-content: flex-end;
   padding: 16px;
   height: 151px;
+  background: url(/static/material/imgs/sidenav.svg);
+  color: white;
 }
+/* .chancen-drawer-logo {
+    width: 100%;
+}
+.chancen-drawer-logo img {
+    max-width: 100%;
+    max-height: 100%;
+} */
 .chancen-avatar-dropdown {
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -174,6 +187,17 @@ img {
           align-items: center;
 }
 
+.chancen-registration--bottom {
+  position: fixed;
+  width: calc(100% - 32px);
+  bottom: 0;
+  padding:16px;
+  text-align: center;
+}
+.chancen-registration--bottom img {
+  max-width: 100%;
+}
+
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
@@ -263,7 +287,8 @@ img {
   display: block;
 }
 
-#dlg-add-students .mdl-spinner {
+#dlg-add-students .mdl-spinner,
+#dlg-add-courses .mdl-spinner {
   display: block;
   margin: 0 auto;
 }
@@ -340,4 +365,11 @@ img {
 
 .mdl-radiofield.is-invalid .mdl-radiofield__error {
     visibility: visible;
+}
+
+.mdl-card__supporting-text.mdl-card--expand {
+    width: calc(100% - 32px);
+    overflow-x: auto;
+    padding: 16px 0;
+    margin: 0 16px;
 }

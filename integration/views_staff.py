@@ -9,8 +9,8 @@ from django.http import HttpResponseRedirect
 
 from django.shortcuts import render
 
-from .models import Account, Contact, DegreeCourse
-from .forms import UploadForm, StudentsUploadForm, StudentAccountForm, BulkActionsForm
+from .models import Account, Contact, DegreeCourse, Contract
+from .forms import *
 
 from django.core.paginator import Paginator, EmptyPage
 
@@ -56,10 +56,9 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         except EmptyPage:
             students = paginator.page(paginator.num_pages)
 
-        bulk_form = BulkActionsForm(contact.account, students)
+        bulk_form = BulkActionsForm(contact.account)
 
         context.update(contact=contact, students=students, filters=filters, bulk_form=bulk_form)
-
         return context
 
     def get(self, request, *args, **kwargs):
@@ -163,20 +162,76 @@ class StudentReview(LoginRequiredMixin, DetailView):
         context = super(StudentReview, self).get_context_data(**kwargs)
 
         account = context.get('account')
-        context.update(acc_form=StudentAccountForm({'status': account.status}))
+        contact = Contact.university_staff.get(email=self.request.user.email)
+        if contact.account.pk != account.hochschule_ref.pk:
+            raise ObjectDoesNotExist()
+
+        payload = self.request.POST if 'status' in self.request.POST else {'status': account.status}
+        context.update(acc_form=StudentAccountForm(payload))
+        contract = account.get_active_contract()
+        if contract:
+            context.update(contract=contract)
+            discount = contract.get_discount()
+            payload = self.request.POST if 'course' in self.request.POST else {'course': contract.studiengang_ref.pk}
+            context.update(ctr_form=StudentContractForm(contract.university_ref, payload))
+            if 'course' in self.request.POST:
+                context.update(dsc_form=DiscountForm(self.request.POST))
+            else:
+                context.update(dsc_form=DiscountForm(instance=discount))
 
         return context
+
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object, **kwargs)
+        if 'status' in request.POST:
+            ctr_form = context.get('acc_form')
+            if ctr_form.is_valid():
+                account = context.get('account')
+                account.status = ctr_form.cleaned_data.get('status')
+                account.save()
+        elif 'course' in request.POST:
+            ctr_form = context.get('ctr_form')
+            if ctr_form.is_valid():
+                contract = context.get('contract')
+                contract.studiengang_ref = DegreeCourse.objects.get(pk=ctr_form.cleaned_data.get('course'))
+                contract.save()
+            dsc_form = context.get('dsc_form')
+            if dsc_form.is_valid():
+                dsc_form.save()
+
+        return self.render_to_response(context)
+
+
+class ContractReview(LoginRequiredMixin, DetailView):
+    model = Contract
+    template_name = 'staff/contract_review.html'
 
 
 class BulkActions(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
-        print(request.META)
         contact = Contact.university_staff.get(
             email=request.user.email)
         form = BulkActionsForm(contact.account, request.POST)
 
         if form.is_valid():
-            print(form.cleaned_data)
+            student_pks = [pk for pk in form.cleaned_data.get('students').split(';') if pk]
+            students = Account.objects.filter(pk__in=student_pks)
+
+            new_status = form.cleaned_data.get('status')
+            if new_status != '--':
+                students.update(status=new_status)
+
+            course_pk = form.cleaned_data.get('course')
+            if course_pk != '--':
+                contracts_pk = [s.get_active_contract().pk for s in students if s.get_active_contract() is not None]
+                contracts = Contract.objects.filter(pk__in=contracts_pk)
+                course = contact.account.degreecourse_set.get(pk=course_pk)
+                contracts.update(studiengang_ref=course)
+                # for contract in contracts:
+                #     contract.studiengang_ref = course
+                #     contract.save()
 
         return HttpResponseRedirect('/')

@@ -61,7 +61,7 @@
               </div>
 
               <div class="mdl-cell mdl-cell--1-col">
-                <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" href={% if next %}"./?p={{ next }}{% else %}./confirm/{% endif %}">
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" href="{% if next %}./?p={{ next }}{% else %}./confirm/{% endif %}">
                   {% if next %}{% trans 'Next' %}{% else %}{% trans 'Confirm' %}{% endif %}
                 </a>
               </div>

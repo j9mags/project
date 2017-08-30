@@ -1,14 +1,8 @@
-{% extends 'layout/base.html' %}
+{% extends 'layout/registration.html' %}
 
-{% load static %}
 {% load i18n %}
 
-{% block extrahead %}
-    <link rel="stylesheet" href="{% static "/css/login.css" %}"/>
-{% endblock %}
-
-{% block layout %}
-<div class="chancen-layout mdl-layout mdl-js-layout">
+{% block registration %}
   {% if form.non_field_errors %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
       <div class="mdl-snackbar__text">{{ form.non_field_errors | first }}</div>
@@ -77,9 +71,4 @@
       </figure>
     </div>
   </section>
-</div>
-{% endblock %}
-
-{% block extrajs %}
-  <script src="{% static '/js/login.js' %}"></script>
 {% endblock %}

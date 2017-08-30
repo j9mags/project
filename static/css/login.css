@@ -2,10 +2,20 @@ body {
     background-color: #ddd;
 }
 
+.top {
+    position: absolute;
+    left: 50%;
+    top: 32px;
+    transform: translate(-50%, 0);
+    perspective: 1000px;
+    width: 330px;
+    height: 125px;
+}
+
 .container {
     position: absolute;
     left: 50%;
-    top: 40px;
+    top: 185px;
     transform: translate(-50%, 0);
     perspective: 1000px;
     width: 330px;

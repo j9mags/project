@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 
 from .models import Choices
+from .models import Rabatt
 
 
 SalutationChoices = [('', '')] + Choices.Salutation
@@ -10,6 +11,8 @@ GenderChoices = [('', '')] + Choices.Gender
 NationalityChoices = [('', '')] + Choices.Nationality
 LanguageChoices = [('', '')] + Choices.Language
 BillingChoices = [('', '')] + Choices.Payment
+
+KEEP_CURRENT = _('-- Keep current --')
 
 
 class UploadForm(forms.Form):
@@ -43,11 +46,10 @@ class UploadForm(forms.Form):
 
 
 class StudentsUploadForm(UploadForm):
-
     def __init__(self, university, *args, **kwargs):
         super(StudentsUploadForm, self).__init__(*args, **kwargs)
         self.fields['course'] = forms.ChoiceField(
-            choices=[(o.pk, o.name) for o in university.degreecourse_set.all()]
+            choices=[(o.pk, o.name) for o in university.get_active_courses()]
         )
 
 
@@ -56,7 +58,6 @@ class LanguageSelectForm(forms.Form):
 
 
 class StudentOnboardingForm(forms.Form):
-
     salutation = forms.ChoiceField(choices=SalutationChoices)
     first_name = forms.CharField(max_length=40)
     last_name = forms.CharField(max_length=80)
@@ -89,12 +90,28 @@ class StudentAccountForm(forms.Form):
     status = forms.ChoiceField(choices=Choices.AccountStatus)
 
 
+class StudentContractForm(forms.Form):
+    def __init__(self, university, *args, **kwargs):
+        super(StudentContractForm, self).__init__(*args, **kwargs)
+        self.fields['course'] = forms.ChoiceField(
+            choices=[(o.pk, o.name) for o in university.get_active_courses()],
+            required=False
+        )
+
+
+class DiscountForm(forms.ModelForm):
+    class Meta:
+        model = Rabatt
+        fields = ['contract', 'discount_type', 'discount_tuition_fee', 'discount_semester_fee']
+
+
 class BulkActionsForm(forms.Form):
-    status = forms.ChoiceField(choices=[('--', _('-- Keep --'))] + Choices.AccountStatus)
+    status = forms.ChoiceField(choices=[('--', KEEP_CURRENT)] + Choices.AccountStatus, required=False)
     students = forms.CharField()
 
-    def __init__(self, university, students, *args, **kwargs):
+    def __init__(self, university, *args, **kwargs):
         super(BulkActionsForm, self).__init__(*args, **kwargs)
         self.fields['course'] = forms.ChoiceField(
-            choices=[('--', _('-- Keep --'))] + [(o.pk, o.name) for o in university.degreecourse_set.all()]
+            choices=[('--', KEEP_CURRENT)] + [(o.pk, o.name) for o in university.get_active_courses()],
+            required=False
         )

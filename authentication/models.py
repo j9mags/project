@@ -8,7 +8,7 @@ from uuid import uuid4
 
 from authtools.models import AbstractEmailUser
 
-from integration.models import RecordType, Account, Contact, Contract
+from integration.models import RecordType, Account, Contact, Contract, DegreeCourse
 
 import csv
 
@@ -76,6 +76,8 @@ class CsvUpload(models.Model):
     def process(self):
         if self.course:
             self._create_students()
+        else:
+            self._create_courses()
 
         self.delete()
 
@@ -100,7 +102,7 @@ class CsvUpload(models.Model):
         ctc_rt = RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler').id
         ctr_id = RecordType.objects.get(sobject_type='Contract', developer_name='Sofortzahler').id
 
-        university = self.get_srecord().account
+        university = self.user.get_srecord().account
         course = university.degreecourse_set.get(pk=self.course)
 
         reader = csv.DictReader(lines)
@@ -173,3 +175,37 @@ class CsvUpload(models.Model):
         except Exception as e:
             print(e)
             UserModel.objects.filter(pk__in=user_ids).delete()
+
+    def _create_courses(self):
+        if not self.user.is_unistaff:
+            raise exceptions.PermissionDenied()
+
+        if not self.content:
+            raise exceptions.ObjectDoesNotExist()
+
+        university = self.user.get_srecord().account
+        courses = []
+        lines = self.content.split('\n')
+        reader = csv.DictReader(lines)
+        desc_skipped = False
+        for row in reader:
+            if not desc_skipped:
+                desc_skipped = True
+                continue
+
+            course = DegreeCourse()
+            course.university = university
+            course.name = row.get('Studiengang Name')
+            course.standard_period_of_study = row.get('Standard Study Period')
+            course.cost_per_semester = row.get('Cost per Semester')
+            course.cost_per_month = row.get('Cost per Month')
+            # course. = row.get('Tuition Fees Total')
+            course.cost_per_month_beyond_standard = row.get('Cost per Month beyond Standard Study Period')
+            course.matriculation_fee = row.get('Matriculation Fee')
+            course.start_of_studies_month = row.get('Starting Month of Studies')
+            course.start_of_studies = row.get('Start of Studies')
+            course.start_summer_semester = row.get('Starting Month Summer Semester')
+            course.start_winter_semester = row.get('Starting Month Winter Semester')
+
+            courses.append(course)
+        DegreeCourse.objects.bulk_create(courses)

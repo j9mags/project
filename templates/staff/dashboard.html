@@ -66,15 +66,15 @@
   <div id="dlg-add-students" class="mdl-dialog {% if display_st %}is-showing-dialog{% endif %}">
       <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
       <form enctype="multipart/form-data" method="post" 
-            onsubmit="document.getElementById('upload-progress').classList.add('is-active')"
-            onabort="document.getElementById('upload-progress').classList.remove('is-active')">
+            onsubmit="document.getElementById('upload-progress-st').classList.add('is-active')"
+            onabort="document.getElementById('upload-progress-st').classList.remove('is-active')">
 
           {% csrf_token %}
       
           <div class="mdl-dialog__content">
               {% include 'snippets/select.html' with field=st_form.course %}
-              {% include 'snippets/input-file.html' with field=st_form.csv type='file'%}
-              <div id="upload-progress" class="mdl-spinner mdl-js-spinner"></div>
+              {% include 'snippets/input-file.html' with field=st_form.csv type='file' pref='st_' %}
+              <div id="upload-progress-st" class="mdl-spinner mdl-js-spinner"></div>
           </div>
           <div class="mdl-dialog__actions">
               <input type="submit" 
@@ -87,14 +87,14 @@
   <div id="dlg-add-courses" class="mdl-dialog {% if display_cs %}is-showing-dialog{% endif %}">
     <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
     <form enctype="multipart/form-data" method="post" 
-          onsubmit="document.getElementById('upload-progress').classList.add('is-active')"
-          onabort="document.getElementById('upload-progress').classList.remove('is-active')">
+          onsubmit="document.getElementById('upload-progress-cs').classList.add('is-active')"
+          onabort="document.getElementById('upload-progress-cs').classList.remove('is-active')">
 
       {% csrf_token %}
   
       <div class="mdl-dialog__content">
-        {% include 'snippets/input-file.html' with field=cs_form.csv type='file'%}
-        <div id="upload-progress" class="mdl-spinner mdl-js-spinner"></div>
+        {% include 'snippets/input-file.html' with field=cs_form.csv type='file' pref='cs_' %}
+        <div id="upload-progress-cs" class="mdl-spinner mdl-js-spinner"></div>
       </div>
       <div class="mdl-dialog__actions">
         <input type="submit" 

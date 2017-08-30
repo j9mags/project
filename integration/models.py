@@ -10,13 +10,15 @@ class Choices:
     Country = [('Abchasien', 'Abchasien'), ('Afghanistan', 'Afghanistan'), ('Ägypten', 'Ägypten'), ('Albanien', 'Albanien'), ('Algerien', 'Algerien'), ('Andorra', 'Andorra'), ('Angola', 'Angola'), ('Antigua und Barbuda', 'Antigua und Barbuda'), ('Äquatorialguinea', 'Äquatorialguinea'), ('Argentinien', 'Argentinien'), ('Armenien', 'Armenien'), ('Aserbaidschan', 'Aserbaidschan'), ('Äthiopien', 'Äthiopien'), ('Australien', 'Australien'), ('Bahamas', 'Bahamas'), ('Bahrain', 'Bahrain'), ('Bangladesch', 'Bangladesch'), ('Barbados', 'Barbados'), ('Belgien', 'Belgien'), ('Belize', 'Belize'), ('Benin', 'Benin'), ('Bergkarabach', 'Bergkarabach'), ('Bhutan', 'Bhutan'), ('Bolivien', 'Bolivien'), ('Bosnien und Herzegowina', 'Bosnien und Herzegowina'), ('Botswana', 'Botswana'), ('Brasilien', 'Brasilien'), ('Brunei', 'Brunei'), ('Bulgarien', 'Bulgarien'), ('Burkina Faso', 'Burkina Faso'), ('Burundi', 'Burundi'), ('Chile', 'Chile'), ('Republik China', 'Republik China'), ('Volksrepublik China', 'Volksrepublik China'), ('Cookinseln', 'Cookinseln'), ('Costa Rica', 'Costa Rica'), ('Dänemark', 'Dänemark'), ('Deutschland', 'Deutschland'), ('Dominica', 'Dominica'), ('Dominikanische Republik', 'Dominikanische Republik'), ('Dschibuti', 'Dschibuti'), ('Ecuador', 'Ecuador'), ('El Salvador', 'El Salvador'), ('Elfenbeinküste', 'Elfenbeinküste'), ('Eritrea', 'Eritrea'), ('Estland', 'Estland'), ('Fidschi', 'Fidschi'), ('Finnland', 'Finnland'), ('Frankreich', 'Frankreich'), ('Gabun', 'Gabun'), ('Gambia', 'Gambia'), ('Georgien', 'Georgien'), ('Ghana', 'Ghana'), ('Grenada', 'Grenada'), ('Griechenland', 'Griechenland'), ('Guatemala', 'Guatemala'), ('Guinea', 'Guinea'), ('Guinea-Bissau', 'Guinea-Bissau'), ('Guyana', 'Guyana'), ('Haiti', 'Haiti'), ('Honduras', 'Honduras'), ('Indien', 'Indien'), ('Indonesien', 'Indonesien'), ('Irak', 'Irak'), ('Iran', 'Iran'), ('Irland', 'Irland'), ('Island', 'Island'), ('Israel', 'Israel'), ('Italien', 'Italien'), ('Jamaika', 'Jamaika'), ('Japan', 'Japan'), ('Jemen', 'Jemen'), ('Jordanien', 'Jordanien'), ('Kambodscha', 'Kambodscha'), ('Kamerun', 'Kamerun'), ('Kanada', 'Kanada'), ('Kap Verde', 'Kap Verde'), ('Kasachstan', 'Kasachstan'), ('Katar', 'Katar'), ('Kenia', 'Kenia'), ('Kirgisistan', 'Kirgisistan'), ('Kiribati', 'Kiribati'), ('Kolumbien', 'Kolumbien'), ('Komoren', 'Komoren'), ('Kongo, Demokratische Republik', 'Kongo, Demokratische Republik'), ('Kongo, Republik', 'Kongo, Republik'), ('Korea, Nord', 'Korea, Nord'), ('Korea, Süd', 'Korea, Süd'), ('Kosovo', 'Kosovo'), ('Kroatien', 'Kroatien'), ('Kuba', 'Kuba'), ('Kuwait', 'Kuwait'), ('Laos', 'Laos'), ('Lesotho', 'Lesotho'), ('Lettland', 'Lettland'), ('Libanon', 'Libanon'), ('Liberia', 'Liberia'), ('Libyen', 'Libyen'), ('Liechtenstein', 'Liechtenstein'), ('Litauen', 'Litauen'), ('Luxemburg', 'Luxemburg'), ('Madagaskar', 'Madagaskar'), ('Malawi', 'Malawi'), ('Malaysia', 'Malaysia'), ('Malediven', 'Malediven'), ('Mali', 'Mali'), ('Malta', 'Malta'), ('Marokko', 'Marokko'), ('Marshallinseln', 'Marshallinseln'), ('Mauretanien', 'Mauretanien'), ('Mauritius', 'Mauritius'), ('Mazedonien', 'Mazedonien'), ('Mexiko', 'Mexiko'), ('Mikronesien', 'Mikronesien'), ('Moldawien', 'Moldawien'), ('Monaco', 'Monaco'), ('Mongolei', 'Mongolei'), ('Montenegro', 'Montenegro'), ('Mosambik', 'Mosambik'), ('Myanmar', 'Myanmar'), ('Namibia', 'Namibia'), ('Nauru', 'Nauru'), ('Nepal', 'Nepal'), ('Neuseeland', 'Neuseeland'), ('Nicaragua', 'Nicaragua'), ('Niederlande', 'Niederlande'), ('Niger', 'Niger'), ('Nigeria', 'Nigeria'), ('Niue', 'Niue'), ('Nordzypern', 'Nordzypern'), ('Norwegen', 'Norwegen'), ('Oman', 'Oman'), ('Österreich', 'Österreich'), ('Osttimor / Timor-Leste', 'Osttimor / Timor-Leste'), ('Pakistan', 'Pakistan'), ('Palästina', 'Palästina'), ('Palau', 'Palau'), ('Panama', 'Panama'), ('Papua-Neuguinea', 'Papua-Neuguinea'), ('Paraguay', 'Paraguay'), ('Peru', 'Peru'), ('Philippinen', 'Philippinen'), ('Polen', 'Polen'), ('Portugal', 'Portugal'), ('Ruanda', 'Ruanda'), ('Rumänien', 'Rumänien'), ('Russland', 'Russland'), ('Salomonen', 'Salomonen'), ('Sambia', 'Sambia'), ('Samoa', 'Samoa'), ('San Marino', 'San Marino'), ('São Tomé und Príncipe', 'São Tomé und Príncipe'), ('Saudi-Arabien', 'Saudi-Arabien'), ('Schweden', 'Schweden'), ('Schweiz', 'Schweiz'), ('Senegal', 'Senegal'), ('Serbien', 'Serbien'), ('Seychellen', 'Seychellen'), ('Sierra Leone', 'Sierra Leone'), ('Simbabwe', 'Simbabwe'), ('Singapur', 'Singapur'), ('Slowakei', 'Slowakei'), ('Slowenien', 'Slowenien'), ('Somalia', 'Somalia'), ('Somaliland', 'Somaliland'), ('Spanien', 'Spanien'), ('Sri Lanka', 'Sri Lanka'), ('St. Kitts und Nevis', 'St. Kitts und Nevis'), ('St. Lucia', 'St. Lucia'), ('St. Vincent und die Grenadinen', 'St. Vincent und die Grenadinen'), ('Südafrika', 'Südafrika'), ('Sudan', 'Sudan'), ('Südossetien', 'Südossetien'), ('Südsudan', 'Südsudan'), ('Suriname', 'Suriname'), ('Swasiland', 'Swasiland'), ('Syrien', 'Syrien'), ('Tadschikistan', 'Tadschikistan'), ('Tansania', 'Tansania'), ('Thailand', 'Thailand'), ('Togo', 'Togo'), ('Tonga', 'Tonga'), ('Transnistrien', 'Transnistrien'), ('Trinidad und Tobago', 'Trinidad und Tobago'), ('Tschad', 'Tschad'), ('Tschechien', 'Tschechien'), ('Tunesien', 'Tunesien'), ('Türkei', 'Türkei'), ('Turkmenistan', 'Turkmenistan'), ('Tuvalu', 'Tuvalu'), ('Uganda', 'Uganda'), ('Ukraine', 'Ukraine'), ('Ungarn', 'Ungarn'), ('Uruguay', 'Uruguay'), ('Usbekistan', 'Usbekistan'), ('Vanuatu', 'Vanuatu'), ('Vatikanstadt', 'Vatikanstadt'), ('Venezuela', 'Venezuela'), ('Vereinigte Arabische Emirate', 'Vereinigte Arabische Emirate'), ('Vereinigte Staaten', 'Vereinigte Staaten'), ('Vereinigtes Königreich', 'Vereinigtes Königreich'), ('Vietnam', 'Vietnam'), ('Weißrussland', 'Weißrussland'), ('Westsahara', 'Westsahara'), ('Zentral\xadafrikanische Republik', 'Zentral\xadafrikanische Republik'), ('Zypern', 'Zypern')]
     Gender = [('weiblich', 'weiblich'), ('männlich', 'männlich'), ('geschlechtsneutral', 'geschlechtsneutral')]
     Nationality = [('afghanisch', 'afghanisch'), ('ägyptisch', 'ägyptisch'), ('albanisch', 'albanisch'), ('algerisch', 'algerisch'), ('andorranisch', 'andorranisch'), ('angolanisch', 'angolanisch'), ('antiguanisch', 'antiguanisch'), ('äquatorialguineisch', 'äquatorialguineisch'), ('argentinisch', 'argentinisch'), ('armenisch', 'armenisch'), ('aserbaidschanisch', 'aserbaidschanisch'), ('äthiopisch', 'äthiopisch'), ('australisch', 'australisch'), ('bahamaisch', 'bahamaisch'), ('bahrainisch', 'bahrainisch'), ('bangladeschisch', 'bangladeschisch'), ('barbadisch', 'barbadisch'), ('belgisch', 'belgisch'), ('belizisch', 'belizisch'), ('beninisch', 'beninisch'), ('bhutanisch', 'bhutanisch'), ('bolivianisch', 'bolivianisch'), ('bosnisch-herzegowinisch', 'bosnisch-herzegowinisch'), ('botsuanisch', 'botsuanisch'), ('brasilianisch', 'brasilianisch'), ('bruneiisch', 'bruneiisch'), ('bulgarisch', 'bulgarisch'), ('burkinisch', 'burkinisch'), ('burundisch', 'burundisch'), ('cabo-verdisch', 'cabo-verdisch'), ('chilenisch', 'chilenisch'), ('chinesisch', 'chinesisch'), ('costa-ricanisch', 'costa-ricanisch'), ('ivorisch', 'ivorisch'), ('dänisch', 'dänisch'), ('deutsch', 'deutsch'), ('dominikanisch', 'dominikanisch'), ('dschibutisch', 'dschibutisch'), ('ecuadorianisch', 'ecuadorianisch'), ('salvadorianisch', 'salvadorianisch'), ('eritreisch', 'eritreisch'), ('estnisch', 'estnisch'), ('fidschianisch', 'fidschianisch'), ('finnisch', 'finnisch'), ('französisch', 'französisch'), ('gabunisch', 'gabunisch'), ('gambisch', 'gambisch'), ('georgisch', 'georgisch'), ('ghanaisch', 'ghanaisch'), ('grenadisch', 'grenadisch'), ('griechisch', 'griechisch'), ('guatemaltekisch', 'guatemaltekisch'), ('guineisch', 'guineisch'), ('guinea-bissauisch', 'guinea-bissauisch'), ('guyanisch', 'guyanisch'), ('haitianisch', 'haitianisch'), ('honduranisch', 'honduranisch'), ('indisch', 'indisch'), ('indonesisch', 'indonesisch'), ('irakisch', 'irakisch'), ('iranisch', 'iranisch'), ('irisch', 'irisch'), ('isländisch', 'isländisch'), ('israelisch', 'israelisch'), ('italienisch', 'italienisch'), ('jamaikanisch', 'jamaikanisch'), ('japanisch', 'japanisch'), ('jemenitisch', 'jemenitisch'), ('jordanisch', 'jordanisch'), ('kambodschanisch', 'kambodschanisch'), ('kamerunisch', 'kamerunisch'), ('kanadisch', 'kanadisch'), ('kasachisch', 'kasachisch'), ('katarisch', 'katarisch'), ('kenianisch', 'kenianisch'), ('kirgisisch', 'kirgisisch'), ('kiribatisch', 'kiribatisch'), ('kolumbianisch', 'kolumbianisch'), ('komorisch', 'komorisch'), ('kongolesisch', 'kongolesisch'), ('der Demokratischen Republik Kongo', 'der Demokratischen Republik Kongo'), ('der Demokratischen Volksrepublik Korea', 'der Demokratischen Volksrepublik Korea'), ('der Republik Korea', 'der Republik Korea'), ('kosovarisch', 'kosovarisch'), ('kroatisch', 'kroatisch'), ('kubanisch', 'kubanisch'), ('kuwaitisch', 'kuwaitisch'), ('laotisch', 'laotisch'), ('lesothisch', 'lesothisch'), ('lettisch', 'lettisch'), ('libanesisch', 'libanesisch'), ('liberianisch', 'liberianisch'), ('libysch', 'libysch'), ('liechtensteinisch', 'liechtensteinisch'), ('litauisch', 'litauisch'), ('luxemburgisch', 'luxemburgisch'), ('madagassisch', 'madagassisch'), ('malawisch', 'malawisch'), ('malaysisch', 'malaysisch'), ('maledivisch', 'maledivisch'), ('malisch', 'malisch'), ('maltesisch', 'maltesisch'), ('marokkanisch', 'marokkanisch'), ('marshallisch', 'marshallisch'), ('mauretanisch', 'mauretanisch'), ('mauritisch', 'mauritisch'), ('mazedonisch', 'mazedonisch'), ('mexikanisch', 'mexikanisch'), ('mikronesisch', 'mikronesisch'), ('moldauisch', 'moldauisch'), ('monegassisch', 'monegassisch'), ('mongolisch', 'mongolisch'), ('montenegrinisch', 'montenegrinisch'), ('mosambikanisch', 'mosambikanisch'), ('myanmarisch', 'myanmarisch'), ('namibisch', 'namibisch'), ('nauruisch', 'nauruisch'), ('nepalesisch', 'nepalesisch'), ('neuseeländisch', 'neuseeländisch'), ('nicaraguanisch', 'nicaraguanisch'), ('niederländisch', 'niederländisch'), ('nigrisch', 'nigrisch'), ('nigerianisch', 'nigerianisch'), ('norwegisch', 'norwegisch'), ('omanisch', 'omanisch'), ('österreichisch', 'österreichisch'), ('pakistanisch', 'pakistanisch'), ('palauisch', 'palauisch'), ('panamaisch', 'panamaisch'), ('papua-neuguineisch', 'papua-neuguineisch'), ('paraguayisch', 'paraguayisch'), ('peruanisch', 'peruanisch'), ('philippinisch', 'philippinisch'), ('polnisch', 'polnisch'), ('portugiesisch', 'portugiesisch'), ('ruandisch', 'ruandisch'), ('rumänisch', 'rumänisch'), ('russisch', 'russisch'), ('salomonisch', 'salomonisch'), ('sambisch', 'sambisch'), ('samoanisch', 'samoanisch'), ('san-marinesisch', 'san-marinesisch'), ('são-toméisch', 'são-toméisch'), ('saudi-arabisch', 'saudi-arabisch'), ('schwedisch', 'schwedisch'), ('schweizerisch', 'schweizerisch'), ('senegalesisch', 'senegalesisch'), ('serbisch', 'serbisch'), ('seychellisch', 'seychellisch'), ('sierra-leonisch', 'sierra-leonisch'), ('simbabwisch', 'simbabwisch'), ('singapurisch', 'singapurisch'), ('slowakisch', 'slowakisch'), ('slowenisch', 'slowenisch'), ('somalisch', 'somalisch'), ('spanisch', 'spanisch'), ('sri-lankisch', 'sri-lankisch'), ('von St. Kitts und Nevis', 'von St. Kitts und Nevis'), ('lucianisch', 'lucianisch'), ('vincentisch', 'vincentisch'), ('südafrikanisch', 'südafrikanisch'), ('sudanesisch', 'sudanesisch'), ('südsudanesisch', 'südsudanesisch'), ('surinamisch', 'surinamisch'), ('swasiländisch', 'swasiländisch'), ('syrisch', 'syrisch'), ('tadschikisch', 'tadschikisch'), ('tansanisch', 'tansanisch'), ('thailändisch', 'thailändisch'), ('von Timor-Leste', 'von Timor-Leste'), ('togoisch', 'togoisch'), ('tongaisch', 'tongaisch'), ('von Trinidad und Tobago', 'von Trinidad und Tobago'), ('tschadisch', 'tschadisch'), ('tschechisch', 'tschechisch'), ('tunesisch', 'tunesisch'), ('türkisch', 'türkisch'), ('turkmenisch', 'turkmenisch'), ('tuvaluisch', 'tuvaluisch'), ('ugandisch', 'ugandisch'), ('ukrainisch', 'ukrainisch'), ('ungarisch', 'ungarisch'), ('uruguayisch', 'uruguayisch'), ('usbekisch', 'usbekisch'), ('vanuatuisch', 'vanuatuisch'), ('vatikanisch', 'vatikanisch'), ('venezolanisch', 'venezolanisch'), ('der Vereinigten Arabischen Emirate', 'der Vereinigten Arabischen Emirate'), ('amerikanisch', 'amerikanisch'), ('britisch', 'britisch'), ('vietnamesisch', 'vietnamesisch'), ('weißrussisch', 'weißrussisch'), ('zentralafrikanisch', 'zentralafrikanisch'), ('zyprisch', 'zyprisch')]
-    Language = [('deutsch', 'deutsch'), ('englisch', 'englisch')]
+    Language = [('deutsch', 'deutsch'), ('englisch', 'english')]
     Salutation = [('Mr.', 'Herr'), ('Ms.', 'Frau'), ('Mrs.', 'Frau'), ('Dr.', 'Dr.'), ('Prof.', 'Prof.')]
     Month = [('Januar', 'Januar'), ('Februar', 'Februar'), ('März', 'März'), ('April', 'April'), ('Mai', 'Mai'), ('Juni', 'Juni'), ('Juli', 'Juli'), ('August', 'August'), ('September', 'September'), ('Oktober', 'Oktober'), ('November', 'November'), ('Dezember', 'Dezember')]
     Payment = [('Zu Beginn jeden Monats', 'Zu Beginn jeden Monats'), ('Zu Beginn jeden Semesters', 'Zu Beginn jeden Semesters')]
     AccountStatus = [('Immatrikuliert', 'Immatrikuliert'), ('Abgebrochen', 'Abgebrochen'), ('Beurlaubt', 'Beurlaubt'), ('Auslandssemester', 'Auslandssemester'), ('Exmatrikuliert', 'Exmatrikuliert')]
     InvoiceStatus = [('Draft', 'Draft'), ('Sent', 'Sent'), ('Paid', 'Paid'), ('Cancelled', 'Cancelled')]
-    InvoiceLIStatus = [('TuitionFee', 'Studiengebühr'), ('SemesterFee', 'Semesterbeitrag'), ('SemesterDiscount', 'Rabatt auf Semesterbeitrag'), ('OverdueFee', 'Mahngebühr'), ('MatriculationFee', 'Immatrikulationsgebühr'), ('Dunning Fee', 'Dunning Fee')]
+    InvoiceLIType = [('TuitionFee', 'Studiengebühr'), ('SemesterFee', 'Semesterbeitrag'), ('SemesterDiscount', 'Rabatt auf Semesterbeitrag'), ('OverdueFee', 'Mahngebühr'), ('MatriculationFee', 'Immatrikulationsgebühr'), ('Dunning Fee', 'Dunning Fee')]
+    ContractStatus = [('In Approval Process', 'Genehmigungsverfahren läuft'), ('Activated', 'Aktiviert'), ('Draft', 'Entwurf'), ('Deaktiviert', 'Deaktiviert')]
+
 
 class RecordType(models.Model):
     name = models.CharField(max_length=80)
@@ -210,6 +212,11 @@ class Account(models.Model):
             return Invoice.objects.filter(contract__account__pk=self.pk)
         return None
 
+    def get_active_courses(self):
+        if not self._is_student():
+            return self.degreecourse_set.all()
+        return None
+
 
 class Contact(models.Model):
 
@@ -349,6 +356,13 @@ class DegreeCourse(models.Model):
         default=models.DEFAULTED_ON_CREATE,
         blank=True,
         null=True)
+    course_id = models.CharField(
+        custom=True,
+        max_length=1300,
+        verbose_name='Course of Study ID',
+        sf_read_only=models.READ_ONLY,
+        blank=True,
+        null=True)
 
     university = models.ForeignKey(
         Account,
@@ -360,84 +374,83 @@ class DegreeCourse(models.Model):
         custom=True,
         max_digits=3,
         decimal_places=0,
-        verbose_name='Regelstudienzeit (Semesteranzahl)',
+        verbose_name='Standard Study Period (No. of Semesters)',
         blank=True,
         null=True)
     start_of_studies = models.DateField(
         custom=True,
-        verbose_name='Studienbeginn',
+        verbose_name='Start of Studies',
         blank=True,
         null=True)
     cost_per_month = models.DecimalField(
         custom=True,
         max_digits=18,
         decimal_places=2,
-        verbose_name='Kosten pro Monat > Regelstudienzeit',
+        verbose_name='Cost per Month',
         blank=True,
         null=True)
-    number_of_sofortzahler_trig = models.DecimalField(
+    cost_per_semester = models.DecimalField(
         custom=True,
         max_digits=18,
-        decimal_places=0,
-        verbose_name='Anzahl Sofortzahler',
+        decimal_places=2,
+        verbose_name='Cost per Semester',
         blank=True,
         null=True)
     matriculation_fee = models.DecimalField(
         custom=True,
         max_digits=18,
         decimal_places=2,
-        verbose_name='Immatrikulationsgebühren',
+        verbose_name='Matriculation Fee',
         blank=True,
         null=True)
     semester_fee = models.DecimalField(
         custom=True,
         max_digits=18,
         decimal_places=2,
-        verbose_name='Semesterbeitrag',
+        verbose_name='Semester Fee',
         blank=True,
         null=True)
     total_tuition_fees_auto = models.DecimalField(
         custom=True,
         max_digits=18,
         decimal_places=2,
-        verbose_name='Studiengebühren gesamt',
+        verbose_name='Tuition Fees Total',
         sf_read_only=models.READ_ONLY,
+        blank=True,
+        null=True)
+    cost_per_month_beyond_standard = models.DecimalField(
+        custom=True,
+        max_digits=18,
+        decimal_places=2,
+        verbose_name='Cost per Month > Standard Study Period',
         blank=True,
         null=True)
     start_summer_semester = models.CharField(
         custom=True,
         max_length=255,
-        verbose_name='Startmonat Sommersemester',
+        verbose_name='Starting Month Summer Semester',
         choices=Choices.Month,
         blank=True,
         null=True)
     start_winter_semester = models.CharField(
         custom=True,
         max_length=255,
-        verbose_name='Startmonat Wintersemester',
+        verbose_name='Starting Month Winter Semester',
         choices=Choices.Month,
         blank=True,
         null=True)
     start_of_studies_month = models.CharField(
         custom=True,
         max_length=255,
-        verbose_name='Startmonat Studienbeginn',
+        verbose_name='Starting Month of Studies',
         choices=Choices.Month,
-        blank=True,
-        null=True)
-
-    course_id = models.CharField(
-        custom=True,
-        max_length=1300,
-        verbose_name='StudiengangID',
-        sf_read_only=models.READ_ONLY,
         blank=True,
         null=True)
 
     class Meta(models.Model.Meta):
         db_table = 'DegreeCourse__c'
-        verbose_name = 'Studiengang'
-        verbose_name_plural = 'Studiengänge'
+        verbose_name = 'Degree Course'
+        verbose_name_plural = 'Degree Courses'
         # keyPrefix = 'a00'
 
 
@@ -453,11 +466,14 @@ class Contract(models.Model):
         sf_read_only=models.READ_ONLY,
         default=False)
 
+    contract_number = models.CharField(
+        max_length=30,
+        sf_read_only=models.READ_ONLY)
+
     account = models.ForeignKey(
         Account,
         models.DO_NOTHING,
         related_name='contract_account_set')  # Master Detail Relationship *
-
     university_ref = models.ForeignKey(
         Account,
         models.DO_NOTHING,
@@ -471,6 +487,7 @@ class Contract(models.Model):
         custom=True,
         blank=True,
         null=True)
+
     payment_interval = models.CharField(
         custom=True,
         max_length=255,
@@ -478,6 +495,11 @@ class Contract(models.Model):
         choices=Choices.Payment,
         blank=True,
         null=True)
+
+    status = models.CharField(
+        max_length=40,
+        choices=Choices.ContractStatus,
+        default=models.DEFAULTED_ON_CREATE)
 
     class Meta(models.Model.Meta):
         db_table = 'Contract'
@@ -487,6 +509,12 @@ class Contract(models.Model):
 
     def get_current_invoice(self):
         return self.invoice_set.last()
+
+    def get_discount(self):
+        rc = self.rabatt_set.first()
+        if rc is None:
+            rc = Rabatt(contract=self)
+        return rc
 
 
 class Rabatt(models.Model):
@@ -750,7 +778,7 @@ class InvoiceLineItem(models.Model):
         custom=True,
         max_length=255,
         verbose_name='Rechnungsposten',
-        choices=Choices.InvoiceLIStatus,
+        choices=Choices.InvoiceLIType,
         blank=True,
         null=True)
 
