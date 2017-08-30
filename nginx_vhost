@@ -2,9 +2,8 @@ server {
     listen 80;
     server_name portal.chancen.services;
 
-    location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
-        root /home/chancen/chancen-services-portal;
+        root /home/chancen/chancen-services-portal/;
     }
 
     location / {
