@@ -33,31 +33,43 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         contact = Contact.university_staff.get(
             email=self.request.user.email)
         students = Account.students.filter(hochschule_ref=contact.account).order_by(o)
-
         filters = []
 
-        if status:
-            status = "" if status == "None" else status
-            students = students.filter(status=status)
-            filters.append((_('Status'), status))
+        if not students:
+            students = []
+            if status:
+                status = "" if status == "None" else status
+                filters.append((_('Status'), status))
+            if course:
+                course = None if course == "None" else course
+                if course is not None:
+                    filters.append(
+                        (_('Course'),
+                         contact.account.get_active_courses().get(
+                             pk=course).name))
+        else:
 
-        if course:
-            course = None if course == "None" else course
-            if course is not None:
-                students = students.filter(contract_account_set__studiengang_ref__pk=course)
-                filters.append(
-                    (_('Course'),
-                        students.first().contract_account_set.filter(
-                            studiengang_ref__pk=course).first().studiengang_ref.name))
+            if status:
+                status = "" if status == "None" else status
+                students = students.filter(status=status)
+                filters.append((_('Status'), status))
 
-        paginator = Paginator(students, s)
-        try:
-            students = paginator.page(p)
-        except EmptyPage:
-            students = paginator.page(paginator.num_pages)
+            if course:
+                course = None if course == "None" else course
+                if course is not None:
+                    students = students.filter(contract_account_set__studiengang_ref__pk=course)
+                    filters.append(
+                        (_('Course'),
+                            students.first().contract_account_set.filter(
+                                studiengang_ref__pk=course).first().studiengang_ref.name))
+
+            paginator = Paginator(students, s)
+            try:
+                students = paginator.page(p)
+            except EmptyPage as e:
+                students = paginator.page(paginator.num_pages)
 
         bulk_form = BulkActionsForm(contact.account)
-
         context.update(contact=contact, students=students, filters=filters, bulk_form=bulk_form)
         return context
 

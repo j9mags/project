@@ -99,7 +99,8 @@
       ev.preventDefault();
       var filter = $(this).data('filter');
       var value =  $(this).data('filter-value');
-      addOrUpdateUrlParam(filter, value);
+      if (filter !== undefined)
+        addOrUpdateUrlParam(filter, value);
     });
     $('.chancen-filter a').click(function(ev){
       ev.preventDefault();

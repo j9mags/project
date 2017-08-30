@@ -10,7 +10,11 @@
 {% endblock %}
 
 {% block title %}
-{% trans 'Displaying' %} {{ students.object_list | length }} / {{ students.paginator.count}}
+  {% if students %}
+    {% trans 'Displaying' %} {{ students.object_list | length }} / {{ students.paginator.count}}
+  {% else %}
+    {% trans 'No students found to match this criteria' %}
+  {% endif %}
 {% endblock %}
 
 {% block content %}
