@@ -30,7 +30,7 @@ img {
 }
 
 .chancen-layout {
-  background: url(/static/material/imgs/background.svg);
+  background: url(/assets/material/imgs/background.svg);
 }
 
 .chancen-layout .mdl-layout__header,
@@ -76,7 +76,7 @@ img {
           justify-content: flex-end;
   padding: 16px;
   height: 151px;
-  background: url(/static/material/imgs/sidenav.svg);
+  background: url(/assets/material/imgs/sidenav.svg);
   color: white;
 }
 /* .chancen-drawer-logo {
