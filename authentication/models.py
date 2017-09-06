@@ -143,6 +143,7 @@ class CsvUpload(models.Model):
                 mailing_city=acc.billing_city,
                 mailing_postal_code=acc.billing_postal_code,
                 record_type_id=ctc_rt,
+                student_contact=True,
             )
             contacts.update({acc.immatrikulationsnummer: ctc})
 

@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from .models import *
 
-import uuid
 
 class UniversityAccount(Account):
     class Meta:

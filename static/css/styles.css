@@ -367,6 +367,18 @@ img {
     visibility: visible;
 }
 
+.mdl-card {
+    transition: min-height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.mdl-card--summary {
+    min-height: 0;
+}
+
+.mdl-card--summary .mdl-card__supporting-text {
+    visibility: hidden;
+}
+
 .mdl-card__supporting-text.mdl-card--expand {
     width: calc(100% - 32px);
     overflow-x: auto;

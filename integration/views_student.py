@@ -7,22 +7,25 @@ from django.core.exceptions import *
 from django.views.generic.base import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from django.shortcuts import render
 
-from .models import Account
 from .forms import StudentOnboardingForm
 from .forms import LanguageSelectForm
+
+from .models import Attachment
 
 
 class StudentMixin(LoginRequiredMixin):
 
     def get_queryset(self):
-        return Account.students.get(
-            unimailadresse=self.request.user.email)
+        return self.request.user.get_srecord()
 
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_student():
+            raise PermissionDenied()
+
         rc = super(StudentMixin, self).dispatch(request, *args, **kwargs)
 
         lang = get_language()
@@ -44,8 +47,7 @@ class Dashboard(StudentMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(Dashboard, self).get_context_data(**kwargs)
 
-        account = Account.students.get(
-            unimailadresse=self.request.user.email)
+        account = self.request.user.get_srecord()
         contact = account.get_master_contact()
         contract = account.get_active_contract()
         invoice = contract.get_current_invoice()
@@ -78,8 +80,7 @@ class Onboard(StudentMixin, View):
     template_data = 'students/onboarding_data.html'
 
     def get_queryset(self):
-        return Account.students.get(
-            unimailadresse=self.request.user.email)
+        return self.request.user.get_srecord()
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -215,10 +216,7 @@ class ContactSEPA(StudentMixin, TemplateView):
             raise SuspiciousOperation()
 
         context = super(ContactSEPA, self).get_context_data(**kwargs)
-
-        account = Account.students.get(
-            unimailadresse=self.request.user.email)
-
+        account = self.request.user.get_srecord()
         contact = account.contact_set.filter(pk=pk)
         if not contact:
             raise SuspiciousOperation()
@@ -233,3 +231,18 @@ class ContactSEPA(StudentMixin, TemplateView):
             return HttpResponseRedirect('/')
 
         return rc
+
+
+class DownloadAttachment(StudentMixin, View):
+
+    def get(self, *args, **kwargs):
+        att_id = kwargs.get('att_id')
+        att = Attachment.objects.get(pk=att_id)
+        if not att:
+            raise ObjectDoesNotExist()
+
+        response = HttpResponse(content_type=att.content_type)
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(att.name)
+        response.write(att.fetch_content())
+
+        return response

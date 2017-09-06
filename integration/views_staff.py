@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 
 from django.shortcuts import render
 
-from .models import Account, Contact, DegreeCourse, Contract
+from .models import DegreeCourse, Contract
 from .forms import *
 
 from django.core.paginator import Paginator, EmptyPage
@@ -17,11 +17,20 @@ from django.core.paginator import Paginator, EmptyPage
 from uuid import uuid4
 
 
-class Dashboard(LoginRequiredMixin, TemplateView):
-    template_name = 'staff/dashboard.html'
+class StaffMixin(LoginRequiredMixin):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_unistaff():
+            raise PermissionDenied()
+
+        return super(StaffMixin, self).dispatch(request, *args, **kwargs)
+
+
+class DashboardHome(StaffMixin, TemplateView):
+    template_name = 'staff/dashboard_home.html'
 
     def get_context_data(self, **kwargs):
-        context = super(Dashboard, self).get_context_data(**kwargs)
+        context = super(DashboardHome, self).get_context_data(**kwargs)
 
         p = int(self.request.GET.get('p', '1'))
         o = self.request.GET.get('o', 'pk')
@@ -30,8 +39,7 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
-        contact = Contact.university_staff.get(
-            email=self.request.user.email)
+        contact = self.request.user.get_srecord()
         students = Account.students.filter(hochschule_ref=contact.account).order_by(o)
         filters = []
 
@@ -74,7 +82,7 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        response = super(Dashboard, self).get(request, *args, **kwargs)
+        response = super(DashboardHome, self).get(request, *args, **kwargs)
         contact = response.context_data.get('contact')
 
         response.context_data.update(
@@ -117,7 +125,34 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, context)
 
 
-class FileUploadReview(LoginRequiredMixin, TemplateView):
+class DashboardUniversity(StaffMixin, TemplateView):
+    template_name = 'staff/dashboard_university.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardUniversity, self).get_context_data(**kwargs)
+        contact = self.request.user.get_srecord()
+        context.update(university=contact.account)
+
+        if self.request.POST:
+            form = UniversityForm(self.request.POST, instance=contact.account)
+        else:
+            form = UniversityForm(instance=contact.account)
+
+        context.update(form=form)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(*args, **kwargs)
+
+        form = context.get('form')
+        if form.is_valid():
+            form.save()
+
+        return self.get(request, *args, **kwargs)
+
+
+class FileUploadReview(StaffMixin, TemplateView):
     template_name = 'staff/upload_review.html'
 
     def get_context_data(self, **kwargs):
@@ -142,7 +177,7 @@ class FileUploadReview(LoginRequiredMixin, TemplateView):
         return context
 
 
-class FileUploadAction(LoginRequiredMixin, View):
+class FileUploadAction(StaffMixin, View):
 
     def get(self, request, *args, **kwargs):
         uuid = kwargs.get('uuid')
@@ -166,7 +201,7 @@ class FileUploadAction(LoginRequiredMixin, View):
         return HttpResponseRedirect('/')
 
 
-class StudentReview(LoginRequiredMixin, DetailView):
+class StudentReview(StaffMixin, DetailView):
     model = Account
     template_name = 'staff/student_review.html'
 
@@ -174,7 +209,7 @@ class StudentReview(LoginRequiredMixin, DetailView):
         context = super(StudentReview, self).get_context_data(**kwargs)
 
         account = context.get('account')
-        contact = Contact.university_staff.get(email=self.request.user.email)
+        contact = self.request.user.get_srecord()
         if contact.account.pk != account.hochschule_ref.pk:
             raise ObjectDoesNotExist()
 
@@ -194,7 +229,6 @@ class StudentReview(LoginRequiredMixin, DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        print(request.POST)
         self.object = self.get_object()
         context = self.get_context_data(object=self.object, **kwargs)
         if 'status' in request.POST:
@@ -216,16 +250,14 @@ class StudentReview(LoginRequiredMixin, DetailView):
         return self.render_to_response(context)
 
 
-class ContractReview(LoginRequiredMixin, DetailView):
+class ContractReview(StaffMixin, DetailView):
     model = Contract
     template_name = 'staff/contract_review.html'
 
 
-class BulkActions(LoginRequiredMixin, View):
-
+class BulkActions(StaffMixin, View):
     def post(self, request, *args, **kwargs):
-        contact = Contact.university_staff.get(
-            email=request.user.email)
+        contact = request.user.get_srecord()
         form = BulkActionsForm(contact.account, request.POST)
 
         if form.is_valid():

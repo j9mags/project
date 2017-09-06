@@ -51,6 +51,8 @@
       </header>
       <nav class="chancen-navigation mdl-navigation">
         <a class="mdl-navigation__link" href="{% url 'integration:dashboard' %}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>{% trans 'Home' %}</a>
+        {% block navigation %}
+        {% endblock %}
         <a class="mdl-navigation__link" href="{% url 'authentication:logout' %}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">exit_to_app</i>{% trans 'Logout' %}</a>
         <div class="mdl-layout-spacer"></div>
         <a class="chancen-services--logo" href="https://chancen-eg.de"><img src="{% static 'img/chancen-services--logo.png' %}"></a>

@@ -59,7 +59,8 @@
         };
     addStudents_btn.addEventListener('click', showDlgSt);
     addCourses_btn.addEventListener('click', showDlgCs);
-    blkActions_btn.addEventListener('click', showDlgBlk);
+    if (blkActions_btn !== null)
+      blkActions_btn.addEventListener('click', showDlgBlk);
 
      function addOrUpdateUrlParam(name, value) {
       var href = window.location.href;

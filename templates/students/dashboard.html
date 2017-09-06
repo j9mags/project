@@ -44,7 +44,7 @@
 
     <div class="mdl-tabs__panel" id="invoices-panel">
       {% if current_invoice %}
-        {% include "snippets/student_invoice.html" with invoice=current_invoice class="csp--full-width" %}
+        {% include "snippets/student_invoice.html" with invoice=current_invoice class="csp--full-width mdl-card--summary" %}
       {% else %}
         <h3 class="mdl-typography--headline">{% trans 'No invoices found' %}</h3>
       {% endif %}

@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 
 from .models import Choices
+from .models import Account
 from .models import Rabatt
 
 
@@ -97,6 +98,12 @@ class StudentContractForm(forms.Form):
             choices=[(o.pk, o.name) for o in university.get_active_courses()],
             required=False
         )
+
+
+class UniversityForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['semester_fee_new']
 
 
 class DiscountForm(forms.ModelForm):
