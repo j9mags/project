@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<div class="mdl-card__supporting-text mdl-card--expand mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        {% trans 'Maybe some text explaining GoCardless here?' %}
+    </div>
+
+    <div class="mdl-cell">
+        {{ contact.sepamandate_form_auto | safe }}
+    </div>
+</div>
+

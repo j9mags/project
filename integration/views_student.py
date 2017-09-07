@@ -7,9 +7,9 @@ from django.core.exceptions import *
 from django.views.generic.base import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .forms import StudentOnboardingForm
 from .forms import LanguageSelectForm
@@ -30,7 +30,6 @@ class StudentMixin(LoginRequiredMixin):
 
         lang = get_language()
         account = self.get_queryset()
-
         if account.kommunikationssprache and not account.kommunikationssprache.startswith(lang):
             user_lang = account.kommunikationssprache[:2]
             activate(user_lang)
@@ -46,13 +45,13 @@ class Dashboard(StudentMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Dashboard, self).get_context_data(**kwargs)
+        self.account = self.get_queryset()
 
-        account = self.request.user.get_srecord()
-        contact = account.get_master_contact()
-        contract = account.get_active_contract()
+        contact = self.account.get_master_contact()
+        contract = self.account.get_active_contract()
         invoice = contract.get_current_invoice()
 
-        context['account'] = account
+        context['account'] = self.account
         context['master_contact'] = contact
         context['active_contract'] = contract
         context['current_invoice'] = invoice
@@ -60,15 +59,17 @@ class Dashboard(StudentMixin, TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        response = super(Dashboard, self).get(request, *args, **kwargs)
+        context = self.get_context_data(**kwargs)
+        if not self.account.initial_review_completed_auto:
+            if not self.account.kommunikationssprache:
+                step = 'lang'
+            elif not self.account.student_approved:
+                step = 'review'
+            else:
+                step = 'data'
+            return redirect('integration:onboarding', step=step)
 
-        if not response.context_data.get('account').initial_review_completed_auto:
-            return HttpResponseRedirect('/onboarding/')
-
-        if not response.context_data.get('master_contact').sepalastschriftmandat_erteilt:
-            return HttpResponseRedirect('/sepa/' + response.context_data.get('master_contact').pk)
-
-        return response
+        return super(Dashboard, self).get(request, *args, **kwargs)
 
 
 # Todo: Add BankAccount info on Account view with possibility to set a new mandate
@@ -76,36 +77,66 @@ class AccountDetails(StudentMixin, TemplateView):
     template_name = 'students/onboarding.html'
 
 
-class Onboard(StudentMixin, View):
-    template_lang = 'students/onboarding_lang.html'
-    template_data = 'students/onboarding_data.html'
-
-    def get_queryset(self):
-        return self.request.user.get_srecord()
+class Onboarding(StudentMixin, View):
+    steps = ['lang', 'review', 'data', 'sepa']
+    template = 'students/onboarding.html'
 
     def get_context_data(self, **kwargs):
-        context = {}
+        step = kwargs.get('step') or self.steps[0]
+        if step not in self.steps:
+            raise ObjectDoesNotExist()
+        print(kwargs)
 
-        account = self.get_queryset()
+        context = {'step': step}
+        self.account = self.get_queryset()
 
-        context['sf_account'] = account
-        context['sf_contact'] = account.contact_set.first()
-        context['sf_contract'] = account.contract_account_set.first()
+        context['sf_account'] = self.account
+        context['sf_contact'] = self.account.get_master_contact()
+        context['sf_contract'] = self.account.get_active_contract()
+        context['ignore_drawer'] = True
+        context['stepper'] = (
+            {
+                'title': 'Welcome back! | Wilkommen!',
+                'caption': 'Please choose your preferred language | Bitte wählen Sie Ihre bevorzugte Sprache',
+                'template': 'students/onboarding_lang.html',
+                'submit': 'Continue | Fortsetzen',
+            },
+            {
+                'title': _('Data Review'),
+                'caption': _('Carefully review the data provided by your university'),
+                'template': 'students/onboarding_review.html',
+                'back': 'lang',
+                'submit': _('Continue'),
+            },
+            {
+                'title': _('Complete your registration!'),
+                'caption': _('Fill the form and log into your Chancen account.'),
+                'template': 'students/onboarding_data.html',
+                'back': 'review',
+                'submit': _('Continue'),
+            },
+            {
+                'title': _('Set up your Bank account'),
+                'caption': _('Configure your payment method now or leave it for later.'),
+                'template': 'students/onboarding_sepa.html',
+                'back': 'data',
+                'submit': _('Continue'),
+            },
+        )
 
+        return self.update_context_for(step, context)
+
+    def _get_lang_context(self, context):
+        context.update(form=LanguageSelectForm(initial={'language': self.account.kommunikationssprache}))
+        context['stepper'][0].update(is_active=True)
         return context
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data()
+    def _get_review_context(self, context):
+        context['stepper'][1].update(is_active=True)
+        return context
+
+    def _get_data_context(self, context):
         account = context.get('sf_account')
-
-        if account.initial_review_completed_auto:
-            return HttpResponseRedirect('/')
-
-        if account.kommunikationssprache is None:
-            form = LanguageSelectForm()
-            context.update(form=form)
-            return render(request, self.template_lang, context)
-
         contact = context.get('sf_contact')
         contract = context.get('sf_contract')
 
@@ -138,73 +169,100 @@ class Onboard(StudentMixin, View):
         })
 
         context.update(form=form)
+        context['stepper'][2].update(is_active=True)
+        return context
 
-        return render(request, self.template_data, context)
+    def _get_sepa_context(self, context):
+        context.update(form=LanguageSelectForm())
+        context['stepper'][3].update(is_active=True)
+        return context
 
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data()
+    def update_context_for(self, step, context):
+        try:
+            get = self.__getattribute__('_get_{}_context'.format(step))
+            context = get(context)
+        except AttributeError:
+            pass
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
         account = context.get('sf_account')
 
-        if account.kommunikationssprache is None:
+        if account.initial_review_completed_auto:
+            return redirect('integration:dashboard')
+
+        return render(request, self.template, context)
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        step = context.get('step')
+        if step == 'lang':
             form = LanguageSelectForm(request.POST)
             context.update(form=form)
             if not form.is_valid():
-                print('Not valid')
-                return render(request, self.template_lang, context)
-            account.kommunikationssprache = form.cleaned_data.get('language')
+                return render(request, self.template, context)
+            self.account.kommunikationssprache = form.cleaned_data.get('language')
+            self.account.recordcreated = True
+            try:
+                self.account.save()
+            except Exception as e:
+                form.add_error(None, str(e))
+                return render(request, self.template, context)
+            return redirect('integration:onboarding', step='review')
+        elif step == 'review':
+            self.account.student_approved = True
+            try:
+                self.account.save()
+            except Exception:
+                return render(request, self.template, context)
+            return redirect('integration:onboarding', step='data')
+        elif step == 'data':
+            form = StudentOnboardingForm(request.POST)
+            context.update(form=form)
+
+            if not form.is_valid():
+                return render(request, self.template, context)
+
+            account = context.get('sf_account')
+            contact = context.get('sf_contact')
+            contract = context.get('sf_contract')
+
+            data = form.cleaned_data
+
+            contact.salutation = data.get('salutation')
+            contact.first_name = data.get('first_name')
+            contact.last_name = data.get('last_name')
+            contact.email = data.get('private_email')
+            contact.mobile_phone = data.get('mobile_phone')
+            contact.home_phone = data.get('home_phone')
+            contact.mailing_street = data.get('mailing_street')
+            contact.mailing_city = data.get('mailing_city')
+            contact.mailing_postal_code = data.get('mailing_zip')
+            contact.mailing_country = data.get('mailing_country')
+
+            account.name = '{salutation} {first_name} {last_name}'.format(**data)
+            account.geschlecht = data.get('gender')
+            account.kommunikationssprache = data.get('language')
+            account.staatsangehoerigkeit = data.get('nationality')
+            account.geburtsort = data.get('birth_city')
+            account.geburtsland = data.get('birth_country')
+            account.billing_street = data.get('billing_street')
+            account.billing_city = data.get('billing_city')
+            account.billing_postal_code = data.get('billing_zip')
+            account.billing_country = data.get('billing_country')
+
+            contract.payment_interval = data.get('billing_option')
 
             try:
                 account.save()
+                contact.save()
+                contract.save()
             except Exception as e:
                 form.add_error(None, str(e))
-                return render(request, self.template_lang, context)
+                return render(request, self.template, context)
 
-            return HttpResponseRedirect('/onboarding')
-
-        form = StudentOnboardingForm(request.POST)
-        context.update(form=form)
-
-        if not form.is_valid():
-            return render(request, self.template_data, context)
-
-        contact = context.get('sf_contact')
-        contract = context.get('sf_contract')
-
-        data = form.cleaned_data
-
-        contact.salutation = data.get('salutation')
-        contact.first_name = data.get('first_name')
-        contact.last_name = data.get('last_name')
-        contact.email = data.get('private_email')
-        contact.mobile_phone = data.get('mobile_phone')
-        contact.home_phone = data.get('home_phone')
-        contact.mailing_street = data.get('mailing_street')
-        contact.mailing_city = data.get('mailing_city')
-        contact.mailing_postal_code = data.get('mailing_zip')
-        contact.mailing_country = data.get('mailing_country')
-
-        account.name = '{salutation} {first_name} {last_name}'.format(**data)
-        account.geschlecht = data.get('gender')
-        account.kommunikationssprache = data.get('language')
-        account.staatsangehoerigkeit = data.get('nationality')
-        account.geburtsort = data.get('birth_city')
-        account.geburtsland = data.get('birth_country')
-        account.billing_street = data.get('billing_street')
-        account.billing_city = data.get('billing_city')
-        account.billing_postal_code = data.get('billing_zip')
-        account.billing_country = data.get('billing_country')
-
-        contract.payment_interval = data.get('billing_option')
-
-        try:
-            account.save()
-            contact.save()
-            contract.save()
-        except Exception as e:
-            form.add_error(None, str(e))
-            return render(request, self.template_data, context)
-
-        return HttpResponseRedirect('/sepa/' + contact.pk)
+            return redirect('integration:onboarding', step='sepa')
 
 
 class ContactSEPA(StudentMixin, TemplateView):
@@ -229,7 +287,7 @@ class ContactSEPA(StudentMixin, TemplateView):
         rc = super(ContactSEPA, self).get(*args, **kwargs)
 
         if rc.context_data.get('contact').sepalastschriftmandat_erteilt:
-            return HttpResponseRedirect('/')
+            return redirect('integration:dashboard')
 
         return rc
 

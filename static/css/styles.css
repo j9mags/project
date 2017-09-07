@@ -385,3 +385,20 @@ img {
     padding: 16px 0;
     margin: 0 16px;
 }
+
+#onboarding-stepper {
+    margin: 16px auto;
+    max-width: 840px;
+}
+
+#onboarding-stepper .mdl-step {
+    height: fit-content;
+}
+
+.mdl-step__label-indicator {
+    background-color: rgb(255,171,64)!important;
+}
+
+#onboarding-stepper .mdl-step__actions {
+    justify-content: space-evenly;
+}

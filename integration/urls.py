@@ -4,9 +4,10 @@ from . import views
 from . import views_student as student
 from . import views_staff as staff
 
-
 urlpatterns = [
-    url(r'^onboarding/$', student.Onboard.as_view(), name='onboarding'),
+    url(r'^onboarding/(?P<step>{})/$'.format('|'.join(['({})'.format(x) for x in student.Onboarding.steps])),
+        student.Onboarding.as_view(), name='onboarding'),
+    url(r'^onboarding/$',student.Onboarding.as_view(), name='onboarding'),
     url(r'^account/$', student.AccountDetails.as_view(), name='account'),
     url(r'^sepa/(?P<pk>.+)/$', student.ContactSEPA.as_view(), name='contact_sepa'),
     url(r'^attachment/(?P<att_id>.+)/$', student.DownloadAttachment.as_view(), name='download_attachment'),

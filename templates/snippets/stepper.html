@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<ul class="mdl-stepper mdl-stepper--linear mdl-stepper--feedback" id="{{ id }}">
+    {% for step in stepper %}
+    <li class="mdl-step {% if step.is_active %}is-active{% endif %}">
+        <span class="mdl-step__label">
+            <span class="mdl-step__title">
+                <span class="mdl-step__title-text">{{ step.title }}</span>
+                <span class="mdl-step__title-message">{{ step.caption }}</span>
+            </span>
+        </span>
+        {% if step.is_active %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="mdl-step__content">
+                {% include step.template %}
+            </div>
+            <div class="mdl-step__actions">
+                {% if step.back %}
+                <a href="{% url 'integration:onboarding' step=step.back %}"
+                   class="mdl-button mdl-js-button mdl-js-ripple-effect">{% trans 'Back' %}</a>
+                {% endif %}
+                <input class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised mdl-color-text--white"
+                       type="submit" value="{{ step.submit }}">
+            </div>
+        </form>
+        {% else %}
+            <div class="mdl-step__content"></div>
+            <div class="mdl-step__actions"></div>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>

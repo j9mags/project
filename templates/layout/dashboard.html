@@ -29,6 +29,8 @@
       </div>
     </header>
 
+    {% if ignore_drawer %}
+    {% else %}
     <div class="chancen-drawer mdl-layout__drawer">
       <header class="chancen-drawer-header mdl-color--primary-300">
         <!-- div class="chancen-drawer-logo">
@@ -58,7 +60,7 @@
         <a class="chancen-services--logo" href="https://chancen-eg.de"><img src="{% static 'img/chancen-services--logo.png' %}"></a>
       </nav>
     </div>
-
+    {% endif %}
     <main class="mdl-layout__content mdl-color--grey-100">
       <div class="mdl-grid chancen-content">
         {% block content %}
@@ -66,6 +68,7 @@
       </div>
     </main>
 
+    {% if not ignore_drawer %}
     <div id="fab_ctn" class="mdl-button--fab_flinger-container">
       <button id="fab_btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
         <i class="material-icons mdl-color-text--white">add</i>
@@ -75,6 +78,7 @@
         {% endblock %}
       </div>
     </div>
+    {% endif %}
   </div>
 {% endblock %}
 
