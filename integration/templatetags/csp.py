@@ -1,7 +1,7 @@
 from django import template
 
 import locale
-locale.setlocale(locale.LC_ALL, 'de')
+locale.setlocale(locale.LC_ALL, 'de_DE.utf8')
 
 register = template.Library()
 
