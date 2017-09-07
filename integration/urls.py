@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^student/(?P<pk>.+)/$', staff.StudentReview.as_view(), name='student_review'),
     url(r'^bulk/$', staff.BulkActions.as_view(), name='students_bulk'),
     url(r'^university/$', staff.DashboardUniversity.as_view(), name='university'),
+    url(r'^courses/$', staff.DashboardCourses.as_view(), name='courses'),
 
     url(r'^$',
         views.dispatch_by_user(

@@ -32,7 +32,7 @@ class User(AbstractEmailUser):
             rc = Account.students.get(unimailadresse=self.email)
         return rc
 
-    def create_token(self, token=None, hours=48):
+    def create_token(self, token=None, hours=96):
         token = str(token or uuid4())
         exipiry_date = timezone.now() + timedelta(hours=hours)
 
@@ -124,6 +124,7 @@ class CsvUpload(models.Model):
             acc.immatrikulationsnummer = row.get('Immatrikulationsnummer')
             acc.geburtsdatum = row.get('Geburtsdatum')
             acc.unimailadresse = row.get('Unimailadresse')
+            acc.status = 'Immatrikuliert'
 
             new_user = UserModel(email=acc.unimailadresse, is_active=False)
             new_user.save()

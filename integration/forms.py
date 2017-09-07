@@ -58,8 +58,10 @@ class LanguageSelectForm(forms.Form):
     language = forms.ChoiceField(choices=Choices.Language, widget=forms.RadioSelect)
 
 
+# Todo: Add review current info step
+
 class StudentOnboardingForm(forms.Form):
-    salutation = forms.ChoiceField(choices=SalutationChoices)
+    salutation = forms.ChoiceField(choices=SalutationChoices, required=False)
     first_name = forms.CharField(max_length=40)
     last_name = forms.CharField(max_length=80)
 
@@ -84,7 +86,7 @@ class StudentOnboardingForm(forms.Form):
     billing_zip = forms.CharField(max_length=20, label=_('Postal code'))
     billing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
 
-    billing_option = forms.ChoiceField(choices=BillingChoices)
+    billing_option = forms.ChoiceField(choices=BillingChoices)  # Todo: note to student it's only settable once
 
 
 class StudentAccountForm(forms.Form):

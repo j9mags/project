@@ -74,11 +74,8 @@ class UserAdmin(StrippedUserAdmin):
             reset_password = False
 
         super(UserAdmin, self).save_model(request, obj, form, change)
-
         if reset_password:
-
             # TODO: tell SF about it
-
             pass
 
 

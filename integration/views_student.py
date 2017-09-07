@@ -71,6 +71,7 @@ class Dashboard(StudentMixin, TemplateView):
         return response
 
 
+# Todo: Add BankAccount info on Account view with possibility to set a new mandate
 class AccountDetails(StudentMixin, TemplateView):
     template_name = 'students/onboarding.html'
 

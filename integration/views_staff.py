@@ -56,7 +56,6 @@ class DashboardHome(StaffMixin, TemplateView):
                          contact.account.get_active_courses().get(
                              pk=course).name))
         else:
-
             if status:
                 status = "" if status == "None" else status
                 students = students.filter(status=status)
@@ -74,8 +73,8 @@ class DashboardHome(StaffMixin, TemplateView):
             paginator = Paginator(students, s)
             try:
                 students = paginator.page(p)
-            except EmptyPage as e:
-                students = paginator.page(paginator.num_pages)
+            except EmptyPage:
+                students = paginator.page(paginator.num_pages if p > 1 else 0)
 
         bulk_form = BulkActionsForm(contact.account)
         context.update(contact=contact, students=students, filters=filters, bulk_form=bulk_form)
@@ -123,6 +122,33 @@ class DashboardHome(StaffMixin, TemplateView):
                 cs_form=cs_form)
 
         return render(request, self.template_name, context)
+
+
+class DashboardCourses(StaffMixin, TemplateView):
+    template_name = 'staff/dashboard_courses.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardHome, self).get_context_data(**kwargs)
+
+        p = int(self.request.GET.get('p', '1'))
+        o = self.request.GET.get('o', 'pk')
+        s = int(self.request.GET.get('s', '10'))
+
+        contact = self.request.user.get_srecord()
+        courses = DegreeCourse.objects.filter(university=contact.account).order_by(o)
+
+        if not courses:
+            courses = []
+        else:
+            paginator = Paginator(courses, s)
+
+            try:
+                courses = paginator.page(p)
+            except EmptyPage:
+                courses = paginator.page(paginator.num_pages if p > 1 else 0)
+
+        context.update(contact=contact, courses=courses)
+        return context
 
 
 class DashboardUniversity(StaffMixin, TemplateView):
@@ -201,6 +227,7 @@ class FileUploadAction(StaffMixin, View):
         return HttpResponseRedirect('/')
 
 
+# Todo Display all non-bank data
 class StudentReview(StaffMixin, DetailView):
     model = Account
     template_name = 'staff/student_review.html'
