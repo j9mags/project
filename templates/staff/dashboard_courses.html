@@ -5,7 +5,7 @@
 {% load csp %}
 
 {% block title %}
-  {% if students %}
+  {% if courses %}
     {% trans 'Displaying' %} {{ courses.object_list | length }} / {{ courses.paginator.count}}
   {% else %}
     {% trans 'No courses found to match this criteria' %}
@@ -27,7 +27,7 @@
     <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp csp--full-width">
       <thead>
         <tr>
-          <th class="mdl-data-table__cell--non-numeric">{% trans 'Course name' %}</th>
+          <th class="mdl-data-table__cell--non-numeric csp--full-width">{% trans 'Course name' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Standard Period of Studies' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Cost per semester' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Cost per month' %}</th>
@@ -42,7 +42,7 @@
             <td class="mdl-data-table__cell--non-numeric">{{ course.name }}
               <!-- a href="{% url 'integration:course_review' course.pk %}">{{ course.name }}</a -->
             </td>
-            <td class="mdl-data-table__cell">{{ course.standard_period_of_study }}</td>
+            <td class="mdl-data-table__cell">{{ course.standard_period_of_study|floatformat:"0" }}</td>
             <td class="mdl-data-table__cell">{{ course.cost_per_semester|currency }}</td>
             <td class="mdl-data-table__cell">{{ course.cost_per_month|currency }}</td>
             <td class="mdl-data-table__cell">{{ course.cost_per_month_beyond_standard|currency }}</td>
