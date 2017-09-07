@@ -18,19 +18,23 @@ from uuid import uuid4
 
 
 class StaffMixin(LoginRequiredMixin):
-
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_unistaff():
             raise PermissionDenied()
 
         return super(StaffMixin, self).dispatch(request, *args, **kwargs)
 
+    def get_staff_context(self):
+        self.contact = self.request.user.get_srecord()
+        return dict(contact=self.contact, st_form=StudentsUploadForm(self.contact.account), cs_form=UploadForm())
+
 
 class DashboardHome(StaffMixin, TemplateView):
     template_name = 'staff/dashboard_home.html'
 
     def get_context_data(self, **kwargs):
-        context = super(DashboardHome, self).get_context_data(**kwargs)
+        context = self.get_staff_context()
+        context.update(super(DashboardHome, self).get_context_data(**kwargs))
 
         p = int(self.request.GET.get('p', '1'))
         o = self.request.GET.get('o', 'pk')
@@ -39,8 +43,7 @@ class DashboardHome(StaffMixin, TemplateView):
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
-        contact = self.request.user.get_srecord()
-        students = Account.students.filter(hochschule_ref=contact.account).order_by(o)
+        students = Account.students.filter(hochschule_ref=self.contact.account).order_by(o)
         filters = []
 
         if not students:
@@ -67,8 +70,8 @@ class DashboardHome(StaffMixin, TemplateView):
                     students = students.filter(contract_account_set__studiengang_ref__pk=course)
                     filters.append(
                         (_('Course'),
-                            students.first().contract_account_set.filter(
-                                studiengang_ref__pk=course).first().studiengang_ref.name))
+                         students.first().contract_account_set.filter(
+                             studiengang_ref__pk=course).first().studiengang_ref.name))
 
             paginator = Paginator(students, s)
             try:
@@ -76,19 +79,9 @@ class DashboardHome(StaffMixin, TemplateView):
             except EmptyPage:
                 students = paginator.page(paginator.num_pages if p > 1 else 0)
 
-        bulk_form = BulkActionsForm(contact.account)
-        context.update(contact=contact, students=students, filters=filters, bulk_form=bulk_form)
+        bulk_form = BulkActionsForm(self.contact.account)
+        context.update(students=students, filters=filters, bulk_form=bulk_form)
         return context
-
-    def get(self, request, *args, **kwargs):
-        response = super(DashboardHome, self).get(request, *args, **kwargs)
-        contact = response.context_data.get('contact')
-
-        response.context_data.update(
-            st_form=StudentsUploadForm(contact.account),
-            cs_form=UploadForm())
-
-        return response
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -128,14 +121,14 @@ class DashboardCourses(StaffMixin, TemplateView):
     template_name = 'staff/dashboard_courses.html'
 
     def get_context_data(self, **kwargs):
-        context = super(DashboardHome, self).get_context_data(**kwargs)
+        context = self.get_staff_context()
+        context.update(super(DashboardCourses, self).get_context_data(**kwargs))
 
         p = int(self.request.GET.get('p', '1'))
         o = self.request.GET.get('o', 'pk')
         s = int(self.request.GET.get('s', '10'))
 
-        contact = self.request.user.get_srecord()
-        courses = DegreeCourse.objects.filter(university=contact.account).order_by(o)
+        courses = DegreeCourse.objects.filter(university=self.contact.account).order_by(o)
 
         if not courses:
             courses = []
@@ -147,7 +140,7 @@ class DashboardCourses(StaffMixin, TemplateView):
             except EmptyPage:
                 courses = paginator.page(paginator.num_pages if p > 1 else 0)
 
-        context.update(contact=contact, courses=courses)
+        context.update(courses=courses)
         return context
 
 
@@ -155,21 +148,21 @@ class DashboardUniversity(StaffMixin, TemplateView):
     template_name = 'staff/dashboard_university.html'
 
     def get_context_data(self, **kwargs):
-        context = super(DashboardUniversity, self).get_context_data(**kwargs)
-        contact = self.request.user.get_srecord()
-        context.update(university=contact.account)
+        context = self.get_staff_context()
+        context.update(super(DashboardUniversity, self).get_context_data(**kwargs))
+        context.update(university=self.contact.account)
 
         if self.request.POST:
-            form = UniversityForm(self.request.POST, instance=contact.account)
+            form = UniversityForm(self.request.POST, instance=self.contact.account)
         else:
-            form = UniversityForm(instance=contact.account)
+            form = UniversityForm(instance=self.contact.account)
 
         context.update(form=form)
 
         return context
 
     def post(self, request, *args, **kwargs):
-        context = self.get_context_data(*args, **kwargs)
+        context = self.get_context_data(**kwargs)
 
         form = context.get('form')
         if form.is_valid():
@@ -204,7 +197,6 @@ class FileUploadReview(StaffMixin, TemplateView):
 
 
 class FileUploadAction(StaffMixin, View):
-
     def get(self, request, *args, **kwargs):
         uuid = kwargs.get('uuid')
         action = kwargs.get('action')
@@ -233,11 +225,11 @@ class StudentReview(StaffMixin, DetailView):
     template_name = 'staff/student_review.html'
 
     def get_context_data(self, **kwargs):
-        context = super(StudentReview, self).get_context_data(**kwargs)
+        context = self.get_staff_context()
+        context.update(super(StudentReview, self).get_context_data(**kwargs))
 
         account = context.get('account')
-        contact = self.request.user.get_srecord()
-        if contact.account.pk != account.hochschule_ref.pk:
+        if self.contact.account.pk != account.hochschule_ref.pk:
             raise ObjectDoesNotExist()
 
         payload = self.request.POST if 'status' in self.request.POST else {'status': account.status}
@@ -257,7 +249,8 @@ class StudentReview(StaffMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = self.get_context_data(object=self.object, **kwargs)
+        context = self.get_staff_context()
+        context.update(self.get_context_data(object=self.object, **kwargs))
         if 'status' in request.POST:
             ctr_form = context.get('acc_form')
             if ctr_form.is_valid():
