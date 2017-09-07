@@ -15,9 +15,10 @@ urlpatterns = [
         staff.FileUploadAction.as_view(), name='upload_action'),
     url(r'^review/(?P<uuid>.+)/$', staff.FileUploadReview.as_view(), name='upload_review'),
     url(r'^student/(?P<pk>.+)/$', staff.StudentReview.as_view(), name='student_review'),
+    url(r'^students/$', staff.DashboardHome.as_view(), name='students'),
     url(r'^bulk/$', staff.BulkActions.as_view(), name='students_bulk'),
     url(r'^university/$', staff.DashboardUniversity.as_view(), name='university'),
-    url(r'^courses/(?P<pk>.+)/$', staff.DashboardCourses.as_view(), name='course_review'),
+    url(r'^course/(?P<pk>.+)/$', staff.DashboardCourses.as_view(), name='course_review'),
     url(r'^courses/$', staff.DashboardCourses.as_view(), name='courses'),
 
     url(r'^$',
