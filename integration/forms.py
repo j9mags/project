@@ -59,7 +59,7 @@ class LanguageSelectForm(forms.Form):
 
 
 class OnboardingReviewForm(forms.Form):
-    approved = forms.BooleanField()
+    approved = forms.BooleanField(label=_('I accept that the data provided by the university is correct.'))
 
 
 class StudentOnboardingForm(forms.Form):
