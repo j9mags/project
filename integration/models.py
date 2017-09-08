@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
+from datetime import date
+
 from django.contrib.auth import get_user_model
-from django.utils.datetime_safe import date
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
 from django.db import connections
