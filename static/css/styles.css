@@ -334,9 +334,9 @@ img {
   padding: 0;
 }
 
-.mdl-textfield,
-.mdl-radiofield,
-.mdl-selectfield {
+.chancen-content .mdl-textfield,
+.chancen-content .mdl-radiofield,
+.chancen-content .mdl-selectfield {
   width: 100%;
 }
 
