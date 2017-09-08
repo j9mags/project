@@ -47,6 +47,7 @@ class DashboardHome(StaffMixin, TemplateView):
 
         students = Account.students.filter(hochschule_ref=self.contact.account).order_by(o)
         if q:
+            context.update(q=q)
             students = students.filter(
                 Q(name__icontains=q) | Q(immatrikulationsnummer=q) | Q(unimailadresse__icontains=q))
 
@@ -138,6 +139,7 @@ class DashboardCourses(StaffMixin, TemplateView):
 
         courses = DegreeCourse.objects.filter(university=self.contact.account).order_by(o)
         if q:
+            context.update(q=q)
             courses = courses.filter(Q(name__icontains=q))
         if not courses:
             courses = []
