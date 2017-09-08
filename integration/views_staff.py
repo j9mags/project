@@ -133,7 +133,7 @@ class DashboardCourses(StaffMixin, TemplateView):
 
         courses = DegreeCourse.objects.filter(university=self.contact.account).order_by(o)
         if q:
-            courses = courses.fiter(Q(name__contains=q))
+            courses = courses.filter(Q(name__icontains=q))
         if not courses:
             courses = []
         else:
