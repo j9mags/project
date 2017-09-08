@@ -6,7 +6,7 @@ from django.views.generic.base import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-
+from django.db.models import Q
 from django.shortcuts import render
 
 from .models import DegreeCourse, Contract
@@ -123,13 +123,17 @@ class DashboardCourses(StaffMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = self.get_staff_context()
         context.update(super(DashboardCourses, self).get_context_data(**kwargs))
+        context.update(can_search=True)
 
         p = int(self.request.GET.get('p', '1'))
         o = self.request.GET.get('o', 'pk')
         s = int(self.request.GET.get('s', '10'))
 
-        courses = DegreeCourse.objects.filter(university=self.contact.account).order_by(o)
+        q = self.request.GET.get('q')
 
+        courses = DegreeCourse.objects.filter(university=self.contact.account).order_by(o)
+        if q:
+            courses = courses.fiter(Q(name__contains=q))
         if not courses:
             courses = []
         else:
