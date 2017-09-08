@@ -5,12 +5,15 @@
     <li class="mdl-step {% if step.is_active %}is-active{% endif %}">
         <span class="mdl-step__label">
             <span class="mdl-step__title">
-                <span class="mdl-step__title-text">{{ step.title }}</span>
-                <span class="mdl-step__title-message">{{ step.caption }}</span>
+                {% if step.is_active %}
+                    <span class="mdl-step__title-text mdl-typography--title">{{ step.caption }}</span>
+                {% else %}
+                    <span class="mdl-step__title-text mdl-typography--title">{{ step.title }}</span>
+                {% endif %}
             </span>
         </span>
         {% if step.is_active %}
-        <form method="post">
+        <form method="post" action="{{ step.action }}">
             {% csrf_token %}
             <div class="mdl-step__content">
                 {% include step.template %}

@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from .forms import *
 
@@ -100,12 +101,14 @@ class Onboarding(StudentMixin, View):
                     'title': 'Welcome back! | Wilkommen!',
                     'caption': 'Please choose your preferred language | Bitte wählen Sie Ihre bevorzugte Sprache',
                     'template': 'students/onboarding_lang.html',
+                    'action': reverse('integration:onboarding', kwargs={'step': 'lang'}),
                     'submit': 'Continue | Fortsetzen',
                 },
                 {
                     'title': _('Data Review'),
                     'caption': _('Carefully review the data provided by your university'),
                     'template': 'students/onboarding_review.html',
+                    'action': reverse('integration:onboarding', kwargs={'step': 'review'}),
                     'back': 'lang',
                     'submit': _('Continue'),
                 },
@@ -113,6 +116,7 @@ class Onboarding(StudentMixin, View):
                     'title': _('Complete your registration!'),
                     'caption': _('Fill the form and log into your Chancen account.'),
                     'template': 'students/onboarding_data.html',
+                    'action': reverse('integration:onboarding', kwargs={'step': 'data'}),
                     'back': 'review',
                     'submit': _('Continue'),
                 },
@@ -120,6 +124,7 @@ class Onboarding(StudentMixin, View):
                     'title': _('Set up your Bank account'),
                     'caption': _('Configure your payment method now or leave it for later.'),
                     'template': 'students/onboarding_sepa.html',
+                    'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
                     'back': 'data',
                     'submit': _('Continue'),
                 },
@@ -216,10 +221,19 @@ class Onboarding(StudentMixin, View):
             form = OnboardingReviewForm(request.POST)
             if form.is_valid():
                 self.account.student_approved = form.cleaned_data.get('approved', False)
-            try:
-                self.account.save()
-            except Exception:
+                try:
+                    self.account.save()
+                except Exception:
+                    return render(request, self.template, context)
+            else:
+                context.update(form=form)
+                self.account.student_approved = False
+                try:
+                    self.account.save()
+                except Exception as e:
+                    form.errors.add(None, str(e))
                 return render(request, self.template, context)
+
             return redirect('integration:onboarding', step='data')
         elif step == 'data':
             form = StudentOnboardingForm(request.POST)

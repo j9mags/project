@@ -37,6 +37,10 @@ img {
 .chancen-layout .mdl-layout__header .mdl-layout__drawer-button {
   color: white;
 }
+
+#chancen-logout-button .material-icons {
+  padding-left: 8px;
+}
 .mdl-layout__drawer .avatar {
   margin-bottom: 16px;
 }
@@ -359,12 +363,24 @@ img {
   display: block;
 }
 
+.mdl-checkfield.is-invalid,
 .mdl-radiofield.is-invalid {
   color: #d50000;
 }
 
+.mdl-checkfield.is-invalid .mdl-checkfield__error,
 .mdl-radiofield.is-invalid .mdl-radiofield__error {
     visibility: visible;
+}
+
+.mdl-checkfield__error,
+.mdl-radiofield__error {
+    color: #d50000;
+    position: absolute;
+    font-size: 12px;
+    margin-top: 3px;
+    visibility: hidden;
+    display: block;
 }
 
 .mdl-card {

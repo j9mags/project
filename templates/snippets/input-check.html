@@ -1,5 +1,13 @@
-<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect {% if field.errors %}is-invalid{% endif %}">
-    <input type="checkbox" name="{{ field.html_name }}" id="{{ field.id_for_label }}"
-           class="mdl-checkbox__input" {% if field.value %}checked{% endif %}>
-    <span class="mdl-checkbox__label">{{ field.label }}</span>
-</label>
+<div class="mdl-checkfield {% if field.errors %}is-invalid{% endif %}">
+    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+        <input type="checkbox" name="{{ field.html_name }}" id="{{ field.id_for_label }}"
+               class="mdl-checkbox__input" {% if field.value %}checked{% endif %}>
+        <span class="mdl-checkbox__label">{{ field.label }}</span>
+    </label>
+
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <span class="mdl-checkfield__error">{{ error | escape }}</span>
+        {% endfor%}
+    {% endif %}
+</div>
