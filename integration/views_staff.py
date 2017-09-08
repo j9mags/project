@@ -35,17 +35,22 @@ class DashboardHome(StaffMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = self.get_staff_context()
         context.update(super(DashboardHome, self).get_context_data(**kwargs))
+        context.update(can_search=True)
 
         p = int(self.request.GET.get('p', '1'))
         o = self.request.GET.get('o', 'pk')
         s = int(self.request.GET.get('s', '10'))
+        q = self.request.GET.get('q')
 
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
         students = Account.students.filter(hochschule_ref=self.contact.account).order_by(o)
-        filters = []
+        if q:
+            students = students.filter(
+                Q(name__icontains=q) | Q(immatrikulationsnummer=q) | Q(unimailadresse__icontains=q))
 
+        filters = []
         if not students:
             students = []
             if status:
