@@ -252,7 +252,10 @@ class Account(models.Model):
     payment_options = models.CharField(custom=True, max_length=255, choices=Choices.PaymentOptions, blank=True,
                                        null=True)
     recordcreated = models.BooleanField(custom=True, verbose_name='Record created', default=models.DEFAULTED_ON_CREATE)
-    student_approved = models.BooleanField(custom=True, verbose_name='Student Approved', default=models.DEFAULTED_ON_CREATE)
+    student_approved = models.BooleanField(custom=True, verbose_name='Student Approved',
+                                           default=models.DEFAULTED_ON_CREATE)
+    initial_review_completed = models.BooleanField(custom=True, verbose_name='Initial Review Completed',
+                                                   default=models.DEFAULTED_ON_CREATE)
 
     objects = managers.DefaultManager()
     universities = managers.UniversityManager()

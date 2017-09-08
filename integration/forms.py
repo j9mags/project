@@ -58,7 +58,9 @@ class LanguageSelectForm(forms.Form):
     language = forms.ChoiceField(choices=Choices.Language, widget=forms.RadioSelect)
 
 
-# Todo: Add review current info step
+class OnboardingReviewForm(forms.Form):
+    approved = forms.BooleanField()
+
 
 class StudentOnboardingForm(forms.Form):
     salutation = forms.ChoiceField(choices=SalutationChoices, required=False)

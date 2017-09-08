@@ -17,35 +17,7 @@
         {% include 'snippets/field-text.html' with label=_('University email address') value=sf_account.unimailadresse %}
     </div>
 
-    <!-- div class="mdl-cell--12-col">
-        <h5 class="mdl-typography--headline">{% trans 'Personal data' %}</h5>
+    <div class="mdl-cell--12-col">
+        {% include 'snippets/input-check.html' with field=form.approved %}
     </div>
-    <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('First name') value=sf_contact.first_name %}
-    </div>
-    <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Last name') value=sf_contact.last_name %}
-    </div>
-    <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Personal email') value=sf_contact.email %}
-    </div>
-    <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Mobile phone') value=sf_contact.mobile_phone %}
-    </div>
-
-    <div class="mdl-cell mdl-cell--12-col">
-        <span class="mdl-typography--title">{% trans 'Home address' %}</span>
-    </div>
-    <div class="mdl-cell mdl-cell--8-col">
-        {% include 'snippets/field-text.html' with label=_('Street') value=sf_contact.mailing_street %}
-    </div>
-    <div class="mdl-cell mdl-cell--4-col">
-        {% include 'snippets/field-text.html' with label=_('Postal Code') value=sf_contact.mailing_postal_code %}
-    </div>
-    <div class="mdl-cell mdl-cell--6-col">
-        {% include 'snippets/field-text.html' with label=_('City') value=sf_contact.mailing_city %}
-    </div>
-    <div class="mdl-cell mdl-cell--6-col">
-        {% include 'snippets/field-text.html' with label=_('Country') value=sf_contact.mailing_country %}
-    </div -->
 </div>

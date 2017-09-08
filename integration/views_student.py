@@ -11,14 +11,12 @@ from django.http import HttpResponse
 
 from django.shortcuts import render, redirect
 
-from .forms import StudentOnboardingForm
-from .forms import LanguageSelectForm
+from .forms import *
 
 from .models import Attachment
 
 
 class StudentMixin(LoginRequiredMixin):
-
     def get_queryset(self):
         return self.request.user.get_srecord()
 
@@ -60,13 +58,12 @@ class Dashboard(StudentMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        if not self.account.initial_review_completed_auto:
+        if not self.account.initial_review_completed:
+            step = 'data'
             if not self.account.kommunikationssprache:
                 step = 'lang'
             elif not self.account.student_approved:
                 step = 'review'
-            else:
-                step = 'data'
             return redirect('integration:onboarding', step=step)
 
         return super(Dashboard, self).get(request, *args, **kwargs)
@@ -85,44 +82,48 @@ class Onboarding(StudentMixin, View):
         step = kwargs.get('step') or self.steps[0]
         if step not in self.steps:
             raise ObjectDoesNotExist()
-        print(kwargs)
 
-        context = {'step': step}
         self.account = self.get_queryset()
 
-        context['sf_account'] = self.account
-        context['sf_contact'] = self.account.get_master_contact()
-        context['sf_contract'] = self.account.get_active_contract()
-        context['ignore_drawer'] = True
-        context['stepper'] = (
-            {
-                'title': 'Welcome back! | Wilkommen!',
-                'caption': 'Please choose your preferred language | Bitte wählen Sie Ihre bevorzugte Sprache',
-                'template': 'students/onboarding_lang.html',
-                'submit': 'Continue | Fortsetzen',
-            },
-            {
-                'title': _('Data Review'),
-                'caption': _('Carefully review the data provided by your university'),
-                'template': 'students/onboarding_review.html',
-                'back': 'lang',
-                'submit': _('Continue'),
-            },
-            {
-                'title': _('Complete your registration!'),
-                'caption': _('Fill the form and log into your Chancen account.'),
-                'template': 'students/onboarding_data.html',
-                'back': 'review',
-                'submit': _('Continue'),
-            },
-            {
-                'title': _('Set up your Bank account'),
-                'caption': _('Configure your payment method now or leave it for later.'),
-                'template': 'students/onboarding_sepa.html',
-                'back': 'data',
-                'submit': _('Continue'),
-            },
-        )
+        if not self.account.kommunikationssprache:
+            step = 'lang'
+        elif not self.account.student_approved:
+            if step not in self.steps[:1]:
+                step = 'review'
+        elif not self.account.geburtsort:
+            if step not in self.steps[:2]:
+                step = 'data'
+
+        context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.get_master_contact(),
+                   'sf_contract': self.account.get_active_contract(), 'ignore_drawer': True, 'stepper': (
+                {
+                    'title': 'Welcome back! | Wilkommen!',
+                    'caption': 'Please choose your preferred language | Bitte wählen Sie Ihre bevorzugte Sprache',
+                    'template': 'students/onboarding_lang.html',
+                    'submit': 'Continue | Fortsetzen',
+                },
+                {
+                    'title': _('Data Review'),
+                    'caption': _('Carefully review the data provided by your university'),
+                    'template': 'students/onboarding_review.html',
+                    'back': 'lang',
+                    'submit': _('Continue'),
+                },
+                {
+                    'title': _('Complete your registration!'),
+                    'caption': _('Fill the form and log into your Chancen account.'),
+                    'template': 'students/onboarding_data.html',
+                    'back': 'review',
+                    'submit': _('Continue'),
+                },
+                {
+                    'title': _('Set up your Bank account'),
+                    'caption': _('Configure your payment method now or leave it for later.'),
+                    'template': 'students/onboarding_sepa.html',
+                    'back': 'data',
+                    'submit': _('Continue'),
+                },
+            )}
 
         return self.update_context_for(step, context)
 
@@ -132,6 +133,7 @@ class Onboarding(StudentMixin, View):
         return context
 
     def _get_review_context(self, context):
+        context.update(form=OnboardingReviewForm(initial={'approved': self.account.student_approved}))
         context['stepper'][1].update(is_active=True)
         return context
 
@@ -189,7 +191,7 @@ class Onboarding(StudentMixin, View):
         context = self.get_context_data(**kwargs)
         account = context.get('sf_account')
 
-        if account.initial_review_completed_auto:
+        if account.initial_review_completed:
             return redirect('integration:dashboard')
 
         return render(request, self.template, context)
@@ -211,7 +213,9 @@ class Onboarding(StudentMixin, View):
                 return render(request, self.template, context)
             return redirect('integration:onboarding', step='review')
         elif step == 'review':
-            self.account.student_approved = True
+            form = OnboardingReviewForm(request.POST)
+            if form.is_valid():
+                self.account.student_approved = form.cleaned_data.get('approved', False)
             try:
                 self.account.save()
             except Exception:
@@ -263,10 +267,19 @@ class Onboarding(StudentMixin, View):
                 return render(request, self.template, context)
 
             return redirect('integration:onboarding', step='sepa')
+        elif step == 'sepa':
+            self.account.initial_review_completed = True
+
+            try:
+                self.account.save()
+            except Exception as e:
+                context.update(error=str(e))  # should we rather launch a 500 ??
+                return render(request, self.template, context)
+
+            return redirect('integration:dashboard')
 
 
 class ContactSEPA(StudentMixin, TemplateView):
-
     template_name = 'students/contact_sepa.html'
 
     def get_context_data(self, **kwargs):
@@ -293,7 +306,6 @@ class ContactSEPA(StudentMixin, TemplateView):
 
 
 class DownloadAttachment(StudentMixin, View):
-
     def get(self, *args, **kwargs):
         att_id = kwargs.get('att_id')
         att = Attachment.objects.get(pk=att_id)
