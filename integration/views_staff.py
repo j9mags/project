@@ -132,7 +132,7 @@ class DashboardCourses(StaffMixin, TemplateView):
         context.update(can_search=True)
 
         p = int(self.request.GET.get('p', '1'))
-        o = self.request.GET.get('o', 'pk')
+        o = self.request.GET.get('o', '-start_of_studies')
         s = int(self.request.GET.get('s', '10'))
 
         q = self.request.GET.get('q')

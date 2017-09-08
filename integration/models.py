@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth import get_user_model
+from django.utils.datetime_safe import date
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
 from django.db import connections
@@ -296,7 +297,7 @@ class Account(models.Model):
 
     def get_active_courses(self):
         if not self._is_student():
-            return self.degreecourse_set.all()
+            return self.degreecourse_set.filter(start_of_studies__gte=date.today())
         return None
 
 
