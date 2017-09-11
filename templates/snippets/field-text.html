@@ -6,7 +6,7 @@
   {% elif type == 'float' %}
     <div class="mdl-typography--font-light mdl-typography--title">{{ value }}</div>
   {% elif type == 'currency' %}
-    <div class="mdl-typography--font-light mdl-typography--title">{{ value | currency:"0" }}</div>
+    <div class="mdl-typography--font-light mdl-typography--title">{{ value | currency }}</div>
   {% elif type == 'date' %}
     <div class="mdl-typography--font-light mdl-typography--title">{{ value | date:"d.m.Y" }}</div>
   {% else %}
