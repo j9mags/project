@@ -204,6 +204,7 @@ img {
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 
+.mdl-button:not(.mdl-button--icon) .material-icons,
 .mdl-button:not(.mdl-button--fab) .material-icons {
   padding-left: 8px;
 }

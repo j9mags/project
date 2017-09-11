@@ -201,11 +201,12 @@ class CsvUpload(models.Model):
             course.standard_period_of_study = row.get('Standard Study Period')
             course.cost_per_semester = row.get('Cost per Semester')
             course.cost_per_month = row.get('Cost per Month')
-            # course. = row.get('Tuition Fees Total')
             course.cost_per_month_beyond_standard = row.get('Cost per Month beyond Standard Study Period')
             course.matriculation_fee = row.get('Matriculation Fee')
             course.start_of_studies_month = row.get('Starting Month of Studies')
             course.start_of_studies = row.get('Start of Studies')
+            course.fee_semester_abroad = row.get('Fee Semester abroad')
+            course.fee_semester_off = row.get('Fee Semester off')
             course.start_summer_semester = row.get('Starting Month Summer Semester')
             course.start_winter_semester = row.get('Starting Month Winter Semester')
 

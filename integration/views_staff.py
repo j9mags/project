@@ -151,8 +151,22 @@ class DashboardCourses(StaffMixin, TemplateView):
             except EmptyPage:
                 courses = paginator.page(paginator.num_pages if p > 1 else 0)
 
-        context.update(courses=courses)
+        if self.request.POST:
+            form = UniversityForm(self.request.POST, instance=self.contact.account)
+        else:
+            form = UniversityForm(instance=self.contact.account)
+
+        context.update(courses=courses, form=form)
         return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        form = context.get('form')
+        if form.is_valid():
+            form.save()
+
+        return self.get(request, *args, **kwargs)
 
 
 class DashboardUniversity(StaffMixin, TemplateView):
