@@ -243,7 +243,7 @@ class FileUpload(StaffMixin, TemplateView):
                 uuid=str(uuid4()),
                 content=content
             )
-            return redirect('/review/' + upd.uuid)
+            return redirect('integration:upload_review', uuid=upd.uuid)
         else:
             context.update(
                 display_st=form == st_form,
