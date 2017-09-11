@@ -204,7 +204,8 @@ class FileUpload(StaffMixin, TemplateView):
         if uuid is None:
             raise SuspiciousOperation()
 
-        context = super(FileUpload, self).get_context_data(**kwargs)
+        context = self.get_staff_context()
+        context.update(super(FileUpload, self).get_context_data(**kwargs))
 
         if uuid == "new" and self.request.POST:
             return context
