@@ -1,4 +1,16 @@
+{% load csp %}
+
 <div class="mdl-textfield mdl-textfield--floating-label is-dirty">
-  <div class="mdl-typography--font-light mdl-typography--title">{{ value | default:"--" | safe }}</div>
+  {% if type == 'int' %}
+    <div class="mdl-typography--font-light mdl-typography--title">{{ value | floatformat:"0" }}</div>
+  {% elif type == 'float' %}
+    <div class="mdl-typography--font-light mdl-typography--title">{{ value }}</div>
+  {% elif type == 'currency' %}
+    <div class="mdl-typography--font-light mdl-typography--title">{{ value | currency:"0" }}</div>
+  {% elif type == 'date' %}
+    <div class="mdl-typography--font-light mdl-typography--title">{{ value | date:"d.m.Y" }}</div>
+  {% else %}
+    <div class="mdl-typography--font-light mdl-typography--title">{{ value | default:"--" | safe }}</div>
+  {% endif %}
   <label class="mdl-textfield__label">{{ label }}</label>
 </div>

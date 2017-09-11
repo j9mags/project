@@ -21,25 +21,25 @@
         {% include 'snippets/field-text.html' with label=_('Standard Period of Studies') value=course.standard_period_of_study %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Cost per semester') value=course.cost_per_semester %}
+        {% include 'snippets/field-text.html' with label=_('Cost per semester') value=course.cost_per_semester type="currency" %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Cost per month') value=course.cost_per_month %}
+        {% include 'snippets/field-text.html' with label=_('Cost per month') value=course.cost_per_month type="currency" %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Cost per month beyond Standard Period') value=course.cost_per_month_beyond_standard %}
+        {% include 'snippets/field-text.html' with label=_('Cost per month beyond Standard Period') value=course.cost_per_month_beyond_standard type="currency" %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Matriculation fee') value=course.matriculation_fee %}
+        {% include 'snippets/field-text.html' with label=_('Matriculation fee') value=course.matriculation_fee type="currency" %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Fee Semester abroad') value=course.fee_semester_abroad %}
+        {% include 'snippets/field-text.html' with label=_('Fee Semester abroad') value=course.fee_semester_abroad type="currency" %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Fee Semester off') value=course.standard_period_of_study %}
+        {% include 'snippets/field-text.html' with label=_('Fee Semester off') value=course.fee_semester_off type="currency" %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Start of Studies') value=course.fee_semester_off %}
+        {% include 'snippets/field-text.html' with label=_('Start of Studies') value=course.start_of_studies type="date" %}
       </div>
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('Starting Month Summer Semester') value=course.start_summer_semester %}
