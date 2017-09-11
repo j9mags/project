@@ -257,8 +257,11 @@ class Account(models.Model, PerishableTokenMixin):
     kommunikationssprache = models.CharField(custom=True, max_length=255, verbose_name=_('Communication Language'),
                                              choices=Choices.Language, blank=True, null=True)
     unimailadresse = models.EmailField(custom=True, verbose_name=_('University Email Address'), blank=True, null=True)
+
     zahlungskontakt_ref = models.ForeignKey('Contact', models.DO_NOTHING, custom=True,
                                             related_name='account_zahlungskontaktref_set', blank=True, null=True)
+    student_contact = models.ForeignKey('Contact', models.DO_NOTHING, custom=True,
+                                        related_name='account_studentcontact_set', blank=True, null=True)
 
     sepalastschriftmandat_erteilt_auto = models.BooleanField(custom=True,
                                                              db_column='SEPALastschriftmandatErteiltAuto__c',
@@ -311,7 +314,7 @@ class Account(models.Model, PerishableTokenMixin):
 
     def get_student_contact(self):
         if self._is_student():
-            return self.contact_set.get(student_contact=True)
+            return self.student_contact
         return None
 
     def get_payment_contact(self):
