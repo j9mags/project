@@ -302,6 +302,9 @@ class CourseReview(StaffMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = self.get_staff_context()
         context.update(super(CourseReview, self).get_context_data(**kwargs))
+
+        if self.object.university.pk != self.contact.account.pk:
+            raise ObjectDoesNotExist()
         context.update(course=self.object)
         return context
 
