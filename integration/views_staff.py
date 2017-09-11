@@ -206,6 +206,9 @@ class FileUpload(StaffMixin, TemplateView):
 
         context = super(FileUpload, self).get_context_data(**kwargs)
 
+        if uuid == "new" and self.request.POST:
+            return context
+
         try:
             upload = self.request.user.csvupload_set.get(uuid=uuid)
         except Exception as e:
