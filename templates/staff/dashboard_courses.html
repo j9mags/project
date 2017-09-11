@@ -15,9 +15,13 @@
 {% block content %}
   <div class="mdl-cell mdl-cell--6-col mdl-cell--2-offset-tablet mdl-cell--6-offset-desktop mdl-typography--text-right">
     <form method="post">
-      {% include 'snippets/input.html' with field=form.semester_fee_new %}
-      <input type="submit" value="{% trans 'Update' %}"
-             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white">
+      <div class="mdl-cell">
+        {% include 'snippets/input.html' with field=form.semester_fee_new %}
+      </div>
+      <div class="mdl-cell mdl-cell--2-col">
+        <input type="submit" value="{% trans 'Update' %}"
+               class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white">
+      </div>
     </form>
   </div>
 
