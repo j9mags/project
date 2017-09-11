@@ -295,6 +295,17 @@ class StudentReview(StaffMixin, DetailView):
         return self.render_to_response(context)
 
 
+class CourseReview(StaffMixin, DetailView):
+    model = DegreeCourse
+    template_name = 'staff/course_review.html'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_staff_context()
+        context.update(super(CourseReview, self).get_context_data(**kwargs))
+
+        return context
+
+
 class ContractReview(StaffMixin, DetailView):
     model = Contract
     template_name = 'staff/contract_review.html'

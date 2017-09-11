@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^students/$', staff.DashboardHome.as_view(), name='students'),
     url(r'^bulk/$', staff.BulkActions.as_view(), name='students_bulk'),
     url(r'^university/$', staff.DashboardUniversity.as_view(), name='university'),
-    url(r'^course/(?P<pk>.+)/$', staff.DashboardCourses.as_view(), name='course_review'),
+    url(r'^course/(?P<pk>.+)/$', staff.CourseReview.as_view(), name='course_review'),
     url(r'^courses/$', staff.DashboardCourses.as_view(), name='courses'),
 
     url(r'^$',
