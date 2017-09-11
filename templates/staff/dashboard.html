@@ -20,7 +20,7 @@
 {% block fab_options %}
 <div id="dlg-add-students" class="mdl-dialog {% if display_st %}is-showing-dialog{% endif %}">
     <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
-    <form enctype="multipart/form-data" method="post" action="{% url 'integration:upload_review' uuid=_ %}"
+    <form enctype="multipart/form-data" method="post" action="{% url 'integration:upload_review' uuid='new' %}"
           onsubmit="document.getElementById('upload-progress-st').classList.add('is-active')"
           onabort="document.getElementById('upload-progress-st').classList.remove('is-active')">
 
