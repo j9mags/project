@@ -1,0 +1,59 @@
+{% extends 'layout/dashboard.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load csp %}
+
+{% block title %}{{ course.name }}{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col mdl-grid">
+    {% if form %}
+      <form method="post">
+        {% csrf_token %}
+    {% endif %}
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Standard Period of Studies') value=course.standard_period_of_study %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Cost per semester') value=course.cost_per_semester %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Cost per month') value=course.cost_per_month %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Cost per month beyond Standard Period') value=course.cost_per_month_beyond_standard %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Matriculation fee') value=course.matriculation_fee %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Fee Semester abroad') value=course.fee_semester_abroad %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Fee Semester off') value=course.standard_period_of_study %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Start of Studies') value=course.fee_semester_off %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Starting Month Summer Semester') value=course.start_summer_semester %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Starting Month Winter Semester') value=course.start_winter_semester %}
+      </div>
+    {% if form %}
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  <script src="{% static '/js/mdl-selectfield.min.js' %}"></script>
+{% endblock %}
