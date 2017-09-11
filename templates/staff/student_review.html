@@ -3,11 +3,6 @@
 {% load static %}
 {% load i18n %}
 
-{% block extrahead %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
-{% endblock %}
-
 {% block title %}{{ account.name }}{% endblock %}
 
 {% block content %}
@@ -17,10 +12,4 @@
 <div class="mdl-cell mdl-cell--12-col">
   {% include "snippets/student_contract.html" with class="csp--full-width" form=ctr_form discount_form=dsc_form %}
 </div>
-{% endblock %}
-
-
-{% block extrajs %}
-  {{ block.super }}
-  <script src="{% static '/js/mdl-selectfield.min.js' %}"></script>
 {% endblock %}
