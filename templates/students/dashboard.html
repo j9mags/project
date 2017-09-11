@@ -6,6 +6,14 @@
 {% block title %}{% trans 'My Chancen' %}{% endblock %}
 
 {% block content %}
+
+  {% if not account.sepalastschriftmandat_erteilt_auto %}
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+      <div class="mdl-snackbar__text">{% trans 'You have not authorise us to debit your account. Without permission from you we cannot debit your tuition fees from your account and you are not able to commence your studies.' %}</div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+  {% endif %}
+
   <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
     <div class="mdl-tabs__tab-bar">
         <a id="account-tab" href="#account-panel" class="mdl-tabs__tab">{% trans 'Account' %}</a>

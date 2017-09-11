@@ -145,15 +145,15 @@ class Onboarding(StudentMixin, View):
         context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.get_master_contact(),
                    'sf_contract': self.account.get_active_contract(), 'ignore_drawer': True, 'stepper': (
                 {
-                    'title': 'Welcome back! | Wilkommen!',
-                    'caption': 'Please choose your preferred language | Bitte wählen Sie Ihre bevorzugte Sprache',
+                    'title': 'Wilkommen! | Welcome back! ',
+                    'caption': 'Bitte wähle deine bevorzugte Sprache. | Please select your preferred language.',
                     'template': 'students/onboarding_lang.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'lang'}),
                     'submit': 'Continue | Fortsetzen',
                 },
                 {
                     'title': _('Data Review'),
-                    'caption': _('Carefully review the data provided by your university'),
+                    'caption': _('Your university sent us important data for your profile. Please check it carefully. Should you find any discrepancies, please contact your university to correct this.'),
                     'template': 'students/onboarding_review.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'review'}),
                     'back': 'lang',
@@ -169,7 +169,7 @@ class Onboarding(StudentMixin, View):
                 },
                 {
                     'title': _('Set up your Bank account'),
-                    'caption': _('Configure your payment method now or leave it for later.'),
+                    'caption': _('In the future we will debit your tuition fees from your selected bank account. Please click on the following link to authorise the debit orders.'),
                     'template': 'students/onboarding_sepa.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
                     'back': 'data',
