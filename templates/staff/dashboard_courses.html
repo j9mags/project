@@ -14,12 +14,13 @@
 
 {% block content %}
   <form method="post" class="mdl-cell--12-col mdl-grid">
+    {% csrf_token %}
     <div class="mdl-cell mdl-cell--2-col mdl-cell--9-offset-desktop mdl-cell--5-offset-tablet">
       {% include 'snippets/input.html' with field=form.semester_fee_new %}
     </div>
     <div class="mdl-cell mdl-cell--1-col mdl-cell--middle">
       <input type="submit" value="{% trans 'Update' %}"
-             class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--accent mdl-color-text--white">
+             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white">
     </div>
   </form>
 
