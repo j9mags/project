@@ -6,19 +6,18 @@
       {% csrf_token %}
   {% endif %}
 
-    <div class="mdl-card__title relative mdl-color--light-green-200">
-      <h2 class="mdl-card__title-text">{{ account.name }}</h2>
-    </div>
-
     <div class="mdl-card__supporting-text mdl-grid">
       <div class="mdl-cell--12-col">
         <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
       </div>
-      <!-- div class="mdl-cell">
+      <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('University') value=account.hochschule_ref.name %}
-      </div -->
+      </div>
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('Matriculation number') value=account.immatrikulationsnummer %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Email') value=account.unimailadresse %}
       </div>
       <div class="mdl-cell">
         {% if form %}
@@ -26,6 +25,9 @@
         {% else %}
           {% include 'snippets/field-text.html' with label=_('Status') value=account.status %}
         {% endif %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.get_course.name %}
       </div>
     </div>
 
@@ -53,13 +55,18 @@
       </div>
     </div>
 
-  {% if form %}
     <div class="mdl-card__actions mdl-card--border">
-      <div class="mdl-grid">
-        <input type="submit" class="mdl-cell mdl-cell--9-offset mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+      {% if form %}
+        <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
                value="{% trans 'Confirm changes' %}">
-      </div>
+      {% else %}
+        <a class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+           href="{% url 'integration:contact' pk='new' %}">{% trans 'New contact' %}
+          <i class="material-icons">person_add</i>
+        </a>
+      {% endif %}
     </div>
+  {% if form %}
     </form>
   {% endif %}
 </div>

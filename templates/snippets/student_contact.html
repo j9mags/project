@@ -1,10 +1,6 @@
 {% load i18n %}
 
 <div class="mdl-card mdl-card-account mdl-shadow--6dp {{ class }}">
-  <div class="mdl-card__title relative mdl-color--light-green-200">
-    <h2 class="mdl-card__title-text">{% trans 'Personal data' %}</h2>
-  </div>
-
   <div class="mdl-card__supporting-text mdl-grid">
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Salutation') value=contact.salutation %}
@@ -15,9 +11,6 @@
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Last name') value=contact.last_name %}
     </div>
-  </div>
-
-  <div class="mdl-card__supporting-text mdl-grid">
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Personal email') value=contact.email %}
     </div>
@@ -29,8 +22,36 @@
     </div>
   </div>
 
+  {% if contact.zahlungskontakt_auto %}
+  <div class="mdl-card__supporting-text mdl-grid">
+    <div class="mdl-cell--12-col">
+      <h5 class="mdl-typography--headline">{% trans 'Bank Account data' %}</h5>
+    </div>
+    {% with ba=contact.get_bank_account %}
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Bank Name') value=ba.bank_name %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Country Code') value=ba.country_code %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Account Number(last 2 digits)') value=ba.account_number %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Account Holder Name') value=ba.account_holder_name %}
+      </div>
+    {% endwith %}
+  </div>
+  {% else %}
+  <div class="mdl-card__actions mdl-card--border">
+    <a class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+       href="{{ contact.sepamandate_url_auto }}">{% trans 'Set as Payment Contact' %}</a>
+  </div>
+  {% endif %}
+
   <div class="mdl-card__menu">
-    <a href="" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+    <a href="{% url 'integration:contact' pk=contact.pk %}"
+       class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
       <i class="material-icons">edit</i>
     </a>
   </div>

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
 {% endblock %}
 
+{% block title %}{{ page_title }}{% endblock %}
+
 {% block content %}
     {% include 'snippets/stepper.html' with id='onboarding-stepper'%}
 {% endblock %}

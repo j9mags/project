@@ -2,19 +2,18 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language, activate
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.conf import settings
-
 from django.core.exceptions import *
+from django.core.paginator import Paginator, EmptyPage
+from django.views.generic import DetailView
 from django.views.generic.base import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .forms import *
-
-from .models import Attachment
+from .models import Attachment, Contact, RecordType
 
 
 class StudentMixin(LoginRequiredMixin):
@@ -48,13 +47,23 @@ class Dashboard(StudentMixin, TemplateView):
 
         contact = self.account.get_master_contact()
         contract = self.account.get_active_contract()
-        invoice = contract.get_current_invoice()
+        invoices = contract.get_all_invoices()
 
         context['account'] = self.account
         context['master_contact'] = contact
         context['active_contract'] = contract
-        context['current_invoice'] = invoice
+        context['ignore_drawer'] = True
 
+        p = int(self.request.GET.get('p', '1'))
+        s = int(self.request.GET.get('s', '10'))
+
+        paginator = Paginator(invoices, s)
+        try:
+            invoices = paginator.page(p)
+        except EmptyPage:
+            invoices = paginator.page(paginator.num_pages if p > 1 else 0)
+
+        context['invoices'] = invoices
         return context
 
     def get(self, request, *args, **kwargs):
@@ -70,9 +79,47 @@ class Dashboard(StudentMixin, TemplateView):
         return super(Dashboard, self).get(request, *args, **kwargs)
 
 
-# Todo: Add BankAccount info on Account view with possibility to set a new mandate
-class AccountDetails(StudentMixin, TemplateView):
-    template_name = 'students/onboarding.html'
+class ContactDetails(StudentMixin, TemplateView):
+    model = Contact
+    template_name = 'students/contact.html'
+
+    def get_context_data(self, **kwargs):
+        pk = kwargs.get('pk')
+        if not pk:
+            raise SuspiciousOperation()
+        context = super(ContactDetails, self).get_context_data(**kwargs)
+        context['ignore_drawer'] = True
+
+        self.account = self.get_queryset()
+
+        if pk != 'new':
+            contact = self.account.contact_set.filter(pk=pk)
+            if not contact.exists():
+                raise ObjectDoesNotExist()
+
+            contact = contact.first()
+        else:
+            contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
+                              account=self.account)
+        if self.request.POST:
+            form = StudentContactForm(self.request.POST, instance=contact)
+        else:
+            form = StudentContactForm(instance=contact)
+        context.update(contact=contact, form=form)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        form = context.get('form')
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('integration:dashboard')
+            except Exception as e:
+                form.add_error(None, str(e))
+        return render(request, self.template_name, context)
 
 
 class Onboarding(StudentMixin, View):
@@ -126,7 +173,7 @@ class Onboarding(StudentMixin, View):
                     'template': 'students/onboarding_sepa.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
                     'back': 'data',
-                    'submit': _('Continue'),
+                    'submit': _('Complete'),
                 },
             )}
 
@@ -134,11 +181,13 @@ class Onboarding(StudentMixin, View):
 
     def _get_lang_context(self, context):
         context.update(form=LanguageSelectForm(initial={'language': self.account.kommunikationssprache}))
+        context.update(page_title=context['stepper'][0].get('title'))
         context['stepper'][0].update(is_active=True)
         return context
 
     def _get_review_context(self, context):
         context.update(form=OnboardingReviewForm(initial={'approved': self.account.student_approved}))
+        context.update(page_title=context['stepper'][1].get('title'))
         context['stepper'][1].update(is_active=True)
         return context
 
@@ -176,11 +225,12 @@ class Onboarding(StudentMixin, View):
         })
 
         context.update(form=form)
+        context.update(page_title=context['stepper'][2].get('title'))
         context['stepper'][2].update(is_active=True)
         return context
 
     def _get_sepa_context(self, context):
-        context.update(form=LanguageSelectForm())
+        context.update(page_title=context['stepper'][3].get('title'))
         context['stepper'][3].update(is_active=True)
         return context
 
@@ -210,7 +260,6 @@ class Onboarding(StudentMixin, View):
             if not form.is_valid():
                 return render(request, self.template, context)
             self.account.kommunikationssprache = form.cleaned_data.get('language')
-            self.account.recordcreated = True
             try:
                 self.account.save()
             except Exception as e:
@@ -293,32 +342,6 @@ class Onboarding(StudentMixin, View):
             return redirect('integration:dashboard')
 
 
-class ContactSEPA(StudentMixin, TemplateView):
-    template_name = 'students/contact_sepa.html'
-
-    def get_context_data(self, **kwargs):
-        pk = kwargs.get('pk')
-        if pk is None:
-            raise SuspiciousOperation()
-
-        context = super(ContactSEPA, self).get_context_data(**kwargs)
-        account = self.request.user.get_srecord()
-        contact = account.contact_set.filter(pk=pk)
-        if not contact:
-            raise SuspiciousOperation()
-
-        context['contact'] = contact[0]
-        return context
-
-    def get(self, *args, **kwargs):
-        rc = super(ContactSEPA, self).get(*args, **kwargs)
-
-        if rc.context_data.get('contact').sepalastschriftmandat_erteilt:
-            return redirect('integration:dashboard')
-
-        return rc
-
-
 class DownloadAttachment(StudentMixin, View):
     def get(self, *args, **kwargs):
         att_id = kwargs.get('att_id')
@@ -326,8 +349,9 @@ class DownloadAttachment(StudentMixin, View):
         if not att:
             raise ObjectDoesNotExist()
 
-        response = HttpResponse(content_type=att.content_type)
+        rc = att.fetch_content()
+
+        response = HttpResponse(rc, content_type=att.content_type)
         response['Content-Disposition'] = 'attachment; filename="{}"'.format(att.name)
-        response.write(att.fetch_content())
 
         return response

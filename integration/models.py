@@ -1,13 +1,29 @@
 from __future__ import unicode_literals
-
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from datetime import date
 
-from django.contrib.auth import get_user_model
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
 from django.db import connections
 
 from . import managers
+
+
+class PerishableTokenMixin:
+    def is_token_expired(self):
+        if not self.cspassword_token:
+            return True
+        if not self.cspassword_time:
+            return False
+        if self.cspassword_time < timezone.now():
+            return True
+
+        return False
+
+    def request_new_password(self):
+        self.password_change_requested = True
+        self.save()
 
 
 class Choices:
@@ -75,7 +91,7 @@ class Choices:
                ('Vereinigte Staaten', 'Vereinigte Staaten'), ('Vereinigtes Königreich', 'Vereinigtes Königreich'),
                ('Vietnam', 'Vietnam'), ('Weißrussland', 'Weißrussland'), ('Westsahara', 'Westsahara'),
                ('Zentral\xadafrikanische Republik', 'Zentral\xadafrikanische Republik'), ('Zypern', 'Zypern')]
-    Gender = [('weiblich', 'weiblich'), ('männlich', 'männlich'), ('geschlechtsneutral', 'geschlechtsneutral')]
+    Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('neutral'))]
     Nationality = [('afghanisch', 'afghanisch'), ('ägyptisch', 'ägyptisch'), ('albanisch', 'albanisch'),
                    ('algerisch', 'algerisch'), ('andorranisch', 'andorranisch'), ('angolanisch', 'angolanisch'),
                    ('antiguanisch', 'antiguanisch'), ('äquatorialguineisch', 'äquatorialguineisch'),
@@ -150,27 +166,28 @@ class Choices:
                    ('amerikanisch', 'amerikanisch'), ('britisch', 'britisch'), ('vietnamesisch', 'vietnamesisch'),
                    ('weißrussisch', 'weißrussisch'), ('zentralafrikanisch', 'zentralafrikanisch'),
                    ('zyprisch', 'zyprisch')]
-    Language = [('deutsch', 'deutsch'), ('englisch', 'english')]
-    Salutation = [('Mr.', 'Herr'), ('Ms.', 'Frau'), ('Mrs.', 'Frau'), ('Dr.', 'Dr.'), ('Prof.', 'Prof.')]
-    Month = [('Januar', 'Januar'), ('Februar', 'Februar'), ('März', 'März'), ('April', 'April'), ('Mai', 'Mai'),
-             ('Juni', 'Juni'), ('Juli', 'Juli'), ('August', 'August'), ('September', 'September'),
-             ('Oktober', 'Oktober'), ('November', 'November'), ('Dezember', 'Dezember')]
-    Payment = [('Zu Beginn jeden Monats', 'Beginning of each Month'),
-               ('Zu Beginn jeden Semesters', 'Beginning of each Semester')]
-    PaymentOptions = [('Suspend payments', 'Suspend payments'),
-                      ('Continue regular payments', 'Continue regular payments'),
-                      ('Partial payments', 'Partial payments')]
-    AccountStatus = [('Immatrikuliert', 'Enrolled'), ('Abgebrochen', 'Aborted'), ('Beurlaubt', 'Semester Off'),
-                     ('Auslandssemester', 'Semester abroad'), ('Exmatrikuliert', 'Exmatriculated')]
-    InvoiceStatus = [('Draft', 'Draft'), ('Sent', 'Sent'), ('Paid', 'Paid'), ('Cancelled', 'Cancelled')]
-    InvoiceLIType = [('TuitionFee', 'Studiengebühr'), ('SemesterFee', 'Semesterbeitrag'),
-                     ('SemesterDiscount', 'Rabatt auf Semesterbeitrag'), ('OverdueFee', 'Mahngebühr'),
-                     ('MatriculationFee', 'Immatrikulationsgebühr'), ('Dunning Fee', 'Dunning Fee'),
-                     ('Fee Semester abroad', 'Fee Semester abroad'), ('Fee Semester off', 'Fee Semester off')]
-    ContractStatus = [('In Approval Process', 'Genehmigungsverfahren läuft'), ('Activated', 'Aktiviert'),
-                      ('Draft', 'Entwurf'), ('Deaktiviert', 'Deaktiviert')]
-    DiscountType = [('Discount Tuition Fee', 'Discount Tuition Fee'),
-                    ('Discount Semester Fee', 'Discount Semester Fee')]
+    Language = [('deutsch', _('deutsch')), ('englisch', _('englisch'))]
+    Salutation = [('Mr.', _('Herr')), ('Ms.', _('Frau')), ('Mrs.', _('Frau')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
+    Month = [('Januar', _('Januar')), ('Februar', _('Februar')), ('März', _('März')), ('April', _('April')),
+             ('Mai', _('Mai')),
+             ('Juni', _('Juni')), ('Juli', _('Juli')), ('August', _('August')), ('September', _('September')),
+             ('Oktober', _('Oktober')), ('November', _('November')), ('Dezember', _('Dezember'))]
+    Payment = [('Zu Beginn jeden Monats', _('Beginning of each Month')),
+               ('Zu Beginn jeden Semesters', _('Beginning of each Semester'))]
+    PaymentOptions = [('Suspend payments', _('Suspend payments')),
+                      ('Continue regular payments', _('Continue regular payments')),
+                      ('Partial payments', _('Partial payments'))]
+    AccountStatus = [('Immatrikuliert', _('Enrolled')), ('Abgebrochen', _('Aborted')), ('Beurlaubt', _('Semester Off')),
+                     ('Auslandssemester', _('Semester abroad')), ('Exmatrikuliert', _('Exmatriculated'))]
+    InvoiceStatus = [('Draft', _('Draft')), ('Sent', _('Sent')), ('Paid', _('Paid')), ('Cancelled', _('Cancelled'))]
+    InvoiceLIType = [('TuitionFee', _('Studiengebühr')), ('SemesterFee', _('Semesterbeitrag')),
+                     ('SemesterDiscount', _('Rabatt auf Semesterbeitrag')), ('OverdueFee', _('Mahngebühr')),
+                     ('MatriculationFee', _('Immatrikulationsgebühr')), ('Dunning Fee', _('Dunning Fee')),
+                     ('Fee Semester abroad', _('Fee Semester abroad')), ('Fee Semester off', _('Fee Semester off'))]
+    ContractStatus = [('In Approval Process', _('Genehmigungsverfahren läuft')), ('Activated', _('Aktiviert')),
+                      ('Draft', _('Entwurf')), ('Deaktiviert', _('Deaktiviert'))]
+    DiscountType = [('Discount Tuition Fee', _('Discount Tuition Fee')),
+                    ('Discount Semester Fee', _('Discount Semester Fee'))]
 
 
 class RecordType(models.Model):
@@ -194,7 +211,7 @@ class RecordType(models.Model):
         return self.name
 
 
-class Account(models.Model):
+class Account(models.Model, PerishableTokenMixin):
     record_type = models.ForeignKey(RecordType, models.DO_NOTHING, blank=True, null=True,
                                     limit_choices_to={'sobject_type': 'Account'})
 
@@ -204,31 +221,33 @@ class Account(models.Model):
                                       sf_read_only=models.READ_ONLY, blank=True, null=True)
     parent = models.ForeignKey('self', models.DO_NOTHING, related_name='account_parent_set', blank=True, null=True)
 
-    billing_street = models.TextField(blank=True, null=True)
-    billing_city = models.CharField(max_length=40, blank=True, null=True)
-    billing_postal_code = models.CharField(max_length=20, verbose_name='Billing Zip/Postal Code', blank=True, null=True)
-    billing_country = models.CharField(max_length=80, choices=Choices.Country, blank=True, null=True)
+    billing_street = models.TextField(blank=True, null=True, verbose_name=_('Street'))
+    billing_city = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('City'))
+    billing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
+    billing_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'), blank=True,
+                                       null=True)
 
-    name = models.CharField(max_length=255, verbose_name='Account Name')
-    status = models.CharField(custom=True, max_length=255, choices=Choices.AccountStatus, blank=True, null=True)
+    name = models.CharField(max_length=255, verbose_name=_('Name'))
+    status = models.CharField(custom=True, max_length=255, choices=Choices.AccountStatus, verbose_name=_('Status'),
+                              blank=True, null=True)
 
     hochschule_ref = models.ForeignKey('self', models.DO_NOTHING, custom=True, related_name='account_hochschuleref_set',
-                                       blank=True, null=True)
-    immatrikulationsnummer = models.CharField(custom=True, max_length=255, verbose_name='Matriculation Number',
+                                       blank=True, null=True, verbose_name=_('University'))
+    immatrikulationsnummer = models.CharField(custom=True, max_length=255, verbose_name=_('Matriculation Number'),
                                               blank=True, null=True)
     studiengebuehren_gesamt = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                                  verbose_name='Tuition Fee Total', blank=True, null=True)
-    geschlecht = models.CharField(custom=True, max_length=255, verbose_name='Gender', choices=Choices.Gender,
+                                                  verbose_name=_('Tuition Fee Total'), blank=True, null=True)
+    geschlecht = models.CharField(custom=True, max_length=255, verbose_name=_('Gender'), choices=Choices.Gender,
                                   blank=True, null=True)
-    geburtsort = models.CharField(custom=True, max_length=255, verbose_name='Place of Birth', blank=True, null=True)
-    geburtsdatum = models.DateField(custom=True, verbose_name='Date of Birth', blank=True, null=True)
-    geburtsland = models.CharField(custom=True, max_length=255, verbose_name='Country of Birth',
+    geburtsort = models.CharField(custom=True, max_length=255, verbose_name=_('Place of Birth'), blank=True, null=True)
+    geburtsdatum = models.DateField(custom=True, verbose_name=_('Date of Birth'), blank=True, null=True)
+    geburtsland = models.CharField(custom=True, max_length=255, verbose_name=_('Country of Birth'),
                                    choices=Choices.Country, blank=True, null=True)
-    staatsangehoerigkeit = models.CharField(custom=True, max_length=255, verbose_name='Nationality',
+    staatsangehoerigkeit = models.CharField(custom=True, max_length=255, verbose_name=_('Nationality'),
                                             choices=Choices.Nationality, blank=True, null=True)
-    kommunikationssprache = models.CharField(custom=True, max_length=255, verbose_name='Communication Language',
+    kommunikationssprache = models.CharField(custom=True, max_length=255, verbose_name=_('Communication Language'),
                                              choices=Choices.Language, blank=True, null=True)
-    unimailadresse = models.EmailField(custom=True, verbose_name='University Email Address', blank=True, null=True)
+    unimailadresse = models.EmailField(custom=True, verbose_name=_('University Email Address'), blank=True, null=True)
     zahlungskontakt_ref = models.ForeignKey('Contact', models.DO_NOTHING, custom=True,
                                             related_name='account_zahlungskontaktref_set', blank=True, null=True)
 
@@ -239,20 +258,24 @@ class Account(models.Model):
     traegergesellschaft = models.CharField(custom=True, max_length=255, verbose_name='Private Sponsorship', blank=True,
                                            null=True)
     abwicklungsgebuhr_pro_einzug_pro_student = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                                                   verbose_name='Execution Fee / Direct Debit / Student',
+                                                                   verbose_name=_(
+                                                                       'Execution Fee / Direct Debit / Student'),
                                                                    help_text='in Euro', blank=True, null=True)
 
     cspassword_token = models.CharField(custom=True, db_column='CSPasswordToken__c', max_length=50,
                                         verbose_name='CS Password Token', blank=True, null=True)
+    cspassword_time = models.DateTimeField(custom=True, db_column='CSPasswordTime__c', verbose_name='CS Password Time',
+                                           blank=True, null=True)
+    password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
     initial_review_completed_auto = models.BooleanField(custom=True, verbose_name='Initial review completed',
                                                         sf_read_only=models.READ_ONLY)
-    semester_fee_new = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name='Semester Fee',
+    semester_fee_new = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
                                            blank=True, null=True)
-    semester_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name='Semester Fee',
+    semester_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
                                            sf_read_only=models.READ_ONLY, blank=True, null=True)
     payment_options = models.CharField(custom=True, max_length=255, choices=Choices.PaymentOptions, blank=True,
-                                       null=True)
+                                       null=True, verbose_name=_('Payment options'))
     recordcreated = models.BooleanField(custom=True, verbose_name='Record created', default=models.DEFAULTED_ON_CREATE)
     student_approved = models.BooleanField(custom=True, verbose_name='Student Approved',
                                            default=models.DEFAULTED_ON_CREATE)
@@ -265,8 +288,8 @@ class Account(models.Model):
 
     class Meta(models.Model.Meta):
         db_table = 'Account'
-        verbose_name = 'Account'
-        verbose_name_plural = 'Accounts'
+        verbose_name = _('Account')
+        verbose_name_plural = _('Accounts')
         # keyPrefix = '001'
 
     def __str__(self):
@@ -275,9 +298,20 @@ class Account(models.Model):
     def _is_student(self):
         return self.record_type.developer_name == 'Sofortzahler'
 
+    def get_user_email(self):
+        return self.unimailadresse
+
     def get_master_contact(self):
+        return self.get_student_contact()
+
+    def get_student_contact(self):
         if self._is_student():
-            return self.contact_set.first()
+            return self.contact_set.get(student_contact=True)
+        return None
+
+    def get_payment_contact(self):
+        if self._is_student():
+            return self.zahlungskontakt_ref
         return None
 
     def get_active_contract(self):
@@ -302,7 +336,7 @@ class Account(models.Model):
         return None
 
 
-class Contact(models.Model):
+class Contact(models.Model, PerishableTokenMixin):
     record_type = models.ForeignKey(RecordType, models.DO_NOTHING, blank=True, null=True,
                                     limit_choices_to={'sobject_type': 'Contact'})
     last_modified_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
@@ -312,21 +346,23 @@ class Contact(models.Model):
 
     account = models.ForeignKey(Account, models.DO_NOTHING, blank=True, null=True)  # Master Detail Relationship *
 
-    last_name = models.CharField(max_length=80)
-    first_name = models.CharField(max_length=40, blank=True, null=True)
-    salutation = models.CharField(max_length=40, choices=Choices.Salutation, blank=True, null=True)
-    name = models.CharField(max_length=121, verbose_name='Full Name', sf_read_only=models.READ_ONLY)
+    last_name = models.CharField(max_length=80, verbose_name=_('Last name'))
+    first_name = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('First name'))
+    salutation = models.CharField(max_length=40, choices=Choices.Salutation, blank=True, null=True,
+                                  verbose_name=_('Salutation'))
+    name = models.CharField(max_length=121, verbose_name=_('Full Name'), sf_read_only=models.READ_ONLY)
 
-    title = models.CharField(max_length=128, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
-    mobile_phone = models.CharField(max_length=40, blank=True, null=True)
-    home_phone = models.CharField(max_length=40, blank=True, null=True)
-    other_phone = models.CharField(max_length=40, blank=True, null=True)
+    title = models.CharField(max_length=128, blank=True, null=True, verbose_name=_('title'))
+    email = models.EmailField(verbose_name=_('Email'))
+    mobile_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Mobile phone'))
+    home_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Home phone'))
+    other_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Other phone'))
 
-    mailing_street = models.TextField(blank=True, null=True)
-    mailing_city = models.CharField(max_length=40, blank=True, null=True)
-    mailing_postal_code = models.CharField(max_length=20, verbose_name='Mailing Zip/Postal Code', blank=True, null=True)
-    mailing_country = models.CharField(max_length=80, blank=True, null=True)
+    mailing_street = models.TextField(blank=True, null=True, verbose_name=_('Street'))
+    mailing_city = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('City'))
+    mailing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
+    mailing_country = models.CharField(max_length=80, blank=True, null=True, verbose_name=_('Country'),
+                                       choices=Choices.Country)
 
     sepalastschriftmandat_erteilt = models.BooleanField(custom=True, db_column='SEPALastschriftmandatErteilt__c',
                                                         verbose_name='SEPA Direct Debit Mandate Granted?',
@@ -334,12 +370,20 @@ class Contact(models.Model):
     zahlungskontakt_auto = models.BooleanField(custom=True, verbose_name='Payment Contact',
                                                sf_read_only=models.READ_ONLY)
 
+    recordcreated = models.BooleanField(custom=True, verbose_name='Record created', default=models.DEFAULTED_ON_CREATE)
     cspassword_token = models.CharField(custom=True, db_column='CSPasswordToken__c', max_length=50,
                                         verbose_name='CS Password Token', blank=True, null=True)
+    cspassword_time = models.DateTimeField(custom=True, db_column='CSPasswordTime__c', verbose_name='CS Password Time',
+                                           blank=True, null=True)
+    password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+
     invoice_contact = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
     sepamandate_form_auto = models.CharField(custom=True, db_column='SEPAMandateFormAuto__c', max_length=1300,
                                              verbose_name='SEPA Mandate Form', sf_read_only=models.READ_ONLY,
                                              blank=True, null=True)
+    sepamandate_url_auto = models.CharField(custom=True, db_column='SEPAMandateUrlAuto__c', max_length=1300,
+                                            verbose_name='SEPA Mandate Url', sf_read_only=models.READ_ONLY,
+                                            blank=True, null=True)
     student_contact = models.BooleanField(custom=True, verbose_name='StudentContact',
                                           default=models.DEFAULTED_ON_CREATE)
 
@@ -349,72 +393,103 @@ class Contact(models.Model):
 
     class Meta(models.Model.Meta):
         db_table = 'Contact'
-        verbose_name = 'Contact'
-        verbose_name_plural = 'Contacts'
+        verbose_name = _('Contact')
+        verbose_name_plural = _('Contacts')
         # keyPrefix = '003'
 
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if (self.pk is None) and (self.record_type.developer_name == 'Hochschule'):
-            UserModel = get_user_model()
-            if not UserModel.objects.filter(email=self.email).exists():
-                new_user = UserModel(email=self.email, is_active=False)
-                new_user.save()
-                pt = new_user.create_token()
-                self.cspassword_token = pt.token
-            else:
-                # TODO How to react to this?
-                pass
+    def _is_staff(self):
+        return self.record_type.developer_name == 'Hochschule'
 
-        return super(Contact, self).save(*args, **kwargs)
+    def get_user_email(self):
+        return self.email
+
+    def get_bank_account(self):
+        if not self._is_staff():
+            rc = self.customerbankaccount_set.filter(enabled=True)
+            if rc.exists():
+                return rc.first()
+
+    def get_address_html(self):
+        return '{self.mailing_street}<br>{self.mailing_city}, {self.mailing_postal_code}<br>{self.mailing_country}'.format(
+            self=self)
+
+
+class CustomerBankAccount(models.Model):
+    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    name = models.CharField(max_length=80, verbose_name='Customer Bank Account Name', sf_read_only=models.READ_ONLY)
+
+    customer_ref = models.ForeignKey(Contact, models.DO_NOTHING, custom=True,
+                                     sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
+    account_holder_name = models.CharField(custom=True, max_length=255, blank=True, null=True,
+                                           verbose_name=_('Account Holder Name'))
+    account_number = models.CharField(custom=True, max_length=20, verbose_name=_('Account Number(last 2 digits)'),
+                                      blank=True, null=True)
+    bank_name = models.CharField(custom=True, max_length=255, blank=True, null=True, verbose_name=_('Bank Name'))
+    country_code = models.CharField(custom=True, max_length=4, blank=True, null=True, verbose_name=_('Country Code'))
+    enabled = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE, verbose_name=_('Enabled'))
+
+    class Meta(models.Model.Meta):
+        db_table = 'CustomerBankAccount__c'
+        verbose_name = 'Customer Bank Account'
+        verbose_name_plural = 'Customer Bank Accounts'
+        # keyPrefix = 'a0D'
+
+    def short(self):
+        return '{self.country_code} **** {self.account_number}'.format(self=self)
 
 
 class DegreeCourse(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-    name = models.CharField(max_length=80, verbose_name='Studiengang Name', default=models.DEFAULTED_ON_CREATE,
+    name = models.CharField(max_length=80, verbose_name=_('Name'), default=models.DEFAULTED_ON_CREATE,
                             blank=True, null=True)
     university = models.ForeignKey(Account, models.DO_NOTHING, custom=True,
                                    sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
-    course_id = models.CharField(custom=True, max_length=1300, verbose_name='Course of Study ID',
+    course_id = models.CharField(custom=True, max_length=1300, verbose_name=_('ID'),
                                  sf_read_only=models.READ_ONLY, blank=True, null=True)
 
     standard_period_of_study = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
-                                                   verbose_name='Standard Study Period (No. of Semesters)', blank=True,
+                                                   verbose_name=_('Standard Study Period (No. of Semesters)'),
+                                                   blank=True,
                                                    null=True)
-    start_of_studies = models.DateField(custom=True, verbose_name='Start of Studies', blank=True, null=True)
-    start_summer_semester = models.CharField(custom=True, max_length=255, verbose_name='Starting Month Summer Semester',
+    start_of_studies = models.DateField(custom=True, verbose_name=_('Start of Studies'), blank=True, null=True)
+    start_summer_semester = models.CharField(custom=True, max_length=255,
+                                             verbose_name=_('Starting Month Summer Semester'),
                                              choices=Choices.Month, blank=True, null=True)
-    start_winter_semester = models.CharField(custom=True, max_length=255, verbose_name='Starting Month Winter Semester',
+    start_winter_semester = models.CharField(custom=True, max_length=255,
+                                             verbose_name=_('Starting Month Winter Semester'),
                                              choices=Choices.Month, blank=True, null=True)
-    start_of_studies_month = models.CharField(custom=True, max_length=255, verbose_name='Starting Month of Studies',
+    start_of_studies_month = models.CharField(custom=True, max_length=255, verbose_name=_('Starting Month of Studies'),
                                               choices=Choices.Month, blank=True, null=True)
 
-    matriculation_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2, blank=True, null=True)
-    semester_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2, blank=True, null=True)
-    cost_per_month = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name='Cost per Month',
+    matriculation_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2, blank=True, null=True,
+                                            verbose_name=_('Matriculation Fee'))
+    semester_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2, blank=True, null=True,
+                                       verbose_name=_('Semester Fee'))
+    cost_per_month = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Cost per Month'),
                                          blank=True, null=True)
     cost_per_semester = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                            verbose_name='Cost per Semester', blank=True, null=True)
+                                            verbose_name=_('Cost per Semester'), blank=True, null=True)
     fee_semester_abroad = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                              verbose_name='Fee Semester abroad', blank=True, null=True)
+                                              verbose_name=_('Fee Semester abroad'), blank=True, null=True)
     fee_semester_off = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
-                                           verbose_name='Fee Semester off', blank=True, null=True)
+                                           verbose_name=_('Fee Semester off'), blank=True, null=True)
     cost_per_month_beyond_standard = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                                         verbose_name='Cost per Month > Standard Study Period',
+                                                         verbose_name=_('Cost per Month > Standard Study Period'),
                                                          blank=True, null=True)
 
     total_tuition_fees_auto = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                                  verbose_name='Tuition Fees Total', sf_read_only=models.READ_ONLY,
+                                                  verbose_name=_('Tuition Fees Total'), sf_read_only=models.READ_ONLY,
                                                   blank=True, null=True)
     number_of_sofortzahler_trig = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
-                                                      verbose_name='Number of Sofortzahler', blank=True, null=True)
+                                                      verbose_name=_('Number of Sofortzahler'), blank=True, null=True)
 
     class Meta(models.Model.Meta):
         db_table = 'DegreeCourse__c'
-        verbose_name = 'Degree Course'
-        verbose_name_plural = 'Degree Courses'
+        verbose_name = _('Degree Course')
+        verbose_name_plural = _('Degree Courses')
         # keyPrefix = 'a00'
 
 
@@ -425,75 +500,87 @@ class Contract(models.Model):
 
     account = models.ForeignKey(Account, models.DO_NOTHING,
                                 related_name='contract_account_set')  # Master Detail Relationship *
-    contract_number = models.CharField(max_length=30, sf_read_only=models.READ_ONLY)
+    contract_number = models.CharField(max_length=30, sf_read_only=models.READ_ONLY, verbose_name=_('Number'))
 
-    university_ref = models.ForeignKey(Account, models.DO_NOTHING, custom=True,
+    university_ref = models.ForeignKey(Account, models.DO_NOTHING, custom=True, verbose_name=_('University'),
                                        related_name='contract_universityref_set', blank=True, null=True)
-    studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True, blank=True, null=True)
-    active = models.BooleanField(custom=True, verbose_name='Aktiv', default=models.DEFAULTED_ON_CREATE)
-    payment_interval = models.CharField(custom=True, max_length=255, choices=Choices.Payment, blank=True, null=True)
+    studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True, blank=True, null=True,
+                                        verbose_name=_('Degree Course'))
+    active = models.BooleanField(custom=True, verbose_name=_('Active'), default=models.DEFAULTED_ON_CREATE)
+    payment_interval = models.CharField(custom=True, max_length=255, choices=Choices.Payment, blank=True, null=True,
+                                        verbose_name=_('Payment Interval'))
     first_payment = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
     cost_per_month = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                         verbose_name='Cost per Month>Standard Study Period',
+                                         verbose_name=_('Cost per Month>Standard Study Period'),
                                          sf_read_only=models.READ_ONLY, blank=True, null=True)
     total_tuition_fees_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                                 verbose_name='Tuition Fees Total', sf_read_only=models.READ_ONLY,
+                                                 verbose_name=_('Tuition Fees Total'), sf_read_only=models.READ_ONLY,
                                                  blank=True, null=True)
     standard_period_of_study_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
-                                                       verbose_name='Standard Study Period (No. of Semesters)',
+                                                       verbose_name=_('Standard Study Period (No. of Semesters)'),
                                                        sf_read_only=models.READ_ONLY, blank=True, null=True)
-    payment_terms_auto = models.CharField(custom=True, max_length=1300, verbose_name='Payment Terms',
+    payment_terms_auto = models.CharField(custom=True, max_length=1300, verbose_name=_('Payment Terms'),
                                           sf_read_only=models.READ_ONLY, blank=True, null=True)
     matriculation_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                                verbose_name='Matriculation Fee', sf_read_only=models.READ_ONLY,
+                                                verbose_name=_('Matriculation Fee'), sf_read_only=models.READ_ONLY,
                                                 blank=True, null=True)
     start_summer_semester_ref = models.CharField(custom=True, max_length=1300,
-                                                 verbose_name='Starting Month Summer Semester',
+                                                 verbose_name=_('Starting Month Summer Semester'),
                                                  sf_read_only=models.READ_ONLY, blank=True, null=True)
-    semester_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name='Semester Fee',
+    semester_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
                                            sf_read_only=models.READ_ONLY, blank=True, null=True)
     total_amount_of_rates_auto = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
-                                                     verbose_name='Number of Rates Total',
+                                                     verbose_name=_('Number of Rates Total'),
                                                      sf_read_only=models.READ_ONLY, blank=True, null=True)
-    student_id_ref = models.CharField(custom=True, max_length=1300, verbose_name='Student ID',
+    student_id_ref = models.CharField(custom=True, max_length=1300, verbose_name=_('Student ID'),
                                       sf_read_only=models.READ_ONLY, blank=True, null=True)
-    cost_per_month2 = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name='Cost per Month',
+    cost_per_month2 = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                          verbose_name=_('Cost per Month'),
                                           sf_read_only=models.READ_ONLY, blank=True, null=True)
     cost_per_semester = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                            verbose_name='Cost per Semester', sf_read_only=models.READ_ONLY, blank=True,
+                                            verbose_name=_('Cost per Semester'), sf_read_only=models.READ_ONLY,
+                                            blank=True,
                                             null=True)
-    count_invoices = models.DecimalField(custom=True, max_digits=18, decimal_places=0, verbose_name='Count of Invoices',
+    count_invoices = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
+                                         verbose_name=_('Count of Invoices'),
                                          sf_read_only=models.READ_ONLY, blank=True, null=True)
-    start_of_studies_month_ref = models.CharField(custom=True, max_length=1300, verbose_name='Startmonat Studienbeginn',
+    start_of_studies_month_ref = models.CharField(custom=True, max_length=1300,
+                                                  verbose_name=_('Start of Studies Month'),
                                                   sf_read_only=models.READ_ONLY, blank=True, null=True)
     start_winter_semester_ref = models.CharField(custom=True, max_length=1300,
-                                                 verbose_name='Starting Month Winter Semester',
+                                                 verbose_name=_('Starting Month Winter Semester'),
                                                  sf_read_only=models.READ_ONLY, blank=True, null=True)
     discount_helper_auto = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
-                                               verbose_name='Discount Helper', sf_read_only=models.READ_ONLY,
+                                               verbose_name=_('Discount Helper'), sf_read_only=models.READ_ONLY,
                                                blank=True, null=True)
-    active_discounts = models.BooleanField(custom=True, verbose_name='Aktive Rabatte', sf_read_only=models.READ_ONLY)
+    active_discounts = models.BooleanField(custom=True, verbose_name=_('Active Discounts'),
+                                           sf_read_only=models.READ_ONLY)
     include_in_invoice_creation_process_auto = models.BooleanField(custom=True,
-                                                                   verbose_name='Include In Invoice Creation Process',
+                                                                   verbose_name=_(
+                                                                       'Include In Invoice Creation Process'),
                                                                    sf_read_only=models.READ_ONLY)
     number_of_invoices_auto = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
-                                                  verbose_name='Number of Invoices', sf_read_only=models.READ_ONLY,
+                                                  verbose_name=_('Number of Invoices'), sf_read_only=models.READ_ONLY,
                                                   blank=True, null=True)
     payment_contact_trig = models.ForeignKey(Contact, models.DO_NOTHING, custom=True,
                                              related_name='contract_paymentcontacttrig_set', blank=True, null=True)
-    special_fee_auto = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name='Special Fee',
+    special_fee_auto = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Special Fee'),
                                            sf_read_only=models.READ_ONLY, blank=True, null=True)
 
-    status = models.CharField(max_length=40, choices=Choices.ContractStatus, default=models.DEFAULTED_ON_CREATE)
+    status = models.CharField(max_length=40, choices=Choices.ContractStatus, default=models.DEFAULTED_ON_CREATE,
+                              verbose_name=_('Status'))
 
     class Meta(models.Model.Meta):
         db_table = 'Contract'
-        verbose_name = 'Contract'
-        verbose_name_plural = 'Contracts'
+        verbose_name = _('Contract')
+        verbose_name_plural = _('Contracts')
         # keyPrefix = '800'
 
     def get_current_invoice(self):
         return self.invoice_set.last()
+
+    def get_all_invoices(self):
+        return self.invoice_set.exclude(status='Draft').order_by('-invoice_date')
 
     def get_discount(self):
         rc = self.rabatt_set.first()
@@ -504,145 +591,65 @@ class Contract(models.Model):
 
 class Rabatt(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-    name = models.CharField(max_length=80, verbose_name='Discounts', sf_read_only=models.READ_ONLY)
+    name = models.CharField(max_length=80, verbose_name=_('Name'), sf_read_only=models.READ_ONLY)
     contract = models.ForeignKey(Contract, models.DO_NOTHING, custom=True,
                                  sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
-    discount_type = models.CharField(custom=True, max_length=255, choices=Choices.DiscountType, blank=True, null=True)
+    discount_type = models.CharField(custom=True, max_length=255, choices=Choices.DiscountType, blank=True, null=True,
+                                     verbose_name=_('Discount Type'))
     discount_tuition_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                               verbose_name='Discount on Tuition Fee', blank=True, null=True)
+                                               verbose_name=_('Discount on Tuition Fee'), blank=True, null=True)
     discount_semester_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
-                                                verbose_name='Discount on Semester Fee', blank=True, null=True)
+                                                verbose_name=_('Discount on Semester Fee'), blank=True, null=True)
     applicable_months = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
-                                            verbose_name='Number of Applicable Months', blank=True, null=True)
+                                            verbose_name=_('Number of Applicable Months'), blank=True, null=True)
     utilization = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
-                                      verbose_name='Number of Utilizations', blank=True, null=True)
-    active = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+                                      verbose_name=_('Number of Utilizations'), blank=True, null=True)
+    active = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE, verbose_name=_('Active'))
 
     class Meta(models.Model.Meta):
         db_table = 'Rabatt__c'
-        verbose_name = 'Discount'
-        verbose_name_plural = 'Discounts'
+        verbose_name = _('Discount')
+        verbose_name_plural = _('Discounts')
         # keyPrefix = 'a0H'
-
-
-# class Mandate(models.Model):
-#    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-#    name = models.CharField(max_length=80, sf_read_only=models.READ_ONLY)
-
-#    customer_ref = models.ForeignKey(Contact, models.DO_NOTHING, custom=True, blank=True, null=True)
-#    mandate_id = models.CharField(custom=True, max_length=255, verbose_name='Mandate GoCardless Id', blank=True, null=True)
-#    bank_account_ref = models.ForeignKey(CustomerBankAccount, models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
-#    reference = models.CharField(custom=True, max_length=255, blank=True, null=True)
-#    status = models.CharField(custom=True, max_length=255, choices=[('pending_customer_approval', 'pending_customer_approval'), ('pending_submission', 'pending_submission'), ('submitted', 'submitted'), ('active', 'active'), ('failed', 'failed'), ('cancelled', 'cancelled'), ('expired', 'expired')], blank=True, null=True)
-#    mandate_pdf = models.TextField(custom=True, verbose_name='Mandate Pdf Url', blank=True, null=True)
-#    class Meta(models.Model.Meta):
-#        db_table = 'Mandate__c'
-#        verbose_name = 'Mandate'
-#        verbose_name_plural = 'Mandates'
-#        # keyPrefix = 'a0C'
 
 
 class Invoice(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-    name = models.CharField(max_length=80, verbose_name='Invoice Name', default=models.DEFAULTED_ON_CREATE, blank=True,
+    name = models.CharField(max_length=80, verbose_name=_('Name'), default=models.DEFAULTED_ON_CREATE, blank=True,
                             null=True)
 
     last_modified_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
 
     contract = models.ForeignKey(Contract, models.DO_NOTHING, custom=True,
                                  sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
-    university_ref = models.CharField(custom=True, max_length=1300, verbose_name='University',
+    university_ref = models.CharField(custom=True, max_length=1300, verbose_name=_('University'),
                                       sf_read_only=models.READ_ONLY, blank=True, null=True)
-    contact = models.ForeignKey(Contact, models.DO_NOTHING, custom=True, blank=True, null=True)
+    contact = models.ForeignKey(Contact, models.DO_NOTHING, custom=True, blank=True, null=True,
+                                verbose_name=_('Contact'))
     # mandate_ref = models.ForeignKey('Mandate', models.DO_NOTHING, custom=True, blank=True, null=True)
-    student_id_ref = models.CharField(custom=True, max_length=1300, verbose_name='Student ID',
+    student_id_ref = models.CharField(custom=True, max_length=1300, verbose_name=_('Student ID'),
                                       sf_read_only=models.READ_ONLY, blank=True, null=True)
-    period = models.CharField(custom=True, max_length=10, blank=True, null=True)
-    total = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name='Invoice Amount',
+    period = models.CharField(custom=True, max_length=10, blank=True, null=True, verbose_name=_('Period'))
+    total = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Invoice Amount'),
                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
 
-    etsalutation_ref = models.CharField(custom=True, db_column='ETSalutationRef__c', max_length=1300,
-                                        verbose_name='ETSalutation', sf_read_only=models.READ_ONLY, blank=True,
-                                        null=True)
-    etfirst_name_ref = models.CharField(custom=True, db_column='ETFirstNameRef__c', max_length=1300,
-                                        verbose_name='ETFirstName', sf_read_only=models.READ_ONLY, blank=True,
-                                        null=True)
-    etlast_name_ref = models.CharField(custom=True, db_column='ETLastNameRef__c', max_length=1300,
-                                       verbose_name='ETLastName', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    etbilling_street_ref = models.CharField(custom=True, db_column='ETBillingStreetRef__c', max_length=1300,
-                                            verbose_name='ETBillingStreet', sf_read_only=models.READ_ONLY, blank=True,
-                                            null=True)
-    etbilling_zip_ref = models.CharField(custom=True, db_column='ETBillingZipRef__c', max_length=1300,
-                                         verbose_name='ETBillingZip', sf_read_only=models.READ_ONLY, blank=True,
-                                         null=True)
-    etbilling_city_ref = models.CharField(custom=True, db_column='ETBillingCityRef__c', max_length=1300,
-                                          verbose_name='ETBillingCity', sf_read_only=models.READ_ONLY, blank=True,
-                                          null=True)
-
-    studiengang_ref = models.CharField(custom=True, max_length=1300, verbose_name='Degree Course',
+    studiengang_ref = models.CharField(custom=True, max_length=1300, verbose_name=_('Degree Course'),
                                        sf_read_only=models.READ_ONLY, blank=True, null=True)
-    payment_terms_ref = models.CharField(custom=True, max_length=1300, verbose_name='Payment Terms',
+    payment_terms_ref = models.CharField(custom=True, max_length=1300, verbose_name=_('Payment Terms'),
                                          sf_read_only=models.READ_ONLY, blank=True, null=True)
-    is_dunning_invoice_trig = models.BooleanField(custom=True, verbose_name='Is Dunning Invoice',
-                                                  default=models.DEFAULTED_ON_CREATE)
-    invoice_date = models.DateField(custom=True, blank=True, null=True)
-    etsalutation_ref = models.CharField(custom=True, db_column='ETSalutationRef__c', max_length=1300,
-                                        verbose_name='ETSalutation', sf_read_only=models.READ_ONLY, blank=True,
-                                        null=True)
-    etfirst_name_ref = models.CharField(custom=True, db_column='ETFirstNameRef__c', max_length=1300,
-                                        verbose_name='ETFirstName', sf_read_only=models.READ_ONLY, blank=True,
-                                        null=True)
-    etlast_name_ref = models.CharField(custom=True, db_column='ETLastNameRef__c', max_length=1300,
-                                       verbose_name='ETLastName', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    etbilling_street_ref = models.CharField(custom=True, db_column='ETBillingStreetRef__c', max_length=1300,
-                                            verbose_name='ETBillingStreet', sf_read_only=models.READ_ONLY, blank=True,
-                                            null=True)
-    etbilling_zip_ref = models.CharField(custom=True, db_column='ETBillingZipRef__c', max_length=1300,
-                                         verbose_name='ETBillingZip', sf_read_only=models.READ_ONLY, blank=True,
-                                         null=True)
-    etbilling_city_ref = models.CharField(custom=True, db_column='ETBillingCityRef__c', max_length=1300,
-                                          verbose_name='ETBillingCity', sf_read_only=models.READ_ONLY, blank=True,
-                                          null=True)
-    studiengang_ref = models.CharField(custom=True, max_length=1300, verbose_name='Degree Course',
-                                       sf_read_only=models.READ_ONLY, blank=True, null=True)
-    payment_terms_ref = models.CharField(custom=True, max_length=1300, verbose_name='Payment Terms',
-                                         sf_read_only=models.READ_ONLY, blank=True, null=True)
-    is_dunning_invoice_trig = models.BooleanField(custom=True, verbose_name='Is Dunning Invoice',
-                                                  default=models.DEFAULTED_ON_CREATE)
-    invoice_date = models.DateField(custom=True, blank=True, null=True)
-    mandate_go_cardless_id_auto = models.CharField(custom=True, max_length=1300, verbose_name='Mandate GoCardless Id',
-                                                   sf_read_only=models.READ_ONLY, blank=True, null=True)
-    reference_trig = models.CharField(custom=True, max_length=255, verbose_name='Reference', blank=True, null=True)
+    invoice_date = models.DateField(custom=True, blank=True, null=True, verbose_name=_('Invoice Date'))
 
-    status = models.CharField(custom=True, max_length=255, choices=Choices.InvoiceStatus, blank=True, null=True)
-    dont_count_rates_trig = models.BooleanField(custom=True, verbose_name="Don't count rates",
-                                                default=models.DEFAULTED_ON_CREATE)
-    invoice_has_special_fees = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+    status = models.CharField(custom=True, max_length=255, choices=Choices.InvoiceStatus, blank=True, null=True,
+                              verbose_name=_('Status'))
 
     class Meta(models.Model.Meta):
         db_table = 'Invoice__c'
-        verbose_name = 'Invoice'
-        verbose_name_plural = 'Invoices'
+        verbose_name = _('Invoice')
+        verbose_name_plural = _('Invoices')
         # keyPrefix = 'a09'
 
-
-class InvoiceLineItem(models.Model):
-    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-    name = models.CharField(max_length=80, verbose_name='Invoice Line Item Name', sf_read_only=models.READ_ONLY)
-
-    invoice = models.ForeignKey('Invoice', models.DO_NOTHING, custom=True,
-                                sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
-    amount = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name='Amount Total', blank=True,
-                                 null=True)
-    unit_price = models.DecimalField(custom=True, max_digits=18, decimal_places=2, blank=True, null=True)
-    type = models.CharField(custom=True, max_length=255, verbose_name='Invoice Item', choices=Choices.InvoiceLIType,
-                            blank=True, null=True)
-
-    class Meta(models.Model.Meta):
-        db_table = 'InvoiceLineItem__c'
-        verbose_name = 'Invoice Line Item'
-        verbose_name_plural = 'Invoice Line Items'
-        # keyPrefix = 'a0G'
+    def get_current_attachment(self):
+        return self.attachment_set.last()
 
 
 class Attachment(models.Model):
@@ -673,6 +680,6 @@ class Attachment(models.Model):
     def fetch_content(self):
         session = connections['salesforce'].sf_session
         url = session.auth.instance_url + self.body
-        blob = handle_api_exceptions(url, session.get).text
+        blob = handle_api_exceptions(url, session.get)
 
         return blob

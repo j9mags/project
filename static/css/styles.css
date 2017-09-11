@@ -38,9 +38,6 @@ img {
   color: white;
 }
 
-#chancen-logout-button .material-icons {
-  padding-left: 8px;
-}
 .mdl-layout__drawer .avatar {
   margin-bottom: 16px;
 }
@@ -206,6 +203,10 @@ img {
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
+
+.mdl-button:not(.mdl-button--fab) .material-icons {
+  padding-left: 8px;
+}
 
 #fab_ctn {
   position: fixed;

@@ -6,8 +6,8 @@ from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView, LogoutView
 
-from .models import PerishableToken
 from .forms import SetPasswordForm, ForgotPasswordForm
+from integration.models import Account, Contact
 
 
 class UserLogin(LoginView):
@@ -24,13 +24,16 @@ class UserLogout(LogoutView):
 
 
 def get_token_or_raise(tk):
-    rc = PerishableToken.objects.filter(token=tk)
+    rc = Account.students.filter(cspassword_token=tk)
     pt = rc and rc[0]
+    if not pt:
+        rc = Contact.university_staff.filter(cspassword_token=tk)
+        pt = rc and rc[0]
 
     if not pt:
         raise Http404()
 
-    if pt.is_expired():
+    if pt.is_token_expired():
         raise PermissionDenied()
 
     return pt
@@ -48,7 +51,7 @@ class PasswordSet(View):
             raise SuspiciousOperation()
 
         pt = get_token_or_raise(tk)
-        form = SetPasswordForm(initial={'token': pt.token})
+        form = SetPasswordForm(initial={'token': pt.cspassword_token})
         context = {'form': form}
 
         return render(request, self.template_form, context)
@@ -60,16 +63,17 @@ class PasswordSet(View):
 
         if form.is_valid():
             pt = get_token_or_raise(form.cleaned_data.get('token'))
-
-            pt.user.set_password(form.cleaned_data.get('password1'))
-            pt.user.is_active = True
-            pt.user.save()
-
-            srecord = pt.user.get_srecord()
-            srecord.cspassword_token = None
-            srecord.save()
-
-            pt.delete()
+            UserModel = get_user_model()
+            if UserModel.objects.filter(email=pt.get_user_email()).exists():
+                user = UserModel.objects.get(email=pt.get_user_email())
+            else:
+                user = UserModel(email=pt.get_user_email(), is_active=True)
+                pt.recordcreated = True
+            user.set_password(form.cleaned_data.get('password1'))
+            user.save()
+            pt.cspassword_token = None
+            pt.cspassword_time = None
+            pt.save()
 
             return render(request, self.template_done, context)
 
@@ -94,11 +98,8 @@ class PasswordChange(View):
 
             if qs.exists():
                 user = qs.first()
-                pt = user.create_token()
-
-                srecord = user.get_srecord()
-                srecord.cspassword_token = pt.token
-                srecord.save()
+                pt = user.get_srecord()
+                pt.request_new_password()
 
             return render(request, self.template_success, context)
 

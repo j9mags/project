@@ -21,6 +21,7 @@
             </div>
           </div>
         </form>
+        <div class="mdl-layout-spacer"></div>
         {% endif %}
         <a href="{% url 'authentication:logout' %}"
            class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white " id="chancen-logout-button">
@@ -82,5 +83,7 @@
 {% endblock %}
 
 {% block extrajs %}
-  <script src="{% static '/js/dashboard.js' %}"></script>
+  {% if not ignore_drawer %}
+    <script src="{% static '/js/dashboard.js' %}"></script>
+  {% endif %}
 {% endblock %}

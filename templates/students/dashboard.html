@@ -8,53 +8,56 @@
 {% block content %}
   <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
     <div class="mdl-tabs__tab-bar">
-        <a href="#account-panel" class="mdl-tabs__tab is-active">{% trans 'Account' %}</a>
-        <a href="#contacts-panel" class="mdl-tabs__tab">{% trans 'Contacts' %}</a>
-        <!-- a href="#contracts-panel" class="mdl-tabs__tab">{% trans 'Contracts' %}</a -->
-        <a href="#invoices-panel" class="mdl-tabs__tab">{% trans 'Invoices' %}</a>
+        <a id="account-tab" href="#account-panel" class="mdl-tabs__tab">{% trans 'Account' %}</a>
+        <a id="invoices-tab" href="#invoices-panel" class="mdl-tabs__tab">{% trans 'Invoices' %}</a>
     </div>
 
-    <div class="mdl-tabs__panel is-active" id="account-panel">
-        {% include "snippets/student_account.html" with class="csp--full-width" %}
+    <div class="mdl-tabs__panel" id="account-panel">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+          {% include "snippets/student_account.html" with class="csp--full-width" %}
+        </div>
+
+        {% if master_contact %}
+        <div class="mdl-cell--12-col">
+          <h5 class="mdl-typography--headline">{% trans 'Registered contacts' %}</h5>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          {% include "snippets/student_contact.html" with contact=master_contact class="csp--full-width" %}
+        </div>
+        {% else %}
+          <h3 class="mdl-typography--headline">{% trans 'No contact information found' %}</h3>
+        {% endif %}
+        {% for contact in account.contact_set.all %}
+          {% if contact != master_contact %}
+            <div class="mdl-cell mdl-cell--12-col">
+              {% include "snippets/contact_card.html" %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
 
     <div class="mdl-tabs__panel" id="contacts-panel">
-      {% if master_contact %}
-        {% include "snippets/student_contact.html" with contact=master_contact class="csp--full-width" %}
-      {% else %}
-        <h3 class="mdl-typography--headline">{% trans 'No contact information found' %}</h3>
-      {% endif %}
-      <div class="demo-cards mdl-cell--12-col mdl-grid">
-        {% for contact in account.contact_set.all %}
-          {% if contact != master_contact %}
-            {% include "snippets/contact_card.html" %}
-          {% endif %}
-        {% endfor %}
-      </div>
     </div>
 
-    <!-- div class="mdl-tabs__panel" id="contracts-panel">
-      <div class="mdl-cell mdl-cell--12-col mdl-grid">
-        {% for contract in account.contract_account_set.all %}
-          {{ contract.studiengang_ref.name }}
-          {{ contract.payment_interval }}
-        {% endfor %}
-      </div>
-    </div -->
-
     <div class="mdl-tabs__panel" id="invoices-panel">
-      {% if current_invoice %}
-        {% include "snippets/student_invoice.html" with invoice=current_invoice class="csp--full-width mdl-card--summary" %}
+      {% if invoices %}
+        {% include "snippets/student_invoices.html" %}
       {% else %}
         <h3 class="mdl-typography--headline">{% trans 'No invoices found' %}</h3>
       {% endif %}
-      <div class="demo-cards mdl-cell--12-col mdl-grid">
-        {% for invoice in account.get_all_invoices %}
-          {% if invoice != current_invoice %}
-            {{ invoice.name }} - {{ invoice.period }} <br>
-          {% endif %}
-        {% endfor %}
-      </div>
     </div>
   </div>
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  <script>
+  (function () {
+    var hash = window.location.hash || '#account';
+    $(hash+'-tab').addClass('is-active');
+    $(hash+'-panel').addClass('is-active');
+  }.call(this));
+  </script>
 {% endblock %}

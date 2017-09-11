@@ -1,0 +1,65 @@
+{% extends 'layout/dashboard.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ contact.name|default:_('New contact') }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+{% if form.non_field_errors %}
+<div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+    <div class="mdl-snackbar__text">{{ form.non_field_errors | first }}</div>
+    <button class="mdl-snackbar__action" type="button"></button>
+</div>
+{% endif %}
+
+<div class="mdl-card mdl-card-account mdl-shadow--6dp csp--full-width">
+    <form method="post">
+        {% csrf_token %}
+        <div class="mdl-card__supporting-text mdl-grid">
+            <div class="mdl-grid">
+                <div class="mdl-cell">
+                    {% include 'snippets/select.html' with field=form.salutation %}
+                </div>
+                <div class="mdl-cell">
+                    {% include 'snippets/input.html' with field=form.first_name type='text' %}
+                </div>
+                <div class="mdl-cell">
+                    {% include 'snippets/input.html' with field=form.last_name type='text' %}
+                </div>
+                <div class="mdl-cell">
+                    {% include 'snippets/input.html' with field=form.email type='email'%}
+                </div>
+                <div class="mdl-cell">
+                    {% include 'snippets/input.html' with field=form.mobile_phone type='phone' %}
+                </div>
+                <div class="mdl-cell">
+                    {% include 'snippets/input.html' with field=form.other_phone type='phone' %}
+                </div>
+                <div class="mdl-cell--8-col">
+                    {% include 'snippets/address.html' with title=_('Home') street=form.mailing_street zip=form.mailing_postal_code city=form.mailing_city country=form.mailing_country %}
+                </div>
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-grid">
+                <a href="{% url 'integration:dashboard' %}"
+                   class="mdl-cell mdl-button">{% trans 'Back' %}</a>
+                <input type="submit" class="mdl-cell mdl-cell--4-offset-desktop mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+                       value="{% trans 'Confirm' %}">
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+<script src="{% static '/js/mdl-selectfield.min.js' %}"></script>
+{% endblock %}

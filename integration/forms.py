@@ -1,10 +1,9 @@
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 
-from .models import Choices
+from .models import Choices, Contact
 from .models import Account
 from .models import Rabatt
-
 
 SalutationChoices = [('', '')] + Choices.Salutation
 CountryChoices = [('', '')] + Choices.Country
@@ -102,6 +101,17 @@ class StudentContractForm(forms.Form):
             choices=[(o.pk, o.name) for o in university.get_active_courses()],
             required=False
         )
+
+
+class StudentContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['salutation', 'first_name', 'last_name', 'email', 'mobile_phone', 'other_phone', 'mailing_street',
+                  'mailing_city', 'mailing_postal_code', 'mailing_country']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['salutation'].widget.choices[0] = ("", "")
 
 
 class UniversityForm(forms.ModelForm):

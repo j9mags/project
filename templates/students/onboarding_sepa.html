@@ -2,11 +2,17 @@
 
 <div class="mdl-card__supporting-text mdl-card--expand mdl-grid">
     <div class="mdl-cell mdl-cell--12-col">
-        {% trans 'Maybe some text explaining GoCardless here?' %}
+        <span class="mdl-typography--body-2">{% trans 'Maybe some text explaining GoCardless here?' %}</span>
     </div>
 
-    <div class="mdl-cell">
-        {{ sf_contact.sepamandate_form_auto | safe }}
+    <div class="mdl-cell mdl-cell--12-col">
+        <a target="_blank" href="{{ sf_contact.sepamandate_url_auto }}">{% trans 'Setup now' %}</a>
+    </div>
+    <div class="mdl-cell mdl-cell--12-col">
+        <span class="mdl-typography--body-1">{% trans 'or copy the link below and paste it on a browser any time.' %}</span>
+    </div>
+    <div class="mdl-cell mdl-cell--12-col">
+        <span class="mdl-typography--caption mdl-color-text--accent">{{ sf_contact.sepamandate_url_auto }}</span>
     </div>
 </div>
 
