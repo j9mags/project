@@ -13,4 +13,5 @@ def get(od, key):
 
 @register.filter()
 def currency(value):
+    value = value or 0
     return locale.currency(value, grouping=True)
