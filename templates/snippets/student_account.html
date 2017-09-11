@@ -57,8 +57,10 @@
 
     <div class="mdl-card__actions mdl-card--border">
       {% if form %}
-        <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+      <div class="mdl-grid">
+        <input type="submit" class="mdl-cell mdl-cell--9-offset mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
                value="{% trans 'Confirm changes' %}">
+      </div>
       {% else %}
         <a class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
            href="{% url 'integration:contact' pk='new' %}">{% trans 'New contact' %}
