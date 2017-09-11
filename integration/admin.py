@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
 from .models import *
 
@@ -38,7 +39,17 @@ class UniversityContactInline(admin.StackedInline):
 class UniversityAdmin(admin.ModelAdmin):
     icon = '<i class="material-icons">school</i>'
 
-    fields = ('name',)
+    fieldsets = (
+        (None, {
+            'fields': (('name', 'abwicklungsgebuhr_pro_einzug_pro_student'),)
+        }),
+        (_('Bank account'), {
+            'fields': (('ibanhsauto', 'bichsauto'),)
+        }),
+        (_('Billing address'), {
+            'fields': ('billing_street', ('billing_postal_code', 'billing_city', 'billing_country'))
+        })
+    )
 
     inlines = [UniversityContactInline]
 

@@ -231,6 +231,15 @@ class Account(models.Model, PerishableTokenMixin):
     status = models.CharField(custom=True, max_length=255, choices=Choices.AccountStatus, verbose_name=_('Status'),
                               blank=True, null=True)
 
+    abwicklungsgebuhr_pro_einzug_pro_student = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                                                   verbose_name=_(
+                                                                       'Execution Fee / Direct Debit / Student'),
+                                                                   help_text='in Euro', blank=True, null=True)
+    ibanhsauto = models.CharField(custom=True, db_column='IBANHSAuto__c', max_length=255, verbose_name='IBAN',
+                                  blank=True, null=True)
+    bichsauto = models.CharField(custom=True, db_column='BICHSAuto__c', max_length=255, verbose_name='BIC', blank=True,
+                                 null=True)
+
     hochschule_ref = models.ForeignKey('self', models.DO_NOTHING, custom=True, related_name='account_hochschuleref_set',
                                        blank=True, null=True, verbose_name=_('University'))
     immatrikulationsnummer = models.CharField(custom=True, max_length=255, verbose_name=_('Matriculation Number'),
@@ -257,10 +266,6 @@ class Account(models.Model, PerishableTokenMixin):
                                                              sf_read_only=models.READ_ONLY)
     traegergesellschaft = models.CharField(custom=True, max_length=255, verbose_name='Private Sponsorship', blank=True,
                                            null=True)
-    abwicklungsgebuhr_pro_einzug_pro_student = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                                                   verbose_name=_(
-                                                                       'Execution Fee / Direct Debit / Student'),
-                                                                   help_text='in Euro', blank=True, null=True)
 
     cspassword_token = models.CharField(custom=True, db_column='CSPasswordToken__c', max_length=50,
                                         verbose_name='CS Password Token', blank=True, null=True)
