@@ -20,11 +20,13 @@
 {% block fab_options %}
 <div id="dlg-add-students" class="mdl-dialog {% if display_st %}is-showing-dialog{% endif %}">
     <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
-    <form enctype="multipart/form-data" method="post"
+    <form enctype="multipart/form-data" method="post" action="{% url 'integration:review' uuid=new %}"
           onsubmit="document.getElementById('upload-progress-st').classList.add('is-active')"
           onabort="document.getElementById('upload-progress-st').classList.remove('is-active')">
 
         {% csrf_token %}
+
+        <input type="hidden" name="view_name" value="{{ view.template_name }}">
 
         <div class="mdl-dialog__content">
             {% include 'snippets/select.html' with field=st_form.course %}

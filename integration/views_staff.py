@@ -7,7 +7,7 @@ from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import DegreeCourse, Contract
 from .forms import *
@@ -196,7 +196,7 @@ class DashboardUniversity(StaffMixin, TemplateView):
         return self.get(request, *args, **kwargs)
 
 
-class FileUploadReview(StaffMixin, TemplateView):
+class FileUpload(StaffMixin, TemplateView):
     template_name = 'staff/upload_review.html'
 
     def get_context_data(self, **kwargs):
@@ -204,7 +204,7 @@ class FileUploadReview(StaffMixin, TemplateView):
         if uuid is None:
             raise SuspiciousOperation()
 
-        context = super(FileUploadReview, self).get_context_data(**kwargs)
+        context = super(FileUpload, self).get_context_data(**kwargs)
 
         try:
             upload = self.request.user.csvupload_set.get(uuid=uuid)
@@ -219,6 +219,39 @@ class FileUploadReview(StaffMixin, TemplateView):
         context.update(prev=p - 1, cur=p, next=p + 1 if upload.has_more_data(p) else False)
 
         return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        contact = context.get('contact')
+
+        st_form = StudentsUploadForm(contact.account, request.POST, request.FILES)
+        cs_form = UploadForm(request.POST, request.FILES)
+
+        if 'course' in request.POST:
+            form = st_form
+        else:
+            form = cs_form
+
+        if form.is_valid():
+            csv = form.cleaned_data.get('csv')
+            charset = csv.charset or 'utf-8'
+            content = ''.join([line.decode(charset) for line in csv])
+
+            upd = request.user.csvupload_set.create(
+                course=form.cleaned_data.get('course'),
+                uuid=str(uuid4()),
+                content=content
+            )
+            return redirect('/review/' + upd.uuid)
+        else:
+            context.update(
+                display_st=form == st_form,
+                display_cs=form == st_form,
+                st_form=st_form,
+                cs_form=cs_form)
+        template = request.POST.get('view')
+        return render(request, template, context)
 
 
 class FileUploadAction(StaffMixin, View):
