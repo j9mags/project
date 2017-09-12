@@ -91,7 +91,7 @@ class Choices:
                ('Vereinigte Staaten', 'Vereinigte Staaten'), ('Vereinigtes Königreich', 'Vereinigtes Königreich'),
                ('Vietnam', 'Vietnam'), ('Weißrussland', 'Weißrussland'), ('Westsahara', 'Westsahara'),
                ('Zentral\xadafrikanische Republik', 'Zentral\xadafrikanische Republik'), ('Zypern', 'Zypern')]
-    Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('neutral'))]
+    Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('non-binary'))]
     Nationality = [('afghanisch', 'afghanisch'), ('ägyptisch', 'ägyptisch'), ('albanisch', 'albanisch'),
                    ('algerisch', 'algerisch'), ('andorranisch', 'andorranisch'), ('angolanisch', 'angolanisch'),
                    ('antiguanisch', 'antiguanisch'), ('äquatorialguineisch', 'äquatorialguineisch'),
@@ -167,11 +167,11 @@ class Choices:
                    ('weißrussisch', 'weißrussisch'), ('zentralafrikanisch', 'zentralafrikanisch'),
                    ('zyprisch', 'zyprisch')]
     Language = [('deutsch', _('deutsch')), ('englisch', _('english'))]
-    Salutation = [('Mr.', _('Herr')), ('Ms.', _('Frau')), ('Mrs.', _('Frau')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
-    Month = [('Januar', _('Januar')), ('Februar', _('Februar')), ('März', _('März')), ('April', _('April')),
-             ('Mai', _('Mai')),
-             ('Juni', _('Juni')), ('Juli', _('Juli')), ('August', _('August')), ('September', _('September')),
-             ('Oktober', _('Oktober')), ('November', _('November')), ('Dezember', _('Dezember'))]
+    Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
+    Month = [('Januar', _('January')), ('Februar', _('February')), ('März', _('March')), ('April', _('April')),
+             ('Mai', _('May')), ('Juni', _('June')), ('Juli', _('July')), ('August', _('August')),
+             ('September', _('September')), ('Oktober', _('October')), ('November', _('November')),
+             ('Dezember', _('December'))]
     Payment = [('Zu Beginn jeden Monats', _('Beginning of each Month')),
                ('Zu Beginn jeden Semesters', _('Beginning of each Semester'))]
     PaymentOptions = [('Suspend payments', _('Suspend payments')),
@@ -180,12 +180,12 @@ class Choices:
     AccountStatus = [('Immatrikuliert', _('Enrolled')), ('Abgebrochen', _('Aborted')), ('Beurlaubt', _('Semester Off')),
                      ('Auslandssemester', _('Semester abroad')), ('Exmatrikuliert', _('Exmatriculated'))]
     InvoiceStatus = [('Draft', _('Draft')), ('Sent', _('Sent')), ('Paid', _('Paid')), ('Cancelled', _('Cancelled'))]
-    InvoiceLIType = [('TuitionFee', _('Studiengebühr')), ('SemesterFee', _('Semesterbeitrag')),
-                     ('SemesterDiscount', _('Rabatt auf Semesterbeitrag')), ('OverdueFee', _('Mahngebühr')),
-                     ('MatriculationFee', _('Immatrikulationsgebühr')), ('Dunning Fee', _('Dunning Fee')),
+    InvoiceLIType = [('TuitionFee', _('Tuition Fee')), ('SemesterFee', _('Semester Fee')),
+                     ('SemesterDiscount', _('Semester Discount')), ('OverdueFee', _('Overdue Fee')),
+                     ('MatriculationFee', _('Matriculation Fee')), ('Dunning Fee', _('Dunning Fee')),
                      ('Fee Semester abroad', _('Fee Semester abroad')), ('Fee Semester off', _('Fee Semester off'))]
-    ContractStatus = [('In Approval Process', _('Genehmigungsverfahren läuft')), ('Activated', _('Aktiviert')),
-                      ('Draft', _('Entwurf')), ('Deaktiviert', _('Deaktiviert'))]
+    ContractStatus = [('In Approval Process', _('In Approval Process')), ('Activated', _('Activated')),
+                      ('Draft', _('Draft')), ('Deaktiviert', _('Deactivated'))]
     DiscountType = [('Discount Tuition Fee', _('Discount Tuition Fee')),
                     ('Discount Semester Fee', _('Discount Semester Fee'))]
 
@@ -485,7 +485,7 @@ class DegreeCourse(models.Model):
     fee_semester_off = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
                                            verbose_name=_('Fee Semester off'), blank=True, null=True)
     cost_per_month_beyond_standard = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
-                                                         verbose_name=_('Cost per Month > Standard Study Period'),
+                                                         verbose_name=_('Cost per Month>Standard Study Period'),
                                                          blank=True, null=True)
 
     total_tuition_fees_auto = models.DecimalField(custom=True, max_digits=18, decimal_places=2,

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-11 20:36+0000\n"
+"POT-Creation-Date: 2017-09-12 16:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,24 +63,24 @@ msgstr ""
 msgid "-- Keep current --"
 msgstr ""
 
-#: integration/forms.py:61
+#: integration/forms.py:70
 msgid "I accept that the data provided by the university is correct."
 msgstr ""
 
-#: integration/forms.py:80 integration/forms.py:85
+#: integration/forms.py:89 integration/forms.py:94
 msgid "Street address"
 msgstr ""
 
-#: integration/forms.py:81 integration/forms.py:86 integration/models.py:225
+#: integration/forms.py:90 integration/forms.py:95 integration/models.py:225
 #: integration/models.py:370
 msgid "City"
 msgstr ""
 
-#: integration/forms.py:82 integration/forms.py:87
+#: integration/forms.py:91 integration/forms.py:96
 msgid "Postal code"
 msgstr ""
 
-#: integration/forms.py:83 integration/forms.py:88 integration/models.py:227
+#: integration/forms.py:92 integration/forms.py:97 integration/models.py:227
 #: integration/models.py:372
 msgid "Country"
 msgstr ""
@@ -94,7 +94,7 @@ msgid "male"
 msgstr ""
 
 #: integration/models.py:94
-msgid "neutral"
+msgid "non-binary"
 msgstr ""
 
 #: integration/models.py:169
@@ -102,15 +102,19 @@ msgid "deutsch"
 msgstr ""
 
 #: integration/models.py:169
-msgid "englisch"
+msgid "english"
 msgstr ""
 
 #: integration/models.py:170
-msgid "Herr"
+msgid "Mr."
 msgstr ""
 
 #: integration/models.py:170
-msgid "Frau"
+msgid "Ms."
+msgstr ""
+
+#: integration/models.py:170
+msgid "Mrs."
 msgstr ""
 
 #: integration/models.py:170
@@ -122,15 +126,15 @@ msgid "Prof."
 msgstr ""
 
 #: integration/models.py:171
-msgid "Januar"
+msgid "January"
 msgstr ""
 
 #: integration/models.py:171
-msgid "Februar"
+msgid "February"
 msgstr ""
 
 #: integration/models.py:171
-msgid "März"
+msgid "March"
 msgstr ""
 
 #: integration/models.py:171
@@ -138,18 +142,18 @@ msgid "April"
 msgstr ""
 
 #: integration/models.py:172
-msgid "Mai"
+msgid "May"
 msgstr ""
 
-#: integration/models.py:173
-msgid "Juni"
+#: integration/models.py:172
+msgid "June"
 msgstr ""
 
-#: integration/models.py:173
-msgid "Juli"
+#: integration/models.py:172
+msgid "July"
 msgstr ""
 
-#: integration/models.py:173
+#: integration/models.py:172
 msgid "August"
 msgstr ""
 
@@ -157,16 +161,16 @@ msgstr ""
 msgid "September"
 msgstr ""
 
-#: integration/models.py:174
-msgid "Oktober"
+#: integration/models.py:173
+msgid "October"
 msgstr ""
 
-#: integration/models.py:174
+#: integration/models.py:173
 msgid "November"
 msgstr ""
 
 #: integration/models.py:174
-msgid "Dezember"
+msgid "December"
 msgstr ""
 
 #: integration/models.py:175
@@ -209,7 +213,7 @@ msgstr ""
 msgid "Exmatriculated"
 msgstr ""
 
-#: integration/models.py:182
+#: integration/models.py:182 integration/models.py:188
 msgid "Draft"
 msgstr ""
 
@@ -226,23 +230,26 @@ msgid "Cancelled"
 msgstr ""
 
 #: integration/models.py:183
-msgid "Studiengebühr"
+msgid "Tuition Fee"
 msgstr ""
 
-#: integration/models.py:183
-msgid "Semesterbeitrag"
+#: integration/models.py:183 integration/models.py:281
+#: integration/models.py:283 integration/models.py:478
+#: integration/models.py:538
+msgid "Semester Fee"
 msgstr ""
 
 #: integration/models.py:184
-msgid "Rabatt auf Semesterbeitrag"
+msgid "Semester Discount"
 msgstr ""
 
 #: integration/models.py:184
-msgid "Mahngebühr"
+msgid "Overdue Fee"
 msgstr ""
 
-#: integration/models.py:185
-msgid "Immatrikulationsgebühr"
+#: integration/models.py:185 integration/models.py:476
+#: integration/models.py:533
+msgid "Matriculation Fee"
 msgstr ""
 
 #: integration/models.py:185
@@ -260,19 +267,15 @@ msgid "Fee Semester off"
 msgstr ""
 
 #: integration/models.py:187
-msgid "Genehmigungsverfahren läuft"
+msgid "In Approval Process"
 msgstr ""
 
 #: integration/models.py:187
-msgid "Aktiviert"
+msgid "Activated"
 msgstr ""
 
 #: integration/models.py:188
-msgid "Entwurf"
-msgstr ""
-
-#: integration/models.py:188
-msgid "Deaktiviert"
+msgid "Deactivated"
 msgstr ""
 
 #: integration/models.py:189
@@ -297,10 +300,10 @@ msgid "Name"
 msgstr ""
 
 #: integration/models.py:231 integration/models.py:579
-#: integration/models.py:651 integration/views_staff.py:59
-#: integration/views_staff.py:71 templates/snippets/student_account.html:26
+#: integration/models.py:651 integration/views_staff.py:73
+#: integration/views_staff.py:85 templates/snippets/student_account.html:26
 #: templates/snippets/student_invoices.html:8
-#: templates/staff/dashboard_home.html:38
+#: templates/staff/dashboard_students.html:38
 #: templates/students/onboarding_review.html:14
 msgid "Status"
 msgstr ""
@@ -324,7 +327,7 @@ msgid "Tuition Fee Total"
 msgstr ""
 
 #: integration/models.py:249 templates/snippets/student_account.html:48
-#: templates/staff/dashboard_home.html:35
+#: templates/staff/dashboard_students.html:35
 msgid "Gender"
 msgstr ""
 
@@ -350,11 +353,6 @@ msgstr ""
 
 #: integration/models.py:259
 msgid "University Email Address"
-msgstr ""
-
-#: integration/models.py:281 integration/models.py:283
-#: integration/models.py:478 integration/models.py:538
-msgid "Semester Fee"
 msgstr ""
 
 #: integration/models.py:286
@@ -395,7 +393,7 @@ msgstr ""
 
 #: integration/models.py:365 templates/snippets/contact_card.html:10
 #: templates/snippets/student_contact.html:18
-#: templates/staff/dashboard_home.html:34
+#: templates/staff/dashboard_students.html:34
 msgid "Mobile phone"
 msgstr ""
 
@@ -462,10 +460,6 @@ msgstr ""
 msgid "Starting Month of Studies"
 msgstr ""
 
-#: integration/models.py:476 integration/models.py:533
-msgid "Matriculation Fee"
-msgstr ""
-
 #: integration/models.py:479 integration/models.py:546
 msgid "Cost per Month"
 msgstr ""
@@ -474,8 +468,8 @@ msgstr ""
 msgid "Cost per Semester"
 msgstr ""
 
-#: integration/models.py:488
-msgid "Cost per Month > Standard Study Period"
+#: integration/models.py:488 integration/models.py:522
+msgid "Cost per Month>Standard Study Period"
 msgstr ""
 
 #: integration/models.py:492 integration/models.py:525
@@ -505,10 +499,6 @@ msgstr ""
 
 #: integration/models.py:519
 msgid "Payment Interval"
-msgstr ""
-
-#: integration/models.py:522
-msgid "Cost per Month>Standard Study Period"
 msgstr ""
 
 #: integration/models.py:530 integration/models.py:646
@@ -607,47 +597,47 @@ msgstr ""
 msgid "Invoices"
 msgstr ""
 
-#: integration/views_staff.py:64 integration/views_staff.py:78
+#: integration/views_staff.py:78 integration/views_staff.py:92
 #: templates/snippets/student_contract.html:18
-#: templates/staff/dashboard_home.html:37
+#: templates/staff/dashboard_students.html:37
 #: templates/students/onboarding_review.html:17
 msgid "Course"
 msgstr ""
 
-#: integration/views_student.py:155
+#: integration/views_student.py:160
 msgid "Data Review"
 msgstr ""
 
-#: integration/views_student.py:156
+#: integration/views_student.py:162
 msgid ""
 "Your university sent us important data for your profile. Please check it "
 "carefully. Should you find any discrepancies, please contact your university "
 "to correct this."
 msgstr ""
 
-#: integration/views_student.py:160 integration/views_student.py:168
+#: integration/views_student.py:166 integration/views_student.py:174
 msgid "Continue"
 msgstr ""
 
-#: integration/views_student.py:163
+#: integration/views_student.py:169
 msgid "Complete your registration!"
 msgstr ""
 
-#: integration/views_student.py:164
+#: integration/views_student.py:170
 msgid "Fill the form and log into your Chancen account."
 msgstr ""
 
-#: integration/views_student.py:171
+#: integration/views_student.py:177
 msgid "Set up your Bank account"
 msgstr ""
 
-#: integration/views_student.py:172
+#: integration/views_student.py:179
 msgid ""
 "In the future we will debit your tuition fees from your selected bank "
 "account. Please click on the following link to authorise the debit orders."
 msgstr ""
 
-#: integration/views_student.py:176
+#: integration/views_student.py:183
 msgid "Complete"
 msgstr ""
 
@@ -672,7 +662,7 @@ msgid "Your request has been successfully processed."
 msgstr ""
 
 #: templates/layout/base.html:6
-msgid "Chancen Services"
+msgid "CHANCEN SERVICES"
 msgstr ""
 
 #: templates/layout/dashboard.html:20
@@ -786,7 +776,7 @@ msgid "Birth country"
 msgstr ""
 
 #: templates/snippets/student_account.html:54
-#: templates/staff/dashboard_home.html:36
+#: templates/staff/dashboard_students.html:36
 msgid "Language"
 msgstr ""
 
@@ -835,24 +825,39 @@ msgstr ""
 msgid "Matriculation fee"
 msgstr ""
 
-#: templates/staff/dashboard.html:15 templates/staff/dashboard.html:99
+#: templates/staff/dashboard.html:14 templates/staff/dashboard.html:102
+#: templates/staff/dashboard_home.html:15
 msgid "Courses"
 msgstr ""
 
-#: templates/staff/dashboard.html:17 templates/staff/dashboard.html:96
+#: templates/staff/dashboard.html:16 templates/staff/dashboard.html:99
+#: templates/staff/dashboard_home.html:29
 msgid "Students"
 msgstr ""
 
-#: templates/staff/dashboard.html:22 templates/staff/dashboard.html:45
+#: templates/staff/dashboard.html:21 templates/staff/dashboard.html:46
 msgid "Upload from your computer"
 msgstr ""
 
-#: templates/staff/dashboard.html:65
+#: templates/staff/dashboard.html:38 templates/staff/dashboard.html:60
+msgid "Upload"
+msgstr ""
+
+#: templates/staff/dashboard.html:40 templates/staff/dashboard.html:62
+msgid "Download sample"
+msgstr ""
+
+#: templates/staff/dashboard.html:68
 msgid "Changes will apply to selected rows"
 msgstr ""
 
+#: templates/staff/dashboard.html:80 templates/staff/upload_review.html:65
+#: templates/students/contact.html:55
+msgid "Confirm"
+msgstr ""
+
 #: templates/staff/dashboard_courses.html:9
-#: templates/staff/dashboard_home.html:10
+#: templates/staff/dashboard_students.html:10
 msgid "Displaying"
 msgstr ""
 
@@ -868,23 +873,31 @@ msgstr ""
 msgid "Course name"
 msgstr ""
 
-#: templates/staff/dashboard_home.html:12
+#: templates/staff/dashboard_home.html:22
+msgid "View courses"
+msgstr ""
+
+#: templates/staff/dashboard_home.html:36
+msgid "View students"
+msgstr ""
+
+#: templates/staff/dashboard_students.html:12
 msgid "No students found to match this criteria"
 msgstr ""
 
-#: templates/staff/dashboard_home.html:24
+#: templates/staff/dashboard_students.html:24
 msgid "Bulk update"
 msgstr ""
 
-#: templates/staff/dashboard_home.html:31
+#: templates/staff/dashboard_students.html:31
 msgid "Matriculation"
 msgstr ""
 
-#: templates/staff/dashboard_home.html:32
+#: templates/staff/dashboard_students.html:32
 msgid "Student name"
 msgstr ""
 
-#: templates/staff/dashboard_home.html:33
+#: templates/staff/dashboard_students.html:33
 msgid "University email"
 msgstr ""
 
@@ -906,10 +919,6 @@ msgstr ""
 
 #: templates/staff/upload_review.html:65
 msgid "Next"
-msgstr ""
-
-#: templates/staff/upload_review.html:65 templates/students/contact.html:55
-msgid "Confirm"
 msgstr ""
 
 #: templates/students/dashboard.html:6

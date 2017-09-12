@@ -191,10 +191,7 @@ class Onboarding(StudentMixin, View):
             form = LanguageSelectForm(self.request.POST, instance=self.account)
         else:
             form = LanguageSelectForm(instance=self.account)
-        for f in form.fields:
-            print(f)
-            for opt in form.fields[f]._get_choices():
-                print(opt)
+
         context.update(form=form)
         context.update(page_title=context['stepper'][0].get('title'))
         context['stepper'][0].update(is_active=True)

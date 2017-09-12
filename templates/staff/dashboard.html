@@ -1,6 +1,5 @@
 {% extends 'layout/dashboard.html' %}
 
-
 {% load static %}
 {% load i18n %}
 
@@ -35,8 +34,10 @@
         </div>
         <div class="mdl-dialog__actions">
             <input type="submit"
-                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
-                   value="Upload">
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
+                   value="{% trans 'Upload' %}">
+            <div class="mdl-layout-spacer"></div>
+            <a href="{% static '' %}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download sample' %}</a>
         </div>
     </form>
 </div>
@@ -55,8 +56,10 @@
         </div>
         <div class="mdl-dialog__actions">
             <input type="submit"
-                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
-                   value="Upload">
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
+                   value="{% trans 'Upload' %}">
+            <div class="mdl-layout-spacer"></div>
+            <a href="{% static '' %}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download sample' %}</a>
         </div>
     </form>
 </div>
@@ -74,7 +77,7 @@
         <div class="mdl-dialog__actions">
             <input type="submit"
                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
-                   value="Confirm">
+                   value="{% trans 'Confirm' %}">
         </div>
     </form>
 </div>
