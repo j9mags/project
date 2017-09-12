@@ -1,4 +1,4 @@
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from django.utils.translation import get_language, activate
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.conf import settings
