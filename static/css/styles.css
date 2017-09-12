@@ -421,3 +421,9 @@ img {
 #onboarding-stepper .mdl-step__actions {
     justify-content: space-evenly;
 }
+
+.csp-card__title-icon {
+    position: absolute;
+    left: calc(50% - 48px);
+    top: 8px;
+}
