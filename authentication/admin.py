@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 # from django.contrib.auth.forms import PasswordResetForm
 from django.utils.crypto import get_random_string
 
-from authtools.admin import StrippedUserAdmin
+from authtools.admin import UserAdmin as DjUserAdmin
 from authtools.forms import UserCreationForm
 
 from .models import PerishableToken, CsvUpload
@@ -45,7 +45,7 @@ class UserCreationForm(UserCreationForm):
         return password2
 
 
-class UserAdmin(StrippedUserAdmin):
+class UserAdmin(DjUserAdmin):
     """
     A UserAdmin that sends a password-reset email when creating a new user,
     unless a password was entered.
@@ -62,7 +62,7 @@ class UserAdmin(StrippedUserAdmin):
         }),
     )
 
-    inlines = [TokenInline]
+    # inlines = [TokenInline]
 
     def save_model(self, request, obj, form, change):
         if not change and not obj.has_usable_password():
