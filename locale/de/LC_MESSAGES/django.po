@@ -103,8 +103,6 @@ msgid "deutsch"
 msgstr ""
 
 #: integration/models.py:169
-#, fuzzy
-#| msgid "English"
 msgid "englisch"
 msgstr "Englisch"
 

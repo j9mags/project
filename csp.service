@@ -6,7 +6,7 @@ After=network.target
 User=chancen
 Group=www-data
 WorkingDirectory=/home/chancen/chancen-services-portal
-ExecStart=/home/chancen/chancen-services-portal/.env/bin/gunicorn --access-logfile - --workers 3 --bind unix:/home/chancen/chancen-services-portal/csp.sock csp.wsgi:application
+ExecStart=/home/chancen/chancen-services-portal/.env/bin/gunicorn --access-logfile csp-access.log --log-file csp-debug.log --capture-output --workers 3 --bind unix:csp.sock csp.wsgi:application
 
 [Install]
 WantedBy=multi-user.target

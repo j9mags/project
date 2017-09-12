@@ -29,7 +29,7 @@ class StudentMixin(LoginRequiredMixin):
         lang = get_language()
         account = self.get_queryset()
         if account.kommunikationssprache and not account.kommunikationssprache.startswith(lang):
-            user_lang = account.kommunikationssprache[:2]
+            user_lang = account.kommunikationssprache.lower()[:2]
             activate(user_lang)
             request.session[LANGUAGE_SESSION_KEY] = user_lang
             rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_lang)
