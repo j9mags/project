@@ -3,15 +3,17 @@
 {% load static %}
 
 {% block extrahead %}
- <link rel="stylesheet" href="{% static '/css/errors.css' %}" />
+ <!-- link rel="stylesheet" href="{% static '/css/errors.css' %}" / -->
 {% endblock %}
 
 {% block layout %}
-<div class="demo-layout mdl-layout mdl-js-layout">
-    <div class="mdl-layout__content">
-        <div class="error-section mdl-typography--text-center">
-          <div class="logo-font error-title">{% block title %}{% endblock %}</div>
-          <div class="logo-font error-subtitle">{% block subtitle %}{% endblock %}</div>
+<div class="mdl-layout__container">
+    <div class="mdl-typography--text-center" style="margin-top:32px">
+        <h1 class="mdl-typography--font-thin mdl-typography--display-4">{{ code }} :(</h1>
+        <h1 class="mdl-typography--font-thin mdl-typography--display-4">{% block title %}{% endblock %}</h1>
+
+        <div style="position:fixed;bottom:0;width:100%;padding:8px">
+            <div><a href="/"><img src="{% static 'img/chancen-services--logo__dark.png' %}" style="max-width:480px;height:auto"></a></div>
         </div>
     </div>
 </div>
