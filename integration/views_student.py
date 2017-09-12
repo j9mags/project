@@ -187,7 +187,15 @@ class Onboarding(StudentMixin, View):
         return self.update_context_for(step, context)
 
     def _get_lang_context(self, context):
-        context.update(form=LanguageSelectForm(initial={'language': self.account.kommunikationssprache}))
+        if self.request.POST:
+            form = LanguageSelectForm(self.request.POST, instance=self.account)
+        else:
+            form = LanguageSelectForm(instance=self.account)
+        for f in form.fields:
+            print(f)
+            for opt in form.fields[f]._get_choices():
+                print(opt)
+        context.update(form=form)
         context.update(page_title=context['stepper'][0].get('title'))
         context['stepper'][0].update(is_active=True)
         return context
@@ -262,13 +270,13 @@ class Onboarding(StudentMixin, View):
         context = self.get_context_data(**kwargs)
         step = context.get('step')
         if step == 'lang':
-            form = LanguageSelectForm(request.POST)
-            context.update(form=form)
+            form = context.get('form')
+            # context.update(form=form)
             if not form.is_valid():
                 return render(request, self.template, context)
-            self.account.kommunikationssprache = form.cleaned_data.get('language')
+            # self.account.kommunikationssprache = form.cleaned_data.get('language')
             try:
-                self.account.save()
+                form.save()
             except Exception as e:
                 form.add_error(None, str(e))
                 return render(request, self.template, context)

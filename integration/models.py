@@ -166,7 +166,7 @@ class Choices:
                    ('amerikanisch', 'amerikanisch'), ('britisch', 'britisch'), ('vietnamesisch', 'vietnamesisch'),
                    ('weißrussisch', 'weißrussisch'), ('zentralafrikanisch', 'zentralafrikanisch'),
                    ('zyprisch', 'zyprisch')]
-    Language = [('deutsch', _('deutsch')), ('englisch', _('englisch'))]
+    Language = [('deutsch', _('deutsch')), ('englisch', _('english'))]
     Salutation = [('Mr.', _('Herr')), ('Ms.', _('Frau')), ('Mrs.', _('Frau')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
     Month = [('Januar', _('Januar')), ('Februar', _('Februar')), ('März', _('März')), ('April', _('April')),
              ('Mai', _('Mai')),
@@ -255,7 +255,7 @@ class Account(models.Model, PerishableTokenMixin):
     staatsangehoerigkeit = models.CharField(custom=True, max_length=255, verbose_name=_('Nationality'),
                                             choices=Choices.Nationality, blank=True, null=True)
     kommunikationssprache = models.CharField(custom=True, max_length=255, verbose_name=_('Communication Language'),
-                                             choices=Choices.Language, blank=True, null=True)
+                                             choices=Choices.Language, null=True)
     unimailadresse = models.EmailField(custom=True, verbose_name=_('University Email Address'), blank=True, null=True)
 
     zahlungskontakt_ref = models.ForeignKey('Contact', models.DO_NOTHING, custom=True,

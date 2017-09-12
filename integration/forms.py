@@ -53,8 +53,17 @@ class StudentsUploadForm(UploadForm):
         )
 
 
-class LanguageSelectForm(forms.Form):
-    language = forms.ChoiceField(choices=Choices.Language, widget=forms.RadioSelect)
+class LanguageSelectForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['kommunikationssprache']
+        widgets = {
+            'kommunikationssprache': forms.RadioSelect()
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(LanguageSelectForm, self).__init__(*args, **kwargs)
+        self.fields['kommunikationssprache']._choices = Choices.Language
 
 
 class OnboardingReviewForm(forms.Form):
