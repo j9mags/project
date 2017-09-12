@@ -65,7 +65,7 @@ class CsvUpload(models.Model):
         max = page * 20
         data = self.content.split('\n')
         lines = [data.pop(0)] + data[min + 1: max + 1]
-        return csv.DictReader(lines)
+        return csv.DictReader(lines, delimiter=";")
 
     def has_more_data(self, page):
         data = self.content.split('\n')
