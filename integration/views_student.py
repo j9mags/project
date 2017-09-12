@@ -17,7 +17,6 @@ import logging
 from .forms import *
 from .models import Attachment, Contact, RecordType
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -159,7 +158,8 @@ class Onboarding(StudentMixin, View):
                 },
                 {
                     'title': _('Data Review'),
-                    'caption': _('Your university sent us important data for your profile. Please check it carefully. Should you find any discrepancies, please contact your university to correct this.'),
+                    'caption': _(
+                        'Your university sent us important data for your profile. Please check it carefully. Should you find any discrepancies, please contact your university to correct this.'),
                     'template': 'students/onboarding_review.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'review'}),
                     'back': 'lang',
@@ -175,7 +175,8 @@ class Onboarding(StudentMixin, View):
                 },
                 {
                     'title': _('Set up your Bank account'),
-                    'caption': _('In the future we will debit your tuition fees from your selected bank account. Please click on the following link to authorise the debit orders.'),
+                    'caption': _(
+                        'In the future we will debit your tuition fees from your selected bank account. Please click on the following link to authorise the debit orders.'),
                     'template': 'students/onboarding_sepa.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
                     'back': 'data',

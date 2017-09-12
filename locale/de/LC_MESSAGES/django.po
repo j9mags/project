@@ -772,7 +772,7 @@ msgstr ""
 #: templates/snippets/stepper.html:24 templates/staff/upload_review.html:58
 #: templates/students/contact.html:53
 msgid "Back"
-msgstr ""
+msgstr "Zurück"
 
 #: templates/snippets/student_account.html:11
 #: templates/students/onboarding_review.html:5
