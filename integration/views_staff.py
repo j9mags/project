@@ -292,7 +292,7 @@ class FileUploadAction(StaffMixin, View):
         else:
             upload.process()
 
-        return HttpResponseRedirect('/')
+        return redirect('integration:dashboard')
 
 
 # Todo Display all non-bank data

@@ -89,14 +89,11 @@ class CsvUpload(models.Model):
         if not self.content:
             raise exceptions.ObjectDoesNotExist()
 
-        UserModel = get_user_model()
-
         lines = self.content.splitlines()
 
         accs = []
         contacts = {}
         contracts = {}
-        user_ids = []
         acc_mns = []
 
         acc_rt = RecordType.objects.get(sobject_type='Account', developer_name='Sofortzahler').id
@@ -127,12 +124,6 @@ class CsvUpload(models.Model):
             acc.unimailadresse = row.get('Unimailadresse')
             acc.status = 'Immatrikuliert'
 
-            new_user = UserModel(email=acc.unimailadresse, is_active=False)
-            new_user.save()
-            user_ids.append(new_user.pk)
-            pt = new_user.create_token()
-            acc.cspassword_token = pt.token
-
             accs.append(acc)
             acc_mns.append(acc.immatrikulationsnummer)
 
@@ -156,28 +147,22 @@ class CsvUpload(models.Model):
             )
             contracts.update({acc.immatrikulationsnummer: ctr})
 
-        try:
-            Account.objects.bulk_create(accs)
+        Account.objects.bulk_create(accs)
 
-            accounts = Account.students.filter(immatrikulationsnummer__in=acc_mns)
+        ctc_to_insert = []
+        ctr_to_insert = []
+        accounts = Account.students.filter(immatrikulationsnummer__in=acc_mns, hochschule_ref=university)
+        for acc in accounts:
+            ctc = contacts[acc.immatrikulationsnummer]
+            ctc.account = acc
+            ctc_to_insert.append(ctc)
 
-            # Maybe insert contacts outside the try clause?
-            ctc_to_insert = []
-            ctr_to_insert = []
-            for acc in accounts:
-                ctc = contacts[acc.immatrikulationsnummer]
-                ctc.account = acc
-                ctc_to_insert.append(ctc)
+            ctr = contracts[acc.immatrikulationsnummer]
+            ctr.account = acc
+            ctr_to_insert.append(ctr)
 
-                ctr = contracts[acc.immatrikulationsnummer]
-                ctr.account = acc
-                ctr_to_insert.append(ctr)
-
-            Contact.objects.bulk_create(ctc_to_insert)
-            Contract.objects.bulk_create(ctr_to_insert)
-        except Exception as e:
-            UserModel.objects.filter(pk__in=user_ids).delete()
-            raise e
+        Contact.objects.bulk_create(ctc_to_insert)
+        Contract.objects.bulk_create(ctr_to_insert)
 
     def _create_courses(self):
         if not self.user.is_unistaff:
