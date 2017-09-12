@@ -30,11 +30,22 @@ class StaffMixin(LoginRequiredMixin):
 
 
 class DashboardHome(StaffMixin, TemplateView):
-    template_name = 'staff/dashboard_home.html'
+    template_name = 'staff/dashboard_students.html'
 
     def get_context_data(self, **kwargs):
         context = self.get_staff_context()
         context.update(super(DashboardHome, self).get_context_data(**kwargs))
+
+        students = Account.students.filter(hochschule_ref=self.contact.account)
+        courses = DegreeCourse.objects.filter(university=self.contact.account)
+
+
+class DashboardStudents(StaffMixin, TemplateView):
+    template_name = 'staff/dashboard_students.html'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_staff_context()
+        context.update(super(DashboardStudents, self).get_context_data(**kwargs))
         context.update(can_search=True)
 
         p = int(self.request.GET.get('p', '1'))

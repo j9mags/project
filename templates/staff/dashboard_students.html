@@ -43,7 +43,7 @@
             <tr data-student="{{ student.pk }}">
                 <td class="mdl-data-table__cell">
                   <a href="{% url 'integration:student_review' student.pk %}">{{ student.immatrikulationsnummer | default:"--" }}</a>
-                </td> 
+                </td>
                 <td class="mdl-data-table__cell--non-numeric">{{ student.name }}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ student.unimailadresse }}</td>
                 <td class="mdl-data-table__cell">{{ student.get_master_contact.mobile_phone | default:"--" }}</td>
