@@ -12,8 +12,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
+import logging
+
 from .forms import *
 from .models import Attachment, Contact, RecordType
+
+
+_logger = logging.getLogger(__name__)
 
 
 class StudentMixin(LoginRequiredMixin):
@@ -30,6 +35,7 @@ class StudentMixin(LoginRequiredMixin):
         account = self.get_queryset()
         if account.kommunikationssprache and not account.kommunikationssprache.startswith(lang):
             user_lang = account.kommunikationssprache.lower()[:2]
+            _logger.debug('UserLang', user_lang)
             activate(user_lang)
             request.session[LANGUAGE_SESSION_KEY] = user_lang
             rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_lang)
