@@ -188,7 +188,7 @@ class CsvUpload(models.Model):
         university = self.user.get_srecord().account
         courses = []
         lines = self.content.split('\n')
-        reader = csv.DictReader(lines)
+        reader = csv.DictReader(lines, delimiter=";")
         desc_skipped = False
         for row in reader:
             if not desc_skipped:
