@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.core import exceptions
 from django.contrib.auth import get_user_model
 
+from datetime import datetime
 from datetime import timedelta
 from uuid import uuid4
 
@@ -122,7 +123,7 @@ class CsvUpload(models.Model):
 
             acc.name = "{Vorname} {Name}".format(**row)
             acc.immatrikulationsnummer = row.get('Immatrikulationsnummer')
-            acc.geburtsdatum = row.get('Geburtsdatum')
+            acc.geburtsdatum = datetime.strptime(row.get('Geburtsdatum'), '%d.%m.%Y')
             acc.unimailadresse = row.get('Unimailadresse')
             acc.status = 'Immatrikuliert'
 
@@ -175,8 +176,8 @@ class CsvUpload(models.Model):
             Contact.objects.bulk_create(ctc_to_insert)
             Contract.objects.bulk_create(ctr_to_insert)
         except Exception as e:
-            print(e)
             UserModel.objects.filter(pk__in=user_ids).delete()
+            raise e
 
     def _create_courses(self):
         if not self.user.is_unistaff:
