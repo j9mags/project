@@ -1,0 +1,24 @@
+{% extends 'staff/dashboard.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{# TODO: Add Search feature #}
+
+{% block title %}{{ contact.account.name }}{% endblock %}
+
+{% block content %}
+<div class="mdl-cell mdl-cell--12-col mdl-grid">
+    <div class="mdl-cell mdl-color--white mdl-shadow--6dp">
+        <div class="mdl-card csp-full-width">
+            <div class="mdl-card__title mdl-card--expand">
+                <h2 class="mdl-card__title-text">{{ courses|count }} {% trans 'Courses' %}</h2>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="{% url 'integration:courses' %}"
+                   class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{% trans 'View courses' %}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
