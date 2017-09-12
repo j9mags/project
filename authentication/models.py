@@ -63,7 +63,7 @@ class CsvUpload(models.Model):
     def get_data(self, page):
         min = (page - 1) * 20
         max = page * 20
-        data = self.content.split('\n')
+        data = self.content.splitlines()
         lines = [data.pop(0)] + data[min + 1: max + 1]
         return csv.DictReader(lines, delimiter=";")
 
@@ -90,7 +90,7 @@ class CsvUpload(models.Model):
 
         UserModel = get_user_model()
 
-        lines = self.content.split('\n')
+        lines = self.content.splitlines()
 
         accs = []
         contacts = {}
@@ -187,7 +187,7 @@ class CsvUpload(models.Model):
 
         university = self.user.get_srecord().account
         courses = []
-        lines = self.content.split('\n')
+        lines = self.content.splitlines()
         reader = csv.DictReader(lines, delimiter=";")
         desc_skipped = False
         for row in reader:
