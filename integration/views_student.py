@@ -211,7 +211,7 @@ class Onboarding(StudentMixin, View):
         form = StudentOnboardingForm(initial={
             'first_name': contact.first_name,
             'last_name': contact.last_name,
-            'salutation': contact.salutation,
+            # 'salutation': contact.salutation,
 
             'private_email': contact.email,
             'mobile_phone': contact.mobile_phone,
@@ -260,6 +260,8 @@ class Onboarding(StudentMixin, View):
 
         if account.initial_review_completed:
             return redirect('integration:dashboard')
+
+        print(context)
 
         return render(request, self.template, context)
 

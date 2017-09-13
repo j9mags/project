@@ -72,19 +72,19 @@ class OnboardingReviewForm(forms.Form):
 
 class StudentOnboardingForm(forms.Form):
     salutation = forms.ChoiceField(choices=SalutationChoices, required=False)
-    first_name = forms.CharField(max_length=40)
-    last_name = forms.CharField(max_length=80)
+    first_name = forms.CharField(max_length=40, label=_('First name'))
+    last_name = forms.CharField(max_length=80, label=_('Last name'))
 
-    gender = forms.ChoiceField(choices=GenderChoices)
-    nationality = forms.ChoiceField(choices=NationalityChoices)
-    language = forms.ChoiceField(choices=LanguageChoices)
+    gender = forms.ChoiceField(choices=GenderChoices, label=_('Gender'))
+    nationality = forms.ChoiceField(choices=NationalityChoices, label=_('Nationality'))
+    language = forms.ChoiceField(choices=LanguageChoices, label=_('Language'))
 
-    birth_city = forms.CharField(max_length=255)
-    birth_country = forms.ChoiceField(choices=CountryChoices)
+    birth_city = forms.CharField(max_length=255, label=_('Birth city'))
+    birth_country = forms.ChoiceField(choices=CountryChoices, label=_('Birth country'))
 
-    private_email = forms.EmailField()
-    mobile_phone = forms.CharField(max_length=40)
-    home_phone = forms.CharField(max_length=40, required=False)
+    private_email = forms.EmailField(label=_('Personal email'))
+    mobile_phone = forms.CharField(max_length=40, label=_('Mobile phone'))
+    home_phone = forms.CharField(max_length=40, required=False, label=_('Home phone'))
 
     mailing_street = forms.CharField(max_length=40, label=_('Street address'))
     mailing_city = forms.CharField(max_length=255, label=_('City'))
@@ -96,7 +96,8 @@ class StudentOnboardingForm(forms.Form):
     billing_zip = forms.CharField(max_length=20, label=_('Postal code'))
     billing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
 
-    billing_option = forms.ChoiceField(choices=BillingChoices)  # Todo: note to student it's only settable once
+    billing_option = forms.ChoiceField(choices=BillingChoices, label=_('Payment options'),
+                                       help_text=_("You will only be able to set this once, so choose carefully"))
 
 
 class StudentAccountForm(forms.Form):

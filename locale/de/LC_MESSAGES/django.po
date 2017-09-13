@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 14:15+0000\n"
+"POT-Creation-Date: 2017-09-13 16:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,6 +73,56 @@ msgstr ""
 "Ich akzeptiere, dass die von meiner Hochschule bereitgestellten Daten "
 "korrekt sind."
 
+#: integration/forms.py:75 integration/models.py:358
+#: templates/snippets/student_contact.html:9
+msgid "First name"
+msgstr "Vorname"
+
+#: integration/forms.py:76 integration/models.py:357
+#: templates/snippets/student_contact.html:12
+msgid "Last name"
+msgstr "Nachname"
+
+#: integration/forms.py:78 integration/models.py:249
+#: templates/snippets/student_account.html:48
+#: templates/staff/dashboard_students.html:35
+msgid "Gender"
+msgstr "Geschlecht"
+
+#: integration/forms.py:79 integration/models.py:255
+#: templates/snippets/student_account.html:51
+msgid "Nationality"
+msgstr "Staatsangehoerigkeit"
+
+#: integration/forms.py:80 templates/snippets/student_account.html:54
+#: templates/staff/dashboard_students.html:36
+msgid "Language"
+msgstr "Kommunikationssprache"
+
+#: integration/forms.py:82 templates/snippets/student_account.html:42
+msgid "Birth city"
+msgstr "Geburtsort"
+
+#: integration/forms.py:83 templates/snippets/student_account.html:45
+msgid "Birth country"
+msgstr "Geburtsland"
+
+#: integration/forms.py:85 templates/snippets/contact_card.html:9
+#: templates/snippets/student_contact.html:15
+msgid "Personal email"
+msgstr "Persönliche E-Mail"
+
+#: integration/forms.py:86 integration/models.py:365
+#: templates/snippets/contact_card.html:10
+#: templates/snippets/student_contact.html:18
+#: templates/staff/dashboard_students.html:34
+msgid "Mobile phone"
+msgstr "Handynummer"
+
+#: integration/forms.py:87 integration/models.py:366
+msgid "Home phone"
+msgstr "Telefonnummer"
+
 #: integration/forms.py:89 integration/forms.py:94
 msgid "Street address"
 msgstr "Adresse"
@@ -90,6 +140,14 @@ msgstr "PLZ"
 #: integration/models.py:372
 msgid "Country"
 msgstr "Land"
+
+#: integration/forms.py:99 integration/models.py:286
+msgid "Payment options"
+msgstr "Zahlungsoptionen"
+
+#: integration/forms.py:100
+msgid "You will only be able to set this once, so choose carefully"
+msgstr "Sie können das nur einmal einstellen, also sorgfältig wählen."
 
 #: integration/models.py:94
 msgid "female"
@@ -332,11 +390,6 @@ msgstr "Immatrikulationsnummer"
 msgid "Tuition Fee Total"
 msgstr "Studiengebühren gesamt"
 
-#: integration/models.py:249 templates/snippets/student_account.html:48
-#: templates/staff/dashboard_students.html:35
-msgid "Gender"
-msgstr "Geschlecht"
-
 #: integration/models.py:251
 msgid "Place of Birth"
 msgstr "Geburtsort"
@@ -349,10 +402,6 @@ msgstr "Geburtsdatum"
 msgid "Country of Birth"
 msgstr "Geburtsland"
 
-#: integration/models.py:255 templates/snippets/student_account.html:51
-msgid "Nationality"
-msgstr "Staatsangehoerigkeit"
-
 #: integration/models.py:257
 msgid "Communication Language"
 msgstr "Kommunikationssprache"
@@ -361,10 +410,6 @@ msgstr "Kommunikationssprache"
 msgid "University Email Address"
 msgstr "Universitäre E-Mail-Adresse"
 
-#: integration/models.py:286
-msgid "Payment options"
-msgstr "Zahlungsoptionen"
-
 #: integration/models.py:299 templates/students/dashboard.html:19
 msgid "Account"
 msgstr ""
@@ -372,14 +417,6 @@ msgstr ""
 #: integration/models.py:300
 msgid "Accounts"
 msgstr ""
-
-#: integration/models.py:357 templates/snippets/student_contact.html:12
-msgid "Last name"
-msgstr "Nachname"
-
-#: integration/models.py:358 templates/snippets/student_contact.html:9
-msgid "First name"
-msgstr "Vorname"
 
 #: integration/models.py:360 templates/snippets/student_contact.html:6
 msgid "Salutation"
@@ -396,16 +433,6 @@ msgstr "Titel"
 #: integration/models.py:364 templates/snippets/student_account.html:20
 msgid "Email"
 msgstr "E-Mail"
-
-#: integration/models.py:365 templates/snippets/contact_card.html:10
-#: templates/snippets/student_contact.html:18
-#: templates/staff/dashboard_students.html:34
-msgid "Mobile phone"
-msgstr "Handynummer"
-
-#: integration/models.py:366
-msgid "Home phone"
-msgstr "Telefonnummer"
 
 #: integration/models.py:367 templates/snippets/student_contact.html:21
 msgid "Other phone"
@@ -610,11 +637,12 @@ msgstr "Rechnungen"
 msgid "Course"
 msgstr "Studiengang"
 
-#: integration/views_staff.py:243
+#: integration/views_staff.py:245
 msgid "There seem to be missing values, please review the data thoroughly."
-msgstr "Es scheinen fehlende Werte zu sein, bitte überprüfen Sie die Daten gründlich."
+msgstr ""
+"Es scheinen fehlende Werte zu sein, bitte überprüfen Sie die Daten gründlich."
 
-#: integration/views_staff.py:244
+#: integration/views_staff.py:246
 msgid ""
 "There seem to be wrong values or incorrectly formatted, please review the "
 "data thoroughly."
@@ -622,7 +650,7 @@ msgstr ""
 "Es scheint falsche Werte zu geben oder falsch formatiert zu sein, bitte "
 "überprüfen Sie die Daten sorgfältig."
 
-#: integration/views_staff.py:273
+#: integration/views_staff.py:275
 msgid "File content is not correct"
 msgstr "Dateiinhalt ist nicht korrekt"
 
@@ -747,11 +775,6 @@ msgstr "%(title)sadresse"
 msgid "Contact data"
 msgstr "Kontaktdaten"
 
-#: templates/snippets/contact_card.html:9
-#: templates/snippets/student_contact.html:15
-msgid "Personal email"
-msgstr "Persönliche E-Mail"
-
 #: templates/snippets/contact_card.html:11
 msgid "Home address"
 msgstr "Heimatadresse"
@@ -770,7 +793,7 @@ msgstr "Bank Name"
 msgid "Set as Payment Contact"
 msgstr "Als Zahlungskontakt einstellen"
 
-#: templates/snippets/stepper.html:24 templates/staff/upload_review.html:64
+#: templates/snippets/stepper.html:24 templates/staff/upload_review.html:61
 #: templates/students/contact.html:53
 msgid "Back"
 msgstr "Zurück"
@@ -793,19 +816,6 @@ msgstr "Persönliche Daten"
 #: templates/snippets/student_account.html:39
 msgid "Birth day"
 msgstr "Geburtsdatum"
-
-#: templates/snippets/student_account.html:42
-msgid "Birth city"
-msgstr "Geburtsort"
-
-#: templates/snippets/student_account.html:45
-msgid "Birth country"
-msgstr "Geburtsland"
-
-#: templates/snippets/student_account.html:54
-#: templates/staff/dashboard_students.html:36
-msgid "Language"
-msgstr "Kommunikationssprache"
 
 #: templates/snippets/student_account.html:62
 #: templates/snippets/student_contract.html:42
@@ -878,7 +888,7 @@ msgstr "Beispiel herunterladen"
 msgid "Changes will apply to selected rows"
 msgstr "Die Änderungen gelten für die gewählten Reihen"
 
-#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:71
+#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:57
 #: templates/students/contact.html:55
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -941,12 +951,12 @@ msgid "Carefully review the data before confirming"
 msgstr "Bitte überprüfen Sie die Daten genau, bevor Sie den Upload bestätigen."
 
 #: templates/staff/upload_review.html:57
-msgid "Discard"
-msgstr "Verwerfen"
-
-#: templates/staff/upload_review.html:71
 msgid "Next"
 msgstr "Weiter"
+
+#: templates/staff/upload_review.html:65
+msgid "Discard"
+msgstr "Verwerfen"
 
 #: templates/students/dashboard.html:6
 msgid "My Chancen"

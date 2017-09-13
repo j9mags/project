@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 14:15+0000\n"
+"POT-Creation-Date: 2017-09-13 16:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,6 +67,56 @@ msgstr ""
 msgid "I accept that the data provided by the university is correct."
 msgstr ""
 
+#: integration/forms.py:75 integration/models.py:358
+#: templates/snippets/student_contact.html:9
+msgid "First name"
+msgstr ""
+
+#: integration/forms.py:76 integration/models.py:357
+#: templates/snippets/student_contact.html:12
+msgid "Last name"
+msgstr ""
+
+#: integration/forms.py:78 integration/models.py:249
+#: templates/snippets/student_account.html:48
+#: templates/staff/dashboard_students.html:35
+msgid "Gender"
+msgstr ""
+
+#: integration/forms.py:79 integration/models.py:255
+#: templates/snippets/student_account.html:51
+msgid "Nationality"
+msgstr ""
+
+#: integration/forms.py:80 templates/snippets/student_account.html:54
+#: templates/staff/dashboard_students.html:36
+msgid "Language"
+msgstr ""
+
+#: integration/forms.py:82 templates/snippets/student_account.html:42
+msgid "Birth city"
+msgstr ""
+
+#: integration/forms.py:83 templates/snippets/student_account.html:45
+msgid "Birth country"
+msgstr ""
+
+#: integration/forms.py:85 templates/snippets/contact_card.html:9
+#: templates/snippets/student_contact.html:15
+msgid "Personal email"
+msgstr ""
+
+#: integration/forms.py:86 integration/models.py:365
+#: templates/snippets/contact_card.html:10
+#: templates/snippets/student_contact.html:18
+#: templates/staff/dashboard_students.html:34
+msgid "Mobile phone"
+msgstr ""
+
+#: integration/forms.py:87 integration/models.py:366
+msgid "Home phone"
+msgstr ""
+
 #: integration/forms.py:89 integration/forms.py:94
 msgid "Street address"
 msgstr ""
@@ -83,6 +133,18 @@ msgstr ""
 #: integration/forms.py:92 integration/forms.py:97 integration/models.py:227
 #: integration/models.py:372
 msgid "Country"
+msgstr ""
+
+#: integration/forms.py:99 integration/models.py:286
+msgid "Payment options"
+msgstr ""
+
+#: integration/forms.py:100
+msgid "You will only be able to set this once, so choose carefully"
+msgstr ""
+
+#: integration/forms.py:148 integration/forms.py:152
+msgid "This field is required."
 msgstr ""
 
 #: integration/models.py:94
@@ -326,11 +388,6 @@ msgstr ""
 msgid "Tuition Fee Total"
 msgstr ""
 
-#: integration/models.py:249 templates/snippets/student_account.html:48
-#: templates/staff/dashboard_students.html:35
-msgid "Gender"
-msgstr ""
-
 #: integration/models.py:251
 msgid "Place of Birth"
 msgstr ""
@@ -343,10 +400,6 @@ msgstr ""
 msgid "Country of Birth"
 msgstr ""
 
-#: integration/models.py:255 templates/snippets/student_account.html:51
-msgid "Nationality"
-msgstr ""
-
 #: integration/models.py:257
 msgid "Communication Language"
 msgstr ""
@@ -355,24 +408,12 @@ msgstr ""
 msgid "University Email Address"
 msgstr ""
 
-#: integration/models.py:286
-msgid "Payment options"
-msgstr ""
-
 #: integration/models.py:299 templates/students/dashboard.html:19
 msgid "Account"
 msgstr ""
 
 #: integration/models.py:300
 msgid "Accounts"
-msgstr ""
-
-#: integration/models.py:357 templates/snippets/student_contact.html:12
-msgid "Last name"
-msgstr ""
-
-#: integration/models.py:358 templates/snippets/student_contact.html:9
-msgid "First name"
 msgstr ""
 
 #: integration/models.py:360 templates/snippets/student_contact.html:6
@@ -389,16 +430,6 @@ msgstr ""
 
 #: integration/models.py:364 templates/snippets/student_account.html:20
 msgid "Email"
-msgstr ""
-
-#: integration/models.py:365 templates/snippets/contact_card.html:10
-#: templates/snippets/student_contact.html:18
-#: templates/staff/dashboard_students.html:34
-msgid "Mobile phone"
-msgstr ""
-
-#: integration/models.py:366
-msgid "Home phone"
 msgstr ""
 
 #: integration/models.py:367 templates/snippets/student_contact.html:21
@@ -604,17 +635,17 @@ msgstr ""
 msgid "Course"
 msgstr ""
 
-#: integration/views_staff.py:243
+#: integration/views_staff.py:245
 msgid "There seem to be missing values, please review the data thoroughly."
 msgstr ""
 
-#: integration/views_staff.py:244
+#: integration/views_staff.py:246
 msgid ""
 "There seem to be wrong values or incorrectly formatted, please review the "
 "data thoroughly."
 msgstr ""
 
-#: integration/views_staff.py:273
+#: integration/views_staff.py:275
 msgid "File content is not correct"
 msgstr ""
 
@@ -734,11 +765,6 @@ msgstr ""
 msgid "Contact data"
 msgstr ""
 
-#: templates/snippets/contact_card.html:9
-#: templates/snippets/student_contact.html:15
-msgid "Personal email"
-msgstr ""
-
 #: templates/snippets/contact_card.html:11
 msgid "Home address"
 msgstr ""
@@ -757,7 +783,7 @@ msgstr ""
 msgid "Set as Payment Contact"
 msgstr ""
 
-#: templates/snippets/stepper.html:24 templates/staff/upload_review.html:64
+#: templates/snippets/stepper.html:24 templates/staff/upload_review.html:61
 #: templates/students/contact.html:53
 msgid "Back"
 msgstr ""
@@ -779,19 +805,6 @@ msgstr ""
 
 #: templates/snippets/student_account.html:39
 msgid "Birth day"
-msgstr ""
-
-#: templates/snippets/student_account.html:42
-msgid "Birth city"
-msgstr ""
-
-#: templates/snippets/student_account.html:45
-msgid "Birth country"
-msgstr ""
-
-#: templates/snippets/student_account.html:54
-#: templates/staff/dashboard_students.html:36
-msgid "Language"
 msgstr ""
 
 #: templates/snippets/student_account.html:62
@@ -865,7 +878,7 @@ msgstr ""
 msgid "Changes will apply to selected rows"
 msgstr ""
 
-#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:71
+#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:57
 #: templates/students/contact.html:55
 msgid "Confirm"
 msgstr ""
@@ -928,11 +941,11 @@ msgid "Carefully review the data before confirming"
 msgstr ""
 
 #: templates/staff/upload_review.html:57
-msgid "Discard"
+msgid "Next"
 msgstr ""
 
-#: templates/staff/upload_review.html:71
-msgid "Next"
+#: templates/staff/upload_review.html:65
+msgid "Discard"
 msgstr ""
 
 #: templates/students/dashboard.html:6
