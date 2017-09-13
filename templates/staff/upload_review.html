@@ -51,26 +51,18 @@
                 </tbody>
               </table>
             </div>
-            <div class="mdl-card__actions mdl-card--border mdl-grid">
-              <div class="mdl-cell mdl-cell--1-col">
-                <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white" href="./discard/">
-                  {% trans 'Discard' %}
-                </a>
-              </div>
-
-              <div class="mdl-cell mdl-cell--1-col mdl-cell--1-offset-phone mdl-cell--5-offset-tablet mdl-cell--9-offset-desktop">
-                {% if prev > 0 %}
-                  <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="./?p={{ prev }}">
-                    {% trans 'Back' %}
-                  </a>
-                {% endif %}
-              </div>
-
-              <div class="mdl-cell mdl-cell--1-col">
-                <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" href="{% if next %}./?p={{ next }}{% else %}./confirm/{% endif %}">
-                  {% if next %}{% trans 'Next' %}{% else %}{% trans 'Confirm' %}{% endif %}
-                </a>
-              </div>
+            <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
+              <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"
+                 href="{% if next %}./?p={{ next }}{% else %}./confirm/{% endif %}">
+                {% if next %}{% trans 'Next' %}{% else %}{% trans 'Confirm' %}{% endif %}
+              </a>
+              {% if prev > 0 %}
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                   href="./?p={{ prev }}">{% trans 'Back' %}</a>
+              {% endif %}
+              <div class="mdl-layout-spacer"></div>
+              <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white"
+                 href="./discard/">{% trans 'Discard' %}</a>
             </div>
           </div>
 

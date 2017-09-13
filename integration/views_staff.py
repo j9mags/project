@@ -283,9 +283,10 @@ class FileUpload(StaffMixin, TemplateView):
             display_st=form == st_form,
             display_cs=form == cs_form,
             st_form=st_form,
-            cs_form=cs_form)
-        print(context)
-        print(form.errors)
+            cs_form=cs_form,
+            form=form,
+        )
+
         template = request.POST.get('view_name')
         return render(request, template, context)
 
