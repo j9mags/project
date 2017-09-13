@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.shortcuts import render, redirect
 
-from models import CsvUpload
+from authentication.models import CsvUpload
 from .models import DegreeCourse, Contract
 from .forms import *
 
@@ -247,17 +247,19 @@ class FileUpload(StaffMixin, TemplateView):
         st_form = StudentsUploadForm(contact.account, request.POST, request.FILES)
         cs_form = UploadForm(request.POST, request.FILES)
 
-        is_course = 'course' in request.POST
+        is_course = 'course' not in request.POST
         if is_course:
-            form = st_form
-        else:
             form = cs_form
+        else:
+            form = st_form
 
         if form.is_valid():
             csv = form.cleaned_data.get('csv')
             charset = csv.charset or 'utf-8'
             content = ''.join([line.decode(charset) for line in csv])
-
+            content = '\n'.join([
+                line for line in content.splitlines() if any(line.split(';'))
+            ])
             if not CsvUpload.is_valid(content, is_course):
                 form.add_error(None, _('File content is not correct'))
             else:
@@ -270,10 +272,12 @@ class FileUpload(StaffMixin, TemplateView):
 
         context.update(
             display_st=form == st_form,
-            display_cs=form == st_form,
+            display_cs=form == cs_form,
             st_form=st_form,
             cs_form=cs_form)
-        template = request.POST.get('view')
+        print(context)
+        print(form.errors)
+        template = request.POST.get('view_name')
         return render(request, template, context)
 
 

@@ -131,27 +131,30 @@ class CsvUpload(models.Model):
                 desc_skipped = True
                 continue
 
+            if not(any(row) and all(row)):
+                continue
+
             acc = Account()
             acc.record_type_id = acc_rt
             acc.hochschule_ref = university
 
-            acc.billing_street = row.get('Adresse')
+            acc.billing_street = row.get('Straße und Hausnummer')
             acc.billing_postal_code = row.get('PLZ')
             acc.billing_city = row.get('Stadt')
 
-            acc.name = "{Vorname} {Name}".format(**row)
+            acc.name = "{Vorname} {Nachname}".format(**row)
             acc.immatrikulationsnummer = row.get('Immatrikulationsnummer')
             acc.geburtsdatum = datetime.strptime(row.get('Geburtsdatum'), '%d.%m.%Y')
-            acc.unimailadresse = row.get('Unimailadresse')
+            acc.unimailadresse = row.get('universitäre E-Mail-Adresse')
             acc.status = 'Immatrikuliert'
 
             accs.append(acc)
             acc_mns.append(acc.immatrikulationsnummer)
 
             ctc = Contact(
-                last_name=row.get('Name'),
+                last_name=row.get('Nachname'),
                 first_name=row.get('Vorname'),
-                email=row.get('private Emailadresse'),
+                email=row.get('private E-Mail-Adresse'),
                 mobile_phone=row.get('Handynummer'),
                 mailing_street=acc.billing_street,
                 mailing_city=acc.billing_city,
@@ -202,20 +205,23 @@ class CsvUpload(models.Model):
                 desc_skipped = True
                 continue
 
+            if not(any(row) and all(row)):
+                continue
+
             course = DegreeCourse()
             course.university = university
-            course.name = row.get('Studiengang Name')
-            course.standard_period_of_study = row.get('Standard Study Period')
-            course.cost_per_semester = row.get('Cost per Semester')
-            course.cost_per_month = row.get('Cost per Month')
-            course.cost_per_month_beyond_standard = row.get('Cost per Month beyond Standard Study Period')
-            course.matriculation_fee = row.get('Matriculation Fee')
-            course.start_of_studies_month = row.get('Starting Month of Studies')
-            course.start_of_studies = row.get('Start of Studies')
-            course.fee_semester_abroad = row.get('Fee Semester abroad')
-            course.fee_semester_off = row.get('Fee Semester off')
-            course.start_summer_semester = row.get('Starting Month Summer Semester')
-            course.start_winter_semester = row.get('Starting Month Winter Semester')
+            course.name = row.get('Name des Studiengangs')
+            course.standard_period_of_study = row.get('Regelstudienzeit (in Semestern)')
+            course.cost_per_semester = row.get('Kosten pro Semester')
+            course.cost_per_month = row.get('Kosten pro Monat')
+            course.cost_per_month_beyond_standard = row.get('Kosten pro Monat über der Regelstudienzeit')
+            course.matriculation_fee = row.get('Immatrikulationsgebühr (einmalig)')
+            course.fee_semester_abroad = row.get('Auslandssemestergebühr pro Monat')
+            course.fee_semester_off = row.get('Urlaubssemestergebühr pro Monat')
+            course.start_of_studies_month = row.get('Startmonat des Studiengangs')
+            course.start_of_studies = row.get('Startdatum des Studiengangs')
+            course.start_summer_semester = row.get('Startmonat des Sommersemesters')
+            course.start_winter_semester = row.get('Startmonat des Wintersemesters')
 
             courses.append(course)
         DegreeCourse.objects.bulk_create(courses)
