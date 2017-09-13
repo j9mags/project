@@ -93,9 +93,9 @@ class DashboardStudents(StaffMixin, TemplateView):
                     filters.append(
                         (_('Course'),
                          students.first().contract_account_set.filter(
-                             studiengang_ref__pk=course).first().studiengang_ref.name),
+                             studiengang_ref__pk=course).first().studiengang_ref.name,
                          'course'
-                    )
+                         ))
 
             paginator = Paginator(students, s)
             try:
