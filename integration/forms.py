@@ -134,6 +134,28 @@ class DiscountForm(forms.ModelForm):
         model = Rabatt
         fields = ['contract', 'discount_type', 'discount_tuition_fee', 'discount_semester_fee']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['discount_type'].widget.choices[0] = ("", "")
+
+    def clean(self):
+        cleaned_data = super(DiscountForm, self).clean()
+        discount_type = cleaned_data.get('discount_type')
+        print(cleaned_data)
+        if discount_type == 'Discount Tuition Fee':
+            if not cleaned_data.get('discount_tuition_fee'):
+                self.add_error('discount_tuition_fee', forms.ValidationError(_('This field is required')))
+            cleaned_data.update(discount_semester_fee=None)
+        elif discount_type == 'Discount Semester Fee':
+            if not cleaned_data.get('discount_semester_fee'):
+                self.add_error('discount_semester_fee', forms.ValidationError(_('This field is required')))
+            cleaned_data.update(discount_tuition_fee=None)
+        else:
+            cleaned_data.update(discount_tuition_fee=None)
+            cleaned_data.update(discount_semester_fee=None)
+
+        return cleaned_data
+
 
 class BulkActionsForm(forms.Form):
     status = forms.ChoiceField(choices=[('--', KEEP_CURRENT)] + Choices.AccountStatus, required=False)
