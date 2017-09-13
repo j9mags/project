@@ -144,11 +144,11 @@ class DiscountForm(forms.ModelForm):
         print(cleaned_data)
         if discount_type == 'Discount Tuition Fee':
             if not cleaned_data.get('discount_tuition_fee'):
-                self.add_error('discount_tuition_fee', forms.ValidationError(_('This field is required')))
+                self.add_error('discount_tuition_fee', forms.ValidationError(_('This field is required.')))
             cleaned_data.update(discount_semester_fee=None)
         elif discount_type == 'Discount Semester Fee':
             if not cleaned_data.get('discount_semester_fee'):
-                self.add_error('discount_semester_fee', forms.ValidationError(_('This field is required')))
+                self.add_error('discount_semester_fee', forms.ValidationError(_('This field is required.')))
             cleaned_data.update(discount_tuition_fee=None)
         else:
             cleaned_data.update(discount_tuition_fee=None)
