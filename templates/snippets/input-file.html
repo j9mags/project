@@ -8,7 +8,10 @@
       <i class="material-icons">attach_file</i>
       <input type="file" 
              name="{{ field.html_name }}" 
-             id="{{ field.id_for_label }}" 
+             id="{{ field.id_for_label }}"
+             {% if accept %}
+             accept="{{ accept }}"
+             {% endif %}
              onchange="document.getElementById('{{pref}}{{ field.id_for_label }}--text').value=this.files[0].name;" />
   </label>
 

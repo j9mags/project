@@ -29,7 +29,7 @@
 
         <div class="mdl-dialog__content">
             {% include 'snippets/select.html' with field=st_form.course %}
-            {% include 'snippets/input-file.html' with field=st_form.csv type='file' pref='st_' %}
+            {% include 'snippets/input-file.html' with field=st_form.csv type='file' pref='st_' accept=".csv, text/csv" %}
             <div id="upload-progress-st" class="mdl-spinner mdl-js-spinner"></div>
         </div>
         <div class="mdl-dialog__actions">
@@ -37,7 +37,8 @@
                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
                    value="{% trans 'Upload' %}">
             <div class="mdl-layout-spacer"></div>
-            <a href="{% static '' %}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download sample' %}</a>
+            <a href="{% static '/templates/Import_Studierende_Vorlage.xlsx' %}"
+               class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download sample' %}</a>
         </div>
     </form>
 </div>
@@ -51,7 +52,7 @@
         {% csrf_token %}
         <input type="hidden" name="view_name" value="{{ view.template_name }}">
         <div class="mdl-dialog__content">
-            {% include 'snippets/input-file.html' with field=cs_form.csv type='file' pref='cs_' %}
+            {% include 'snippets/input-file.html' with field=cs_form.csv type='file' pref='cs_' accept=".csv, text/csv" %}
             <div id="upload-progress-cs" class="mdl-spinner mdl-js-spinner"></div>
         </div>
         <div class="mdl-dialog__actions">
@@ -59,7 +60,8 @@
                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
                    value="{% trans 'Upload' %}">
             <div class="mdl-layout-spacer"></div>
-            <a href="{% static '' %}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download sample' %}</a>
+            <a href="{% static '/templates/Import_Studiengänge_Vorlage.xlsx' %}"
+               class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download sample' %}</a>
         </div>
     </form>
 </div>
