@@ -84,16 +84,18 @@ class DashboardStudents(StaffMixin, TemplateView):
             if status:
                 status = "" if status == "None" else status
                 students = students.filter(status=status)
-                filters.append(('status', status))
+                filters.append((_('Status'), status, 'status'))
 
             if course:
                 course = None if course == "None" else course
                 if course is not None:
                     students = students.filter(contract_account_set__studiengang_ref__pk=course)
                     filters.append(
-                        ('course',
+                        (_('Course'),
                          students.first().contract_account_set.filter(
-                             studiengang_ref__pk=course).first().studiengang_ref.name))
+                             studiengang_ref__pk=course).first().studiengang_ref.name),
+                         'course'
+                    )
 
             paginator = Paginator(students, s)
             try:

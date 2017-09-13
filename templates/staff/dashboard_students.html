@@ -16,7 +16,7 @@
 {% block content %}
   <div class="mdl-cell mdl-cell--8-col">
     {% for f in filters %}
-      {% include 'snippets/chip.html' with field=f.0 value=f.1 %}
+      {% include 'snippets/chip.html' with field=f.0 value=f.1 filter=f.3 %}
     {% endfor %}
   </div>
 
