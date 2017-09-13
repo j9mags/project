@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 12:28+0000\n"
+"POT-Creation-Date: 2017-09-13 14:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -300,8 +300,8 @@ msgid "Name"
 msgstr ""
 
 #: integration/models.py:231 integration/models.py:579
-#: integration/models.py:651 integration/views_staff.py:74
-#: integration/views_staff.py:86 templates/snippets/student_account.html:26
+#: integration/models.py:651 integration/views_staff.py:75
+#: integration/views_staff.py:87 templates/snippets/student_account.html:26
 #: templates/snippets/student_invoices.html:8
 #: templates/staff/dashboard_students.html:38
 #: templates/students/onboarding_review.html:14
@@ -597,14 +597,24 @@ msgstr ""
 msgid "Invoices"
 msgstr ""
 
-#: integration/views_staff.py:79 integration/views_staff.py:93
+#: integration/views_staff.py:80 integration/views_staff.py:94
 #: templates/snippets/student_contract.html:18
 #: templates/staff/dashboard_students.html:37
 #: templates/students/onboarding_review.html:17
 msgid "Course"
 msgstr ""
 
-#: integration/views_staff.py:262
+#: integration/views_staff.py:243
+msgid "There seem to be missing values, please review the data thoroughly."
+msgstr ""
+
+#: integration/views_staff.py:244
+msgid ""
+"There seem to be wrong values or incorrectly formatted, please review the "
+"data thoroughly."
+msgstr ""
+
+#: integration/views_staff.py:273
 msgid "File content is not correct"
 msgstr ""
 
@@ -747,7 +757,7 @@ msgstr ""
 msgid "Set as Payment Contact"
 msgstr ""
 
-#: templates/snippets/stepper.html:24 templates/staff/upload_review.html:58
+#: templates/snippets/stepper.html:24 templates/staff/upload_review.html:64
 #: templates/students/contact.html:53
 msgid "Back"
 msgstr ""
@@ -855,7 +865,7 @@ msgstr ""
 msgid "Changes will apply to selected rows"
 msgstr ""
 
-#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:65
+#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:71
 #: templates/students/contact.html:55
 msgid "Confirm"
 msgstr ""
@@ -913,15 +923,15 @@ msgstr ""
 msgid "Semester fee"
 msgstr ""
 
-#: templates/staff/upload_review.html:19
+#: templates/staff/upload_review.html:25
 msgid "Carefully review the data before confirming"
 msgstr ""
 
-#: templates/staff/upload_review.html:51
+#: templates/staff/upload_review.html:57
 msgid "Discard"
 msgstr ""
 
-#: templates/staff/upload_review.html:65
+#: templates/staff/upload_review.html:71
 msgid "Next"
 msgstr ""
 

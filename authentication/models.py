@@ -97,11 +97,12 @@ class CsvUpload(models.Model):
 
     def process(self):
         if self.course:
-            self._create_students()
+            rc = self._create_students()
         else:
-            self._create_courses()
-
-        self.delete()
+            rc = self._create_courses()
+        if rc:
+            self.delete()
+        return rc
 
     def _create_students(self):
         if not self.user.is_unistaff:
@@ -132,7 +133,7 @@ class CsvUpload(models.Model):
                 continue
 
             if not(any(row) and all(row)):
-                continue
+                return False
 
             acc = Account()
             acc.record_type_id = acc_rt
@@ -187,6 +188,7 @@ class CsvUpload(models.Model):
 
         Contact.objects.bulk_create(ctc_to_insert)
         Contract.objects.bulk_create(ctr_to_insert)
+        return True
 
     def _create_courses(self):
         if not self.user.is_unistaff:
@@ -206,7 +208,7 @@ class CsvUpload(models.Model):
                 continue
 
             if not(any(row) and all(row)):
-                continue
+                return False
 
             course = DegreeCourse()
             course.university = university
@@ -219,9 +221,10 @@ class CsvUpload(models.Model):
             course.fee_semester_abroad = row.get('Auslandssemestergebühr pro Monat')
             course.fee_semester_off = row.get('Urlaubssemestergebühr pro Monat')
             course.start_of_studies_month = row.get('Startmonat des Studiengangs')
-            course.start_of_studies = row.get('Startdatum des Studiengangs')
+            course.start_of_studies = datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
             course.start_summer_semester = row.get('Startmonat des Sommersemesters')
             course.start_winter_semester = row.get('Startmonat des Wintersemesters')
 
             courses.append(course)
         DegreeCourse.objects.bulk_create(courses)
+        return True

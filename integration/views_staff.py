@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from django.core.exceptions import *
@@ -237,6 +238,14 @@ class FileUpload(StaffMixin, TemplateView):
             context.update(course=DegreeCourse.objects.get(pk=upload.course))
         context.update(prev=p - 1, cur=p, next=p + 1 if upload.has_more_data(p) else False)
 
+        err = self.request.GET.get('err')
+        err_msg = {
+            '1': _('There seem to be missing values, please review the data thoroughly.'),
+            '2': _('There seem to be wrong values or incorrectly formatted, please review the data thoroughly.')
+        }.get(err)
+
+        if err_msg:
+            context.update(error=err_msg)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -299,9 +308,19 @@ class FileUploadAction(StaffMixin, View):
         if action == 'discard':
             upload.delete()
         else:
-            upload.process()
+            for line in upload.content.splitlines():
+                row = line.split(';')
+                if not (all(row) and any(row)):
+                    rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
+                    return redirect(rc+'?err=1')
 
+            try:
+                upload.process()
+            except:
+                rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
+                return redirect(rc+'?err=2')
         return redirect('integration:dashboard')
+
 
 
 # Todo Display all non-bank data

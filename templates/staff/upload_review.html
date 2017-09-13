@@ -10,6 +10,12 @@
 {% endblock %}
 
 {% block layout %}
+{% if error %}
+<div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+  <div class="mdl-snackbar__text">{{ error }}</div>
+  <button class="mdl-snackbar__action" type="button"></button>
+</div>
+{% endif %}
 <div class="mdl-layout mdl-js-layout">
     <main class="mdl-layout__content mdl-color--grey-100">
       <div class="chancen-content mdl-grid">

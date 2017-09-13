@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 12:28+0000\n"
+"POT-Creation-Date: 2017-09-13 14:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,8 +306,8 @@ msgid "Name"
 msgstr ""
 
 #: integration/models.py:231 integration/models.py:579
-#: integration/models.py:651 integration/views_staff.py:74
-#: integration/views_staff.py:86 templates/snippets/student_account.html:26
+#: integration/models.py:651 integration/views_staff.py:75
+#: integration/views_staff.py:87 templates/snippets/student_account.html:26
 #: templates/snippets/student_invoices.html:8
 #: templates/staff/dashboard_students.html:38
 #: templates/students/onboarding_review.html:14
@@ -603,14 +603,26 @@ msgstr "Rechnung"
 msgid "Invoices"
 msgstr "Rechnungen"
 
-#: integration/views_staff.py:79 integration/views_staff.py:93
+#: integration/views_staff.py:80 integration/views_staff.py:94
 #: templates/snippets/student_contract.html:18
 #: templates/staff/dashboard_students.html:37
 #: templates/students/onboarding_review.html:17
 msgid "Course"
 msgstr "Studiengang"
 
-#: integration/views_staff.py:262
+#: integration/views_staff.py:243
+msgid "There seem to be missing values, please review the data thoroughly."
+msgstr "Es scheinen fehlende Werte zu sein, bitte überprüfen Sie die Daten gründlich."
+
+#: integration/views_staff.py:244
+msgid ""
+"There seem to be wrong values or incorrectly formatted, please review the "
+"data thoroughly."
+msgstr ""
+"Es scheint falsche Werte zu geben oder falsch formatiert zu sein, bitte "
+"überprüfen Sie die Daten sorgfältig."
+
+#: integration/views_staff.py:273
 msgid "File content is not correct"
 msgstr "Dateiinhalt ist nicht korrekt"
 
@@ -758,7 +770,7 @@ msgstr "Bank Name"
 msgid "Set as Payment Contact"
 msgstr "Als Zahlungskontakt einstellen"
 
-#: templates/snippets/stepper.html:24 templates/staff/upload_review.html:58
+#: templates/snippets/stepper.html:24 templates/staff/upload_review.html:64
 #: templates/students/contact.html:53
 msgid "Back"
 msgstr "Zurück"
@@ -866,7 +878,7 @@ msgstr "Beispiel herunterladen"
 msgid "Changes will apply to selected rows"
 msgstr "Die Änderungen gelten für die gewählten Reihen"
 
-#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:65
+#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:71
 #: templates/students/contact.html:55
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -924,15 +936,15 @@ msgstr "Universitäts Daten. Bitte mit Vorsicht handeln!"
 msgid "Semester fee"
 msgstr "Semesterbeiträge"
 
-#: templates/staff/upload_review.html:19
+#: templates/staff/upload_review.html:25
 msgid "Carefully review the data before confirming"
 msgstr "Bitte überprüfe die Daten genau, bevor du sie bestätigst"
 
-#: templates/staff/upload_review.html:51
+#: templates/staff/upload_review.html:57
 msgid "Discard"
 msgstr "Verwerfen"
 
-#: templates/staff/upload_review.html:65
+#: templates/staff/upload_review.html:71
 msgid "Next"
 msgstr "Weiter"
 
@@ -980,4 +992,5 @@ msgstr "Jetzt einrichten"
 
 #: templates/students/onboarding_sepa.html:8
 msgid "or copy the link below and paste it on a browser any time."
-msgstr "oder kopiere den unterstehenden Link und füge ihn in deinen Browser ein."
+msgstr ""
+"oder kopiere den unterstehenden Link und füge ihn in deinen Browser ein."
