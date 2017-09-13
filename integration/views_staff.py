@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.shortcuts import render, redirect
 
+from models import CsvUpload
 from .models import DegreeCourse, Contract
 from .forms import *
 
@@ -246,7 +247,8 @@ class FileUpload(StaffMixin, TemplateView):
         st_form = StudentsUploadForm(contact.account, request.POST, request.FILES)
         cs_form = UploadForm(request.POST, request.FILES)
 
-        if 'course' in request.POST:
+        is_course = 'course' in request.POST
+        if is_course:
             form = st_form
         else:
             form = cs_form
@@ -256,18 +258,21 @@ class FileUpload(StaffMixin, TemplateView):
             charset = csv.charset or 'utf-8'
             content = ''.join([line.decode(charset) for line in csv])
 
-            upd = request.user.csvupload_set.create(
-                course=form.cleaned_data.get('course'),
-                uuid=str(uuid4()),
-                content=content
-            )
-            return redirect('integration:upload_review', uuid=upd.uuid)
-        else:
-            context.update(
-                display_st=form == st_form,
-                display_cs=form == st_form,
-                st_form=st_form,
-                cs_form=cs_form)
+            if not CsvUpload.is_valid(content, is_course):
+                form.add_error(None, _('File content is not correct'))
+            else:
+                upd = request.user.csvupload_set.create(
+                    course=form.cleaned_data.get('course'),
+                    uuid=str(uuid4()),
+                    content=content
+                )
+                return redirect('integration:upload_review', uuid=upd.uuid)
+
+        context.update(
+            display_st=form == st_form,
+            display_cs=form == st_form,
+            st_form=st_form,
+            cs_form=cs_form)
         template = request.POST.get('view')
         return render(request, template, context)
 

@@ -15,7 +15,6 @@ import csv
 
 
 class User(AbstractEmailUser):
-
     class Meta:
         swappable = 'AUTH_USER_MODEL'
 
@@ -58,8 +57,30 @@ class CsvUpload(models.Model):
     uuid = models.CharField(max_length=50)
     content = models.TextField(blank=True, null=True)
 
+    expected_student_headers = ["Immatrikulationsnummer", "Nachname", "Vorname", "Geburtsdatum",
+                                "Straße und Hausnummer", "PLZ", "Stadt", "universitäre E-Mail-Adresse",
+                                "private E-Mail-Adresse", "Handynummer"]
+    expected_courses_headers = ["Name des Studiengangs", "Regelstudienzeit (in Semestern)", "Kosten pro Semester",
+                                "Kosten pro Monat", "Kosten pro Monat über der Regelstudienzeit",
+                                "Immatrikulationsgebühr (einmalig)", "Auslandssemestergebühr pro Monat",
+                                "Urlaubssemestergebühr pro Monat", "Startmonat des Studiengangs",
+                                "Startdatum des Studiengangs", "Startmonat des Sommersemesters",
+                                "Startmonat des Wintersemesters"]
+
     def __str__(self):
         return "{course} by {user}".format(course=self.course, user=self.user)
+
+    @staticmethod
+    def is_valid(content, course=False):
+        headers = CsvUpload.expected_courses_headers if course else CsvUpload.expected_student_headers
+        lines = content.splitlines()
+        reader = csv.DictReader(lines, delimiter=";")
+
+        for header in reader.fieldnames:
+            if header not in headers:
+                return False
+
+        return True
 
     def get_data(self, page):
         min = (page - 1) * 20

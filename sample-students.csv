@@ -1,4 +1,4 @@
-Immatrikulationsnummer,Name,Vorname,Geburtsdatum,Adresse,PLZ,Stadt,Unimailadresse,private Emailadresse,Handynummer
+Immatrikulationsnummer,Nachname,Vorname,Geburtsdatum,Straße und Hausnummer,PLZ,Stadt,universitäre E-Mail-Adresse,private E-Mail-Adresse,Handynummer
 "Students matriculation number", "Last name", "First given name", "Date of birth", "Street address", "Postal code", "City", "University email address", "Private email address", "Mobile number"
 000001,Test1,Test,1996-01-11,Uberstr 55,10967,Berlin,daniel+stud1@empaua2.com,dhbahr+test1@gmail2.com,+49112233456780
 000002,Test2,Test,1996-02-12,Uberstr 55,10967,Berlin,daniel+stud2@empaua2.com,dhbahr+test2@gmail2.com,+49112233456781

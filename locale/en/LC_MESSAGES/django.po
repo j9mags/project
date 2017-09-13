@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-12 16:36+0000\n"
+"POT-Creation-Date: 2017-09-13 12:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -300,8 +300,8 @@ msgid "Name"
 msgstr ""
 
 #: integration/models.py:231 integration/models.py:579
-#: integration/models.py:651 integration/views_staff.py:73
-#: integration/views_staff.py:85 templates/snippets/student_account.html:26
+#: integration/models.py:651 integration/views_staff.py:74
+#: integration/views_staff.py:86 templates/snippets/student_account.html:26
 #: templates/snippets/student_invoices.html:8
 #: templates/staff/dashboard_students.html:38
 #: templates/students/onboarding_review.html:14
@@ -597,11 +597,15 @@ msgstr ""
 msgid "Invoices"
 msgstr ""
 
-#: integration/views_staff.py:78 integration/views_staff.py:92
+#: integration/views_staff.py:79 integration/views_staff.py:93
 #: templates/snippets/student_contract.html:18
 #: templates/staff/dashboard_students.html:37
 #: templates/students/onboarding_review.html:17
 msgid "Course"
+msgstr ""
+
+#: integration/views_staff.py:262
+msgid "File content is not correct"
 msgstr ""
 
 #: integration/views_student.py:160
@@ -825,33 +829,33 @@ msgstr ""
 msgid "Matriculation fee"
 msgstr ""
 
-#: templates/staff/dashboard.html:14 templates/staff/dashboard.html:102
+#: templates/staff/dashboard.html:14 templates/staff/dashboard.html:104
 #: templates/staff/dashboard_home.html:15
 msgid "Courses"
 msgstr ""
 
-#: templates/staff/dashboard.html:16 templates/staff/dashboard.html:99
+#: templates/staff/dashboard.html:16 templates/staff/dashboard.html:101
 #: templates/staff/dashboard_home.html:29
 msgid "Students"
 msgstr ""
 
-#: templates/staff/dashboard.html:21 templates/staff/dashboard.html:46
+#: templates/staff/dashboard.html:21 templates/staff/dashboard.html:47
 msgid "Upload from your computer"
 msgstr ""
 
-#: templates/staff/dashboard.html:38 templates/staff/dashboard.html:60
+#: templates/staff/dashboard.html:38 templates/staff/dashboard.html:61
 msgid "Upload"
 msgstr ""
 
-#: templates/staff/dashboard.html:40 templates/staff/dashboard.html:62
+#: templates/staff/dashboard.html:41 templates/staff/dashboard.html:64
 msgid "Download sample"
 msgstr ""
 
-#: templates/staff/dashboard.html:68
+#: templates/staff/dashboard.html:70
 msgid "Changes will apply to selected rows"
 msgstr ""
 
-#: templates/staff/dashboard.html:80 templates/staff/upload_review.html:65
+#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:65
 #: templates/students/contact.html:55
 msgid "Confirm"
 msgstr ""
