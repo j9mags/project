@@ -317,6 +317,9 @@ img {
 .mdl-textfield--file .mdl-button--file {
   right: 0;
 }
+.mdl-textfield .mdl-typography--title {
+  margin-top: 8px;
+}
 
 .mdl-underlined {
   border-bottom: solid
@@ -410,16 +413,26 @@ img {
     max-width: 840px;
 }
 
-#onboarding-stepper .mdl-step {
-    height: fit-content;
+.mdl-step {
+    height: initial!important;
+}
+
+.mdl-step__label {
+    cursor: default;
 }
 
 .mdl-step__label-indicator {
     background-color: rgb(255,171,64)!important;
 }
 
-#onboarding-stepper .mdl-step__actions {
-    justify-content: space-evenly;
+.mdl-step__actions {
+    justify-content: space-evenly!important;
+}
+
+.mdl-stepper:not(.mdl-stepper--horizontal) .mdl-step__label:hover,
+.mdl-stepper:not(.mdl-stepper--horizontal) .mdl-step__label:active,
+.mdl-stepper:not(.mdl-stepper--horizontal) .mdl-step__label:focus {
+    background-color: transparent;
 }
 
 .csp-card__title-icon {
@@ -428,9 +441,20 @@ img {
     top: 8px;
 }
 
+.mdl-textfield__help,
+.mdl-date-textfield__help,
+.mdl-checkfield__help,
 .mdl-selectfield__help {
     position: absolute;
     font-size: 12px;
+    line-height: 13px;
     margin-top: 3px;
     display: block;
+}
+
+.mdl-textfield.is-invalid .mdl-textfield__help,
+.mdl-date-textfield.is-invalid .mdl-date-textfield__help,
+.mdl-checkfield.is-invalid .mdl-checkfield__help,
+.mdl-selectfield.is-invalid .mdl-selectfield__help {
+    visibility: hidden;
 }

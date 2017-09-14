@@ -20,11 +20,17 @@ from uuid import uuid4
 
 
 class StaffMixin(LoginRequiredMixin):
+    login_url = '/authentication/login/'
+
     def dispatch(self, request, *args, **kwargs):
+        rc = super(StaffMixin, self).dispatch(request, *args, **kwargs)
+        if not 200 <= rc.status_code < 300:
+            return rc
+
         if not request.user.is_unistaff():
             raise PermissionDenied()
 
-        return super(StaffMixin, self).dispatch(request, *args, **kwargs)
+        return rc
 
     def get_staff_context(self):
         self.contact = self.request.user.get_srecord()

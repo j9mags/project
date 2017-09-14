@@ -5,6 +5,15 @@
         <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
     </div>
     <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('First name') value=sf_contact.first_name %}
+    </div>
+    <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Last name') value=sf_contact.last_name %}
+    </div>
+    <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Date of Birth') value=sf_account.geburtsdatum type="date" %}
+    </div>
+    <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('University') value=sf_account.hochschule_ref.name %}
     </div>
     <div class="mdl-cell">

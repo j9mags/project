@@ -2,14 +2,15 @@
 
 <div class="mdl-card__supporting-text mdl-card--expand mdl-grid">
     <div class="mdl-cell mdl-cell--12-col">
-        <a target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl"
-           href="{{ sf_contact.sepamandate_url_auto }}">{% trans 'Setup now' %}</a>
+        <p class="mdl-typography--body-2">
+            {% trans 'If someone else is paying your tuition fees, please send the following link and close this window.' %}</p>
+    </div>
+    <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+        <p class="mdl-typography--title mdl-typography--font-light mdl-color-text--accent">{{ sf_contact.sepamandate_url_auto }}</p>
     </div>
     <div class="mdl-cell mdl-cell--12-col">
-        <span class="mdl-typography--body-1">{% trans 'or copy the link below and paste it on a browser any time.' %}</span>
-    </div>
-    <div class="mdl-cell mdl-cell--12-col">
-        <span class="mdl-typography--caption mdl-color-text--accent">{{ sf_contact.sepamandate_url_auto }}</span>
+        <p class="mdl-typography--body-2">
+            {% trans 'Otherwise, authorize us to collect the study fees by direct debit from your account.' %}</p>
     </div>
 </div>
 

@@ -1,7 +1,8 @@
+{% load i18n %}
+
 <div class="mdl-textfield mdl-js-textfield mdl-textfield--file mdl-textfield--floating-label {% if field.errors %}is-invalid{% endif %}">
   <input class="mdl-textfield__input" 
-         placeholder="No file chosen" 
-         type="text" 
+         placeholder="{% trans 'No file chosen' %}"
          id="{{pref}}{{ field.id_for_label }}--text"
          readonly />
   <label for="{{ field.id_for_label }}" class="mdl-button  mdl-button--mini-fab mdl-button--file mdl-js-button mdl-button--fab mdl-js-ripple-effect">
@@ -14,10 +15,10 @@
              {% endif %}
              onchange="document.getElementById('{{pref}}{{ field.id_for_label }}--text').value=this.files[0].name;" />
   </label>
-
-    {% if field.errors %}
-        {% for error in field.errors %}
-            <span class="mdl-textfield__error">{{ error | escape }}</span>
-        {% endfor%}
-    {% endif %}
+  {% if field.help_text %}
+    <span class="mdl-textfield__help">{{ field.help_text }}</span>
+  {% endif %}
+  {% if field.errors %}
+    <span class="mdl-selectfield__error">{{ field.errors | first | escape }}</span>
+  {% endif %}
 </div>

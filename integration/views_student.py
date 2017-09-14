@@ -4,7 +4,6 @@ from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.conf import settings
 from django.core.exceptions import *
 from django.core.paginator import Paginator, EmptyPage
-from django.views.generic import DetailView
 from django.views.generic.base import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,20 +20,23 @@ _logger = logging.getLogger(__name__)
 
 
 class StudentMixin(LoginRequiredMixin):
+    login_url = '/authentication/login'
+
     def get_queryset(self):
         return self.request.user.get_srecord()
 
     def dispatch(self, request, *args, **kwargs):
+        rc = super(StudentMixin, self).dispatch(request, *args, **kwargs)
+        if not 200 <= rc.status_code < 300:
+            return rc
+
         if not request.user.is_student():
             raise PermissionDenied()
-
-        rc = super(StudentMixin, self).dispatch(request, *args, **kwargs)
 
         lang = get_language()
         account = self.get_queryset()
         if account.kommunikationssprache and not account.kommunikationssprache.startswith(lang):
             user_lang = account.kommunikationssprache.lower()[:2]
-            _logger.debug('UserLang', user_lang)
             activate(user_lang)
             request.session[LANGUAGE_SESSION_KEY] = user_lang
             rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_lang)
@@ -159,14 +161,15 @@ class Onboarding(StudentMixin, View):
                 {
                     'title': _('Data Review'),
                     'caption': _(
-                        'Your university sent us important data for your profile. Please check it carefully. Should you find any discrepancies, please contact your university to correct this.'),
+                        'Your university sent us important data for your profile. Please check it carefully. '
+                        'Should you find any discrepancies, please contact your university to correct this.'),
                     'template': 'students/onboarding_review.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'review'}),
                     'back': 'lang',
                     'submit': _('Continue'),
                 },
                 {
-                    'title': _('Complete your registration!'),
+                    'title': _('Data input'),
                     'caption': _('Fill the form and log into your Chancen account.'),
                     'template': 'students/onboarding_data.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'data'}),
@@ -174,13 +177,14 @@ class Onboarding(StudentMixin, View):
                     'submit': _('Continue'),
                 },
                 {
-                    'title': _('Set up your Bank account'),
+                    'title': _('SEPA Mandate'),
                     'caption': _(
-                        'In the future we will debit your tuition fees from your selected bank account. Please click on the following link to authorise the debit orders.'),
+                        'In the future we will debit your tuition fees from your selected bank account. '
+                        'Please click on the following link to authorise the debit orders.'),
                     'template': 'students/onboarding_sepa.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
                     'back': 'data',
-                    'submit': _('Complete'),
+                    'submit': _('Grant mandate'),
                 },
             )}
 
@@ -258,10 +262,8 @@ class Onboarding(StudentMixin, View):
         context = self.get_context_data(**kwargs)
         account = context.get('sf_account')
 
-        if account.initial_review_completed:
+        if account.initial_review_completed and account.sepalastschriftmandat_erteilt_auto:
             return redirect('integration:dashboard')
-
-        print(context)
 
         return render(request, self.template, context)
 
@@ -270,10 +272,8 @@ class Onboarding(StudentMixin, View):
         step = context.get('step')
         if step == 'lang':
             form = context.get('form')
-            # context.update(form=form)
             if not form.is_valid():
                 return render(request, self.template, context)
-            # self.account.kommunikationssprache = form.cleaned_data.get('language')
             try:
                 form.save()
             except Exception as e:
@@ -311,9 +311,6 @@ class Onboarding(StudentMixin, View):
 
             data = form.cleaned_data
 
-            contact.salutation = data.get('salutation')
-            contact.first_name = data.get('first_name')
-            contact.last_name = data.get('last_name')
             contact.email = data.get('private_email')
             contact.mobile_phone = data.get('mobile_phone')
             contact.home_phone = data.get('home_phone')
@@ -322,9 +319,7 @@ class Onboarding(StudentMixin, View):
             contact.mailing_postal_code = data.get('mailing_zip')
             contact.mailing_country = data.get('mailing_country')
 
-            account.name = '{salutation} {first_name} {last_name}'.format(**data)
             account.geschlecht = data.get('gender')
-            account.kommunikationssprache = data.get('language')
             account.staatsangehoerigkeit = data.get('nationality')
             account.geburtsort = data.get('birth_city')
             account.geburtsland = data.get('birth_country')
@@ -332,6 +327,7 @@ class Onboarding(StudentMixin, View):
             account.billing_city = data.get('billing_city')
             account.billing_postal_code = data.get('billing_zip')
             account.billing_country = data.get('billing_country')
+            account.initial_review_completed = True
 
             contract.payment_interval = data.get('billing_option')
 
@@ -345,15 +341,7 @@ class Onboarding(StudentMixin, View):
 
             return redirect('integration:onboarding', step='sepa')
         elif step == 'sepa':
-            self.account.initial_review_completed = True
-
-            try:
-                self.account.save()
-            except Exception as e:
-                context.update(error=str(e))  # should we rather launch a 500 ??
-                return render(request, self.template, context)
-
-            return redirect('integration:dashboard')
+            return redirect(self.account.get_student_contact().sepamandate_url_auto)
 
 
 class DownloadAttachment(StudentMixin, View):

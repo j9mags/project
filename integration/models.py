@@ -221,7 +221,7 @@ class Account(models.Model, PerishableTokenMixin):
                                       sf_read_only=models.READ_ONLY, blank=True, null=True)
     parent = models.ForeignKey('self', models.DO_NOTHING, related_name='account_parent_set', blank=True, null=True)
 
-    billing_street = models.TextField(blank=True, null=True, verbose_name=_('Street'))
+    billing_street = models.TextField(blank=True, null=True, verbose_name=_('Street and House number'))
     billing_city = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('City'))
     billing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
     billing_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'), blank=True,
@@ -361,12 +361,12 @@ class Contact(models.Model, PerishableTokenMixin):
     name = models.CharField(max_length=121, verbose_name=_('Full Name'), sf_read_only=models.READ_ONLY)
 
     title = models.CharField(max_length=128, blank=True, null=True, verbose_name=_('title'))
-    email = models.EmailField(verbose_name=_('Email'))
+    email = models.EmailField(verbose_name=_('Private email address'))
     mobile_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Mobile phone'))
     home_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Home phone'))
     other_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Other phone'))
 
-    mailing_street = models.TextField(blank=True, null=True, verbose_name=_('Street'))
+    mailing_street = models.TextField(blank=True, null=True, verbose_name=_('Street and House number'))
     mailing_city = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('City'))
     mailing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
     mailing_country = models.CharField(max_length=80, blank=True, null=True, verbose_name=_('Country'),

@@ -2,8 +2,8 @@
     {% for opt in field.field.choices %}
     <div>
         <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="{{ field.id_for_label }}_{{forloop.counter }}">
-            <input type="radio" id="{{ field.id_for_label }}_{{forloop.counter }}" class="mdl-radio__button" name="{{ field.html_name }}"
-                   value="{{ opt.0 }}"
+            <input type="radio" id="{{ field.id_for_label }}_{{forloop.counter }}" class="mdl-radio__button"
+                   name="{{ field.html_name }}" value="{{ opt.0 }}"
                    {% if field.value == opt.0 %}
                     checked="checked"
                    {% endif %}/>
@@ -11,11 +11,12 @@
         </label>
     </div>
     {% endfor %}
+    {% if field.help_text %}
+    <span class="mdl-radiofield__help">{{ field.help_text }}</span>
+    {% endif %}
     {% if field.errors %}
     <div class="mdl-cell--12-col">
-        {% for error in field.errors %}
-        <span class="mdl-radiofield__error">{{ error | escape }}</span>
-        {% endfor%}
+        <span class="mdl-radiofield__error">{{ field.errors | first | escape }}</span>
     </div>
     {% endif %}
 </div>

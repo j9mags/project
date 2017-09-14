@@ -16,13 +16,17 @@
            {% endif %}
            />
     <label class="mdl-textfield__label" 
-           for="{{ field.id_for_label }}">
-        {{ field.label }}
+           for="{{ field.id_for_label }}">{{ field.label }}
+        {% if field.field.required %}
+        <span class="mdl-color-text--red">*</span>
+        {% endif %}
     </label>
-    
+
+    {% if field.help_text %}
+    <span class="mdl-textfield__help">{{ field.help_text }}</span>
+    {% endif %}
+
     {% if field.errors %}
-        {% for error in field.errors %}
-            <span class="mdl-textfield__error">{{ error | escape }}</span>
-        {% endfor%}
+        <span class="mdl-textfield__error">{{ field.errors | first | escape }}</span>
     {% endif %}
 </div>

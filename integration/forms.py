@@ -71,22 +71,17 @@ class OnboardingReviewForm(forms.Form):
 
 
 class StudentOnboardingForm(forms.Form):
-    salutation = forms.ChoiceField(choices=SalutationChoices, required=False)
-    first_name = forms.CharField(max_length=40, label=_('First name'))
-    last_name = forms.CharField(max_length=80, label=_('Last name'))
-
     gender = forms.ChoiceField(choices=GenderChoices, label=_('Gender'))
     nationality = forms.ChoiceField(choices=NationalityChoices, label=_('Nationality'))
-    language = forms.ChoiceField(choices=LanguageChoices, label=_('Language'))
 
     birth_city = forms.CharField(max_length=255, label=_('Birth city'))
     birth_country = forms.ChoiceField(choices=CountryChoices, label=_('Birth country'))
 
-    private_email = forms.EmailField(label=_('Personal email'))
+    private_email = forms.EmailField(label=_('Private email address'))
     mobile_phone = forms.CharField(max_length=40, label=_('Mobile phone'))
     home_phone = forms.CharField(max_length=40, required=False, label=_('Home phone'))
 
-    mailing_street = forms.CharField(max_length=40, label=_('Street address'))
+    mailing_street = forms.CharField(max_length=40, label=_('Street and House number'))
     mailing_city = forms.CharField(max_length=255, label=_('City'))
     mailing_zip = forms.CharField(max_length=20, label=_('Postal code'))
     mailing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
@@ -97,7 +92,7 @@ class StudentOnboardingForm(forms.Form):
     billing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
 
     billing_option = forms.ChoiceField(choices=BillingChoices, label=_('Payment options'),
-                                       help_text=_("You will only be able to set this once, so choose carefully"))
+                                       help_text=_("Attention, this payment option will be used for payments in the future."))
 
 
 class StudentAccountForm(forms.Form):
@@ -142,7 +137,7 @@ class DiscountForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(DiscountForm, self).clean()
         discount_type = cleaned_data.get('discount_type')
-        print(cleaned_data)
+
         if discount_type == 'Discount Tuition Fee':
             if not cleaned_data.get('discount_tuition_fee'):
                 self.add_error('discount_tuition_fee', forms.ValidationError(_('This field is required.')))
