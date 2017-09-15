@@ -15,12 +15,12 @@
 {% block content %}
   <form method="post" class="mdl-cell--12-col mdl-grid">
     {% csrf_token %}
-    <div class="mdl-cell mdl-cell--2-col mdl-cell--9-offset-desktop mdl-cell--5-offset-tablet">
+    <div class="mdl-cell mdl-cell--2-col mdl-cell--8-offset-desktop mdl-cell--4-offset-tablet">
       {% include 'snippets/input.html' with field=form.semester_fee_new %}
     </div>
-    <div class="mdl-cell mdl-cell--1-col mdl-cell--middle mdl-typography--text-right">
+    <div class="mdl-cell mdl-cell--2-col mdl-cell--middle mdl-typography--text-right">
       <input type="submit" value="{% trans 'Update' %}"
-             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white">
+             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white csp--full-width">
     </div>
   </form>
 
@@ -28,6 +28,7 @@
     <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp csp--full-width">
       <thead>
         <tr>
+          <th></th>
           <th class="mdl-data-table__cell--non-numeric csp--full-width">{% trans 'Course name' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Standard Period of Studies' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Cost per semester' %}</th>
@@ -39,9 +40,10 @@
       <tbody>
         {% for course in courses %}
           <tr data-student="{{ course.pk }}">
-            <td class="mdl-data-table__cell--non-numeric">
-              <a href="{% url 'integration:course_review' course.pk %}">{{ course.name }}</a>
-            </td>
+            <td class="csp-table--action">
+              <a class="mdl-color-text--primary" href="{% url 'integration:course_review' course.pk %}">
+                <i class="material-icons md-18">school</i>{% trans 'Details' %}</a></td>
+            <td class="mdl-data-table__cell--non-numeric">{{ course.name }}</td>
             <td class="mdl-data-table__cell">{{ course.standard_period_of_study|floatformat:"0" }}</td>
             <td class="mdl-data-table__cell">{{ course.cost_per_semester|currency }}</td>
             <td class="mdl-data-table__cell">{{ course.cost_per_month|currency }}</td>

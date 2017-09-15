@@ -189,8 +189,9 @@ class DashboardCourses(StaffMixin, TemplateView):
         form = context.get('form')
         if form.is_valid():
             form.save()
+            form.add_error(None, _('Semester fee updated successfully.'))
 
-        return self.get(request, *args, **kwargs)
+        return render(request, self.template_name, context=context)
 
 
 class DashboardUniversity(StaffMixin, TemplateView):
@@ -331,8 +332,6 @@ class FileUploadAction(StaffMixin, View):
         return redirect('integration:dashboard')
 
 
-
-# Todo Display all non-bank data
 class StudentReview(StaffMixin, DetailView):
     model = Account
     template_name = 'staff/student_review.html'

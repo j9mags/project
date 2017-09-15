@@ -279,7 +279,8 @@ class Account(models.Model, PerishableTokenMixin):
     initial_review_completed_auto = models.BooleanField(custom=True, verbose_name='Initial review completed',
                                                         sf_read_only=models.READ_ONLY)
     semester_fee_new = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
-                                           blank=True, null=True)
+                                           blank=True, null=True,
+                                           help_text=_('Modify this value to update all Courses.'))
     semester_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
                                            sf_read_only=models.READ_ONLY, blank=True, null=True)
     payment_options = models.CharField(custom=True, max_length=255, choices=Choices.PaymentOptions, blank=True,
