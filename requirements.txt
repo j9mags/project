@@ -2,7 +2,7 @@ certifi==2017.4.17
 chardet==3.0.4
 Django==1.11.3
 django-authtools==1.6.0
-django-csvimport==2.11
+django-loginas==0.3.2
 django-material==1.0.0
 django-salesforce==0.7.2
 gunicorn==19.7.1

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-14 16:02+0000\n"
+"POT-Creation-Date: 2017-09-15 10:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "Fill out both fields"
 msgstr ""
 
-#: authentication/admin.py:57
+#: authentication/admin.py:58
 msgid ""
 "Enter the new user's name and email address and click save. The user will be "
 "emailed a link allowing them to login to the site and set their password "
@@ -43,11 +43,11 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: csp/settings.py:141
+#: csp/settings.py:142
 msgid "German"
 msgstr ""
 
-#: csp/settings.py:142
+#: csp/settings.py:143
 msgid "English"
 msgstr ""
 
@@ -710,6 +710,10 @@ msgstr ""
 
 #: templates/layout/dashboard.html:56 templates/students/contact.html:46
 msgid "Home"
+msgstr ""
+
+#: templates/loginas/change_form.html:8
+msgid "Log in as user"
 msgstr ""
 
 #: templates/registration/login.html:21

@@ -50,6 +50,7 @@ class UserAdmin(DjUserAdmin):
     A UserAdmin that sends a password-reset email when creating a new user,
     unless a password was entered.
     """
+    change_form_template = 'loginas/change_form.html'
     add_form = UserCreationForm
     add_fieldsets = (
         (None, {

@@ -45,8 +45,9 @@ INSTALLED_APPS = [
 
     'salesforce',
     'authtools',
+    'loginas',
 
-    'csvimport.app.CSVImportConf',
+    # 'csvimport.app.CSVImportConf',
 
     'integration.apps.IntegrationConfig',
     'authentication.apps.AuthenticationConfig',
