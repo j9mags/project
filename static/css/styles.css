@@ -458,3 +458,13 @@ img {
 .mdl-selectfield.is-invalid .mdl-selectfield__help {
     visibility: hidden;
 }
+
+td.csp-table--action {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.csp-table--action .material-icons {
+    vertical-align: text-bottom;
+    margin-right: 4px;
+}

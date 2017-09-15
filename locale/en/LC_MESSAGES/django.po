@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-15 10:23+0000\n"
+"POT-Creation-Date: 2017-09-15 15:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,7 +69,7 @@ msgstr ""
 
 #: integration/forms.py:74 integration/models.py:249
 #: templates/snippets/student_account.html:48
-#: templates/staff/dashboard_students.html:35
+#: templates/staff/dashboard_students.html:36
 msgid "Gender"
 msgstr ""
 
@@ -93,7 +93,7 @@ msgstr ""
 #: integration/forms.py:81 integration/models.py:365
 #: templates/snippets/contact_card.html:10
 #: templates/snippets/student_contact.html:18
-#: templates/staff/dashboard_students.html:34
+#: templates/staff/dashboard_students.html:35
 msgid "Mobile phone"
 msgstr ""
 
@@ -349,7 +349,7 @@ msgstr ""
 #: integration/models.py:651 integration/views_staff.py:81
 #: integration/views_staff.py:93 templates/snippets/student_account.html:26
 #: templates/snippets/student_invoices.html:8
-#: templates/staff/dashboard_students.html:38
+#: templates/staff/dashboard_students.html:39
 #: templates/students/onboarding_review.html:23
 msgid "Status"
 msgstr ""
@@ -620,7 +620,7 @@ msgstr ""
 
 #: integration/views_staff.py:86 integration/views_staff.py:100
 #: templates/snippets/student_contract.html:18
-#: templates/staff/dashboard_students.html:37
+#: templates/staff/dashboard_students.html:38
 #: templates/students/onboarding_review.html:26
 msgid "Course"
 msgstr ""
@@ -639,40 +639,40 @@ msgstr ""
 msgid "File content is not correct"
 msgstr ""
 
-#: integration/views_student.py:162
+#: integration/views_student.py:163
 msgid "Data Review"
 msgstr ""
 
-#: integration/views_student.py:164
+#: integration/views_student.py:165
 msgid ""
 "Your university sent us important data for your profile. Please check it "
 "carefully. Should you find any discrepancies, please contact your university "
 "to correct this."
 msgstr ""
 
-#: integration/views_student.py:169 integration/views_student.py:177
+#: integration/views_student.py:170 integration/views_student.py:178
 msgid "Continue"
 msgstr ""
 
-#: integration/views_student.py:172
+#: integration/views_student.py:173
 msgid "Data input"
 msgstr ""
 
-#: integration/views_student.py:173
+#: integration/views_student.py:174
 msgid "Fill the form and log into your Chancen account."
 msgstr ""
 
-#: integration/views_student.py:180
+#: integration/views_student.py:181
 msgid "SEPA Mandate"
 msgstr ""
 
-#: integration/views_student.py:182
+#: integration/views_student.py:183
 msgid ""
 "In the future we will debit your tuition fees from your selected bank "
 "account. Please click on the following link to authorise the debit orders."
 msgstr ""
 
-#: integration/views_student.py:187
+#: integration/views_student.py:188
 msgid "Grant mandate"
 msgstr ""
 
@@ -700,15 +700,15 @@ msgstr ""
 msgid "CHANCEN SERVICES"
 msgstr ""
 
-#: templates/layout/dashboard.html:20
+#: templates/layout/dashboard.html:23
 msgid "Enter your query..."
 msgstr ""
 
-#: templates/layout/dashboard.html:28
+#: templates/layout/dashboard.html:31
 msgid "Logout"
 msgstr ""
 
-#: templates/layout/dashboard.html:56 templates/students/contact.html:46
+#: templates/layout/dashboard.html:59 templates/students/contact.html:46
 msgid "Home"
 msgstr ""
 
@@ -784,7 +784,7 @@ msgstr ""
 msgid "No file chosen"
 msgstr ""
 
-#: templates/snippets/stepper.html:24 templates/staff/upload_review.html:61
+#: templates/snippets/stepper.html:23 templates/staff/upload_review.html:61
 #: templates/students/contact.html:53
 msgid "Back"
 msgstr ""
@@ -813,7 +813,7 @@ msgid "Birth day"
 msgstr ""
 
 #: templates/snippets/student_account.html:54
-#: templates/staff/dashboard_students.html:36
+#: templates/staff/dashboard_students.html:37
 msgid "Language"
 msgstr ""
 
@@ -926,16 +926,20 @@ msgstr ""
 msgid "Bulk update"
 msgstr ""
 
-#: templates/staff/dashboard_students.html:31
+#: templates/staff/dashboard_students.html:32
 msgid "Matriculation"
 msgstr ""
 
-#: templates/staff/dashboard_students.html:32
+#: templates/staff/dashboard_students.html:33
 msgid "Student name"
 msgstr ""
 
-#: templates/staff/dashboard_students.html:33
+#: templates/staff/dashboard_students.html:34
 msgid "University email"
+msgstr ""
+
+#: templates/staff/dashboard_students.html:47
+msgid "Details"
 msgstr ""
 
 #: templates/staff/dashboard_university.html:11
