@@ -82,7 +82,7 @@ msgstr "Geschlecht"
 #: integration/forms.py:75 integration/models.py:255
 #: templates/snippets/student_account.html:51
 msgid "Nationality"
-msgstr "Staatsangehöerigkeit"
+msgstr "Staatsangehörigkeit"
 
 #: integration/forms.py:77 templates/snippets/student_account.html:42
 msgid "Birth city"

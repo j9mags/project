@@ -418,7 +418,7 @@ img {
 }
 
 .mdl-step__label {
-    cursor: default;
+    cursor: default!important;
 }
 
 .mdl-step__label-indicator {
@@ -432,7 +432,7 @@ img {
 .mdl-stepper:not(.mdl-stepper--horizontal) .mdl-step__label:hover,
 .mdl-stepper:not(.mdl-stepper--horizontal) .mdl-step__label:active,
 .mdl-stepper:not(.mdl-stepper--horizontal) .mdl-step__label:focus {
-    background-color: transparent;
+    background-color: transparent!important;
 }
 
 .csp-card__title-icon {

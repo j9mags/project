@@ -5,10 +5,9 @@
     <li class="mdl-step {% if step.is_active %}is-active{% endif %}">
         <span class="mdl-step__label">
             <span class="mdl-step__title">
+                <span class="mdl-step__title-text mdl-typography--title">{{ step.title }}</span>
                 {% if step.is_active %}
-                    <span class="mdl-step__title-text mdl-typography--title">{{ step.caption }}</span>
-                {% else %}
-                    <span class="mdl-step__title-text mdl-typography--title">{{ step.title }}</span>
+                    <span class="mdl-step__caption-text mdl-typography--subhead">{{ step.caption }}</span>
                 {% endif %}
             </span>
         </span>

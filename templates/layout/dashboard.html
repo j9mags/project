@@ -7,6 +7,9 @@
   <div class="chancen-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="chancen-header mdl-layout__header">
       <div class="mdl-layout__header-row">
+        {% if title_centered %}
+        <div class="mdl-layout-spacer"></div>
+        {% endif %}
         <span class="mdl-layout-title">{% block title %}{% endblock %}</span>
         <div class="mdl-layout-spacer"></div>
         {% if can_search %}

@@ -150,7 +150,8 @@ class Onboarding(StudentMixin, View):
                 step = 'data'
 
         context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.get_master_contact(),
-                   'sf_contract': self.account.get_active_contract(), 'ignore_drawer': True, 'stepper': (
+                   'title_centered': True, 'sf_contract': self.account.get_active_contract(), 'ignore_drawer': True,
+                   'stepper': (
                 {
                     'title': 'Wilkommen! | Welcome back! ',
                     'caption': 'Bitte wähle deine bevorzugte Sprache. | Please select your preferred language.',
@@ -197,13 +198,11 @@ class Onboarding(StudentMixin, View):
             form = LanguageSelectForm(instance=self.account)
 
         context.update(form=form)
-        context.update(page_title=context['stepper'][0].get('title'))
         context['stepper'][0].update(is_active=True)
         return context
 
     def _get_review_context(self, context):
         context.update(form=OnboardingReviewForm(initial={'approved': self.account.student_approved}))
-        context.update(page_title=context['stepper'][1].get('title'))
         context['stepper'][1].update(is_active=True)
         return context
 
@@ -241,12 +240,10 @@ class Onboarding(StudentMixin, View):
         })
 
         context.update(form=form)
-        context.update(page_title=context['stepper'][2].get('title'))
         context['stepper'][2].update(is_active=True)
         return context
 
     def _get_sepa_context(self, context):
-        context.update(page_title=context['stepper'][3].get('title'))
         context['stepper'][3].update(is_active=True)
         return context
 
