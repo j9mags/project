@@ -64,11 +64,12 @@ class Dashboard(StudentMixin, TemplateView):
         p = int(self.request.GET.get('p', '1'))
         s = int(self.request.GET.get('s', '10'))
 
-        paginator = Paginator(invoices, s)
-        try:
-            invoices = paginator.page(p)
-        except EmptyPage:
-            invoices = paginator.page(paginator.num_pages if p > 1 else 0)
+        if invoices:
+            paginator = Paginator(invoices, s)
+            try:
+                invoices = paginator.page(p)
+            except EmptyPage:
+                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
 
         context['invoices'] = invoices
         return context

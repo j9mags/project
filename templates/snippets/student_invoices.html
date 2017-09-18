@@ -20,9 +20,11 @@
       <td class="mdl-data-table__cell">{{ invoice.invoice_date|date:"d.m.Y"  }}</td>
       <td class="mdl-data-table__cell">{{ invoice.total|currency }}</td>
       <td class="mdl-data-table__cell">
+        {% if invoice.get_current_attachment %}
         <a href="{% url 'integration:download_attachment' att_id=invoice.get_current_attachment.pk %}">
           <i class="material-icons">file_download</i>
         </a>
+        {% endif %}
       </td>
     </tr>
     {% endfor %}
