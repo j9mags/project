@@ -1,9 +1,9 @@
 {% load i18n %}
 {% load static %}
 
-<div id="dlg-add-students" class="mdl-dialog {% if display_st %}is-showing-dialog{% endif %}">
+<div id="dlg-add-students" class="mdl-dialog">
     <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
-    <form enctype="multipart/form-data" method="post" action="{% url 'integration:upload_review' uuid='new' %}"
+    <form enctype="multipart/form-data" method="post" action="{% url 'integration:dashboard' %}"
           onsubmit="document.getElementById('upload-progress-st').classList.add('is-active')"
           onabort="document.getElementById('upload-progress-st').classList.remove('is-active')">
 
@@ -13,7 +13,7 @@
 
         <div class="mdl-dialog__content">
             {% include 'snippets/select.html' with field=form.course %}
-            {% include 'snippets/input-file.html' with field=form.csv type='file' pref='st_' accept=".csv, text/csv" %}
+            {% include 'snippets/input-file.html' with field=form.csv type='file' pref='st_' accept=".xls, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" %}
             <div id="upload-progress-st" class="mdl-spinner mdl-js-spinner"></div>
         </div>
         <div class="mdl-dialog__actions">

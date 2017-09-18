@@ -1,9 +1,14 @@
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 
+import pandas
+from pandas.io import json
+
+from authentication.models import CsvUpload
 from .models import Choices, Contact
 from .models import Account
 from .models import Rabatt
+
 
 SalutationChoices = [('', '')] + Choices.Salutation
 CountryChoices = [('', '')] + Choices.Country
@@ -23,24 +28,14 @@ class UploadForm(forms.Form):
         csv = cleaned_data.get('csv')
 
         if csv is not None:
-            ctype = csv.content_type
-            charset = csv.charset or 'utf-8'
-            if not ctype.startswith('text/'):
-                self.add_error('csv', "File doesn't seem to be a valid CSV")
+            json_data = pandas.read_excel(csv.temporary_file_path()).to_json()
+            data = json.loads(json_data)
 
-            headers = None
-            first_line = None
-
-            for line in csv:
-                if headers is None:
-                    headers = line.decode(charset)
-                elif first_line is None:
-                    first_line = line.decode(charset)
-                else:
-                    break
-
-            if not headers or not first_line:
-                self.add_error('csv', "File doesn't seem to be a valid CSV")
+            is_course = 'course' not in cleaned_data
+            if not CsvUpload.is_valid(data, is_course):
+                self.add_error('csv', _('File content is not correct'))
+            else:
+                cleaned_data.update(raw_data=json_data)
 
         return cleaned_data
 

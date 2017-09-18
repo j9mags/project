@@ -1,3 +1,4 @@
+import pandas
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language, activate
@@ -59,6 +60,42 @@ class DashboardHome(StaffMixin, TemplateView):
         context.update(students=students, courses=courses)
         return context
 
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        contact = context.get('contact')
+
+        st_form = StudentsUploadForm(contact.account, request.POST, request.FILES)
+        cs_form = UploadForm(request.POST, request.FILES)
+
+        is_course = 'course' not in request.POST
+        if is_course:
+            form = cs_form
+        else:
+            form = st_form
+
+        if form.is_valid():
+            json_data = form.cleaned_data.get('raw_data')
+            d = json.loads(json_data)
+            for key in d.keys():
+                d[key].pop('0')
+            upd = request.user.csvupload_set.create(
+                course=form.cleaned_data.get('course'),
+                uuid=str(uuid4()),
+                content=json.dumps(d)
+            )
+            return redirect('integration:upload_review', uuid=upd.uuid)
+
+        context.update(
+            display_st=form == st_form,
+            display_cs=form == cs_form,
+            st_form=st_form,
+            cs_form=cs_form,
+            form=form,
+        )
+
+        return render(request, self.template_name, context)
+
 
 class DashboardStudents(StaffMixin, TemplateView):
     template_name = 'staff/dashboard_students.html'
@@ -93,7 +130,7 @@ class DashboardStudents(StaffMixin, TemplateView):
                 if course is not None:
                     filters.append(
                         (_('Course'),
-                         contact.account.get_active_courses().get(
+                         self.contact.account.get_active_courses().get(
                              pk=course).name))
         else:
             if status:
@@ -121,39 +158,6 @@ class DashboardStudents(StaffMixin, TemplateView):
         bulk_form = BulkActionsForm(self.contact.account)
         context.update(students=students, filters=filters, bulk_form=bulk_form)
         return context
-
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-
-        contact = context.get('contact')
-
-        st_form = StudentsUploadForm(contact.account, request.POST, request.FILES)
-        cs_form = UploadForm(request.POST, request.FILES)
-
-        if 'course' in request.POST:
-            form = st_form
-        else:
-            form = cs_form
-
-        if form.is_valid():
-            csv = form.cleaned_data.get('csv')
-            charset = csv.charset or 'utf-8'
-            content = ''.join([line.decode(charset) for line in csv])
-
-            upd = request.user.csvupload_set.create(
-                course=form.cleaned_data.get('course'),
-                uuid=str(uuid4()),
-                content=content
-            )
-            return HttpResponseRedirect('/review/' + upd.uuid)
-        else:
-            context.update(
-                display_st=form == st_form,
-                display_cs=form == st_form,
-                st_form=st_form,
-                cs_form=cs_form)
-
-        return render(request, self.template_name, context)
 
 
 class DashboardCourses(StaffMixin, TemplateView):
@@ -250,11 +254,19 @@ class FileUpload(StaffMixin, TemplateView):
             raise SuspiciousOperation()
 
         p = int(self.request.GET.get('p', '1'))
-        data = upload.get_data(p)
+        s = int(self.request.GET.get('s', '20'))
+
+        data = upload.parse_data()
+        paginator = Paginator(data, s)
+
+        try:
+            data = paginator.page(p)
+        except EmptyPage:
+            data = paginator.page(paginator.num_pages if p > 1 else 0)
         context.update(data=data)
+
         if upload.course:
             context.update(course=DegreeCourse.objects.get(pk=upload.course))
-        context.update(prev=p - 1, cur=p, next=p + 1 if upload.has_more_data(p) else False)
 
         err = self.request.GET.get('err')
         err_msg = {
@@ -265,48 +277,6 @@ class FileUpload(StaffMixin, TemplateView):
         if err_msg:
             context.update(error=err_msg)
         return context
-
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-
-        contact = context.get('contact')
-
-        st_form = StudentsUploadForm(contact.account, request.POST, request.FILES)
-        cs_form = UploadForm(request.POST, request.FILES)
-
-        is_course = 'course' not in request.POST
-        if is_course:
-            form = cs_form
-        else:
-            form = st_form
-
-        if form.is_valid():
-            csv = form.cleaned_data.get('csv')
-            charset = csv.charset or 'utf-8'
-            content = ''.join([line.decode(charset) for line in csv])
-            content = '\n'.join([
-                line for line in content.splitlines() if any(line.split(';'))
-            ])
-            if not CsvUpload.is_valid(content, is_course):
-                form.add_error(None, _('File content is not correct'))
-            else:
-                upd = request.user.csvupload_set.create(
-                    course=form.cleaned_data.get('course'),
-                    uuid=str(uuid4()),
-                    content=content
-                )
-                return redirect('integration:upload_review', uuid=upd.uuid)
-
-        context.update(
-            display_st=form == st_form,
-            display_cs=form == cs_form,
-            st_form=st_form,
-            cs_form=cs_form,
-            form=form,
-        )
-
-        template = request.POST.get('view_name')
-        return render(request, template, context)
 
 
 class FileUploadAction(StaffMixin, View):
@@ -327,15 +297,10 @@ class FileUploadAction(StaffMixin, View):
         if action == 'discard':
             upload.delete()
         else:
-            for line in upload.content.splitlines():
-                row = line.split(';')
-                if not (all(row) and any(row)):
-                    rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
-                    return redirect(rc+'?err=1')
-
             try:
                 upload.process()
-            except:
+            except Exception as e:
+                print(e)
                 rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
                 return redirect(rc+'?err=2')
         return redirect('integration:dashboard')

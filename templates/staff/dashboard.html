@@ -47,4 +47,20 @@
   {{ block.super }}
   <script src="{% static '/js/mdl-selectfield.min.js' %}"></script>
   <script src="{% static '/js/dashboard-staff.js' %}"></script>
+  <script>
+    (function() {
+      {% if display_st %}
+        var showDlg = window.showDlgSt;
+      {% elif display_cs %}
+        var showDlg = window.showDlgCs;
+      {% elif display_semester_fee %}
+        var showDlg = window.showDlgSms;
+      {% elif display_bulk %}
+        var showDlg = window.showDlgBlk;
+      {% else %}
+        var showDlg = function () {};
+      {% endif %}
+      setTimeout(showDlg, 100);
+    }.call(this));
+  </script>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static %}
 
-<div id="dlg-semester-fee" class="mdl-dialog {% if display_semester_fee %}is-showing-dialog{% endif %}">
+<div id="dlg-semester-fee" class="mdl-dialog">
     <h4 class="mdl-dialog__title">{% trans 'Update Semester fee' %}</h4>
     <form action="{% url 'integration:courses' %}" method="post">
         {% csrf_token %}

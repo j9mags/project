@@ -8,6 +8,7 @@ from datetime import timedelta
 from uuid import uuid4
 
 from authtools.models import AbstractEmailUser
+from pandas.io import json
 
 from integration.models import RecordType, Account, Contact, Contract, DegreeCourse
 
@@ -71,29 +72,30 @@ class CsvUpload(models.Model):
         return "{course} by {user}".format(course=self.course, user=self.user)
 
     @staticmethod
-    def is_valid(content, course=False):
-        headers = CsvUpload.expected_courses_headers if course else CsvUpload.expected_student_headers
-        lines = content.splitlines()
-        reader = csv.DictReader(lines, delimiter=";")
+    def is_valid(data, is_course):
+        headers = CsvUpload.expected_courses_headers if is_course else CsvUpload.expected_student_headers
 
-        for header in reader.fieldnames:
+        for header in data.keys():
             if header not in headers:
                 return False
 
         return True
 
-    def get_data(self, page):
-        min = (page - 1) * 20
-        max = page * 20
-        data = self.content.splitlines()
-        lines = [data.pop(0)] + data[min + 1: max + 1]
-        return csv.DictReader(lines, delimiter=";")
-
-    def has_more_data(self, page):
-        data = self.content.split('\n')
-        max = page * 20
-
-        return len(data) > max + 2
+    def parse_data(self):
+        data = json.loads(self.content)
+        rc = []
+        i, done = 0, False
+        while not done:
+            i += 1
+            d_ = {}
+            for k in data.keys():
+                if not str(i) in data[k]:
+                    done = True
+                    break
+                d_.update({k: data[k][str(i)]})
+            if d_:
+                rc.append(d_)
+        return rc
 
     def process(self):
         if self.course:
@@ -111,8 +113,7 @@ class CsvUpload(models.Model):
         if not self.content:
             raise exceptions.ObjectDoesNotExist()
 
-        lines = self.content.splitlines()
-
+        data = self.parse_data()
         accs = []
         contacts = {}
         contracts = {}
@@ -125,13 +126,7 @@ class CsvUpload(models.Model):
         university = self.user.get_srecord().account
         course = university.degreecourse_set.get(pk=self.course)
 
-        reader = csv.DictReader(lines, delimiter=";")
-        desc_skipped = False
-        for row in reader:
-            if not desc_skipped:
-                desc_skipped = True
-                continue
-
+        for row in data:
             if not(any(row) and all(row)):
                 return False
 
@@ -199,14 +194,8 @@ class CsvUpload(models.Model):
 
         university = self.user.get_srecord().account
         courses = []
-        lines = self.content.splitlines()
-        reader = csv.DictReader(lines, delimiter=";")
-        desc_skipped = False
-        for row in reader:
-            if not desc_skipped:
-                desc_skipped = True
-                continue
-
+        data = self.parse_data()
+        for row in data:
             if not(any(row) and all(row)):
                 return False
 

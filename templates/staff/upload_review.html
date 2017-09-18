@@ -29,19 +29,19 @@
               <table class="mdl-data-table mdl-js-data-table">
                 <thead>
                   <tr>
-                    {% for header in data.fieldnames %}
-                      <th class="mdl-data-table__cell--non-numeric">{{ header }}</th>
+                    {% for k,v in data.0.items %}
+                      <th class="mdl-data-table__cell--non-numeric">{{ k }}</th>
                     {% endfor %}
                     {% if course %}
-                      <th class="mdl-data-table__cell--non-numeric">Studiengang</th>
+                      <th class="mdl-data-table__cell--non-numeric">{% trans 'Degree course' %}</th>
                     {% endif %}
                   </tr>
                 </thead>
                 <tbody>
                 {% for line in data %}
                   <tr>
-                    {% for header in data.fieldnames %}
-                      <td class="mdl-data-table__cell--non-numeric">{{ line|get:header }}</td>
+                    {% for k,v in line.items %}
+                      <td class="mdl-data-table__cell--non-numeric">{{ v }}</td>
                     {% endfor %}
                     {% if course %}
                       <td class="mdl-data-table__cell--non-numeric">{{ course.name }}</td>
@@ -53,12 +53,12 @@
             </div>
             <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
               <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary mdl-color-text--white"
-                 href="{% if next %}./?p={{ next }}{% else %}./confirm/{% endif %}">
-                {% if next %}{% trans 'Next' %}{% else %}{% trans 'Confirm' %}{% endif %}
+                 href="{% if data.has_next %}./?p={{ data.next_page_number }}{% else %}./confirm/{% endif %}">
+                {% if page.has_next %}{% trans 'Next' %}{% else %}{% trans 'Confirm' %}{% endif %}
               </a>
-              {% if prev > 0 %}
+              {% if data.has_previous %}
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                   href="./?p={{ prev }}">{% trans 'Back' %}</a>
+                   href="./?p={{ data.previous_page_number }}">{% trans 'Back' %}</a>
               {% endif %}
               <div class="mdl-layout-spacer"></div>
               <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white"

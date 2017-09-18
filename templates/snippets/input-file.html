@@ -19,6 +19,6 @@
     <span class="mdl-textfield__help">{{ field.help_text }}</span>
   {% endif %}
   {% if field.errors %}
-    <span class="mdl-selectfield__error">{{ field.errors | first | escape }}</span>
+    <span class="mdl-textfield__error">{{ field.errors | first | escape }}</span>
   {% endif %}
 </div>
