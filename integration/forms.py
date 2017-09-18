@@ -124,6 +124,11 @@ class UniversityForm(forms.ModelForm):
         model = Account
         fields = ['semester_fee_new']
 
+    def __init__(self, *args, **kwargs):
+        super(UniversityForm, self).__init__(*args, **kwargs)
+        self.fields['semester_fee_new'].localize = True
+        self.fields['semester_fee_new'].widget.is_localized = True
+
 
 class DiscountForm(forms.ModelForm):
     class Meta:

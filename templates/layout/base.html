@@ -3,16 +3,16 @@
 
 {% get_current_language as LANGUAGE_CODE %}
 
-{% trans 'CHANCEN SERVICES' as title %}
+{% trans 'CHANCEN SERVICES' as base_title %}
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ title }}</title>
+    <title>{{ base_title }}</title>
 
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -21,7 +21,7 @@
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="{{ title }}">
+    <meta name="apple-mobile-web-app-title" content="{{ base_title }}">
     <link rel="apple-touch-icon-precomposed" href="{% static 'img/favicon.png' %}">
 
     <!-- Tile icon for Win8 (144x144 + tile color) -->

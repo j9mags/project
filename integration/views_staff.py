@@ -1,6 +1,8 @@
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import get_language, activate
+from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.conf import settings
 from django.core.exceptions import *
 from django.views.generic import DetailView
 from django.views.generic.base import View
@@ -20,6 +22,7 @@ from uuid import uuid4
 
 
 class StaffMixin(LoginRequiredMixin):
+    default_lang = 'de'
     login_url = '/authentication/login/'
 
     def dispatch(self, request, *args, **kwargs):
@@ -29,6 +32,12 @@ class StaffMixin(LoginRequiredMixin):
 
         if not request.user.is_unistaff():
             raise PermissionDenied()
+
+        lang = get_language()
+        if lang != self.default_lang:
+            activate(self.default_lang)
+            request.session[LANGUAGE_SESSION_KEY] = self.default_lang
+            rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, self.default_lang)
 
         return rc
 

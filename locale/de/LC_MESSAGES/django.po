@@ -973,10 +973,6 @@ msgstr "universitäre E-Mail-Adresse"
 msgid "University data. Handle with care!"
 msgstr "Universitäts Daten. Bitte mit Vorsicht handeln!"
 
-#: templates/staff/dashboard_university.html:18
-msgid "Semester fee"
-msgstr "Semesterbeiträge"
-
 #: templates/staff/upload_review.html:25
 msgid "Carefully review the data before confirming"
 msgstr "Bitte überprüfen Sie die Daten genau, bevor Sie den Upload bestätigen."

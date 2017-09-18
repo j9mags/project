@@ -17,72 +17,10 @@
 {% endblock %}
 
 {% block fab_options %}
-<div id="dlg-add-students" class="mdl-dialog {% if display_st %}is-showing-dialog{% endif %}">
-    <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
-    <form enctype="multipart/form-data" method="post" action="{% url 'integration:upload_review' uuid='new' %}"
-          onsubmit="document.getElementById('upload-progress-st').classList.add('is-active')"
-          onabort="document.getElementById('upload-progress-st').classList.remove('is-active')">
 
-        {% csrf_token %}
-
-        <input type="hidden" name="view_name" value="{{ view.template_name }}">
-
-        <div class="mdl-dialog__content">
-            {% include 'snippets/select.html' with field=st_form.course %}
-            {% include 'snippets/input-file.html' with field=st_form.csv type='file' pref='st_' accept=".csv, text/csv" %}
-            <div id="upload-progress-st" class="mdl-spinner mdl-js-spinner"></div>
-        </div>
-        <div class="mdl-dialog__actions">
-            <input type="submit"
-                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
-                   value="{% trans 'Upload' %}">
-            <div class="mdl-layout-spacer"></div>
-            <a href="{% static '/templates/Import_Studierende_Vorlage.xlsx' %}"
-               class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download sample' %}</a>
-        </div>
-    </form>
-</div>
-
-<div id="dlg-add-courses" class="mdl-dialog {% if display_cs %}is-showing-dialog{% endif %}">
-    <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
-    <form enctype="multipart/form-data" method="post" action="{% url 'integration:upload_review' uuid='new' %}"
-          onsubmit="document.getElementById('upload-progress-cs').classList.add('is-active')"
-          onabort="document.getElementById('upload-progress-cs').classList.remove('is-active')">
-
-        {% csrf_token %}
-        <input type="hidden" name="view_name" value="{{ view.template_name }}">
-        <div class="mdl-dialog__content">
-            {% include 'snippets/input-file.html' with field=cs_form.csv type='file' pref='cs_' accept=".csv, text/csv" %}
-            <div id="upload-progress-cs" class="mdl-spinner mdl-js-spinner"></div>
-        </div>
-        <div class="mdl-dialog__actions">
-            <input type="submit"
-                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
-                   value="{% trans 'Upload' %}">
-            <div class="mdl-layout-spacer"></div>
-            <a href="{% static '/templates/Import_Studiengänge_Vorlage.xlsx' %}"
-               class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download sample' %}</a>
-        </div>
-    </form>
-</div>
-
-<div id="dlg-bulk-actions" class="mdl-dialog {% if display_bulk %}is-showing-dialog{% endif %}">
-    <h4 class="mdl-dialog__title">{% trans 'Changes will apply to selected rows' %}</h4>
-    <form action="{% url 'integration:students_bulk' %}" method="post">
-        {% csrf_token %}
-
-        <div class="mdl-dialog__content">
-            <input id="selected_students" type="hidden" name="students" value="" />
-            {% include 'snippets/select.html' with field=bulk_form.status %}
-            {% include 'snippets/select.html' with field=bulk_form.course %}
-        </div>
-        <div class="mdl-dialog__actions">
-            <input type="submit"
-                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
-                   value="{% trans 'Confirm' %}">
-        </div>
-    </form>
-</div>
+{% include 'dialogs/upload-students.html' with form=st_form %}
+{% include 'dialogs/upload-courses.html' with form=cs_form %}
+{% include 'dialogs/bulk-actions.html' with form=bulk_form %}
 
 {% if form.non_field_errors %}
 <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">

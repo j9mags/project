@@ -9,6 +9,9 @@
         DIALOG_ID_BLK = 'dlg-bulk-actions',
         blkActions_dlg = document.getElementById(DIALOG_ID_BLK),
         blkActions_btn = document.getElementById('bulk-form--btn'),
+        DIALOG_ID_SMS = 'dlg-semester-fee',
+        smsUpdate_dlg = document.getElementById(DIALOG_ID_SMS),
+        smsUpdate_btn = document.getElementById('semester-fee--btn'),
         showDlgSt = function(e) {
           var processClick = function (evt) {
             var target = evt.target.closest('#' + DIALOG_ID_ST);
@@ -56,13 +59,31 @@
               blkActions_dlg.classList.add(VISIBLE_CLASS);
               document.addEventListener('click', processClick);
             }
+        },
+        showDlgSms = function(e) {
+            var processClick = function (evt) {
+              var target = evt.target.closest('#' + DIALOG_ID_SMS);
+
+              if ((e !== evt) && (target === null)) {
+                smsUpdate_dlg.classList.remove(VISIBLE_CLASS);
+                smsUpdate_dlg.IS_SHOWING = false;
+                document.removeEventListener('click', processClick);
+              }
+            };
+            if (!smsUpdate_dlg.IS_SHOWING) {
+              smsUpdate_dlg.IS_SHOWING = true;
+              smsUpdate_dlg.classList.add(VISIBLE_CLASS);
+              document.addEventListener('click', processClick);
+            }
         };
     addStudents_btn.addEventListener('click', showDlgSt);
     addCourses_btn.addEventListener('click', showDlgCs);
     if (blkActions_btn !== null)
       blkActions_btn.addEventListener('click', showDlgBlk);
+    if (smsUpdate_btn !== null)
+      smsUpdate_btn.addEventListener('click', showDlgSms);
 
-     function addOrUpdateUrlParam(name, value) {
+    function addOrUpdateUrlParam(name, value) {
       var href = window.location.href;
       var regex = new RegExp("[&\\?]" + name + "=");
       if(regex.test(href)) {
@@ -76,7 +97,7 @@
       }
     }
 
-     function removeUrlParam(name) {
+    function removeUrlParam(name) {
       var url = window.location.href;
       var urlparts= url.split('?');   
       if (urlparts.length>=2) {

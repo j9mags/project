@@ -13,16 +13,15 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post" class="mdl-cell--12-col mdl-grid">
-    {% csrf_token %}
-    <div class="mdl-cell mdl-cell--2-col mdl-cell--8-offset-desktop mdl-cell--4-offset-tablet">
-      {% include 'snippets/input.html' with field=form.semester_fee_new %}
-    </div>
-    <div class="mdl-cell mdl-cell--2-col mdl-cell--middle mdl-typography--text-right">
-      <input type="submit" value="{% trans 'Update' %}"
-             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white csp--full-width">
-    </div>
-  </form>
+  <div class="mdl-cell mdl-cell--1-col mdl-cell--10-offset-desktop mdl-cell--6-offset-tablet">
+    {% include 'snippets/field-text.html' with label=_('Semester fee') value=contact.account.semester_fee_new type="currency" %}
+  </div>
+  <div class="mdl-cell mdl-cell--1-col mdl-cell--middle">
+    <button id="semester-fee--btn" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-button--accent">
+      <i class="material-icons">edit</i>
+    </button>
+  </div>
+  {% include 'dialogs/update-semester-fee.html' with form=form %}
 
   <div class="mdl-cell mdl-cell--12-col">
     <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp csp--full-width">

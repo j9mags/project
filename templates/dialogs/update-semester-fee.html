@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load static %}
+
+<div id="dlg-semester-fee" class="mdl-dialog {% if display_semester_fee %}is-showing-dialog{% endif %}">
+    <h4 class="mdl-dialog__title">{% trans 'Update Semester fee' %}</h4>
+    <form action="{% url 'integration:courses' %}" method="post">
+        {% csrf_token %}
+
+        <div class="mdl-dialog__content">
+            {% include 'snippets/input.html' with field=form.semester_fee_new type='number' %}
+        </div>
+        <div class="mdl-dialog__actions">
+            <input type="submit" value="{% trans 'Confirm' %}"
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+        </div>
+    </form>
+</div>

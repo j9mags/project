@@ -1,0 +1,20 @@
+{% load i18n %}
+{% load static %}
+
+<div id="dlg-bulk-actions" class="mdl-dialog {% if display_bulk %}is-showing-dialog{% endif %}">
+    <h4 class="mdl-dialog__title">{% trans 'Changes will apply to selected rows' %}</h4>
+    <form action="{% url 'integration:students_bulk' %}" method="post">
+        {% csrf_token %}
+
+        <div class="mdl-dialog__content">
+            <input id="selected_students" type="hidden" name="students" value="" />
+            {% include 'snippets/select.html' with field=form.status %}
+            {% include 'snippets/select.html' with field=form.course %}
+        </div>
+        <div class="mdl-dialog__actions">
+            <input type="submit"
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+                   value="{% trans 'Confirm' %}">
+        </div>
+    </form>
+</div>
