@@ -1,7 +1,8 @@
+from collections import OrderedDict
+
 from django.db import models
 from django.utils import timezone
 from django.core import exceptions
-from django.contrib.auth import get_user_model
 
 from datetime import datetime
 from datetime import timedelta
@@ -11,8 +12,6 @@ from authtools.models import AbstractEmailUser
 from pandas.io import json
 
 from integration.models import RecordType, Account, Contact, Contract, DegreeCourse
-
-import csv
 
 
 class User(AbstractEmailUser):
@@ -85,10 +84,11 @@ class CsvUpload(models.Model):
         data = json.loads(self.content)
         rc = []
         i, done = 0, False
+        headers = CsvUpload.expected_student_headers if self.course else CsvUpload.expected_courses_headers
         while not done:
             i += 1
-            d_ = {}
-            for k in data.keys():
+            d_ = OrderedDict()
+            for k in headers:
                 if not str(i) in data[k]:
                     done = True
                     break

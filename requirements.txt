@@ -13,3 +13,4 @@ requests==2.18.1
 simplejson==3.11.1
 urllib3==1.21.1
 pandas==0.20.3
+xlrd==1.1.0
