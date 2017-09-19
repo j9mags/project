@@ -515,7 +515,6 @@ class Contract(models.Model):
                                        related_name='contract_universityref_set', blank=True, null=True)
     studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True, blank=True, null=True,
                                         verbose_name=_('Degree Course'))
-    active = models.BooleanField(custom=True, verbose_name=_('Active'), default=models.DEFAULTED_ON_CREATE)
     payment_interval = models.CharField(custom=True, max_length=255, choices=Choices.Payment, blank=True, null=True,
                                         verbose_name=_('Payment Interval'))
     first_payment = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
