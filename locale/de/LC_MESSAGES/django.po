@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-15 16:14+0000\n"
+"POT-Creation-Date: 2017-09-20 08:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,11 +47,11 @@ msgstr "Die Passwörter stimmen nicht überein"
 msgid "Email address"
 msgstr "E-Mail-Adresse"
 
-#: csp/settings.py:142
+#: csp/settings.py:154
 msgid "German"
 msgstr "Deutsch"
 
-#: csp/settings.py:143
+#: csp/settings.py:155
 msgid "English"
 msgstr "Englisch"
 
@@ -63,78 +63,83 @@ msgstr "Bank Konto"
 msgid "Billing address"
 msgstr "Rechnungsadresse"
 
-#: integration/forms.py:15
+#: integration/forms.py:20
 msgid "-- Keep current --"
 msgstr "-- Aktuell halten --"
 
-#: integration/forms.py:70
+#: integration/forms.py:36
+msgid "File content is not correct"
+msgstr "Dateiinhalt ist nicht korrekt"
+
+#: integration/forms.py:65
 msgid "I accept that the data provided by the university is correct."
 msgstr ""
 "Ich akzeptiere, dass die von meiner Hochschule bereitgestellten Daten "
 "korrekt sind."
 
-#: integration/forms.py:74 integration/models.py:249
+#: integration/forms.py:69 integration/models.py:249
 #: templates/snippets/student_account.html:48
 #: templates/staff/dashboard_students.html:36
 msgid "Gender"
 msgstr "Geschlecht"
 
-#: integration/forms.py:75 integration/models.py:255
+#: integration/forms.py:70 integration/models.py:255
 #: templates/snippets/student_account.html:51
 msgid "Nationality"
 msgstr "Staatsangehörigkeit"
 
-#: integration/forms.py:77 templates/snippets/student_account.html:42
+#: integration/forms.py:72 templates/snippets/student_account.html:42
 msgid "Birth city"
 msgstr "Geburtsort"
 
-#: integration/forms.py:78 templates/snippets/student_account.html:45
+#: integration/forms.py:73 templates/snippets/student_account.html:45
 msgid "Birth country"
 msgstr "Geburtsland"
 
-#: integration/forms.py:80 integration/models.py:365
+#: integration/forms.py:75 integration/models.py:365
 msgid "Private email address"
 msgstr "Persönliche E-Mail-Adresse"
 
-#: integration/forms.py:81 integration/models.py:366
+#: integration/forms.py:76 integration/models.py:366
 #: templates/snippets/contact_card.html:10
 #: templates/snippets/student_contact.html:18
 #: templates/staff/dashboard_students.html:35
 msgid "Mobile phone"
 msgstr "Handynummer"
 
-#: integration/forms.py:82 integration/models.py:367
+#: integration/forms.py:77 integration/models.py:367
 msgid "Home phone"
 msgstr "Telefonnummer"
 
-#: integration/forms.py:84 integration/models.py:224 integration/models.py:370
+#: integration/forms.py:79 integration/models.py:224 integration/models.py:370
 msgid "Street and House number"
 msgstr "Straße und Hausnummer"
 
-#: integration/forms.py:85 integration/forms.py:90 integration/models.py:225
+#: integration/forms.py:80 integration/forms.py:85 integration/models.py:225
 #: integration/models.py:371
 msgid "City"
 msgstr "Stadt"
 
-#: integration/forms.py:86 integration/forms.py:91
+#: integration/forms.py:81 integration/forms.py:86
 msgid "Postal code"
 msgstr "PLZ"
 
-#: integration/forms.py:87 integration/forms.py:92 integration/models.py:227
+#: integration/forms.py:82 integration/forms.py:87 integration/models.py:227
 #: integration/models.py:373
 msgid "Country"
 msgstr "Land"
 
-#: integration/forms.py:89
+#: integration/forms.py:84
 msgid "Street address"
 msgstr "Adresse"
 
-#: integration/forms.py:94 integration/models.py:287
+#: integration/forms.py:89 integration/models.py:287
 msgid "Payment options"
 msgstr "Zahlungsoptionen"
 
-#: integration/forms.py:95
-msgid "Attention, this payment option will be used for payments in the future."
+#: integration/forms.py:90
+msgid ""
+"Please note, this payment option will be used for payments in the future."
 msgstr "Achtung, diese Zahlungsoption wird zukünftig für Zahlungen verwendet."
 
 #: integration/forms.py:143 integration/forms.py:147
@@ -291,7 +296,7 @@ msgstr "Studiengebühr"
 
 #: integration/models.py:183 integration/models.py:281
 #: integration/models.py:284 integration/models.py:479
-#: integration/models.py:539
+#: integration/models.py:538
 msgid "Semester Fee"
 msgstr "Semesterbeitrag"
 
@@ -304,7 +309,7 @@ msgid "Overdue Fee"
 msgstr "Mahngebühr"
 
 #: integration/models.py:185 integration/models.py:477
-#: integration/models.py:534
+#: integration/models.py:533
 msgid "Matriculation Fee"
 msgstr "Immatrikulationsgebühr"
 
@@ -347,13 +352,13 @@ msgid "Zip/Postal Code"
 msgstr "PLZ"
 
 #: integration/models.py:230 integration/models.py:455
-#: integration/models.py:603 integration/models.py:627
+#: integration/models.py:602 integration/models.py:626
 msgid "Name"
 msgstr ""
 
-#: integration/models.py:231 integration/models.py:580
-#: integration/models.py:652 integration/views_staff.py:81
-#: integration/views_staff.py:93 templates/snippets/student_account.html:26
+#: integration/models.py:231 integration/models.py:579
+#: integration/models.py:651 integration/views_staff.py:127
+#: integration/views_staff.py:139 templates/snippets/student_account.html:26
 #: templates/snippets/student_invoices.html:8
 #: templates/staff/dashboard_students.html:39
 #: templates/students/onboarding_review.html:23
@@ -365,7 +370,7 @@ msgid "Execution Fee / Direct Debit / Student"
 msgstr "Abwicklungsgebühr / Lastschrift / Student"
 
 #: integration/models.py:244 integration/models.py:514
-#: integration/models.py:634 templates/snippets/student_account.html:14
+#: integration/models.py:633 templates/snippets/student_account.html:14
 #: templates/students/onboarding_review.html:17
 msgid "University"
 msgstr "Hochschule"
@@ -436,7 +441,7 @@ msgstr "Titel"
 msgid "Other phone"
 msgstr "Andere Telefonnummern"
 
-#: integration/models.py:405 integration/models.py:637
+#: integration/models.py:405 integration/models.py:636
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -468,21 +473,21 @@ msgstr "Aktiviert"
 msgid "ID"
 msgstr ""
 
-#: integration/models.py:463 integration/models.py:529
+#: integration/models.py:463 integration/models.py:528
 msgid "Standard Study Period (No. of Semesters)"
 msgstr "Regelstudienzeit"
 
 #: integration/models.py:466 templates/staff/course_review.html:37
-#: templates/staff/dashboard_courses.html:37
+#: templates/staff/dashboard_courses.html:36
 msgid "Start of Studies"
 msgstr "Beginn des Studiums"
 
-#: integration/models.py:468 integration/models.py:537
+#: integration/models.py:468 integration/models.py:536
 #: templates/staff/course_review.html:40
 msgid "Starting Month Summer Semester"
 msgstr "Startmonat Sommersemester"
 
-#: integration/models.py:471 integration/models.py:560
+#: integration/models.py:471 integration/models.py:559
 #: templates/staff/course_review.html:43
 msgid "Starting Month Winter Semester"
 msgstr "Start Monat Wintersemester"
@@ -491,19 +496,19 @@ msgstr "Start Monat Wintersemester"
 msgid "Starting Month of Studies"
 msgstr "Start Monat des Studiengangs"
 
-#: integration/models.py:480 integration/models.py:547
+#: integration/models.py:480 integration/models.py:546
 msgid "Cost per Month"
 msgstr "Kosten pro Monat"
 
-#: integration/models.py:483 integration/models.py:550
+#: integration/models.py:483 integration/models.py:549
 msgid "Cost per Semester"
 msgstr "Kosten pro Semester"
 
-#: integration/models.py:489 integration/models.py:523
+#: integration/models.py:489 integration/models.py:522
 msgid "Cost per Month>Standard Study Period"
 msgstr "Kosten pro Monat über der Regelstudienzeit"
 
-#: integration/models.py:493 integration/models.py:526
+#: integration/models.py:493 integration/models.py:525
 msgid "Tuition Fees Total"
 msgstr "Studiengebühren gesamt"
 
@@ -512,7 +517,7 @@ msgid "Number of Sofortzahler"
 msgstr "Anzahl der Sofortzahler"
 
 #: integration/models.py:500 integration/models.py:517
-#: integration/models.py:645 templates/snippets/student_account.html:30
+#: integration/models.py:644 templates/snippets/student_account.html:30
 msgid "Degree Course"
 msgstr "Studiengang"
 
@@ -524,127 +529,127 @@ msgstr "Studiengänge"
 msgid "Number"
 msgstr "NUmmer"
 
-#: integration/models.py:518 integration/models.py:616
-msgid "Active"
-msgstr "Aktiv"
-
-#: integration/models.py:520
+#: integration/models.py:519
 msgid "Payment Interval"
 msgstr "Zahlungsinterval"
 
-#: integration/models.py:531 integration/models.py:647
+#: integration/models.py:530 integration/models.py:646
 msgid "Payment Terms"
 msgstr "Zahlungsbedingungen"
 
-#: integration/models.py:542
+#: integration/models.py:541
 msgid "Number of Rates Total"
 msgstr "Raten gesamt"
 
-#: integration/models.py:544 integration/models.py:639
+#: integration/models.py:543 integration/models.py:638
 msgid "Student ID"
 msgstr ""
 
-#: integration/models.py:554
+#: integration/models.py:553
 msgid "Count of Invoices"
 msgstr "Anzahl der Rechnungen"
 
-#: integration/models.py:557
+#: integration/models.py:556
 msgid "Start of Studies Month"
 msgstr "Beginn des Studienmonats"
 
-#: integration/models.py:563
+#: integration/models.py:562
 msgid "Discount Helper"
 msgstr ""
 
-#: integration/models.py:565
+#: integration/models.py:564
 msgid "Active Discounts"
 msgstr "Aktive Rabatte"
 
-#: integration/models.py:569
+#: integration/models.py:568
 msgid "Include In Invoice Creation Process"
 msgstr ""
 
-#: integration/models.py:572
+#: integration/models.py:571
 msgid "Number of Invoices"
 msgstr ""
 
-#: integration/models.py:576
+#: integration/models.py:575
 msgid "Special Fee"
 msgstr ""
 
-#: integration/models.py:584
+#: integration/models.py:583
 msgid "Contract"
 msgstr "Vertrag"
 
-#: integration/models.py:585
+#: integration/models.py:584
 msgid "Contracts"
 msgstr "Verträge"
 
-#: integration/models.py:607
+#: integration/models.py:606
 msgid "Discount Type"
 msgstr "Rabatt Typ"
 
-#: integration/models.py:609
+#: integration/models.py:608
 msgid "Discount on Tuition Fee"
 msgstr "Rabatt auf Studiengebühr"
 
-#: integration/models.py:611
+#: integration/models.py:610
 msgid "Discount on Semester Fee"
 msgstr "Rabatt auf Semesterbeitrag"
 
-#: integration/models.py:613
+#: integration/models.py:612
 msgid "Number of Applicable Months"
 msgstr ""
 
-#: integration/models.py:615
+#: integration/models.py:614
 msgid "Number of Utilizations"
 msgstr ""
 
-#: integration/models.py:620
+#: integration/models.py:615
+msgid "Active"
+msgstr "Aktiv"
+
+#: integration/models.py:619
 msgid "Discount"
 msgstr "Rabatt"
 
-#: integration/models.py:621
+#: integration/models.py:620
 msgid "Discounts"
 msgstr "Rabatte"
 
-#: integration/models.py:641 templates/snippets/student_invoices.html:9
+#: integration/models.py:640 templates/snippets/student_invoices.html:9
 msgid "Period"
 msgstr "Zeitraum"
 
-#: integration/models.py:642 templates/snippets/student_invoices.html:11
+#: integration/models.py:641 templates/snippets/student_invoices.html:11
 msgid "Invoice Amount"
 msgstr "Rechnungsbetrag"
 
-#: integration/models.py:649 templates/snippets/student_invoices.html:10
+#: integration/models.py:648 templates/snippets/student_invoices.html:10
 msgid "Invoice Date"
 msgstr "Rechnungsdatum"
 
-#: integration/models.py:656
+#: integration/models.py:655
 msgid "Invoice"
 msgstr "Rechnung"
 
-#: integration/models.py:657 templates/students/dashboard.html:20
+#: integration/models.py:656 templates/students/dashboard.html:20
 msgid "Invoices"
 msgstr "Rechnungen"
 
-#: integration/views_staff.py:86 integration/views_staff.py:100
+#: integration/views_staff.py:132 integration/views_staff.py:146
 #: templates/snippets/student_contract.html:18
 #: templates/staff/dashboard_students.html:38
 #: templates/students/onboarding_review.html:26
 msgid "Course"
 msgstr "Studiengang"
 
-#: integration/views_staff.py:192
+#: integration/views_staff.py:205
 msgid "Semester fee updated successfully."
 msgstr "Semesterbeitrag erfolgreich aktualisiert."
 
-#: integration/views_staff.py:252
+#: integration/views_staff.py:273
 msgid "There seem to be missing values, please review the data thoroughly."
 msgstr ""
 "Es scheinen fehlende Werte zu sein, bitte überprüfen Sie die Daten gründlich."
 
-#: integration/views_staff.py:253
+#: integration/views_staff.py:274
 msgid ""
 "There seem to be wrong values or incorrectly formatted, please review the "
 "data thoroughly."
@@ -652,49 +657,45 @@ msgstr ""
 "Es scheint falsche Werte zu geben oder falsch formatiert zu sein, bitte "
 "überprüfen Sie die Daten sorgfältig."
 
-#: integration/views_staff.py:282
-msgid "File content is not correct"
-msgstr "Dateiinhalt ist nicht korrekt"
-
-#: integration/views_student.py:163
+#: integration/views_student.py:164
 msgid "Data Review"
 msgstr "Datenüberprüfung"
 
-#: integration/views_student.py:165
+#: integration/views_student.py:166
 msgid ""
 "Your university sent us important data for your profile. Please check it "
 "carefully. Should you find any discrepancies, please contact your university "
 "to correct this."
 msgstr ""
 "Wir haben einige Daten von deiner Hochschule bekommen. Bitte prüfe "
-"aufmerksam, ob die Daten korrekt sind. Sollte dies nicht der Fall sein, "
-"nehme bitte Kontakt mit deiner Hochschule auf."
+"aufmerksam, ob die Daten korrekt sind. Sollte dies nicht der Fall sein, nimm "
+"bitte Kontakt mit deiner Hochschule auf."
 
-#: integration/views_student.py:170 integration/views_student.py:178
+#: integration/views_student.py:171 integration/views_student.py:179
 msgid "Continue"
 msgstr "Fortsetzen"
 
-#: integration/views_student.py:173
+#: integration/views_student.py:174
 msgid "Data input"
 msgstr "Dateneingabe"
 
-#: integration/views_student.py:174
-msgid "Fill the form and log into your Chancen account."
-msgstr "Fülle das Formular aus und logge dich in deinen Account ein."
+#: integration/views_student.py:175
+msgid "Please complete the missing information."
+msgstr "Bitte fülle die fehlenden Informationen aus."
 
-#: integration/views_student.py:181
+#: integration/views_student.py:182
 msgid "SEPA Mandate"
 msgstr "SEPA-Lastschriftmandat"
 
-#: integration/views_student.py:183
+#: integration/views_student.py:184
 msgid ""
-"In the future we will debit your tuition fees from your selected bank "
-"account. Please click on the following link to authorise the debit orders."
+"Please click on the green button or follow the link to authorise us to debit "
+"your tuition fees from your account."
 msgstr ""
-"Bitte klicke auf folgenden Link, um uns durch ein SEPA-Lastschriftmandat zu "
-"autorisieren deine Studiengebühren von deinem Konto einzuziehen."
+"Bitte klicke auf den grünen Button oder versende folgenden Link, "
+"um uns durch ein SEPA-Lastschriftmandat zu autorisieren deine Studiengebühren von deinem Konto einzuziehen."
 
-#: integration/views_student.py:188
+#: integration/views_student.py:189
 msgid "Grant mandate"
 msgstr "Mandat vergeben"
 
@@ -709,6 +710,35 @@ msgstr "Auf diese Seite hast du keinen Zugriff."
 #: templates/404.html:5
 msgid "This page does not exist."
 msgstr "Diese Seite existiert nicht."
+
+#: templates/dialogs/bulk-actions.html:5
+msgid "Changes will apply to selected rows"
+msgstr "Die Änderungen gelten für die gewählten Reihen"
+
+#: templates/dialogs/bulk-actions.html:17
+#: templates/dialogs/update-semester-fee.html:13
+#: templates/staff/upload_review.html:57 templates/students/contact.html:55
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#: templates/dialogs/update-semester-fee.html:5
+msgid "Update Semester fee"
+msgstr "Aktualisiere Semesterbeitrag"
+
+#: templates/dialogs/upload-courses.html:5
+#: templates/dialogs/upload-students.html:5
+msgid "Upload from your computer"
+msgstr "Upload von deinem Computer"
+
+#: templates/dialogs/upload-courses.html:19
+#: templates/dialogs/upload-students.html:22
+msgid "Upload"
+msgstr ""
+
+#: templates/dialogs/upload-courses.html:22
+#: templates/dialogs/upload-students.html:25
+msgid "Download sample"
+msgstr "Beispiel herunterladen"
 
 #: templates/generic/failure.html:6
 msgid "Something went wrong with your request."
@@ -771,10 +801,8 @@ msgid "Choose a new password"
 msgstr "Wähle ein neues Passwort"
 
 #: templates/snippets/address.html:5
-#, fuzzy
-#| msgid "Home address"
 msgid "Address"
-msgstr "Heimatadresse"
+msgstr "Adresse"
 
 #: templates/snippets/contact_card.html:8
 #: templates/students/onboarding_data.html:23
@@ -805,10 +833,8 @@ msgid "Set as Payment Contact"
 msgstr "Als Zahlungskontakt einstellen"
 
 #: templates/snippets/input-file.html:5
-#, fuzzy
-#| msgid "Mobile phone"
 msgid "No file chosen"
-msgstr "Handynummer"
+msgstr "Keine Datei ausgewählt"
 
 #: templates/snippets/stepper.html:23 templates/staff/upload_review.html:61
 #: templates/students/contact.html:53
@@ -844,7 +870,7 @@ msgid "Language"
 msgstr "Kommunikationssprache"
 
 #: templates/snippets/student_account.html:62
-#: templates/snippets/student_contract.html:42
+#: templates/snippets/student_contract.html:43
 msgid "Confirm changes"
 msgstr "Änderungen bestätigen"
 
@@ -865,17 +891,17 @@ msgid "Discount data"
 msgstr "Rabattdaten"
 
 #: templates/staff/course_review.html:16
-#: templates/staff/dashboard_courses.html:33
+#: templates/staff/dashboard_courses.html:32
 msgid "Standard Period of Studies"
 msgstr "Regelstudienzeit"
 
 #: templates/staff/course_review.html:19
-#: templates/staff/dashboard_courses.html:34
+#: templates/staff/dashboard_courses.html:33
 msgid "Cost per semester"
 msgstr "Kosten pro Semester"
 
 #: templates/staff/course_review.html:22
-#: templates/staff/dashboard_courses.html:35
+#: templates/staff/dashboard_courses.html:34
 msgid "Cost per month"
 msgstr "Kosten pro Monat"
 
@@ -884,40 +910,19 @@ msgid "Cost per month beyond Standard Period"
 msgstr "Kosten pro Monat nach der Regelstudienzeit"
 
 #: templates/staff/course_review.html:28
-#: templates/staff/dashboard_courses.html:36
+#: templates/staff/dashboard_courses.html:35
 msgid "Matriculation fee"
 msgstr "Immatrikulationsgebühr"
 
-#: templates/staff/dashboard.html:14 templates/staff/dashboard.html:104
+#: templates/staff/dashboard.html:14 templates/staff/dashboard.html:42
 #: templates/staff/dashboard_home.html:15
 msgid "Courses"
 msgstr "Studiengänge"
 
-#: templates/staff/dashboard.html:16 templates/staff/dashboard.html:101
+#: templates/staff/dashboard.html:16 templates/staff/dashboard.html:39
 #: templates/staff/dashboard_home.html:29
 msgid "Students"
 msgstr "Studierende"
-
-#: templates/staff/dashboard.html:21 templates/staff/dashboard.html:47
-msgid "Upload from your computer"
-msgstr "Upload von deinem Computer"
-
-#: templates/staff/dashboard.html:38 templates/staff/dashboard.html:61
-msgid "Upload"
-msgstr ""
-
-#: templates/staff/dashboard.html:41 templates/staff/dashboard.html:64
-msgid "Download sample"
-msgstr "Beispiel herunterladen"
-
-#: templates/staff/dashboard.html:70
-msgid "Changes will apply to selected rows"
-msgstr "Die Änderungen gelten für die gewählten Reihen"
-
-#: templates/staff/dashboard.html:82 templates/staff/upload_review.html:57
-#: templates/students/contact.html:55
-msgid "Confirm"
-msgstr "Bestätigen"
 
 #: templates/staff/dashboard_courses.html:9
 #: templates/staff/dashboard_students.html:10
@@ -928,15 +933,16 @@ msgstr "Anzeigen"
 msgid "No courses found to match this criteria"
 msgstr "Es wurden keine Studiengänge gefunden, die diesen Kriterien entspreche"
 
-#: templates/staff/dashboard_courses.html:22
-msgid "Update"
-msgstr "Aktualisieren"
+#: templates/staff/dashboard_courses.html:17
+#: templates/staff/dashboard_university.html:18
+msgid "Semester fee"
+msgstr "Semesterbeitrag"
 
-#: templates/staff/dashboard_courses.html:32
+#: templates/staff/dashboard_courses.html:31
 msgid "Course name"
 msgstr "Name des Studiengang"
 
-#: templates/staff/dashboard_courses.html:45
+#: templates/staff/dashboard_courses.html:44
 #: templates/staff/dashboard_students.html:47
 msgid "Details"
 msgstr ""
@@ -976,6 +982,10 @@ msgstr "Universitäts Daten. Bitte mit Vorsicht handeln!"
 #: templates/staff/upload_review.html:25
 msgid "Carefully review the data before confirming"
 msgstr "Bitte überprüfen Sie die Daten genau, bevor Sie den Upload bestätigen."
+
+#: templates/staff/upload_review.html:36
+msgid "Degree course"
+msgstr "Studiengang"
 
 #: templates/staff/upload_review.html:57
 msgid "Next"
@@ -1032,5 +1042,5 @@ msgid ""
 "Otherwise, authorize us to collect the study fees by direct debit from your "
 "account."
 msgstr ""
-"Ansosten autorisiere uns, die Studiengebühren mittels Lastchrift von Deinem "
+"Ansonsten autorisiere uns, die Studiengebühren mittels Lastchrift von Deinem "
 "Konto einzuziehen."

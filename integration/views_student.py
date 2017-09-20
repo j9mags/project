@@ -154,7 +154,7 @@ class Onboarding(StudentMixin, View):
                    'title_centered': True, 'sf_contract': self.account.get_active_contract(), 'ignore_drawer': True,
                    'stepper': (
                 {
-                    'title': 'Wilkommen! | Welcome back! ',
+                    'title': 'Willkommen! | Welcome! ',
                     'caption': 'Bitte wähle deine bevorzugte Sprache. | Please select your preferred language.',
                     'template': 'students/onboarding_lang.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'lang'}),
@@ -172,7 +172,7 @@ class Onboarding(StudentMixin, View):
                 },
                 {
                     'title': _('Data input'),
-                    'caption': _('Fill the form and log into your Chancen account.'),
+                    'caption': _('Please complete the missing information.'),
                     'template': 'students/onboarding_data.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'data'}),
                     'back': 'review',
@@ -181,8 +181,8 @@ class Onboarding(StudentMixin, View):
                 {
                     'title': _('SEPA Mandate'),
                     'caption': _(
-                        'In the future we will debit your tuition fees from your selected bank account. '
-                        'Please click on the following link to authorise the debit orders.'),
+                        'Please click on the green button or follow the link to authorise us '
+                        'to debit your tuition fees from your account.'),
                     'template': 'students/onboarding_sepa.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
                     'back': 'data',

@@ -81,13 +81,14 @@ class StudentOnboardingForm(forms.Form):
     mailing_zip = forms.CharField(max_length=20, label=_('Postal code'))
     mailing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
 
-    billing_street = forms.CharField(max_length=40, label=_('Street address'))
+    billing_street = forms.CharField(max_length=40, label=_('Street and House number'))
     billing_city = forms.CharField(max_length=255, label=_('City'))
     billing_zip = forms.CharField(max_length=20, label=_('Postal code'))
     billing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
 
     billing_option = forms.ChoiceField(choices=BillingChoices, label=_('Payment options'),
-                                       help_text=_("Attention, this payment option will be used for payments in the future."))
+                                       help_text=_("Please note, this payment option will be used for payments "
+                                                   "in the future."))
 
 
 class StudentAccountForm(forms.Form):
