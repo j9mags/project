@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col {{ class }}">
+  <div class="mdl-card__supporting-text mdl-grid">
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Bank Name') value=ba.bank_name %}
+    </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Country Code') value=ba.country_code %}
+    </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Account Number(last 2 digits)') value=ba.account_number %}
+    </div>
+  </div>
+  <div class="mdl-card__actions mdl-dialog__actions">
+    <button id="btn-revoke-mandate"
+            class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+      {% trans 'Revoke mandate' %}
+    </button>
+  </div>
+</div>
+
+{% include 'dialogs/revoke-mandate.html' with form=rvk_form %}
