@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-20 08:51+0000\n"
+"POT-Creation-Date: 2017-09-20 09:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,7 +105,8 @@ msgstr ""
 msgid "Home phone"
 msgstr ""
 
-#: integration/forms.py:79 integration/models.py:224 integration/models.py:370
+#: integration/forms.py:79 integration/forms.py:84 integration/models.py:224
+#: integration/models.py:370
 msgid "Street and House number"
 msgstr ""
 
@@ -123,10 +124,6 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: integration/forms.py:84
-msgid "Street address"
-msgstr ""
-
 #: integration/forms.py:89 integration/models.py:287
 msgid "Payment options"
 msgstr ""
@@ -136,7 +133,7 @@ msgid ""
 "Please note, this payment option will be used for payments in the future."
 msgstr ""
 
-#: integration/forms.py:143 integration/forms.py:147
+#: integration/forms.py:144 integration/forms.py:148
 msgid "This field is required."
 msgstr ""
 
@@ -150,14 +147,6 @@ msgstr ""
 
 #: integration/models.py:94
 msgid "non-binary"
-msgstr ""
-
-#: integration/models.py:169
-msgid "deutsch"
-msgstr ""
-
-#: integration/models.py:169
-msgid "english"
 msgstr ""
 
 #: integration/models.py:170
@@ -742,11 +731,11 @@ msgstr ""
 msgid "Enter your query..."
 msgstr ""
 
-#: templates/layout/dashboard.html:31
+#: templates/layout/dashboard.html:32 templates/layout/dashboard.html:43
 msgid "Logout"
 msgstr ""
 
-#: templates/layout/dashboard.html:59 templates/students/contact.html:46
+#: templates/layout/dashboard.html:72 templates/students/contact.html:46
 msgid "Home"
 msgstr ""
 
@@ -758,15 +747,19 @@ msgstr ""
 msgid "Sign in"
 msgstr ""
 
-#: templates/registration/login.html:36
+#: templates/registration/login.html:32
+msgid "Login"
+msgstr ""
+
+#: templates/registration/login.html:37
 msgid "Forgot your Password?"
 msgstr ""
 
-#: templates/registration/login.html:55
+#: templates/registration/login.html:56
 msgid "Lost Password"
 msgstr ""
 
-#: templates/registration/login.html:65
+#: templates/registration/login.html:66
 msgid "Reset Password"
 msgstr ""
 

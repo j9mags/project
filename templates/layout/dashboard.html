@@ -27,9 +27,22 @@
         <div class="mdl-layout-spacer"></div>
         {% endif %}
         <a href="{% url 'authentication:logout' %}"
-           class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white csp-button--icon" id="chancen-logout-button">
+           class="mdl-cell--hide-phone mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white csp-button--icon"
+           id="chancen-logout-button">
           {% trans 'Logout' %}<i class="material-icons" role="presentation">exit_to_app</i>
         </a>
+
+        <button id="chancen-menu-lower-right"
+                class="mdl-button mdl-js-button mdl-button--icon mdl-cell--hide-tablet mdl-cell--hide-desktop">
+          <i class="material-icons">more_vert</i>
+        </button>
+
+        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+            for="chancen-menu-lower-right">
+          <li class="mdl-menu__item">
+            <a href="{% url 'authentication:logout' %}">{% trans 'Logout' %}</a>
+          </li>
+        </ul>
       </div>
     </header>
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-20 08:51+0000\n"
+"POT-Creation-Date: 2017-09-20 09:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -111,7 +111,8 @@ msgstr "Handynummer"
 msgid "Home phone"
 msgstr "Telefonnummer"
 
-#: integration/forms.py:79 integration/models.py:224 integration/models.py:370
+#: integration/forms.py:79 integration/forms.py:84 integration/models.py:224
+#: integration/models.py:370
 msgid "Street and House number"
 msgstr "Straße und Hausnummer"
 
@@ -129,10 +130,6 @@ msgstr "PLZ"
 msgid "Country"
 msgstr "Land"
 
-#: integration/forms.py:84
-msgid "Street address"
-msgstr "Adresse"
-
 #: integration/forms.py:89 integration/models.py:287
 msgid "Payment options"
 msgstr "Zahlungsoptionen"
@@ -142,7 +139,7 @@ msgid ""
 "Please note, this payment option will be used for payments in the future."
 msgstr "Achtung, diese Zahlungsoption wird zukünftig für Zahlungen verwendet."
 
-#: integration/forms.py:143 integration/forms.py:147
+#: integration/forms.py:144 integration/forms.py:148
 msgid "This field is required."
 msgstr "Dieses Feld ist zwingend erforderlich."
 
@@ -157,14 +154,6 @@ msgstr "männlich"
 #: integration/models.py:94
 msgid "non-binary"
 msgstr "non-binary"
-
-#: integration/models.py:169
-msgid "deutsch"
-msgstr "deutsch"
-
-#: integration/models.py:169
-msgid "english"
-msgstr "englisch"
 
 #: integration/models.py:170
 msgid "Mr."
@@ -692,8 +681,9 @@ msgid ""
 "Please click on the green button or follow the link to authorise us to debit "
 "your tuition fees from your account."
 msgstr ""
-"Bitte klicke auf den grünen Button oder versende folgenden Link, "
-"um uns durch ein SEPA-Lastschriftmandat zu autorisieren deine Studiengebühren von deinem Konto einzuziehen."
+"Bitte klicke auf den grünen Button oder versende folgenden Link, um uns "
+"durch ein SEPA-Lastschriftmandat zu autorisieren deine Studiengebühren von "
+"deinem Konto einzuziehen."
 
 #: integration/views_student.py:189
 msgid "Grant mandate"
@@ -756,11 +746,11 @@ msgstr ""
 msgid "Enter your query..."
 msgstr "Geben Sie ihre Anfrage ein"
 
-#: templates/layout/dashboard.html:31
+#: templates/layout/dashboard.html:32 templates/layout/dashboard.html:43
 msgid "Logout"
-msgstr ""
+msgstr "Abmelden"
 
-#: templates/layout/dashboard.html:59 templates/students/contact.html:46
+#: templates/layout/dashboard.html:72 templates/students/contact.html:46
 msgid "Home"
 msgstr ""
 
@@ -772,15 +762,19 @@ msgstr "Als Benutzer anmelden"
 msgid "Sign in"
 msgstr "Anmelden"
 
-#: templates/registration/login.html:36
+#: templates/registration/login.html:32
+msgid "Login"
+msgstr "Anmelden"
+
+#: templates/registration/login.html:37
 msgid "Forgot your Password?"
 msgstr "Passwort vergessen?"
 
-#: templates/registration/login.html:55
+#: templates/registration/login.html:56
 msgid "Lost Password"
 msgstr "Passwort verloren"
 
-#: templates/registration/login.html:65
+#: templates/registration/login.html:66
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
@@ -1042,5 +1036,14 @@ msgid ""
 "Otherwise, authorize us to collect the study fees by direct debit from your "
 "account."
 msgstr ""
-"Ansonsten autorisiere uns, die Studiengebühren mittels Lastschrift von Deinem "
-"Konto einzuziehen."
+"Ansonsten autorisiere uns, die Studiengebühren mittels Lastschrift von "
+"Deinem Konto einzuziehen."
+
+#~ msgid "Street address"
+#~ msgstr "Adresse"
+
+#~ msgid "deutsch"
+#~ msgstr "deutsch"
+
+#~ msgid "english"
+#~ msgstr "englisch"
