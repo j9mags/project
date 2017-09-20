@@ -340,6 +340,11 @@ img {
   padding: 0;
 }
 
+.mdl-address .mdl-cell {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .chancen-content .mdl-textfield,
 .chancen-content .mdl-radiofield,
 .chancen-content .mdl-selectfield {

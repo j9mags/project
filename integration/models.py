@@ -166,7 +166,7 @@ class Choices:
                    ('amerikanisch', 'amerikanisch'), ('britisch', 'britisch'), ('vietnamesisch', 'vietnamesisch'),
                    ('weißrussisch', 'weißrussisch'), ('zentralafrikanisch', 'zentralafrikanisch'),
                    ('zyprisch', 'zyprisch')]
-    Language = [('deutsch', _('deutsch')), ('englisch', _('english'))]
+    Language = [('deutsch', 'deutsch'), ('englisch', 'english')]
     Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
     Month = [('Januar', _('January')), ('Februar', _('February')), ('März', _('March')), ('April', _('April')),
              ('Mai', _('May')), ('Juni', _('June')), ('Juli', _('July')), ('August', _('August')),
