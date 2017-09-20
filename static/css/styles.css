@@ -39,7 +39,11 @@ img {
 }
 
 .chancen-layout .mdl-layout-title {
-  max-width: 100%;
+  max-width: 85%;
+}
+
+.chancen-layout .mdl-menu__item > a {
+  display: block;
 }
 
 .mdl-layout__drawer .avatar {
