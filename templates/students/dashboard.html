@@ -3,7 +3,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans 'My Chancen' %}{% endblock %}
+{% block title %}{% trans 'My CHANCEN SERVICES Account' %}{% endblock %}
 
 {% block content %}
 
@@ -20,40 +20,57 @@
         <a id="invoices-tab" href="#invoices-panel" class="mdl-tabs__tab">{% trans 'Invoices' %}</a>
     </div>
 
-    <div class="mdl-tabs__panel" id="account-panel">
+    <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %}" id="account-panel">
       <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--12-col">
-          {% include "snippets/student_account.html" with class="csp--full-width" %}
-        </div>
+        {% include "snippets/student_account.html" with class="csp--full-width" %}
 
-        {% if master_contact %}
         <div class="mdl-cell--12-col">
-          <h5 class="mdl-typography--headline">{% trans 'Registered contacts' %}</h5>
+          <h5 class="mdl-typography--headline">{% trans 'Contact data' %}</h5>
         </div>
-        <div class="mdl-cell mdl-cell--12-col">
+        {% if master_contact %}
           {% include "snippets/student_contact.html" with contact=master_contact class="csp--full-width" %}
-        </div>
         {% else %}
           <h3 class="mdl-typography--headline">{% trans 'No contact information found' %}</h3>
         {% endif %}
-        {% for contact in account.contact_set.all %}
-          {% if contact != master_contact %}
-            <div class="mdl-cell mdl-cell--12-col">
-              {% include "snippets/contact_card.html" %}
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
 
-    <div class="mdl-tabs__panel" id="contacts-panel">
+        <div class="mdl-cell--12-col">
+          <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
+        </div>
+        {% if not payment_contact %}
+        <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
+          <div class="mdl-cell mdl-cell--12-col">
+            <p class="mdl-typography--body-2">
+              {% trans 'Authorize us to collect the study fees by direct debit from your account.' %}</p>
+          </div>
+          <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+            <a href="{{ master_contact.sepamandate_url_auto}}"
+               class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised mdl-color-text--white">{% trans 'Grant mandate' %}</a>
+          </div>
+          <div class="mdl-cell mdl-cell--12-col">
+            <p class="mdl-typography--body-2">
+              {% trans 'If someone else is paying your tuition fees, please send the following link and close this window.' %}</p>
+          </div>
+          <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center csp--word-wrap">
+            <p class="mdl-typography--title mdl-typography--font-light mdl-color-text--accent">{{ master_contact.sepamandate_url_auto }}</p>
+          </div>
+        </div>
+        {% elif payment_contact == master_contact %}
+          {% include 'snippets/student_payment.html' with ba=master_contact.get_bank_account class="csp--full-width" %}
+        {% else %}
+          <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
+            <h5 class="mdl-typography--headline">{% trans 'Someone else is paying for you' %}</h5>
+          </div>
+        {% endif %}
+      </div>
     </div>
 
     <div class="mdl-tabs__panel" id="invoices-panel">
       {% if invoices %}
         {% include "snippets/student_invoices.html" %}
       {% else %}
+      <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col mdl-grid">
         <h3 class="mdl-typography--headline">{% trans 'No invoices found' %}</h3>
+      </div>
       {% endif %}
     </div>
   </div>
@@ -61,11 +78,12 @@
 
 {% block extrajs %}
   {{ block.super }}
+  <script src="{% static '/js/dashboard-student.js' %}"></script>
+{% if display_dlg %}
   <script>
-  (function () {
-    var hash = window.location.hash || '#account';
-    $(hash+'-tab').addClass('is-active');
-    $(hash+'-panel').addClass('is-active');
-  }.call(this));
+    (function() {
+        setTimeout(window.showDlg, 100);
+    }.call(this));
   </script>
+{% endif %}
 {% endblock %}

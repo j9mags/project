@@ -81,15 +81,6 @@ class StudentOnboardingForm(forms.Form):
     mailing_zip = forms.CharField(max_length=20, label=_('Postal code'))
     mailing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
 
-    billing_street = forms.CharField(max_length=40, label=_('Street and House number'))
-    billing_city = forms.CharField(max_length=255, label=_('City'))
-    billing_zip = forms.CharField(max_length=20, label=_('Postal code'))
-    billing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
-
-    billing_option = forms.ChoiceField(choices=BillingChoices, label=_('Payment options'),
-                                       help_text=_("Please note, this payment option will be used for payments "
-                                                   "in the future."))
-
 
 class StudentAccountForm(forms.Form):
     status = forms.ChoiceField(choices=Choices.AccountStatus)
@@ -107,12 +98,17 @@ class StudentContractForm(forms.Form):
 class StudentContactForm(forms.ModelForm):
     class Meta:
         model = Contact
-        fields = ['salutation', 'first_name', 'last_name', 'email', 'mobile_phone', 'other_phone', 'mailing_street',
+        fields = ['email', 'mobile_phone', 'other_phone', 'mailing_street',
                   'mailing_city', 'mailing_postal_code', 'mailing_country']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['salutation'].widget.choices[0] = ("", "")
+
+class StudentRevokeMandateForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['cancel_bank_account']
+        labels = {
+            'cancel_bank_account': _('I do want to revoke this mandate.')
+        }
 
 
 class UniversityForm(forms.ModelForm):

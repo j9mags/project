@@ -1,5 +1,8 @@
 {% load i18n %}
 
+<div class="mdl-cell--12-col">
+  <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
+</div>
 <div class="mdl-card mdl-card-account mdl-shadow--6dp {{ class }}">
   {% if form %}
     <form method="post">
@@ -7,9 +10,6 @@
   {% endif %}
 
     <div class="mdl-card__supporting-text mdl-grid">
-      <div class="mdl-cell--12-col">
-        <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
-      </div>
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('University') value=account.hochschule_ref.name %}
       </div>
@@ -30,13 +30,26 @@
         {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.get_course.name %}
       </div>
     </div>
+  {% if form %}
+      <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
+        <input type="submit"
+               class="mdl-cell mdl-cell--9-offset mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+               value="{% trans 'Confirm changes' %}">
+      </div>
+    </form>
+  {% endif %}
+</div>
 
+<div class="mdl-cell--12-col">
+  <h5 class="mdl-typography--headline">{% trans 'Personal data' %}</h5>
+</div>
+<div class="mdl-card mdl-card-account mdl-shadow--6dp {{ class }}">
     <div class="mdl-card__supporting-text mdl-grid">
-      <div class="mdl-cell--12-col">
-        <h5 class="mdl-typography--headline">{% trans 'Personal data' %}</h5>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Name') value=account.name %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Birth day') value=account.geburtsdatum %}
+        {% include 'snippets/field-text.html' with label=_('Birth day') value=account.geburtsdatum type='date' %}
       </div>
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('Birth city') value=account.geburtsort %}
@@ -54,21 +67,4 @@
         {% include 'snippets/field-text.html' with label=_('Language') value=account.kommunikationssprache %}
       </div>
     </div>
-
-    <div class="mdl-card__actions mdl-card--border">
-      {% if form %}
-      <div class="mdl-grid">
-        <input type="submit" class="mdl-cell mdl-cell--9-offset mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
-               value="{% trans 'Confirm changes' %}">
-      </div>
-      {% else %}
-        <a class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
-           href="{% url 'integration:contact' pk='new' %}">{% trans 'New contact' %}
-          <i class="material-icons">person_add</i>
-        </a>
-      {% endif %}
-    </div>
-  {% if form %}
-    </form>
-  {% endif %}
 </div>

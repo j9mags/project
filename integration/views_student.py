@@ -58,8 +58,12 @@ class Dashboard(StudentMixin, TemplateView):
 
         context['account'] = self.account
         context['master_contact'] = contact
+        context['payment_contact'] = self.account.get_payment_contact()
         context['active_contract'] = contract
         context['ignore_drawer'] = True
+
+        if context['master_contact'] == context['payment_contact']:
+            context['rvk_form'] = StudentRevokeMandateForm(instance=contact)
 
         p = int(self.request.GET.get('p', '1'))
         s = int(self.request.GET.get('s', '10'))
@@ -77,14 +81,26 @@ class Dashboard(StudentMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if not self.account.initial_review_completed:
-            step = 'data'
+            step = 'sepa'
             if not self.account.kommunikationssprache:
                 step = 'lang'
             elif not self.account.student_approved:
                 step = 'review'
+            elif not self.account.geburtsort:
+                step = 'data'
             return redirect('integration:onboarding', step=step)
 
         return super(Dashboard, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        form = StudentRevokeMandateForm(request.POST, instance=context['master_contact'])
+
+        if form.is_valid():
+            form.save()
+        else:
+            context.update(display_dlg=True)
+        return render(request, self.template_name, context=context)
 
 
 class ContactDetails(StudentMixin, TemplateView):
@@ -180,13 +196,12 @@ class Onboarding(StudentMixin, View):
                 },
                 {
                     'title': _('SEPA Mandate'),
-                    'caption': _(
-                        'Please click on the green button or follow the link to authorise us '
-                        'to debit your tuition fees from your account.'),
+                    'caption': _('We require authorisation to debit a bank account for your tuition fees.'),
                     'template': 'students/onboarding_sepa.html',
                     'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
                     'back': 'data',
                     'submit': _('Grant mandate'),
+                    'skip_submit': True
                 },
             )}
 
@@ -260,7 +275,7 @@ class Onboarding(StudentMixin, View):
         context = self.get_context_data(**kwargs)
         account = context.get('sf_account')
 
-        if account.initial_review_completed and account.sepalastschriftmandat_erteilt_auto:
+        if account.initial_review_completed:
             return redirect('integration:dashboard')
 
         return render(request, self.template, context)
@@ -325,7 +340,7 @@ class Onboarding(StudentMixin, View):
             account.billing_city = data.get('billing_city')
             account.billing_postal_code = data.get('billing_zip')
             account.billing_country = data.get('billing_country')
-            account.initial_review_completed = True
+            # account.initial_review_completed = True
 
             contract.payment_interval = data.get('billing_option')
 

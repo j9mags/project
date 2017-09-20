@@ -2,7 +2,7 @@
 
 <div class="mdl-address mdl-grid {{ class }}">
     <div class="mdl-cell mdl-cell--12-col">
-        <span class="mdl-typography--title">{% if label %}{{ label }}{% else %}{% trans 'Address' %}{% endif %}</span>
+        <span class="mdl-typography--title">{% if label %}{{ label }}{% endif %}</span>
     </div>
     <div class="mdl-cell mdl-cell--8-col">
         {% include 'snippets/input.html' with field=street type='text' %}

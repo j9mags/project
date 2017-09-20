@@ -395,6 +395,8 @@ class Contact(models.Model, PerishableTokenMixin):
                                             blank=True, null=True)
     student_contact = models.BooleanField(custom=True, verbose_name='StudentContact',
                                           default=models.DEFAULTED_ON_CREATE)
+    cancel_bank_account = models.BooleanField(custom=True, verbose_name='CancelBankAccount',
+                                              default=models.DEFAULTED_ON_CREATE)
 
     objects = managers.DefaultManager()
     university_staff = managers.UniversityManager()
