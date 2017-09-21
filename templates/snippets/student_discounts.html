@@ -1,28 +1,53 @@
 {% load i18n %}
 
-<div class="mdl-cell--12-col">
+<div class="mdl-cell mdl-cell--12-col">
   <h5 class="mdl-typography--headline">{% trans 'Discount data' %}</h5>
 </div>
-<div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col {{ class }}">
-  {% if form %}
-    <form method="post">
-      {% csrf_token %}
-  {% endif %}
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--6-col-desktop {{ class }}">
+  <form method="post">
+    {% csrf_token %}
 
-  <div class="mdl-card__supporting-text mdl-grid">
-    <input type="hidden" name="{{ form.contract.html_name }}" value="{{ form.contract.value }}" />
-    <div class="mdl-cell">{% include 'snippets/select.html' with field=form.discount_type %}</div>
-    <div class="mdl-cell">{% include 'snippets/input.html' with field=form.discount_tuition_fee type='number' %}</div>
-    <div class="mdl-cell">{% include 'snippets/input.html' with field=form.discount_semester_fee type='number' %}</div>
-  </div>
-
-  {% if form %}
-    <div class="mdl-dialog__actions">
-      <div class="mdl-grid">
-        <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
-               value="{% trans 'Confirm changes' %}">
+    <div class="mdl-card__supporting-text mdl-grid">
+      <input type="hidden" name="{{ dsc_form_str.contract.html_name }}" value="{{ dsc_form_str.contract.value }}" />
+      <input type="hidden" name="{{ dsc_form_str.discount_type.html_name }}" value="{{ dsc_form_str.discount_type.value }}" />
+      <input type="hidden" name="{{ dsc_form_str.active.html_name }}" value="{{ dsc_form_str.active.value }}" />
+      <div class="mdl-cell mdl-cell--6-col-desktop">{% include 'snippets/input.html' with field=dsc_form_str.discount_semester_fee type='number' %}</div>
+      <div class="mdl-cell mdl-cell--6-col-desktop">{% include 'snippets/input.html' with field=dsc_form_str.applicable_months type='integer' %}</div>
+      <div class="mdl-cell mdl-cell--6-col-desktop">
+        {% include 'snippets/field-text.html' with label=dsc_form_str.utilization.label value=dsc_form_str.utilization.value type='int' %}
       </div>
     </div>
+
+    <div class="mdl-dialog__actions">
+      <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+             value="{% trans 'Confirm' %}">
+      <div class="mdl-layout-spacer"></div>
+      <input type="submit" class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+             name='discard' value="{% trans 'Discard' %}">
+    </div>
   </form>
-  {% endif %}
+</div>
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--6-col-desktop {{ class }}">
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="mdl-card__supporting-text mdl-grid">
+      <input type="hidden" name="{{ dsc_form_ttn.contract.html_name }}" value="{{ dsc_form_ttn.contract.value }}" />
+      <input type="hidden" name="{{ dsc_form_ttn.discount_type.html_name }}" value="{{ dsc_form_ttn.discount_type.value }}" />
+      <input type="hidden" name="{{ dsc_form_ttn.active.html_name }}" value="{{ dsc_form_ttn.active.value }}" />
+      <div class="mdl-cell mdl-cell--6-col-desktop">{% include 'snippets/input.html' with field=dsc_form_ttn.discount_tuition_fee type='number' %}</div>
+      <div class="mdl-cell mdl-cell--6-col-desktop">{% include 'snippets/input.html' with field=dsc_form_ttn.applicable_months type='integer' %}</div>
+      <div class="mdl-cell mdl-cell--6-col-desktop">
+        {% include 'snippets/field-text.html' with label=dsc_form_ttn.utilization.label value=dsc_form_ttn.utilization.value type='int' %}
+      </div>
+    </div>
+
+    <div class="mdl-dialog__actions">
+      <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+             value="{% trans 'Confirm' %}">
+      <div class="mdl-layout-spacer"></div>
+      <input type="submit" class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+             name='discard' value="{% trans 'Discard' %}">
+    </div>
+  </form>
 </div>

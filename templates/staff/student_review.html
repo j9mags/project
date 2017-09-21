@@ -9,33 +9,3 @@
   {% include "snippets/student_account.html" with class="csp--full-width" form=acc_form %}
   {% include "snippets/student_discounts.html" with class="csp--full-width" form=dsc_form %}
 {% endblock %}
-
-{% block extrajs %}
-{{ block.super }}
-<script>
-(function () {
-var INVISIBLE = 'mdl-cell--hide-phone mdl-cell--hide-tablet mdl-cell--hide-desktop',
-    discount_type_widget = $('#id_discount_type'),
-    tuition_fee_widget = $('#id_discount_tuition_fee').parent().parent(),
-    semester_fee_widget = $('#id_discount_semester_fee').parent().parent();
-
-function update_ui(discount_type) {
-  tuition_fee_widget.addClass(INVISIBLE);
-  semester_fee_widget.addClass(INVISIBLE);
-
-  if (discount_type === "Discount Tuition Fee") {
-    tuition_fee_widget.removeClass(INVISIBLE)
-
-  } else if (discount_type === "Discount Semester Fee") {
-    semester_fee_widget.removeClass(INVISIBLE)
-  }
-}
-
-var discount_type = discount_type_widget.val();
-update_ui(discount_type);
-
-discount_type_widget.on('click', function(){
-  update_ui($(this).val());
-});
-}.call(this));</script>
-{% endblock %}

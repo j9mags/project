@@ -11,10 +11,14 @@
               type="tel"
               pattern="[\+]{0,1}(\d|-\d| \d){1,}"
               value="{{ field.value | default:"" }}"
+           {% elif type == "integer" %}
+              type="text" style="text-align:right"
+              pattern="[0-9]+"
+              value="{{ field.value | floatformat:"0" }}"
            {% elif type == "number" %}
                type="text" style="text-align:right"
                pattern="[0-9]+([\.,][0-9]+)?"
-               value="{{ field.value | default:"0" | floatformat:"2" | localize }}"
+               value="{{ field.value | floatformat:"2" | localize }}"
            {% else %}
               type="{{ type }}"
               value="{{ field.value | default:"" }}"

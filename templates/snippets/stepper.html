@@ -20,7 +20,7 @@
             <div class="mdl-step__actions">
                 {% if step.back %}
                 <a href="{% url 'integration:onboarding' step=step.back %}"
-                   class="mdl-button mdl-js-button mdl-js-ripple-effect">{% trans 'Back' %}</a>
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">{% trans 'Back' %}</a>
                 {% endif %}
                 {% if not step.skip_submit %}
                 <input class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised mdl-color-text--white"

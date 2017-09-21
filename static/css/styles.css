@@ -371,6 +371,10 @@ img {
   word-wrap: break-word;
 }
 
+.csp--dialog-action {
+  line-height: 36px;
+}
+
 .mdl-radiofield {
   position: relative;
   font-size: 16px;

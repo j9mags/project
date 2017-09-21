@@ -592,10 +592,16 @@ class Contract(models.Model):
     def get_all_invoices(self):
         return self.invoice_set.exclude(status='Draft').order_by('-invoice_date')
 
-    def get_discount(self):
-        rc = self.rabatt_set.first()
+    def get_semester_discount(self):
+        rc = self.rabatt_set.filter(active=True, discount_type=Choices.DiscountType[1][0]).first()
         if rc is None:
-            rc = Rabatt(contract=self)
+            rc = Rabatt(contract=self, discount_type=Choices.DiscountType[1][0])
+        return rc
+
+    def get_tuition_discount(self):
+        rc = self.rabatt_set.filter(active=True, discount_type=Choices.DiscountType[0][0]).first()
+        if rc is None:
+            rc = Rabatt(contract=self, discount_type=Choices.DiscountType[0][0])
         return rc
 
 
@@ -604,7 +610,7 @@ class Rabatt(models.Model):
     name = models.CharField(max_length=80, verbose_name=_('Name'), sf_read_only=models.READ_ONLY)
     contract = models.ForeignKey(Contract, models.DO_NOTHING, custom=True,
                                  sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
-    discount_type = models.CharField(custom=True, max_length=255, choices=Choices.DiscountType, blank=True, null=True,
+    discount_type = models.CharField(custom=True, max_length=255, choices=Choices.DiscountType,
                                      verbose_name=_('Discount Type'))
     discount_tuition_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                verbose_name=_('Discount on Tuition Fee'), blank=True, null=True)

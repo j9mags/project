@@ -26,17 +26,11 @@
               {% include 'snippets/input.html' with field=form.password type='password'%}
             </div>
 
-            <div class="mdl-card__actions mdl-card--border">
-              <div class="mdl-grid">
-                <input type="submit" class="mdl-cell mdl-cell--12-col mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
-                       value="{% trans 'Login' %}">
-              </div>
-
-              <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--12-col">
-                  <a onClick='flip("show-left")' class="mdl-color-text--primary" style="float: right">{% trans 'Forgot your Password?' %}</a>
-                </div>
-              </div>
+            <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
+              <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+                     value="{% trans 'Login' %}">
+              <div class="mdl-layout-spacer"></div>
+              <a onClick='flip("show-left")' class="mdl-color-text--primary csp--dialog-action">{% trans 'Forgot your Password?' %}</a>
             </div>
           </div>
         </form>
@@ -56,16 +50,14 @@
               <h2 class="mdl-card__title-text">{% trans 'Lost Password' %}</h2>
             </div>
 
-            <div class="mdl-card__supporting-text  mdl-card--expand">
+            <div class="mdl-card__supporting-text mdl-card--expand">
               {% include 'snippets/input.html' with field=forgot_form.email type='email'%}
             </div>
 
-            <div class="mdl-card__actions mdl-card--border">
-              <div class="mdl-grid">
-                <button class="mdl-cell mdl-cell--12-col mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+            <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
+                <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
                   {% trans 'Reset Password' %}
                 </button>
-              </div>
             </div>
           </div>
         </form>

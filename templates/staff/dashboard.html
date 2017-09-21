@@ -16,11 +16,13 @@
     <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">group</i>{% trans 'Students' %}</a>
 {% endblock %}
 
-{% block fab_options %}
-
+{% block content%}
 {% include 'dialogs/upload-students.html' with form=st_form %}
 {% include 'dialogs/upload-courses.html' with form=cs_form %}
 {% include 'dialogs/bulk-actions.html' with form=bulk_form %}
+{% endblock %}
+
+{% block fab_options %}
 
 {% if form.non_field_errors %}
 <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">

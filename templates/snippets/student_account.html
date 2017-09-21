@@ -1,9 +1,9 @@
 {% load i18n %}
 
-<div class="mdl-cell--12-col">
+<div class="mdl-cell mdl-cell--12-col">
   <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
 </div>
-<div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col {{ class }}">
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
   {% if form %}
     <form method="post">
       {% csrf_token %}
@@ -44,10 +44,10 @@
   {% endif %}
 </div>
 
-<div class="mdl-cell--12-col">
+<div class="mdl-cell mdl-cell--12-col">
   <h5 class="mdl-typography--headline">{% trans 'Personal data' %}</h5>
 </div>
-<div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col {{ class }}">
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
     <div class="mdl-card__supporting-text mdl-grid">
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('Name') value=account.name %}

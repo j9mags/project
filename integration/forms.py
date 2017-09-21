@@ -10,7 +10,6 @@ from .models import Choices, Contact
 from .models import Account
 from .models import Rabatt
 
-
 _logger = logging.getLogger(__name__)
 
 SalutationChoices = [('', '')] + Choices.Salutation
@@ -132,7 +131,8 @@ class UniversityForm(forms.ModelForm):
 class DiscountForm(forms.ModelForm):
     class Meta:
         model = Rabatt
-        fields = ['contract', 'discount_type', 'discount_tuition_fee', 'discount_semester_fee']
+        fields = ['contract', 'discount_type', 'discount_tuition_fee', 'discount_semester_fee', 'active',
+                  'applicable_months', 'utilization']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -145,8 +145,9 @@ class DiscountForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(DiscountForm, self).clean()
         discount_type = cleaned_data.get('discount_type')
-
-        if discount_type == 'Discount Tuition Fee':
+        if 'discard' in self.data:
+            cleaned_data.update(active=False)
+        elif discount_type == 'Discount Tuition Fee':
             if not cleaned_data.get('discount_tuition_fee'):
                 self.add_error('discount_tuition_fee', forms.ValidationError(_('This field is required.')))
             cleaned_data.update(discount_semester_fee=None)
@@ -154,11 +155,7 @@ class DiscountForm(forms.ModelForm):
             if not cleaned_data.get('discount_semester_fee'):
                 self.add_error('discount_semester_fee', forms.ValidationError(_('This field is required.')))
             cleaned_data.update(discount_tuition_fee=None)
-        else:
-            cleaned_data.update(discount_tuition_fee=None)
-            cleaned_data.update(discount_semester_fee=None)
 
-        print(cleaned_data)
         return cleaned_data
 
 

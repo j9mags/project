@@ -2,7 +2,7 @@
 
 <div class="mdl-textfield mdl-textfield--floating-label is-dirty">
   {% if type == 'int' %}
-    <div class="mdl-typography--font-light mdl-typography--title">{{ value | floatformat:"0" }}</div>
+    <div class="mdl-typography--font-light mdl-typography--title">{{ value | default:"0" | floatformat:"0" }}</div>
   {% elif type == 'float' %}
     <div class="mdl-typography--font-light mdl-typography--title">{{ value | floatformat:"2" }}</div>
   {% elif type == 'currency' %}

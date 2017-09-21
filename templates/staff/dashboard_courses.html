@@ -13,6 +13,7 @@
 {% endblock %}
 
 {% block content %}
+  {{ block.super }}
   <div class="mdl-cell mdl-cell--1-col mdl-cell--10-offset-desktop mdl-cell--6-offset-tablet">
     {% include 'snippets/field-text.html' with label=_('Semester fee') value=contact.account.semester_fee_new type="currency" %}
   </div>

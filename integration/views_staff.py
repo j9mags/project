@@ -337,13 +337,21 @@ class StudentReview(StaffMixin, DetailView):
         contract = account.get_active_contract()
         if contract:
             context.update(contract=contract)
-            discount = contract.get_discount()
             payload = self.request.POST if 'contract' in self.request.POST else None
             if payload:
-                print(payload)
-                context.update(dsc_form=DiscountForm(payload, instance=discount))
+                if payload.get('discount_type') == Choices.DiscountType[1][0]:
+                    dsc_form_str = DiscountForm(payload, instance=contract.get_semester_discount())
+                    dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
+                elif payload.get('discount_type') == Choices.DiscountType[0][0]:
+                    dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
+                    dsc_form_ttn = DiscountForm(payload, instance=contract.get_tuition_discount())
+                else:
+                    dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
+                    dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
             else:
-                context.update(dsc_form=DiscountForm(instance=discount))
+                dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
+                dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
+            context.update(dsc_form_str=dsc_form_str, dsc_form_ttn=dsc_form_ttn)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -357,11 +365,16 @@ class StudentReview(StaffMixin, DetailView):
                 account.status = ctr_form.cleaned_data.get('status')
                 account.save()
         elif 'contract' in request.POST:
-            dsc_form = context.get('dsc_form')
+            if request.POST.get('discount_type') == Choices.DiscountType[1][0]:
+                dsc_form = context.get('dsc_form_str')
+            elif request.POST.get('discount_type') == Choices.DiscountType[0][0]:
+                dsc_form = context.get('dsc_form_ttn')
+
             if dsc_form.is_valid():
                 dsc_form.save()
-            else:
-                print(dsc_form.errors)
+                contract = context.get('contract')
+                context.update(dsc_form_str=DiscountForm(instance=contract.get_semester_discount()))
+                context.update(dsc_form_ttn=DiscountForm(instance=contract.get_tuition_discount()))
 
         return self.render_to_response(context)
 

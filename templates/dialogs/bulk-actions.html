@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static %}
 
-<div id="dlg-bulk-actions" class="mdl-dialog">
+<dialog id="dlg-bulk-actions" class="mdl-dialog">
     <h4 class="mdl-dialog__title">{% trans 'Changes will apply to selected rows' %}</h4>
     <form action="{% url 'integration:students_bulk' %}" method="post">
         {% csrf_token %}
@@ -17,4 +17,4 @@
                    value="{% trans 'Confirm' %}">
         </div>
     </form>
-</div>
+</dialog>
