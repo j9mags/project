@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-21 09:28+0000\n"
+"POT-Creation-Date: 2017-09-21 09:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -819,6 +819,19 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+#: templates/snippets/student-sepa.html:5 templates/students/dashboard.html:43
+#: templates/students/onboarding_sepa.html:6
+msgid ""
+"Authorize us to collect the study fees by direct debit from your account."
+msgstr ""
+
+#: templates/snippets/student-sepa.html:13 templates/students/dashboard.html:51
+#: templates/students/onboarding_sepa.html:14
+msgid ""
+"If someone else is paying your tuition fees, please send them the following "
+"link and close this window."
+msgstr ""
+
 #: templates/snippets/student_account.html:4
 #: templates/students/onboarding_review.html:5
 msgid "Matriculation data"
@@ -994,19 +1007,6 @@ msgstr ""
 
 #: templates/students/dashboard.html:37
 msgid "Payment data"
-msgstr ""
-
-#: templates/students/dashboard.html:43
-#: templates/students/onboarding_sepa.html:6
-msgid ""
-"Authorize us to collect the study fees by direct debit from your account."
-msgstr ""
-
-#: templates/students/dashboard.html:51
-#: templates/students/onboarding_sepa.html:14
-msgid ""
-"If someone else is paying your tuition fees, please send the following link "
-"and close this window."
 msgstr ""
 
 #: templates/students/dashboard.html:61
