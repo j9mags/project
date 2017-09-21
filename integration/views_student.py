@@ -11,8 +11,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-import logging
-
 from .forms import *
 from .models import Attachment, Contact, RecordType
 
@@ -35,6 +33,23 @@ class StudentMixin(LoginRequiredMixin):
 
         lang = get_language()
         account = self.get_queryset()
+        if account.kommunikationssprache and not account.kommunikationssprache.startswith(lang):
+            user_lang = account.kommunikationssprache.lower()[:2]
+            activate(user_lang)
+            request.session[LANGUAGE_SESSION_KEY] = user_lang
+            rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_lang)
+
+        return rc
+
+
+class SetLanguage(StudentMixin, View):
+    def get(self, request, *args, **kwargs):
+        next = request.GET.get('next', '/')
+        rc = redirect(next)
+
+        lang = get_language()
+        account = self.get_queryset()
+        print(lang, account.kommunikationssprache)
         if account.kommunikationssprache and not account.kommunikationssprache.startswith(lang):
             user_lang = account.kommunikationssprache.lower()[:2]
             activate(user_lang)
@@ -169,41 +184,41 @@ class Onboarding(StudentMixin, View):
         context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.get_master_contact(),
                    'title_centered': True, 'sf_contract': self.account.get_active_contract(), 'ignore_drawer': True,
                    'stepper': (
-                {
-                    'title': 'Willkommen! | Welcome! ',
-                    'caption': 'Bitte wähle deine bevorzugte Sprache. | Please select your preferred language.',
-                    'template': 'students/onboarding_lang.html',
-                    'action': reverse('integration:onboarding', kwargs={'step': 'lang'}),
-                    'submit': 'Continue | Fortsetzen',
-                },
-                {
-                    'title': _('Data Review'),
-                    'caption': _(
-                        'Your university sent us important data for your profile. Please check it carefully. '
-                        'Should you find any discrepancies, please contact your university to correct this.'),
-                    'template': 'students/onboarding_review.html',
-                    'action': reverse('integration:onboarding', kwargs={'step': 'review'}),
-                    'back': 'lang',
-                    'submit': _('Continue'),
-                },
-                {
-                    'title': _('Data input'),
-                    'caption': _('Please complete the missing information.'),
-                    'template': 'students/onboarding_data.html',
-                    'action': reverse('integration:onboarding', kwargs={'step': 'data'}),
-                    'back': 'review',
-                    'submit': _('Continue'),
-                },
-                {
-                    'title': _('SEPA Mandate'),
-                    'caption': _('We require authorisation to debit a bank account for your tuition fees.'),
-                    'template': 'students/onboarding_sepa.html',
-                    'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
-                    'back': 'data',
-                    'submit': _('Grant mandate'),
-                    'skip_submit': True
-                },
-            )}
+                       {
+                           'title': 'Willkommen! | Welcome! ',
+                           'caption': 'Bitte wähle deine bevorzugte Sprache. | Please select your preferred language.',
+                           'template': 'students/onboarding_lang.html',
+                           'action': reverse('integration:onboarding', kwargs={'step': 'lang'}),
+                           'submit': 'Continue | Fortsetzen',
+                       },
+                       {
+                           'title': _('Data Review'),
+                           'caption': _(
+                               'Your university sent us important data for your profile. Please check it carefully. '
+                               'Should you find any discrepancies, please contact your university to correct this.'),
+                           'template': 'students/onboarding_review.html',
+                           'action': reverse('integration:onboarding', kwargs={'step': 'review'}),
+                           'back': 'lang',
+                           'submit': _('Continue'),
+                       },
+                       {
+                           'title': _('Data input'),
+                           'caption': _('Please complete the missing information.'),
+                           'template': 'students/onboarding_data.html',
+                           'action': reverse('integration:onboarding', kwargs={'step': 'data'}),
+                           'back': 'review',
+                           'submit': _('Continue'),
+                       },
+                       {
+                           'title': _('SEPA Mandate'),
+                           'caption': _('We require authorisation to debit a bank account for your tuition fees.'),
+                           'template': 'students/onboarding_sepa.html',
+                           'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
+                           'back': 'data',
+                           'submit': _('Grant mandate'),
+                           'skip_submit': True
+                       },
+                   )}
 
         return self.update_context_for(step, context)
 
@@ -292,7 +307,10 @@ class Onboarding(StudentMixin, View):
             except Exception as e:
                 form.add_error(None, str(e))
                 return render(request, self.template, context)
-            return redirect('integration:onboarding', step='review')
+
+            response = redirect(reverse('integration:language'))
+            response['location'] += '?next=' + reverse('integration:onboarding', kwargs={'step': 'review'})
+            return response
         elif step == 'review':
             form = OnboardingReviewForm(request.POST)
             if form.is_valid():

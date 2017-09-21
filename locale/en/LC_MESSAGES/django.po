@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-20 16:10+0000\n"
+"POT-Creation-Date: 2017-09-21 09:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,76 +59,80 @@ msgstr ""
 msgid "Billing address"
 msgstr ""
 
-#: integration/forms.py:20
+#: integration/forms.py:23
 msgid "-- Keep current --"
 msgstr ""
 
-#: integration/forms.py:36
-msgid "File content is not correct"
+#: integration/forms.py:40
+msgid "File content is not correct."
 msgstr ""
 
-#: integration/forms.py:65
+#: integration/forms.py:45
+msgid "There is a problem with the file."
+msgstr ""
+
+#: integration/forms.py:72
 msgid "I accept that the data provided by the university is correct."
 msgstr ""
 
-#: integration/forms.py:69 integration/models.py:249
+#: integration/forms.py:76 integration/models.py:249
 #: templates/snippets/student_account.html:61
 #: templates/staff/dashboard_students.html:36
 msgid "Gender"
 msgstr ""
 
-#: integration/forms.py:70 integration/models.py:255
+#: integration/forms.py:77 integration/models.py:255
 #: templates/snippets/student_account.html:64
 msgid "Nationality"
 msgstr ""
 
-#: integration/forms.py:72 templates/snippets/student_account.html:55
+#: integration/forms.py:79 templates/snippets/student_account.html:55
 msgid "Birth city"
 msgstr ""
 
-#: integration/forms.py:73 templates/snippets/student_account.html:58
+#: integration/forms.py:80 templates/snippets/student_account.html:58
 msgid "Birth country"
 msgstr ""
 
-#: integration/forms.py:75 integration/models.py:365
+#: integration/forms.py:82 integration/models.py:365
 msgid "Private email address"
 msgstr ""
 
-#: integration/forms.py:76 integration/models.py:366
+#: integration/forms.py:83 integration/models.py:366
 #: templates/snippets/contact_card.html:10
 #: templates/snippets/student_contact.html:9
 #: templates/staff/dashboard_students.html:35
 msgid "Mobile phone"
 msgstr ""
 
-#: integration/forms.py:77 integration/models.py:367
+#: integration/forms.py:84 integration/models.py:367
 msgid "Home phone"
 msgstr ""
 
-#: integration/forms.py:79 integration/models.py:224 integration/models.py:370
+#: integration/forms.py:86 integration/models.py:224 integration/models.py:370
 #: templates/snippets/student_contact.html:15
 msgid "Street and House number"
 msgstr ""
 
-#: integration/forms.py:80 integration/models.py:225 integration/models.py:371
+#: integration/forms.py:87 integration/models.py:225 integration/models.py:371
 #: templates/snippets/student_contact.html:21
 msgid "City"
 msgstr ""
 
-#: integration/forms.py:81 templates/snippets/student_contact.html:18
+#: integration/forms.py:88 templates/snippets/student_contact.html:18
 msgid "Postal code"
 msgstr ""
 
-#: integration/forms.py:82 integration/models.py:227 integration/models.py:373
+#: integration/forms.py:89 integration/models.py:227 integration/models.py:373
 #: templates/snippets/student_contact.html:24
 msgid "Country"
 msgstr ""
 
-#: integration/forms.py:110
+#: integration/forms.py:117
 msgid "I do want to revoke this mandate."
 msgstr ""
 
-#: integration/forms.py:140 integration/forms.py:144
+#: integration/forms.py:147 integration/forms.py:151
 msgid "This field is required."
 msgstr ""
 
@@ -336,8 +340,8 @@ msgid "Name"
 msgstr ""
 
 #: integration/models.py:231 integration/models.py:581
-#: integration/models.py:653 integration/views_staff.py:127
-#: integration/views_staff.py:139 templates/snippets/student_account.html:26
+#: integration/models.py:653 integration/views_staff.py:141
+#: integration/views_staff.py:153 templates/snippets/student_account.html:26
 #: templates/snippets/student_invoices.html:8
 #: templates/staff/dashboard_students.html:39
 #: templates/students/onboarding_review.html:23
@@ -614,59 +618,59 @@ msgstr ""
 msgid "Invoices"
 msgstr ""
 
-#: integration/views_staff.py:132 integration/views_staff.py:146
+#: integration/views_staff.py:146 integration/views_staff.py:160
 #: templates/snippets/student_contract.html:18
 #: templates/staff/dashboard_students.html:38
 #: templates/students/onboarding_review.html:26
 msgid "Course"
 msgstr ""
 
-#: integration/views_staff.py:205
+#: integration/views_staff.py:219
 msgid "Semester fee updated successfully."
 msgstr ""
 
-#: integration/views_staff.py:273
+#: integration/views_staff.py:287
 msgid "There seem to be missing values, please review the data thoroughly."
 msgstr ""
 
-#: integration/views_staff.py:274
+#: integration/views_staff.py:288
 msgid ""
 "There seem to be wrong values or incorrectly formatted, please review the "
 "data thoroughly."
 msgstr ""
 
-#: integration/views_student.py:180
+#: integration/views_student.py:195
 msgid "Data Review"
 msgstr ""
 
-#: integration/views_student.py:182
+#: integration/views_student.py:197
 msgid ""
 "Your university sent us important data for your profile. Please check it "
 "carefully. Should you find any discrepancies, please contact your university "
 "to correct this."
 msgstr ""
 
-#: integration/views_student.py:187 integration/views_student.py:195
+#: integration/views_student.py:202 integration/views_student.py:210
 msgid "Continue"
 msgstr ""
 
-#: integration/views_student.py:190
+#: integration/views_student.py:205
 msgid "Data input"
 msgstr ""
 
-#: integration/views_student.py:191
+#: integration/views_student.py:206
 msgid "Please complete the missing information."
 msgstr ""
 
-#: integration/views_student.py:198
+#: integration/views_student.py:213
 msgid "SEPA Mandate"
 msgstr ""
 
-#: integration/views_student.py:199
+#: integration/views_student.py:214
 msgid "We require authorisation to debit a bank account for your tuition fees."
 msgstr ""
 
-#: integration/views_student.py:203 templates/students/dashboard.html:47
+#: integration/views_student.py:218 templates/students/dashboard.html:47
 msgid "Grant mandate"
 msgstr ""
 

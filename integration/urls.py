@@ -21,6 +21,11 @@ urlpatterns = [
     url(r'^course/(?P<pk>.+)/$', staff.CourseReview.as_view(), name='course_review'),
     url(r'^courses/$', staff.DashboardCourses.as_view(), name='courses'),
 
+    url(r'^language/$',
+        views.dispatch_by_user(
+            student.SetLanguage.as_view(),
+            staff.SetLanguage.as_view()),
+        name='language'),
     url(r'^$',
         views.dispatch_by_user(
             student.Dashboard.as_view(),

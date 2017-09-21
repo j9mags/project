@@ -47,6 +47,20 @@ class StaffMixin(LoginRequiredMixin):
         return dict(contact=self.contact, st_form=StudentsUploadForm(self.contact.account), cs_form=UploadForm())
 
 
+class SetLanguage(StaffMixin, View):
+    def get(self, request, *args, **kwargs):
+        next = request.GET.get('next', '/')
+        rc = redirect(next)
+
+        lang = get_language()
+        if lang != self.default_lang:
+            activate(self.default_lang)
+            request.session[LANGUAGE_SESSION_KEY] = self.default_lang
+            rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, self.default_lang)
+
+        return rc
+
+
 class DashboardHome(StaffMixin, TemplateView):
     template_name = 'staff/dashboard_home.html'
 

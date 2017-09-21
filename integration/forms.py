@@ -3,12 +3,15 @@ from django import forms
 
 import pandas
 from pandas.io import json
+import logging
 
 from authentication.models import CsvUpload
 from .models import Choices, Contact
 from .models import Account
 from .models import Rabatt
 
+
+_logger = logging.getLogger(__name__)
 
 SalutationChoices = [('', '')] + Choices.Salutation
 CountryChoices = [('', '')] + Choices.Country
@@ -28,14 +31,18 @@ class UploadForm(forms.Form):
         csv = cleaned_data.get('csv')
 
         if csv is not None:
-            json_data = pandas.read_excel(csv.temporary_file_path()).to_json()
-            data = json.loads(json_data)
+            try:
+                json_data = pandas.read_excel(csv.temporary_file_path()).to_json()
+                data = json.loads(json_data)
 
-            is_course = 'course' not in cleaned_data
-            if not CsvUpload.is_valid(data, is_course):
-                self.add_error('csv', _('File content is not correct'))
-            else:
-                cleaned_data.update(raw_data=json_data)
+                is_course = 'course' not in cleaned_data
+                if not CsvUpload.is_valid(data, is_course):
+                    self.add_error('csv', _('File content is not correct.'))
+                else:
+                    cleaned_data.update(raw_data=json_data)
+            except Exception as e:
+                _logger.error(e)
+                self.add_error('csv', _('There is a problem with the file.'))
 
         return cleaned_data
 
