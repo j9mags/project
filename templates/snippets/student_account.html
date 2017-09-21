@@ -3,37 +3,41 @@
 <div class="mdl-cell--12-col">
   <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
 </div>
-<div class="mdl-card mdl-card-account mdl-shadow--6dp {{ class }}">
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col {{ class }}">
   {% if form %}
     <form method="post">
       {% csrf_token %}
   {% endif %}
-
-    <div class="mdl-card__supporting-text mdl-grid">
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('University') value=account.hochschule_ref.name %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Matriculation number') value=account.immatrikulationsnummer %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Email') value=account.unimailadresse %}
-      </div>
-      <div class="mdl-cell">
-        {% if form %}
-          {% include 'snippets/select.html' with field=form.status %}
-        {% else %}
-          {% include 'snippets/field-text.html' with label=_('Status') value=account.status %}
-        {% endif %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.get_course.name %}
-      </div>
+  <div class="mdl-card__supporting-text mdl-grid">
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('University') value=account.hochschule_ref.name %}
     </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Matriculation number') value=account.immatrikulationsnummer %}
+    </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Email') value=account.unimailadresse %}
+    </div>
+    <div class="mdl-cell">
+      {% if form %}
+      {% include 'snippets/select.html' with field=form.status %}
+      {% else %}
+      {% include 'snippets/field-text.html' with label=_('Status') value=account.status %}
+      {% endif %}
+    </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.get_course.name %}
+    </div>
+    {% if contract %}
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Payment interval') value=contract.payment_interval %}
+    </div>
+    {% endif %}
+  </div>
   {% if form %}
-      <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
+      <div class="mdl-dialog__actions">
         <input type="submit"
-               class="mdl-cell mdl-cell--9-offset mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+               class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
                value="{% trans 'Confirm changes' %}">
       </div>
     </form>
@@ -43,7 +47,7 @@
 <div class="mdl-cell--12-col">
   <h5 class="mdl-typography--headline">{% trans 'Personal data' %}</h5>
 </div>
-<div class="mdl-card mdl-card-account mdl-shadow--6dp {{ class }}">
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col {{ class }}">
     <div class="mdl-card__supporting-text mdl-grid">
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('Name') value=account.name %}

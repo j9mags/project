@@ -13,7 +13,7 @@
         {% csrf_token %}
     {% endif %}
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Standard Period of Studies') value=course.standard_period_of_study %}
+        {% include 'snippets/field-text.html' with label=_('Standard Period of Studies') value=course.standard_period_of_study type="int" %}
       </div>
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('Cost per semester') value=course.cost_per_semester type="currency" %}

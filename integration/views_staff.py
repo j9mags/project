@@ -338,13 +338,12 @@ class StudentReview(StaffMixin, DetailView):
         if contract:
             context.update(contract=contract)
             discount = contract.get_discount()
-            payload = self.request.POST if 'course' in self.request.POST else {'course': contract.studiengang_ref.pk}
-            context.update(ctr_form=StudentContractForm(contract.university_ref, payload))
-            if 'course' in self.request.POST:
-                context.update(dsc_form=DiscountForm(self.request.POST))
+            payload = self.request.POST if 'contract' in self.request.POST else None
+            if payload:
+                print(payload)
+                context.update(dsc_form=DiscountForm(payload, instance=discount))
             else:
                 context.update(dsc_form=DiscountForm(instance=discount))
-
         return context
 
     def post(self, request, *args, **kwargs):
@@ -357,15 +356,12 @@ class StudentReview(StaffMixin, DetailView):
                 account = context.get('account')
                 account.status = ctr_form.cleaned_data.get('status')
                 account.save()
-        elif 'course' in request.POST:
-            ctr_form = context.get('ctr_form')
-            if ctr_form.is_valid():
-                contract = context.get('contract')
-                contract.studiengang_ref = DegreeCourse.objects.get(pk=ctr_form.cleaned_data.get('course'))
-                contract.save()
+        elif 'contract' in request.POST:
             dsc_form = context.get('dsc_form')
             if dsc_form.is_valid():
                 dsc_form.save()
+            else:
+                print(dsc_form.errors)
 
         return self.render_to_response(context)
 

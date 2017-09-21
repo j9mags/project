@@ -608,7 +608,7 @@ class Rabatt(models.Model):
                                      verbose_name=_('Discount Type'))
     discount_tuition_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                verbose_name=_('Discount on Tuition Fee'), blank=True, null=True)
-    discount_semester_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
+    discount_semester_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                 verbose_name=_('Discount on Semester Fee'), blank=True, null=True)
     applicable_months = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
                                             verbose_name=_('Number of Applicable Months'), blank=True, null=True)

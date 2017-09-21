@@ -137,6 +137,10 @@ class DiscountForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['discount_type'].widget.choices[0] = ("", "")
+        self.fields['discount_tuition_fee'].localize = True
+        self.fields['discount_tuition_fee'].widget.is_localized = True
+        self.fields['discount_semester_fee'].localize = True
+        self.fields['discount_semester_fee'].widget.is_localized = True
 
     def clean(self):
         cleaned_data = super(DiscountForm, self).clean()
@@ -154,6 +158,7 @@ class DiscountForm(forms.ModelForm):
             cleaned_data.update(discount_tuition_fee=None)
             cleaned_data.update(discount_semester_fee=None)
 
+        print(cleaned_data)
         return cleaned_data
 
 

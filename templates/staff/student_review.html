@@ -6,12 +6,8 @@
 {% block title %}{{ account.name }}{% endblock %}
 
 {% block content %}
-<div class="mdl-cell mdl-cell--12-col">
   {% include "snippets/student_account.html" with class="csp--full-width" form=acc_form %}
-</div>
-<div class="mdl-cell mdl-cell--12-col">
-  {% include "snippets/student_contract.html" with class="csp--full-width" form=ctr_form discount_form=dsc_form %}
-</div>
+  {% include "snippets/student_discounts.html" with class="csp--full-width" form=dsc_form %}
 {% endblock %}
 
 {% block extrajs %}

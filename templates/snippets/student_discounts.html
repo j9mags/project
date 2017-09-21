@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<div class="mdl-cell--12-col">
+  <h5 class="mdl-typography--headline">{% trans 'Discount data' %}</h5>
+</div>
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col {{ class }}">
+  {% if form %}
+    <form method="post">
+      {% csrf_token %}
+  {% endif %}
+
+  <div class="mdl-card__supporting-text mdl-grid">
+    <input type="hidden" name="{{ form.contract.html_name }}" value="{{ form.contract.value }}" />
+    <div class="mdl-cell">{% include 'snippets/select.html' with field=form.discount_type %}</div>
+    <div class="mdl-cell">{% include 'snippets/input.html' with field=form.discount_tuition_fee type='number' %}</div>
+    <div class="mdl-cell">{% include 'snippets/input.html' with field=form.discount_semester_fee type='number' %}</div>
+  </div>
+
+  {% if form %}
+    <div class="mdl-dialog__actions">
+      <div class="mdl-grid">
+        <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+               value="{% trans 'Confirm changes' %}">
+      </div>
+    </div>
+  </form>
+  {% endif %}
+</div>
