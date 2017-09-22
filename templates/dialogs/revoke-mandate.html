@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static %}
 
-<div id="dlg-revoke-mandate" class="mdl-dialog">
+<dialog id="dlg-revoke-mandate" class="mdl-dialog">
     <h4 class="mdl-dialog__title">{% trans 'Are you sure?' %}</h4>
     <form action="{% url 'integration:dashboard' %}" method="post">
         {% csrf_token %}
@@ -14,4 +14,4 @@
                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">
         </div>
     </form>
-</div>
+</dialog>

@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static %}
 
-<div id="dlg-add-courses" class="mdl-dialog">
+<dialog id="dlg-add-courses" class="mdl-dialog">
     <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
     <form enctype="multipart/form-data" method="post" action="{% url 'integration:dashboard' %}"
           onsubmit="document.getElementById('upload-progress-cs').classList.add('is-active')"
@@ -22,4 +22,4 @@
                class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download template' %}</a>
         </div>
     </form>
-</div>
+</dialog>
