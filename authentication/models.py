@@ -181,8 +181,22 @@ class CsvUpload(models.Model):
             ctr.account = acc
             ctr_to_insert.append(ctr)
 
-        Contact.objects.bulk_create(ctc_to_insert)
-        Contract.objects.bulk_create(ctr_to_insert)
+        try:
+            Contact.objects.bulk_create(ctc_to_insert)
+        except Exception as e:
+            print(e)
+            # accounts.delete()
+            for account in accounts:
+                account.delete()
+            return False
+
+        try:
+            Contract.objects.bulk_create(ctr_to_insert)
+        except Exception as e:
+            print(e)
+            accounts.delete()
+            return False
+
         return True
 
     def _create_courses(self):
