@@ -1,7 +1,8 @@
 from django.core.exceptions import *
 from django.views import View
 from django.http.response import Http404
-from django.shortcuts import render
+from django.shortcuts import render, reverse, redirect
+from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView, LogoutView
@@ -15,6 +16,15 @@ class UserLogin(LoginView):
     def get(self, request, *args, **kwargs):
         response = super(UserLogin, self).get(request, *args, **kwargs)
         response.context_data.update(forgot_form=ForgotPasswordForm())
+
+        if 'msg' in request.GET.keys():
+            code = request.GET.get('msg')
+            msg = {
+                'pw-ch--success': _('Your request has been successfully processed.'),
+                'pw-ch--failed': _('Something went wrong with your request.'),
+            }.get(code, None)
+            if msg:
+                response.context_data.update(message=msg)
 
         return response
 
@@ -91,6 +101,7 @@ class PasswordChange(View):
         context = {}
 
         form = ForgotPasswordForm(request.POST)
+        rc = reverse('authentication:login')
 
         if (form.is_valid()):
             UserModel = get_user_model()
@@ -101,6 +112,8 @@ class PasswordChange(View):
                 pt = user.get_srecord()
                 pt.request_new_password()
 
-            return render(request, self.template_success, context)
+            rc += '?msg=pw-ch--success'
+        else:
+            rc += '?msg=pw-ch--failed'
 
-        return render(request, self.template_failure, context)
+        return redirect(rc)
