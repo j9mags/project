@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-21 15:07+0000\n"
+"POT-Creation-Date: 2017-09-25 14:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,6 +41,14 @@ msgstr ""
 
 #: authentication/forms.py:25
 msgid "Email address"
+msgstr ""
+
+#: authentication/views.py:23 templates/generic/success.html:6
+msgid "Your request has been successfully processed."
+msgstr ""
+
+#: authentication/views.py:24 templates/generic/failure.html:6
+msgid "Something went wrong with your request."
 msgstr ""
 
 #: csp/settings.py:154
@@ -111,28 +119,36 @@ msgstr ""
 
 #: integration/forms.py:85 integration/models.py:224 integration/models.py:370
 #: templates/snippets/student_contact.html:15
+#: templates/snippets/student_payment.html:15
 msgid "Street and House number"
 msgstr ""
 
 #: integration/forms.py:86 integration/models.py:225 integration/models.py:371
 #: templates/snippets/student_contact.html:21
+#: templates/snippets/student_payment.html:21
 msgid "City"
 msgstr ""
 
 #: integration/forms.py:87 templates/snippets/student_contact.html:18
+#: templates/snippets/student_payment.html:18
 msgid "Postal code"
 msgstr ""
 
 #: integration/forms.py:88 integration/models.py:227 integration/models.py:373
 #: templates/snippets/student_contact.html:24
+#: templates/snippets/student_payment.html:24
 msgid "Country"
 msgstr ""
 
-#: integration/forms.py:116
+#: integration/forms.py:122
 msgid "I do want to revoke this mandate."
 msgstr ""
 
-#: integration/forms.py:152 integration/forms.py:156
+#: integration/forms.py:143
+msgid "Please consider the payment interval of the student."
+msgstr ""
+
+#: integration/forms.py:161 integration/forms.py:165
 msgid "This field is required."
 msgstr ""
 
@@ -638,38 +654,38 @@ msgid ""
 "data thoroughly."
 msgstr ""
 
-#: integration/views_student.py:195
+#: integration/views_student.py:235
 msgid "Data Review"
 msgstr ""
 
-#: integration/views_student.py:197
+#: integration/views_student.py:237
 msgid ""
 "Your university sent us important data for your profile. Please check it "
 "carefully. Should you find any discrepancies, please contact your university "
 "to correct this."
 msgstr ""
 
-#: integration/views_student.py:202 integration/views_student.py:210
+#: integration/views_student.py:242 integration/views_student.py:250
 msgid "Continue"
 msgstr ""
 
-#: integration/views_student.py:205
+#: integration/views_student.py:245
 msgid "Data input"
 msgstr ""
 
-#: integration/views_student.py:206
+#: integration/views_student.py:246
 msgid "Please complete the missing information."
 msgstr ""
 
-#: integration/views_student.py:213
+#: integration/views_student.py:253
 msgid "SEPA Mandate"
 msgstr ""
 
-#: integration/views_student.py:214
+#: integration/views_student.py:254
 msgid "We require authorisation to debit a bank account for your tuition fees."
 msgstr ""
 
-#: integration/views_student.py:218 templates/students/dashboard.html:47
+#: integration/views_student.py:258 templates/students/dashboard.html:47
 msgid "Grant mandate"
 msgstr ""
 
@@ -694,7 +710,8 @@ msgstr ""
 #: templates/dialogs/update-semester-fee.html:13
 #: templates/snippets/student_discounts.html:23
 #: templates/snippets/student_discounts.html:47
-#: templates/staff/upload_review.html:57 templates/students/contact.html:46
+#: templates/staff/upload_review.html:57 templates/students/contact.html:43
+#: templates/students/payment.html:35
 msgid "Confirm"
 msgstr ""
 
@@ -721,14 +738,6 @@ msgstr ""
 msgid "Download template"
 msgstr ""
 
-#: templates/generic/failure.html:6
-msgid "Something went wrong with your request."
-msgstr ""
-
-#: templates/generic/success.html:6
-msgid "Your request has been successfully processed."
-msgstr ""
-
 #: templates/layout/base.html:6
 msgid "CHANCEN SERVICES"
 msgstr ""
@@ -749,23 +758,23 @@ msgstr ""
 msgid "Log in as user"
 msgstr ""
 
-#: templates/registration/login.html:21
+#: templates/registration/login.html:26
 msgid "Sign in"
 msgstr ""
 
-#: templates/registration/login.html:31
+#: templates/registration/login.html:36
 msgid "Login"
 msgstr ""
 
-#: templates/registration/login.html:33
+#: templates/registration/login.html:38
 msgid "Forgot your Password?"
 msgstr ""
 
-#: templates/registration/login.html:50
+#: templates/registration/login.html:55
 msgid "Lost Password"
 msgstr ""
 
-#: templates/registration/login.html:59
+#: templates/registration/login.html:64
 msgid "Reset Password"
 msgstr ""
 
@@ -820,7 +829,7 @@ msgid "No file chosen"
 msgstr ""
 
 #: templates/snippets/stepper.html:23 templates/staff/upload_review.html:61
-#: templates/students/contact.html:44
+#: templates/students/contact.html:45 templates/students/payment.html:37
 msgid "Back"
 msgstr ""
 
@@ -870,10 +879,6 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-#: templates/snippets/student_payment.html:18
-msgid "Revoke mandate"
-msgstr ""
-
 #: templates/staff/course_review.html:16
 #: templates/staff/dashboard_courses.html:33
 msgid "Standard Period of Studies"
@@ -899,12 +904,12 @@ msgid "Matriculation fee"
 msgstr ""
 
 #: templates/staff/dashboard.html:14 templates/staff/dashboard.html:44
-#: templates/staff/dashboard_home.html:13
+#: templates/staff/dashboard_home.html:14
 msgid "Courses"
 msgstr ""
 
 #: templates/staff/dashboard.html:16 templates/staff/dashboard.html:41
-#: templates/staff/dashboard_home.html:27
+#: templates/staff/dashboard_home.html:28
 msgid "Students"
 msgstr ""
 
@@ -931,11 +936,11 @@ msgstr ""
 msgid "Details"
 msgstr ""
 
-#: templates/staff/dashboard_home.html:20
+#: templates/staff/dashboard_home.html:21
 msgid "View courses"
 msgstr ""
 
-#: templates/staff/dashboard_home.html:34
+#: templates/staff/dashboard_home.html:35
 msgid "View students"
 msgstr ""
 
@@ -994,7 +999,7 @@ msgstr ""
 msgid "No contact information found"
 msgstr ""
 
-#: templates/students/dashboard.html:37
+#: templates/students/dashboard.html:37 templates/students/payment.html:6
 msgid "Payment data"
 msgstr ""
 
@@ -1029,4 +1034,8 @@ msgstr ""
 
 #: templates/students/onboarding_review.html:29
 msgid "University email address"
+msgstr ""
+
+#: templates/students/payment.html:41
+msgid "Revoke mandate"
 msgstr ""

@@ -139,6 +139,9 @@ class DiscountForm(forms.ModelForm):
         model = Rabatt
         fields = ['contract', 'discount_type', 'discount_tuition_fee', 'discount_semester_fee', 'active',
                   'applicable_months', 'utilization']
+        help_texts = {
+            'applicable_months': _('Please consider the payment interval of the student.')
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
