@@ -22,18 +22,18 @@
 
     <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %}" id="account-panel">
       <div class="mdl-grid">
-        {% include "snippets/student_account.html" with class="csp--full-width" %}
+        {% include "snippets/student_account.html" with class="mdl-cell csp--full-width" %}
 
-        <div class="mdl-cell--12-col">
+        <div class="mdl-cell mdl-cell--12-col">
           <h5 class="mdl-typography--headline">{% trans 'Contact data' %}</h5>
         </div>
         {% if master_contact %}
-          {% include "snippets/student_contact.html" with contact=master_contact class="csp--full-width" %}
+          {% include "snippets/student_contact.html" with contact=master_contact class="mdl-cell csp--full-width" %}
         {% else %}
           <h3 class="mdl-typography--headline">{% trans 'No contact information found' %}</h3>
         {% endif %}
 
-        <div class="mdl-cell--12-col">
+        <div class="mdl-cell mdl-cell--12-col">
           <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
         </div>
         {% if not payment_contact %}
@@ -55,7 +55,7 @@
           </div>
         </div>
         {% elif payment_contact == master_contact %}
-          {% include 'snippets/student_payment.html' with ba=master_contact.get_bank_account class="csp--full-width" %}
+          {% include 'snippets/student_payment.html' with ba=master_contact.get_bank_account class="mdl-cell csp--full-width" %}
         {% else %}
           <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
             <h5 class="mdl-typography--headline">{% trans 'Someone else is paying for you' %}</h5>
@@ -79,11 +79,4 @@
 {% block extrajs %}
   {{ block.super }}
   <script src="{% static '/js/dashboard-student.js' %}"></script>
-{% if display_dlg %}
-  <script>
-    (function() {
-        setTimeout(window.showDlg, 100);
-    }.call(this));
-  </script>
-{% endif %}
 {% endblock %}

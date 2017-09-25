@@ -8,6 +8,7 @@
         dlg = document.getElementById(DIALOG_ID),
         btn = document.getElementById('btn-revoke-mandate'),
         showDlg = function(e) {
+          e.preventDefault();
           var processClick = function (evt) {
             var target = evt.target.closest('#' + DIALOG_ID);
             

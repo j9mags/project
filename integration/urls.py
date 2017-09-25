@@ -9,6 +9,7 @@ urlpatterns = [
         student.Onboarding.as_view(), name='onboarding'),
     url(r'^onboarding/$',student.Onboarding.as_view(), name='onboarding'),
     url(r'^contact/(?P<pk>(.+)|(new))/$', student.ContactDetails.as_view(), name='contact'),
+    url(r'^payment/$', student.PaymentDetails.as_view(), name='payment'),
     url(r'^attachment/(?P<att_id>.+)/$', student.DownloadAttachment.as_view(), name='download_attachment'),
 
     url(r'^review/(?P<uuid>.+)/(?P<action>(confirm)|(discard))/$',

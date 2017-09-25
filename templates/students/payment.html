@@ -3,12 +3,13 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{{ contact.name|default:_('New contact') }}{% endblock %}
+{% block title %}{% trans 'Payment data' %}{% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
 {% endblock %}
+
 
 {% block content %}
 
@@ -24,17 +25,8 @@
         {% csrf_token %}
         <div class="mdl-card__supporting-text mdl-grid">
             <div class="mdl-grid">
-                <div class="mdl-cell">
-                    {% include 'snippets/input.html' with field=form.email type='email'%}
-                </div>
-                <div class="mdl-cell">
-                    {% include 'snippets/input.html' with field=form.mobile_phone type='phone' %}
-                </div>
-                <div class="mdl-cell">
-                    {% include 'snippets/input.html' with field=form.other_phone type='phone' %}
-                </div>
                 <div class="mdl-cell--8-col">
-                    {% include 'snippets/address.html' with title='' street=form.mailing_street zip=form.mailing_postal_code city=form.mailing_city country=form.mailing_country %}
+                    {% include 'snippets/address.html' with title='' street=form.billing_street zip=form.billing_postal_code city=form.billing_city country=form.billing_country %}
                 </div>
             </div>
         </div>
@@ -43,12 +35,28 @@
                    value="{% trans 'Confirm' %}">
             <a href="{% url 'integration:dashboard' %}"
                class="mdl-button">{% trans 'Back' %}</a>
+            <div class="mdl-layout-spacer"></div>
+            <button id="btn-revoke-mandate"
+                    class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                {% trans 'Revoke mandate' %}
+            </button>
         </div>
     </form>
 </div>
+
+{% include 'dialogs/revoke-mandate.html' with form=rvk_form %}
 {% endblock %}
+
 
 {% block extrajs %}
 {{ block.super }}
 <script src="{% static '/js/mdl-selectfield.min.js' %}"></script>
+<script src="{% static '/js/dashboard-student.js' %}"></script>
+{% if display_dlg %}
+<script>
+    (function() {
+        setTimeout(window.showDlg, 100);
+    }.call(this));
+  </script>
+{% endif %}
 {% endblock %}

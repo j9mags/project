@@ -77,9 +77,6 @@ class Dashboard(StudentMixin, TemplateView):
         context['active_contract'] = contract
         context['ignore_drawer'] = True
 
-        if context['master_contact'] == context['payment_contact']:
-            context['rvk_form'] = StudentRevokeMandateForm(instance=contact)
-
         p = int(self.request.GET.get('p', '1'))
         s = int(self.request.GET.get('s', '10'))
 
@@ -158,6 +155,49 @@ class ContactDetails(StudentMixin, TemplateView):
                 return redirect('integration:dashboard')
             except Exception as e:
                 form.add_error(None, str(e))
+        return render(request, self.template_name, context)
+
+
+class PaymentDetails(StudentMixin, TemplateView):
+    model = Contact
+    template_name = 'students/payment.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PaymentDetails, self).get_context_data(**kwargs)
+        context['ignore_drawer'] = True
+
+        self.account = self.get_queryset()
+
+        master_contact = self.account.get_student_contact()
+        payment_contact = self.account.get_payment_contact()
+
+        if master_contact == payment_contact:
+            context['rvk_form'] = StudentRevokeMandateForm(instance=payment_contact)
+
+        if self.request.POST:
+            form = StudentPaymentForm(self.request.POST, instance=self.account)
+        else:
+            form = StudentPaymentForm(instance=self.account)
+        context.update(account=self.account, form=form)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        if 'cancel_bank_account' in request.POST:
+            context.update(display_dlg=True)
+            form = context.get('rvk_form')
+        else:
+            form = context.get('form')
+
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('integration:dashboard')
+            except Exception as e:
+                form.add_error(None, str(e))
+
         return render(request, self.template_name, context)
 
 

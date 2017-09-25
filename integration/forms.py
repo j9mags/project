@@ -108,6 +108,12 @@ class StudentContactForm(forms.ModelForm):
                   'mailing_city', 'mailing_postal_code', 'mailing_country']
 
 
+class StudentPaymentForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['billing_street', 'billing_city', 'billing_postal_code', 'billing_country']
+
+
 class StudentRevokeMandateForm(forms.ModelForm):
     class Meta:
         model = Contact
