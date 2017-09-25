@@ -151,6 +151,9 @@ class DiscountForm(forms.ModelForm):
         self.fields['discount_semester_fee'].localize = True
         self.fields['discount_semester_fee'].widget.is_localized = True
 
+        if self.instance and (self.instance.discount_type == 'Discount Semester Fee'):
+            self.fields['applicable_months'].help_text = ''
+
     def clean(self):
         cleaned_data = super(DiscountForm, self).clean()
         discount_type = cleaned_data.get('discount_type')
