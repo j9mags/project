@@ -7,6 +7,7 @@
 {% block title %}{{ course.name_studiengang_auto }}{% endblock %}
 
 {% block content %}
+  {{ block.super }}
   <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col mdl-grid">
     {% if form %}
       <form method="post">
