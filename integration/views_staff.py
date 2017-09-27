@@ -93,6 +93,7 @@ class DashboardHome(StaffMixin, TemplateView):
             d = json.loads(json_data)
             for key in d.keys():
                 d[key].pop('0')
+                d[key].pop('1')
             upd = request.user.csvupload_set.create(
                 course=form.cleaned_data.get('course'),
                 uuid=str(uuid4()),

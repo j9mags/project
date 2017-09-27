@@ -63,9 +63,7 @@ class CsvUpload(models.Model):
     expected_courses_headers = ["Name des Studiengangs", "Regelstudienzeit (in Semestern)", "Kosten pro Semester",
                                 "Kosten pro Monat", "Kosten pro Monat über der Regelstudienzeit",
                                 "Immatrikulationsgebühr (einmalig)", "Auslandssemestergebühr pro Monat",
-                                "Urlaubssemestergebühr pro Monat", "Startmonat des Studiengangs",
-                                "Startdatum des Studiengangs", "Startmonat des Sommersemesters",
-                                "Startmonat des Wintersemesters"]
+                                "Urlaubssemestergebühr pro Monat", "Startdatum des Studiengangs"]
 
     def __str__(self):
         return "{course} by {user}".format(course=self.course, user=self.user)
@@ -83,7 +81,7 @@ class CsvUpload(models.Model):
     def parse_data(self):
         data = json.loads(self.content)
         rc = []
-        i, done = 0, False
+        i, done = 1, False
         headers = CsvUpload.expected_student_headers if self.course else CsvUpload.expected_courses_headers
         while not done:
             i += 1
@@ -223,10 +221,7 @@ class CsvUpload(models.Model):
             course.matriculation_fee = row.get('Immatrikulationsgebühr (einmalig)')
             course.fee_semester_abroad = row.get('Auslandssemestergebühr pro Monat')
             course.fee_semester_off = row.get('Urlaubssemestergebühr pro Monat')
-            course.start_of_studies_month = row.get('Startmonat des Studiengangs')
             course.start_of_studies = datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
-            course.start_summer_semester = row.get('Startmonat des Sommersemesters')
-            course.start_winter_semester = row.get('Startmonat des Wintersemesters')
 
             courses.append(course)
         DegreeCourse.objects.bulk_create(courses)
