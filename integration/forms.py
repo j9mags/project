@@ -50,7 +50,7 @@ class StudentsUploadForm(UploadForm):
     def __init__(self, university, *args, **kwargs):
         super(StudentsUploadForm, self).__init__(*args, **kwargs)
         self.fields['course'] = forms.ChoiceField(
-            choices=[(o.pk, o.name) for o in university.get_active_courses()]
+            choices=[(o.pk, o.name_studiengang_auto) for o in university.get_active_courses()]
         )
 
 

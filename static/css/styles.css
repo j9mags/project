@@ -299,11 +299,12 @@ img {
   width: 30em;
   margin-left: -15em; /*set to a negative number 1/2 of your width*/
   z-index: 900;
-  display: none;
+  transform: scale(0);
+  transition: transform .5s cubic-bezier(0.68, -0.1, 0.27, 1.1);
 }
 
 .mdl-dialog.is-showing-dialog {
-  display: block;
+  transform: scale(1);
 }
 
 #dlg-add-students .mdl-spinner,

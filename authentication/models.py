@@ -90,7 +90,7 @@ class CsvUpload(models.Model):
                 if not str(i) in data[k]:
                     done = True
                     break
-                d_.update({k: data[k][str(i)]})
+                d_.update({k: data[k][str(i)] if 'datum' not in k else datetime.fromtimestamp(int(data[k][str(i)]) / 1000).date()})
             if d_:
                 rc.append(d_)
         return rc
@@ -125,7 +125,7 @@ class CsvUpload(models.Model):
         course = university.degreecourse_set.get(pk=self.course)
 
         for row in data:
-            if not(any(row) and all(row)):
+            if not (any(row) and all(row)):
                 return False
 
             acc = Account()
@@ -138,7 +138,7 @@ class CsvUpload(models.Model):
 
             acc.name = "{Vorname} {Nachname}".format(**row)
             acc.immatrikulationsnummer = row.get('Immatrikulationsnummer')
-            acc.geburtsdatum = datetime.strptime(row.get('Geburtsdatum'), '%d.%m.%Y')
+            acc.geburtsdatum = row.get('Geburtsdatum')  # datetime.strptime(row.get('Geburtsdatum'), '%d.%m.%Y')
             acc.unimailadresse = row.get('universitäre E-Mail-Adresse')
             acc.status = 'Immatrikuliert'
 
@@ -208,7 +208,7 @@ class CsvUpload(models.Model):
         courses = []
         data = self.parse_data()
         for row in data:
-            if not(any(row) and all(row)):
+            if not (any(row) and all(row)):
                 return False
 
             course = DegreeCourse()
@@ -221,7 +221,7 @@ class CsvUpload(models.Model):
             course.matriculation_fee = row.get('Immatrikulationsgebühr (einmalig)')
             course.fee_semester_abroad = row.get('Auslandssemestergebühr pro Monat')
             course.fee_semester_off = row.get('Urlaubssemestergebühr pro Monat')
-            course.start_of_studies = datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
+            course.start_of_studies = row.get('Startdatum des Studiengangs')  # datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
 
             courses.append(course)
         DegreeCourse.objects.bulk_create(courses)
