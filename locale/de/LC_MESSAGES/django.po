@@ -610,7 +610,7 @@ msgstr "Rabatt auf Semesterbeitrag"
 
 #: integration/models.py:620
 msgid "Number of Applicable Months"
-msgstr "Wie oft soll der Rabatt gewährt werden?"
+msgstr "Anzahl der Rabatte"
 
 #: integration/models.py:622
 msgid "Number of Utilizations"
