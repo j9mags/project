@@ -349,7 +349,8 @@ img {
 }
 
 .mdl-address.mdl-grid {
-  padding: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .mdl-address .mdl-cell {
