@@ -24,10 +24,8 @@
     <form method="post">
         {% csrf_token %}
         <div class="mdl-card__supporting-text mdl-grid">
-            <div class="mdl-grid">
-                <div class="mdl-cell--8-col">
-                    {% include 'snippets/address.html' with title='' street=form.billing_street zip=form.billing_postal_code city=form.billing_city country=form.billing_country %}
-                </div>
+            <div class="mdl-cell mdl-cell--8-col">
+                {% include 'snippets/address.html' with title=_('Billing address') street=form.billing_street zip=form.billing_postal_code city=form.billing_city country=form.billing_country %}
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">

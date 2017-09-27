@@ -23,19 +23,17 @@
     <form method="post">
         {% csrf_token %}
         <div class="mdl-card__supporting-text mdl-grid">
-            <div class="mdl-grid">
-                <div class="mdl-cell">
-                    {% include 'snippets/input.html' with field=form.email type='email'%}
-                </div>
-                <div class="mdl-cell">
-                    {% include 'snippets/input.html' with field=form.mobile_phone type='phone' %}
-                </div>
-                <div class="mdl-cell">
-                    {% include 'snippets/input.html' with field=form.other_phone type='phone' %}
-                </div>
-                <div class="mdl-cell--8-col">
-                    {% include 'snippets/address.html' with title='' street=form.mailing_street zip=form.mailing_postal_code city=form.mailing_city country=form.mailing_country %}
-                </div>
+            <div class="mdl-cell">
+                {% include 'snippets/input.html' with field=form.email type='email'%}
+            </div>
+            <div class="mdl-cell">
+                {% include 'snippets/input.html' with field=form.mobile_phone type='phone' %}
+            </div>
+            <div class="mdl-cell">
+                {% include 'snippets/input.html' with field=form.other_phone type='phone' %}
+            </div>
+            <div class="mdl-cell mdl-cell--8-col">
+                {% include 'snippets/address.html' with title=_('Address') street=form.mailing_street zip=form.mailing_postal_code city=form.mailing_city country=form.mailing_country %}
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
