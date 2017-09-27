@@ -12,7 +12,7 @@
       {% include 'snippets/field-text.html' with label=_('Other phone') value=contact.other_phone %}
     </div>
     <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Street and House number') value=contact.mailing_street %}
+      {% include 'snippets/field-text.html' with label=_('Street and House number') value=contact.mailing_street help_text=_('Address') %}
     </div>
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Postal code') value=contact.mailing_postal_code %}

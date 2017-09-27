@@ -82,7 +82,7 @@ class StudentOnboardingForm(forms.Form):
     mobile_phone = forms.CharField(max_length=40, label=_('Mobile phone'))
     home_phone = forms.CharField(max_length=40, required=False, label=_('Home phone'))
 
-    mailing_street = forms.CharField(max_length=40, label=_('Street and House number'))
+    mailing_street = forms.CharField(max_length=40, label=_('Street and House number'), help_text=_('Address'))
     mailing_city = forms.CharField(max_length=255, label=_('City'))
     mailing_zip = forms.CharField(max_length=20, label=_('Postal code'))
     mailing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
@@ -106,12 +106,18 @@ class StudentContactForm(forms.ModelForm):
         model = Contact
         fields = ['email', 'mobile_phone', 'other_phone', 'mailing_street',
                   'mailing_city', 'mailing_postal_code', 'mailing_country']
+        help_texts = {
+            'mailing_street': _('Address')
+        }
 
 
 class StudentPaymentForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['billing_street', 'billing_city', 'billing_postal_code', 'billing_country']
+        help_texts = {
+            'billing_street': _('Billing address')
+        }
 
 
 class StudentRevokeMandateForm(forms.ModelForm):

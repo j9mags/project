@@ -12,7 +12,7 @@
       {% include 'snippets/field-text.html' with label=_('Account Number(last 2 digits)') value=ba.account_number %}
     </div>
     <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.billing_street %}
+      {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.billing_street help_text=_('Billing address') %}
     </div>
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Postal code') value=account.billing_postal_code %}
