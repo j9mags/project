@@ -23,7 +23,7 @@
         {% include 'snippets/field-text.html' with label=_('Status') value=sf_account.status %}
     </div>
     <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Course') value=sf_account.get_active_contract.studiengang_ref.name %}
+        {% include 'snippets/field-text.html' with label=_('Course') value=sf_account.get_active_contract.studiengang_ref.name_studiengang_auto %}
     </div>
     <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('University email address') value=sf_account.unimailadresse %}

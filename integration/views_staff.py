@@ -160,7 +160,7 @@ class DashboardStudents(StaffMixin, TemplateView):
                     filters.append(
                         (_('Course'),
                          students.first().contract_account_set.filter(
-                             studiengang_ref__pk=course).first().studiengang_ref.name,
+                             studiengang_ref__pk=course).first().studiengang_ref.name_studiengang_auto,
                          'course'
                          ))
 
@@ -192,7 +192,7 @@ class DashboardCourses(StaffMixin, TemplateView):
         courses = DegreeCourse.objects.filter(university=self.contact.account).order_by(o)
         if q:
             context.update(q=q)
-            courses = courses.filter(Q(name__icontains=q))
+            courses = courses.filter(Q(name_studiengang_auto__icontains=q))
         if not courses:
             courses = []
         else:

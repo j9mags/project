@@ -22,7 +22,8 @@
   </div>
 
   <div class="mdl-cell mdl-cell--4-col mdl-cell--4-offset-tablet mdl-typography--text-right">
-    <button id="bulk-form--btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white" disabled="disabled">{% trans 'Bulk update' %}</button>
+    <button id="bulk-form--btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white"
+            disabled="disabled">{% trans 'Bulk update' %}</button>
   </div>
 
   <div class="mdl-cell mdl-cell--12-col">
@@ -54,7 +55,7 @@
                 <td class="mdl-data-table__cell--non-numeric">{{ student.kommunikationssprache | default:"--" }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
                   <a class="filter csp-table--action" href="#" data-filter="course" data-filter-value="{{ student.get_course.pk }}">
-                      <i class="material-icons md-18">filter_list</i>{{ student.get_course.name }}</a>
+                      <i class="material-icons md-18">filter_list</i>{{ student.get_course.name_studiengang_auto }}</a>
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">
                   <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ student.status }}">

@@ -458,8 +458,9 @@ class DegreeCourse(models.Model):
                             blank=True, null=True)
     university = models.ForeignKey(Account, models.DO_NOTHING, custom=True,
                                    sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
-    course_id = models.CharField(custom=True, max_length=1300, verbose_name=_('ID'),
-                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
+    course_id = models.CharField(custom=True, max_length=1300, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    name_studiengang_auto = models.CharField(custom=True, max_length=1300, sf_read_only=models.READ_ONLY, blank=True,
+                                             null=True)
 
     standard_period_of_study = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
                                                    verbose_name=_('Standard Study Period (No. of Semesters)'),
