@@ -87,6 +87,10 @@ class StudentOnboardingForm(forms.Form):
     mailing_zip = forms.CharField(max_length=20, label=_('Postal code'))
     mailing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['mailing_country'].widget.choices[0] = ("", "")
+
 
 class StudentAccountForm(forms.Form):
     status = forms.ChoiceField(choices=Choices.AccountStatus)
@@ -107,11 +111,19 @@ class StudentContactForm(forms.ModelForm):
         fields = ['email', 'mobile_phone', 'other_phone', 'mailing_street',
                   'mailing_city', 'mailing_postal_code', 'mailing_country']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['mailing_country'].widget.choices[0] = ("", "")
+
 
 class StudentPaymentForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['billing_street', 'billing_city', 'billing_postal_code', 'billing_country']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['billing_country'].widget.choices[0] = ("", "")
 
 
 class StudentRevokeMandateForm(forms.ModelForm):
