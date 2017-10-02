@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from datetime import date
+from datetime import date, timedelta
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
@@ -341,7 +341,8 @@ class Account(models.Model, PerishableTokenMixin):
 
     def get_active_courses(self):
         if not self._is_student():
-            return self.degreecourse_set.filter(start_of_studies__gte=date.today())
+            min_date = date.today() - timedelta(31)
+            return self.degreecourse_set.filter(start_of_studies__gte=min_date)
         return None
 
 
