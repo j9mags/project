@@ -192,7 +192,8 @@ class CsvUpload(models.Model):
             Contract.objects.bulk_create(ctr_to_insert)
         except Exception as e:
             print(e)
-            accounts.delete()
+            for account in accounts:
+                account.delete()
             return False
 
         return True
