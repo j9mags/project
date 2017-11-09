@@ -14,7 +14,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 
 from authentication.models import CsvUpload
-from .models import DegreeCourse, Contract
+from .models import DegreeCourse, Contract, Account, RecordType
 from .forms import *
 
 from django.core.paginator import Paginator, EmptyPage
@@ -319,6 +319,73 @@ class FileUploadAction(StaffMixin, View):
                 rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
                 return redirect(rc+'?err=2')
         return redirect('integration:dashboard')
+
+
+class StudentRegister(StaffMixin, TemplateView):
+    template_name = 'staff/student_register.html'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_staff_context()
+        context.update(super(StudentRegister, self).get_context_data(**kwargs))
+
+        if self.request.POST:
+            form = CreateStudentForm(self.contact.account, self.request.POST)
+        else:
+            form = CreateStudentForm(self.contact.account)
+        context.update(form=form)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        form = context.get('form')
+
+        if form.is_valid():
+            acc_rt = RecordType.objects.get(sobject_type='Account', developer_name='Sofortzahler').id
+            ctc_rt = RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler').id
+            ctr_id = RecordType.objects.get(sobject_type='Contract', developer_name='Sofortzahler').id
+
+            account = Account(
+                record_type_id=acc_rt,
+                hochschule_ref=self.contact.account,
+                immatrikulationsnummer=form.cleaned_data.get('immatrikulationsnummer'),
+                unimailadresse=form.cleaned_data.get('unimailadresse'),
+                status=form.cleaned_data.get('status'),
+                name="{} {}".format(form.cleaned_data.get('first_name'), form.cleaned_data.get('last_name')),
+                geburtsdatum=form.cleaned_data.get('geburtsdatum'),
+                billing_street=form.cleaned_data.get('street'),
+                billing_postal_code=form.cleaned_data.get('zip'),
+                billing_city=form.cleaned_data.get('city'),
+                billing_country=form.cleaned_data.get('country')
+            )
+            account.save()
+
+            contact = Contact(
+                account=account,
+                record_type_id=ctc_rt,
+                last_name=form.cleaned_data.get('last_name'),
+                first_name=form.cleaned_data.get('first_name'),
+                email=form.cleaned_data.get('email'),
+                mobile_phone=form.cleaned_data.get('mobile_phone'),
+                mailing_street=form.cleaned_data.get('street'),
+                mailing_postal_code=form.cleaned_data.get('zip'),
+                mailing_city=form.cleaned_data.get('city'),
+                mailing_country=form.cleaned_data.get('country'),
+                student_contact=True,
+            )
+            contact.save()
+
+            contract = Contract(
+                account=account,
+                record_type_id=ctr_id,
+                university_ref=account.hochschule_ref,
+                studiengang_ref=account.hochschule_ref.degreecourse_set.get(pk=form.cleaned_data.get('course'))
+            )
+            contract.save()
+            if 'save-new' in request.POST:
+                return redirect('integration:student_register')
+            return redirect('integration:student_review', pk=account.pk)
+        return self.render_to_response(context)
 
 
 class StudentReview(StaffMixin, DetailView):
