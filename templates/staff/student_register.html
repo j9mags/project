@@ -25,11 +25,6 @@
   !function() {
     "use strict";
     const birth_date = document.querySelector('#id_geburtsdatum');
-    const bd_picker = new MaterialDatetimePicker()
-      .on('submit', (val) => {
-        birth_date.value = val.format("YYYY-MM-DD");
-      });
-    birth_date.addEventListener('focus', () => bd_picker.open());
     var dialog = new mdDateTimePicker.default({
       type: 'date',
       init: moment(birth_date.value),
