@@ -27,7 +27,7 @@
     const birth_date = document.querySelector('#id_geburtsdatum');
     var dialog = new mdDateTimePicker.default({
       type: 'date',
-      init: moment(birth_date.value),
+      init: moment(),
       past: moment().subtract(50, 'years'),
       future: moment(),
       trigger: birth_date
