@@ -90,7 +90,7 @@
     if (smsUpdate_btn !== null)
       smsUpdate_btn.addEventListener('click', showDlgSms);
 
-    window.showDlgSt = showDlgSt;
+    window.showDlgSts = showDlgSts;
     window.showDlgCs = showDlgCs;
     window.showDlgBlk = showDlgBlk;
     window.showDlgSms = showDlgSms;
