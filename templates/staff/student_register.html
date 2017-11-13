@@ -5,7 +5,17 @@
 
 {% block title %}{% trans 'New student' %}{% endblock %}
 
+{% block extrahead %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static '/css/mdl-date-textfield.min.css' %}" />
+{% endblock %}
+
 {% block content %}
   {{ block.super }}
   {% include "snippets/student_account_create.html" with class="csp--full-width" form=form %}
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  <script src="{% static '/js/mdl-date-textfield.min.js' %}"></script>
 {% endblock %}
