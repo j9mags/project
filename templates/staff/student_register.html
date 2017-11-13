@@ -7,7 +7,7 @@
 
 {% block extrahead %}
   {{ block.super }}
-  <link rel="stylesheet" href="{% static '/css/datepicker.min.css' %}" />
+  <link rel="stylesheet" href="{% static '/css/mdDateTimePicker.min.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -17,6 +17,33 @@
 
 {% block extrajs %}
   {{ block.super }}
-  <script src="{% static '/js/datepicker.min.js' %}"></script>
-  <script src="{% static '/js/material-datepicker.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rome/2.1.22/rome.js"></script>
+  <script src="{% static '/js/mdDateTimePicker.min.js' %}"></script>
+
+<script defer>
+  !function() {
+    "use strict";
+    const birth_date = document.querySelector('#id_geburtsdatum');
+    const bd_picker = new MaterialDatetimePicker()
+      .on('submit', (val) => {
+        birth_date.value = val.format("YYYY-MM-DD");
+      });
+    birth_date.addEventListener('focus', () => bd_picker.open());
+    var dialog = new mdDateTimePicker.default({
+      type: 'date',
+      init: moment(birth_date.value),
+      past: moment().subtract(50, 'years'),
+      future: moment(),
+      trigger: birth_date
+    });
+    birth_date.addEventListener('focus', function() {
+      dialog.toggle();
+    });
+    birth_date.addEventListener('onOk', function(d) {
+      this.value = dialog.time.format("YYYY-MM-DD");
+    });
+  }();
+  </script>
+
 {% endblock %}
