@@ -77,16 +77,7 @@ class DashboardHome(StaffMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        contact = context.get('contact')
-
-        st_form = StudentsUploadForm(contact.account, request.POST, request.FILES)
-        cs_form = UploadForm(request.POST, request.FILES)
-
-        is_course = 'course' not in request.POST
-        if is_course:
-            form = cs_form
-        else:
-            form = st_form
+        form = UploadForm(request.POST, request.FILES)
 
         if form.is_valid():
             json_data = form.cleaned_data.get('raw_data')
@@ -95,17 +86,18 @@ class DashboardHome(StaffMixin, TemplateView):
                 d[key].pop('0')
                 d[key].pop('1')
             upd = request.user.csvupload_set.create(
-                course=form.cleaned_data.get('course'),
+                course=form.cleaned_data.get('courses'),
                 uuid=str(uuid4()),
                 content=json.dumps(d)
             )
             return redirect('integration:upload_review', uuid=upd.uuid)
 
+        is_course = form.data.get('courses', False)
         context.update(
-            display_st=form == st_form,
-            display_cs=form == cs_form,
-            st_form=st_form,
-            cs_form=cs_form,
+            display_st=not is_course,
+            display_cs=is_course,
+            st_form=form,
+            cs_form=form,
             form=form,
         )
 

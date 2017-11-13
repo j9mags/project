@@ -53,13 +53,13 @@ class PerishableToken(models.Model):
 
 class CsvUpload(models.Model):
     user = models.ForeignKey(User)
-    course = models.CharField(max_length=18, null=True, blank=True)
+    course = models.BooleanField()
     uuid = models.CharField(max_length=50)
     content = models.TextField(blank=True, null=True)
 
     expected_student_headers = ["Immatrikulationsnummer", "Nachname", "Vorname", "Geburtsdatum",
                                 "Straße und Hausnummer", "PLZ", "Stadt", "universitäre E-Mail-Adresse",
-                                "private E-Mail-Adresse", "Handynummer"]
+                                "private E-Mail-Adresse", "Handynummer", "Studiengang"]
     expected_courses_headers = ["Name des Studiengangs", "Regelstudienzeit (in Semestern)", "Kosten pro Semester",
                                 "Kosten pro Monat", "Kosten pro Monat über der Regelstudienzeit",
                                 "Immatrikulationsgebühr (einmalig)", "Auslandssemestergebühr pro Monat",
@@ -83,6 +83,7 @@ class CsvUpload(models.Model):
         rc = []
         i, done = 1, False
         headers = CsvUpload.expected_student_headers if self.course else CsvUpload.expected_courses_headers
+        courses = {}
         while not done:
             i += 1
             d_ = OrderedDict()
@@ -90,7 +91,10 @@ class CsvUpload(models.Model):
                 if not str(i) in data[k]:
                     done = True
                     break
-                d_.update({k: data[k][str(i)] if 'datum' not in k else datetime.fromtimestamp(int(data[k][str(i)]) / 1000).date()})
+                if 'datum' in k:
+                    d_.update({k: datetime.fromtimestamp(int(data[k][str(i)]) / 1000).date()})
+                else:
+                    d_.update({k: data[k][str(i)]})
             if d_:
                 rc.append(d_)
         return rc
@@ -122,7 +126,8 @@ class CsvUpload(models.Model):
         ctr_id = RecordType.objects.get(sobject_type='Contract', developer_name='Sofortzahler').id
 
         university = self.user.get_srecord().account
-        course = university.degreecourse_set.get(pk=self.course)
+        # course = university.degreecourse_set.get(pk=self.course)
+        courses = {}
 
         for row in data:
             if not (any(row) and all(row)):
@@ -157,6 +162,14 @@ class CsvUpload(models.Model):
                 student_contact=True,
             )
             contacts.update({acc.immatrikulationsnummer: ctc})
+
+            course_name = row.get('Studiengang')
+            if course_name not in courses:
+                courses.update({course_name: DegreeCourse.objects.get(name=course_name)})
+            course = courses.get(course_name)
+
+            if not course:
+                raise Exception()
 
             ctr = Contract(
                 university_ref=acc.hochschule_ref,

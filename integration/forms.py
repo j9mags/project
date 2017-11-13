@@ -24,6 +24,10 @@ KEEP_CURRENT = _('-- Keep current --')
 
 class UploadForm(forms.Form):
     csv = forms.FileField()
+    courses = forms.BooleanField()
+
+    def is_course(self):
+        return self.courses
 
     def clean(self):
         cleaned_data = super(UploadForm, self).clean()
@@ -34,7 +38,7 @@ class UploadForm(forms.Form):
                 json_data = pandas.read_excel(csv.temporary_file_path()).to_json()
                 data = json.loads(json_data)
 
-                is_course = 'course' not in cleaned_data
+                is_course = cleaned_data.get('courses')
                 if not CsvUpload.is_valid(data, is_course):
                     self.add_error('csv', _('File content is not correct.'))
                 else:
@@ -46,12 +50,12 @@ class UploadForm(forms.Form):
         return cleaned_data
 
 
-class StudentsUploadForm(UploadForm):
-    def __init__(self, university, *args, **kwargs):
-        super(StudentsUploadForm, self).__init__(*args, **kwargs)
-        self.fields['course'] = forms.ChoiceField(
-            choices=[(o.pk, o.name_studiengang_auto) for o in university.get_active_courses()]
-        )
+#class StudentsUploadForm(UploadForm):
+#    def __init__(self, university, *args, **kwargs):
+#        super(StudentsUploadForm, self).__init__(*args, **kwargs)
+#        self.fields['course'] = forms.ChoiceField(
+#            choices=[(o.pk, o.name_studiengang_auto) for o in university.get_active_courses()]
+#        )
 
 
 class LanguageSelectForm(forms.ModelForm):
