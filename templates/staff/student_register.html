@@ -37,6 +37,11 @@
     });
     birth_date.addEventListener('onOk', function(d) {
       this.value = dialog.time.format("YYYY-MM-DD");
+      this.parentNode.classList.add('is-dirty');
+    });
+    birth_date.addEventListener('onCancel', function(d) {
+      if (! this.value)
+        this.parentNode.classList.remove('is-dirty');
     });
   }();
   </script>
