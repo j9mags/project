@@ -82,7 +82,7 @@ class CsvUpload(models.Model):
         data = json.loads(self.content)
         rc = []
         i, done = 1, False
-        headers = CsvUpload.expected_student_headers if self.course else CsvUpload.expected_courses_headers
+        headers = CsvUpload.expected_courses_headers if self.course else CsvUpload.expected_student_headers
         courses = {}
         while not done:
             i += 1
