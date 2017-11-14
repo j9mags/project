@@ -71,12 +71,14 @@ class CsvUpload(models.Model):
     @staticmethod
     def is_valid(data, is_course):
         headers = CsvUpload.expected_courses_headers if is_course else CsvUpload.expected_student_headers
+        headers_checked = 0
 
         for header in data.keys():
             if header not in headers:
                 return False
+            headers_checked += 1
 
-        return True
+        return headers_checked == len(headers)
 
     def parse_data(self):
         data = json.loads(self.content)
