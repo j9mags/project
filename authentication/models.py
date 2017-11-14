@@ -103,9 +103,9 @@ class CsvUpload(models.Model):
 
     def process(self):
         if self.course:
-            rc = self._create_students()
-        else:
             rc = self._create_courses()
+        else:
+            rc = self._create_students()
         if rc:
             self.delete()
         return rc
