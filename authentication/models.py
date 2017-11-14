@@ -167,7 +167,7 @@ class CsvUpload(models.Model):
 
             course_name = row.get('Studiengang')
             if course_name not in courses:
-                courses.update({course_name: DegreeCourse.objects.get(name_studiengang_auto=course_name)})
+                courses.update({course_name: university.degreecourse_set.get(name_studiengang_auto=course_name)})
             course = courses.get(course_name)
 
             if not course:
