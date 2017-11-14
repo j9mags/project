@@ -83,7 +83,7 @@ class CsvUpload(models.Model):
         rc = []
         i, done = 1, False
         headers = CsvUpload.expected_courses_headers if self.course else CsvUpload.expected_student_headers
-        courses = {}
+
         while not done:
             i += 1
             d_ = OrderedDict()

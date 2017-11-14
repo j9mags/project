@@ -272,8 +272,8 @@ class FileUpload(StaffMixin, TemplateView):
             data = paginator.page(paginator.num_pages if p > 1 else 0)
         context.update(data=data)
 
-        if upload.course:
-            context.update(course=DegreeCourse.objects.get(pk=upload.course))
+        # if upload.course:
+        #     context.update(course=DegreeCourse.objects.get(pk=upload.course))
 
         err = self.request.GET.get('err')
         err_msg = {
