@@ -24,7 +24,7 @@ KEEP_CURRENT = _('-- Keep current --')
 
 class UploadForm(forms.Form):
     csv = forms.FileField()
-    courses = forms.BooleanField()
+    courses = forms.BooleanField(required=False)
 
     def is_course(self):
         return self.courses
