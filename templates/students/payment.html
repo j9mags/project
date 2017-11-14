@@ -44,7 +44,7 @@
 </div>
 {% if open_payments > 0 %}
 <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" data-mdl-for="btn-revoke-mandate-tt">
-    {% trans 'There are open payments on this Mandate, only after all the open payments have been processed you will be able to revoke the mandate.' %}
+    {% trans 'There are open payments on this Mandate. Only after all the open payments have been processed will you be able to revoke the mandate.' %}
 </div>
 {% endif %}
 {% include 'dialogs/revoke-mandate.html' with form=rvk_form %}
