@@ -34,7 +34,8 @@
             <a href="{% url 'integration:dashboard' %}"
                class="mdl-button">{% trans 'Back' %}</a>
             <div class="mdl-layout-spacer"></div>
-            <button id="btn-revoke-mandate"
+
+            <button id="btn-revoke-mandate" {% if open_payments > 0 %}disabled{% endif %}
                     class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
                 {% trans 'Revoke mandate' %}
             </button>
