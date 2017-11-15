@@ -17,6 +17,8 @@ class UserLogin(LoginView):
         response = super(UserLogin, self).get(request, *args, **kwargs)
         response.context_data.update(forgot_form=ForgotPasswordForm())
 
+        flip = 'show-front'
+
         if 'msg' in request.GET.keys():
             code = request.GET.get('msg')
             msg = {
@@ -25,8 +27,9 @@ class UserLogin(LoginView):
                 'pw-ch--missing': _("We couldn't find a user with that email."),
             }.get(code, None)
             if msg:
+                flip = 'show-left'
                 response.context_data.update(message=msg)
-
+        response.context_data.update(cube_flip=flip)
         return response
 
 
