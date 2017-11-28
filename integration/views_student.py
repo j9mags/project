@@ -178,8 +178,10 @@ class PaymentDetails(StudentMixin, TemplateView):
             form = StudentPaymentForm(self.request.POST, instance=self.account)
         else:
             form = StudentPaymentForm(instance=self.account)
-        context.update(account=self.account, form=form, open_payments=payment_contact.mandate_open_payments or 0)
+        context.update(account=self.account, form=form)
 
+        if payment_contact:
+            context.update(open_payments=payment_contact.mandate_open_payments or 0)
         return context
 
     def post(self, request, *args, **kwargs):
