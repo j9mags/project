@@ -11,7 +11,7 @@ from uuid import uuid4
 from authtools.models import AbstractEmailUser
 from pandas.io import json
 
-from integration.models import RecordType, Account, Contact, Contract, DegreeCourse
+from integration.models import RecordType, Account, Contact, Contract, DegreeCourse, DegreeCourseFees
 
 
 class User(AbstractEmailUser):
@@ -222,6 +222,8 @@ class CsvUpload(models.Model):
 
         university = self.user.get_srecord().account
         courses = []
+        courses_names = []
+        courses_fees = {}
         data = self.parse_data()
         for row in data:
             if not (any(row) and all(row)):
@@ -230,15 +232,36 @@ class CsvUpload(models.Model):
             course = DegreeCourse()
             course.university = university
             course.name = row.get('Name des Studiengangs')
-            course.standard_period_of_study = row.get('Regelstudienzeit (in Semestern)')
-            course.cost_per_semester = row.get('Kosten pro Semester')
-            course.cost_per_month = row.get('Kosten pro Monat')
-            course.cost_per_month_beyond_standard = row.get('Kosten pro Monat über der Regelstudienzeit')
-            course.matriculation_fee = row.get('Immatrikulationsgebühr (einmalig)')
-            course.fee_semester_abroad = row.get('Auslandssemestergebühr pro Monat')
-            course.fee_semester_off = row.get('Urlaubssemestergebühr pro Monat')
             course.start_of_studies = row.get('Startdatum des Studiengangs')  # datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
+            course.standard_period_of_study = row.get('Regelstudienzeit (in Semestern)')
 
             courses.append(course)
+            courses_names.append(course.name)
+
+            fees = DegreeCourseFees()
+
+            fees.cost_per_semester = row.get('Kosten pro Semester')
+            fees.cost_per_month = row.get('Kosten pro Monat')
+            fees.cost_per_month_beyond_standard = row.get('Kosten pro Monat über der Regelstudienzeit')
+            fees.matriculation_fee = row.get('Immatrikulationsgebühr (einmalig)')
+            fees.fee_semester_abroad = row.get('Auslandssemestergebühr pro Monat')
+            fees.fee_semester_off = row.get('Urlaubssemestergebühr pro Monat')
+
+            courses_fees.update({course.unique_name: fees})
+
         DegreeCourse.objects.bulk_create(courses)
+
+        sf_courses = DegreeCourse.objects.filter(university=university, name__in=courses_names)
+        linked = 0
+        for course in sf_courses:
+            fee = courses_fees.get(course.unique_name)
+            if fee is None:
+                continue
+            fee.degree_course_ref = course
+            linked += 1
+
+        if linked != len(courses_fees):
+            print("Mismatch .. caution")
+
+        DegreeCourseFees.objects.bulk_create(fees)
         return True

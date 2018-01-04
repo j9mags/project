@@ -126,7 +126,7 @@ DATABASES = {
         'CONSUMER_KEY': '3MVG92u_V3UMpV.hj5oYbP7_bEfS3i8S1wAC35b7LIgKIH99PY85rn23G0gWKI8WlXaOJYSj8jG6Nhn5VHXue',
         'CONSUMER_SECRET': '2985604239647087554',
         'USER': 'irle@chancen-eg.de.empaua',
-        'PASSWORD': 'u&!Vu59h9bOQ2R5uE0IZV8duDzW020W5jYhFk',
+        'PASSWORD': 'LidPyctEckTeuW55B4Urtwhvyv4ndUKNsGw0OFg',
         'HOST': 'https://test.salesforce.com',
     }
 }
