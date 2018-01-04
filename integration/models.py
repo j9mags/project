@@ -509,7 +509,7 @@ class DegreeCourse(models.Model):
 
     @property
     def unique_name(self):
-        return "{self.universiy.id}-{self.name}".format(self=self)
+        return "{self.university.id}-{self.name}".format(self=self)
 
 
 class DegreeCourseFees(models.Model):
