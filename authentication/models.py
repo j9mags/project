@@ -272,5 +272,5 @@ class CsvUpload(models.Model):
         except Exception as e:
             print(e)
             return False
-        
+
         return True
