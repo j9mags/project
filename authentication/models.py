@@ -239,7 +239,7 @@ class CsvUpload(models.Model):
             courses_names.append(course.name)
 
             fees = DegreeCourseFees()
-
+            fees.valid_from = timezone.now()
             fees.cost_per_semester = row.get('Kosten pro Semester')
             fees.cost_per_month = row.get('Kosten pro Monat')
             fees.cost_per_month_beyond_standard = row.get('Kosten pro Monat über der Regelstudienzeit')
