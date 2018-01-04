@@ -304,12 +304,12 @@ class FileUploadAction(StaffMixin, View):
         if action == 'discard':
             upload.delete()
         else:
-            # try:
-            upload.process()
-            #except Exception as e:
-            #    print(e)
-            #    rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
-            #    return redirect(rc+'?err=2')
+            try:
+                upload.process()
+            except Exception as e:
+                print(e)
+                rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
+                return redirect(rc+'?err=2')
         return redirect('integration:dashboard')
 
 
