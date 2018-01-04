@@ -249,11 +249,7 @@ class CsvUpload(models.Model):
 
             courses_fees.update({course.unique_name: fees})
 
-        try:
-            DegreeCourse.objects.bulk_create(courses)
-        except Exception as e:
-            print(e)
-            return False
+        DegreeCourse.objects.bulk_create(courses)
 
         sf_courses = DegreeCourse.objects.filter(university=university, name__in=courses_names)
         linked = 0
@@ -267,10 +263,6 @@ class CsvUpload(models.Model):
         if linked != len(courses_fees):
             print("Mismatch .. caution")
 
-        try:
-            DegreeCourseFees.objects.bulk_create(fees)
-        except Exception as e:
-            print(e)
-            return False
+        DegreeCourseFees.objects.bulk_create(courses_fees.values())
 
         return True
