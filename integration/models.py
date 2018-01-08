@@ -511,6 +511,13 @@ class DegreeCourse(models.Model):
     def unique_name(self):
         return "{self.university.id}-{self.name}".format(self=self)
 
+    @property
+    def active_fee(self):
+        return self.degreecoursefees_set.filter(valid_from__lte=timezone.now()).order_by('-valid_from').first()
+
+    def __str__(self):
+        return "[{self.university.id}] {self.name}".format(self=self)
+
 
 class DegreeCourseFees(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
@@ -538,6 +545,9 @@ class DegreeCourseFees(models.Model):
         verbose_name = 'Degree Course Fees'
         verbose_name_plural = 'Degree Courses Fees'
         # keyPrefix = 'a0P'
+
+    def __str__(self):
+        return "{self.degree_course_ref.name} from {self.valid_from}".format(self=self)
 
 
 class Contract(models.Model):
