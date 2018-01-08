@@ -497,13 +497,13 @@ td.csp-table--action {
 }
 
 .course-fees.collapsed .mdl-card__supporting-text {
-    transition: all .2s ease-out;
+    transition: all .3s ease-out;
 }
 
 .course-fees.collapsed .mdl-card__supporting-text {
-    display: none;
+    max-height: 0;
 }
 
 .course-fees.collapsed:hover .mdl-card__supporting-text {
-    display: block;
+    max-height: 500px;
 }
