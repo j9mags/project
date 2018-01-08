@@ -43,7 +43,7 @@
       <h5 class="mdl-typography--headline">{% trans 'Past fees' %}</h5>
     </div>
     {% for fees in course.past_fees %}
-      {% include "snippets/course_fees.html" with fees=fees collapse=True %}
+      {% include "snippets/course_fees.html" with fees=fees collapsed=True %}
     {% endfor %}
   {% endif %}
 {% endblock %}
