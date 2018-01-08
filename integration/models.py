@@ -512,8 +512,12 @@ class DegreeCourse(models.Model):
         return "{self.university.id}-{self.name}".format(self=self)
 
     @property
-    def active_fee(self):
+    def active_fees(self):
         return self.degreecoursefees_set.filter(valid_from__lte=timezone.now()).order_by('-valid_from').first()
+
+    @property
+    def past_fees(self):
+        return self.degreecoursefees_set.filter(valid_from__lt=self.active_fees.valid_from).order_by('-valid_from')
 
     def __str__(self):
         return "[{self.university.id}] {self.name}".format(self=self)
