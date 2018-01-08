@@ -1,0 +1,25 @@
+{% load i18n %}
+
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col mdl-grid{% if collapsed %} collapsed{% endif%}">
+    <div class="mdl-cell mdl-cell--12-col">
+        <span class="mdl-typography--title">{% trans 'Valid from:' %} {{ fees.valid_from | date:"d.m.Y" }}</span>
+    </div>
+    <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Cost per semester') value=fees.cost_per_semester type="currency" %}
+    </div>
+    <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Cost per month') value=fees.cost_per_month type="currency" %}
+    </div>
+    <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Cost per month beyond Standard Period') value=fees.cost_per_month_beyond_standard type="currency" %}
+    </div>
+    <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Matriculation fee') value=fees.matriculation_fee type="currency" %}
+    </div>
+    <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Fee Semester abroad') value=fees.fee_semester_abroad type="currency" %}
+    </div>
+    <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Fee Semester off') value=fees.fee_semester_off type="currency" %}
+    </div>
+</div>
