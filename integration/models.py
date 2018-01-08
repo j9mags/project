@@ -520,7 +520,7 @@ class DegreeCourse(models.Model):
         return self.degreecoursefees_set.filter(valid_from__lt=self.active_fees.valid_from).order_by('-valid_from')
 
     def __str__(self):
-        return "[{self.university.id}] {self.name}".format(self=self)
+        return "[{self.university.name}] {self.name}".format(self=self)
 
 
 class DegreeCourseFees(models.Model):

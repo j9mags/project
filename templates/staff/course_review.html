@@ -38,7 +38,7 @@
   </div>
   {% include "snippets/course_fees.html" with fees=course.active_fees %}
 
-  {% if course.past_fees.size > 0 %}
+  {% if course.past_fees %}
     <div class="mdl-cell mdl-cell--12-col">
       <h5 class="mdl-typography--headline">{% trans 'Past fees' %}</h5>
     </div>
