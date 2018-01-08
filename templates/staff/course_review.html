@@ -36,5 +36,5 @@
   <div class="mdl-cell mdl-cell--12-col">
     <h5 class="mdl-typography--headline">{% trans 'Current fees' %}</h5>
   </div>
-  {% include "snippets/course_fees.html" with fee=course.active_fee %}
+  {% include "snippets/course_fees.html" with fees=course.active_fees %}
 {% endblock %}
