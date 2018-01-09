@@ -167,7 +167,7 @@ class CsvUpload(models.Model):
 
             course_name = row.get('Studiengang')
             if course_name not in courses:
-                courses.update({course_name: university.degreecourse_set.get(name_studiengang_auto=course_name)})
+                courses.update({course_name: university.degreecourse_set.get(name=course_name)})
             course = courses.get(course_name)
 
             if not course:
@@ -176,6 +176,7 @@ class CsvUpload(models.Model):
             ctr = Contract(
                 university_ref=acc.hochschule_ref,
                 studiengang_ref=course,
+                degree_course_fees_ref=course.active_fees,
                 record_type_id=ctr_id,
             )
             contracts.update({acc.immatrikulationsnummer: ctr})
