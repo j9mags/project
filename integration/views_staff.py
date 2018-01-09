@@ -367,11 +367,13 @@ class StudentRegister(StaffMixin, TemplateView):
             )
             contact.save()
 
+            course = account.hochschule_ref.degreecourse_set.get(pk=form.cleaned_data.get('course'))
             contract = Contract(
                 account=account,
                 record_type_id=ctr_id,
                 university_ref=account.hochschule_ref,
-                studiengang_ref=account.hochschule_ref.degreecourse_set.get(pk=form.cleaned_data.get('course'))
+                studiengang_ref=course,
+                degree_course_fees_ref=course.active_fees
             )
             contract.save()
             if 'save-new' in request.POST:
