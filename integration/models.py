@@ -586,9 +586,9 @@ class Contract(models.Model):
     matriculation_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                 verbose_name=_('Matriculation Fee'), sf_read_only=models.READ_ONLY,
                                                 blank=True, null=True)
-    start_summer_semester_ref = models.CharField(custom=True, max_length=1300,
-                                                 verbose_name=_('Starting Month Summer Semester'),
-                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
+#    start_summer_semester_ref = models.CharField(custom=True, max_length=1300,
+#                                                 verbose_name=_('Starting Month Summer Semester'),
+#                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
     semester_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
                                            sf_read_only=models.READ_ONLY, blank=True, null=True)
     total_amount_of_rates_auto = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
@@ -609,9 +609,9 @@ class Contract(models.Model):
     start_of_studies_month_ref = models.CharField(custom=True, max_length=1300,
                                                   verbose_name=_('Start of Studies Month'),
                                                   sf_read_only=models.READ_ONLY, blank=True, null=True)
-    start_winter_semester_ref = models.CharField(custom=True, max_length=1300,
-                                                 verbose_name=_('Starting Month Winter Semester'),
-                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
+#    start_winter_semester_ref = models.CharField(custom=True, max_length=1300,
+#                                                 verbose_name=_('Starting Month Winter Semester'),
+#                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
     start_of_studies_auto = models.DateField(custom=True, verbose_name=_('Start of Studies'),
                                              sf_read_only=models.READ_ONLY, blank=True, null=True)
     discount_helper_auto = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
