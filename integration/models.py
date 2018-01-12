@@ -606,9 +606,9 @@ class Contract(models.Model):
     count_invoices = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
                                          verbose_name=_('Count of Invoices'),
                                          sf_read_only=models.READ_ONLY, blank=True, null=True)
-    start_of_studies_month_ref = models.CharField(custom=True, max_length=1300,
-                                                  verbose_name=_('Start of Studies Month'),
-                                                  sf_read_only=models.READ_ONLY, blank=True, null=True)
+#    start_of_studies_month_ref = models.CharField(custom=True, max_length=1300,
+#                                                  verbose_name=_('Start of Studies Month'),
+#                                                  sf_read_only=models.READ_ONLY, blank=True, null=True)
 #    start_winter_semester_ref = models.CharField(custom=True, max_length=1300,
 #                                                 verbose_name=_('Starting Month Winter Semester'),
 #                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
