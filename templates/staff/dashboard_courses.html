@@ -43,7 +43,7 @@
             <td class="csp-table--action">
               <a class="mdl-color-text--primary" href="{% url 'integration:course_review' course.pk %}">
                 <i class="material-icons md-18">school</i>{% trans 'Details' %}</a></td>
-            <td class="mdl-data-table__cell--non-numeric">{{ course.name_studiengang_auto }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ course.name }}</td>
             <td class="mdl-data-table__cell">{{ course.standard_period_of_study|floatformat:"0" }}</td>
             <td class="mdl-data-table__cell">{{ course.cost_per_semester|currency }}</td>
             <td class="mdl-data-table__cell">{{ course.cost_per_month|currency }}</td>

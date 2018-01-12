@@ -24,6 +24,10 @@ KEEP_CURRENT = _('-- Keep current --')
 
 class UploadForm(forms.Form):
     csv = forms.FileField()
+    courses = forms.BooleanField(required=False)
+
+    def is_course(self):
+        return self.courses
 
     def clean(self):
         cleaned_data = super(UploadForm, self).clean()
@@ -34,7 +38,7 @@ class UploadForm(forms.Form):
                 json_data = pandas.read_excel(csv.temporary_file_path()).to_json()
                 data = json.loads(json_data)
 
-                is_course = 'course' not in cleaned_data
+                is_course = cleaned_data.get('courses')
                 if not CsvUpload.is_valid(data, is_course):
                     self.add_error('csv', _('File content is not correct.'))
                 else:
@@ -46,12 +50,12 @@ class UploadForm(forms.Form):
         return cleaned_data
 
 
-class StudentsUploadForm(UploadForm):
-    def __init__(self, university, *args, **kwargs):
-        super(StudentsUploadForm, self).__init__(*args, **kwargs)
-        self.fields['course'] = forms.ChoiceField(
-            choices=[(o.pk, o.name_studiengang_auto) for o in university.get_active_courses()]
-        )
+#class StudentsUploadForm(UploadForm):
+#    def __init__(self, university, *args, **kwargs):
+#        super(StudentsUploadForm, self).__init__(*args, **kwargs)
+#        self.fields['course'] = forms.ChoiceField(
+#            choices=[(o.pk, o.name_studiengang_auto) for o in university.get_active_courses()]
+#        )
 
 
 class LanguageSelectForm(forms.ModelForm):
@@ -144,6 +148,28 @@ class UniversityForm(forms.ModelForm):
         super(UniversityForm, self).__init__(*args, **kwargs)
         self.fields['semester_fee_new'].localize = True
         self.fields['semester_fee_new'].widget.is_localized = True
+
+
+class CreateStudentForm(forms.Form):
+    immatrikulationsnummer = forms.CharField(max_length=255, required=True, label=_('Matriculation Number'))
+    unimailadresse = forms.EmailField(required=True, label=_('University Email Address'))
+    status = forms.ChoiceField(choices=Choices.AccountStatus, required=True)
+    last_name = forms.CharField(max_length=80, required=True, label=_('Last name'))
+    first_name = forms.CharField(max_length=40, required=True, label=_('First name'))
+    geburtsdatum = forms.DateField(required=True, label=_('Date of Birth'))
+    street = forms.CharField(max_length=255, required=True, label=_('Street and House number'))
+    city = forms.CharField(max_length=40, required=True, label=_('City'))
+    zip = forms.CharField(max_length=20, required=True, label=_('Zip/Postal Code'))
+    country = forms.ChoiceField(choices=Choices.Country, required=False, label=_('Country'))
+    email = forms.EmailField(required=True, label=_('Private email address'))
+    mobile_phone = forms.CharField(max_length=40, required=True, label=_('Mobile phone'))
+
+    def __init__(self, university, *args, **kwargs):
+        super(CreateStudentForm, self).__init__(*args, **kwargs)
+        self.fields['course'] = forms.ChoiceField(
+            choices=[(o.pk, o.name) for o in university.get_active_courses()],
+            required=True
+        )
 
 
 class DiscountForm(forms.ModelForm):

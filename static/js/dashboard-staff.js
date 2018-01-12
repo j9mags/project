@@ -1,7 +1,10 @@
 (function () {
     var VISIBLE_CLASS = 'is-showing-dialog',
-        DIALOG_ID_ST = 'dlg-add-students',
-        addStudents_dlg = document.getElementById(DIALOG_ID_ST),
+        DIALOG_ID_ST = 'dlg-add-student',
+        addStudent_dlg = document.getElementById(DIALOG_ID_ST),
+        addStudent_btn = document.getElementById('fab-add-student'),
+        DIALOG_ID_STS = 'dlg-add-students',
+        addStudents_dlg = document.getElementById(DIALOG_ID_STS),
         addStudents_btn = document.getElementById('fab-add-students'),
         DIALOG_ID_CS = 'dlg-add-courses',
         addCourses_dlg = document.getElementById(DIALOG_ID_CS),
@@ -12,9 +15,9 @@
         DIALOG_ID_SMS = 'dlg-semester-fee',
         smsUpdate_dlg = document.getElementById(DIALOG_ID_SMS),
         smsUpdate_btn = document.getElementById('semester-fee--btn'),
-        showDlgSt = function(e) {
+        showDlgSts = function(e) {
           var processClick = function (evt) {
-            var target = evt.target.closest('#' + DIALOG_ID_ST);
+            var target = evt.target.closest('#' + DIALOG_ID_STS);
             
             if ((e !== evt) && (target === null)) {
               addStudents_dlg.classList.remove(VISIBLE_CLASS);
@@ -75,15 +78,19 @@
               smsUpdate_dlg.classList.add(VISIBLE_CLASS);
               document.addEventListener('click', processClick);
             }
+        },
+        gotoAddSt = function(e){
+            window.location.href = '/student/register/';
         };
-    addStudents_btn.addEventListener('click', showDlgSt);
+    addStudents_btn.addEventListener('click', showDlgSts);
     addCourses_btn.addEventListener('click', showDlgCs);
+    addStudent_btn.addEventListener('click', gotoAddSt);
     if (blkActions_btn !== null)
       blkActions_btn.addEventListener('click', showDlgBlk);
     if (smsUpdate_btn !== null)
       smsUpdate_btn.addEventListener('click', showDlgSms);
 
-    window.showDlgSt = showDlgSt;
+    window.showDlgSts = showDlgSts;
     window.showDlgCs = showDlgCs;
     window.showDlgBlk = showDlgBlk;
     window.showDlgSms = showDlgSms;
