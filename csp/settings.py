@@ -29,16 +29,16 @@ DEBUG = False # True
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['staging.chancen.services']
-    #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    #SECURE_HSTS_SECONDS = 31536000
-    #SECURE_HSTS_PRELOAD = True
-    #SECURE_CONTENT_TYPE_NOSNIFF = True
-    #SECURE_BROWSER_XSS_FILTER = True
-    #SECURE_SSL_REDIRECT = True
-    #SESSION_COOKIE_SECURE = True
-    #CSRF_COOKIE_SECURE = True
-    #X_FRAME_OPTIONS = 'DENY'
+    ALLOWED_HOSTS = ['portal.chancen.services','staging.chancen.services','demo.chancen.services']
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = 'DENY'
 
 
 # Application definition
