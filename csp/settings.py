@@ -24,12 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '5^ta7yitxe!_ic(v9-a&ukrh$$!*8+v9-zh-i4ar%)12=cm%pf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False # True
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['portal.chancen.services']
+    ALLOWED_HOSTS = ['portal.chancen.services','staging.chancen.services','demo.chancen.services']
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_PRELOAD = True
@@ -107,18 +107,26 @@ WSGI_APPLICATION = 'csp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'csp',
-        'USER': 'dhbahr',
-        'PASSWORD': '3rud4r10n',
+        'NAME': 'csp-staging',
+        'USER': 'chancen',
+        'PASSWORD': 'services',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
     'salesforce': {
+#        'ENGINE': 'salesforce.backend',
+#        'CONSUMER_KEY': '3MVG96mGXeuuwTZi1FvcrlwfqoVX8kci.sNgeu5SDP1O_beHT0lHKm.98wpsh_9G7TYPO8rVV0OkgFoK.dB2y',
+#        'CONSUMER_SECRET': '1200964172777374505',
+#        'USER': 'irle@chancen-eg.de.demo',
+#        'PASSWORD': 'u&!Vu59h9bOQ1',
+#        'HOST': 'https://test.salesforce.com',
+#    },
+#    'salesforce-sandbox': {
         'ENGINE': 'salesforce.backend',
         'CONSUMER_KEY': '3MVG92u_V3UMpV.hj5oYbP7_bEfS3i8S1wAC35b7LIgKIH99PY85rn23G0gWKI8WlXaOJYSj8jG6Nhn5VHXue',
         'CONSUMER_SECRET': '2985604239647087554',
         'USER': 'irle@chancen-eg.de.empaua',
-        'PASSWORD': 'u&!Vu59h9bOQ1',
+        'PASSWORD': 'LidPyctEckTeuW55B4Urtwhvyv4ndUKNsGw0OFg',
         'HOST': 'https://test.salesforce.com',
     }
 }

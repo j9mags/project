@@ -32,9 +32,6 @@
                     {% for k,v in data.0.items %}
                       <th class="mdl-data-table__cell--non-numeric">{{ k }}</th>
                     {% endfor %}
-                    {% if course %}
-                      <th class="mdl-data-table__cell--non-numeric">{% trans 'Degree course' %}</th>
-                    {% endif %}
                   </tr>
                 </thead>
                 <tbody>
@@ -43,9 +40,6 @@
                     {% for k,v in line.items %}
                       <td class="mdl-data-table__cell--non-numeric">{{ v }}</td>
                     {% endfor %}
-                    {% if course %}
-                      <td class="mdl-data-table__cell--non-numeric">{{ course.name_studiengang_auto }}</td>
-                    {% endif %}
                   </tr>
                 {% endfor %}
                 </tbody>

@@ -495,3 +495,17 @@ td.csp-table--action {
     vertical-align: text-bottom;
     margin-right: 4px;
 }
+
+.course-fees.collapsed .mdl-card__supporting-text {
+    transition: all .3s ease-in;
+}
+
+.course-fees.collapsed .mdl-card__supporting-text {
+    max-height: 0;
+    padding: 0;
+}
+
+.course-fees.collapsed:hover .mdl-card__supporting-text {
+    max-height: 500px;
+    padding: inherit;
+}

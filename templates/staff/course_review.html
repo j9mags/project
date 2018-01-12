@@ -4,47 +4,46 @@
 {% load i18n %}
 {% load csp %}
 
-{% block title %}{{ course.name_studiengang_auto }}{% endblock %}
+{% block title %}{{ course.name }}{% endblock %}
 
 {% block content %}
   {{ block.super }}
+  <div class="mdl-cell mdl-cell--12-col">
+    <h5 class="mdl-typography--headline">{% trans 'Course data' %}</h5>
+  </div>
   <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col mdl-grid">
     {% if form %}
       <form method="post">
         {% csrf_token %}
     {% endif %}
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Standard Period of Studies') value=course.standard_period_of_study type="int" %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Cost per semester') value=course.cost_per_semester type="currency" %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Cost per month') value=course.cost_per_month type="currency" %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Cost per month beyond Standard Period') value=course.cost_per_month_beyond_standard type="currency" %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Matriculation fee') value=course.matriculation_fee type="currency" %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Fee Semester abroad') value=course.fee_semester_abroad type="currency" %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Fee Semester off') value=course.fee_semester_off type="currency" %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Start of Studies') value=course.start_of_studies type="date" %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Starting Month Summer Semester') value=course.start_summer_semester %}
-      </div>
-      <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Starting Month Winter Semester') value=course.start_winter_semester %}
-      </div>
+        <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Standard Period of Studies') value=course.standard_period_of_study type="int" %}
+        </div>
+        <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Start of Studies') value=course.start_of_studies type="date" %}
+        </div>
+        <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Starting Month Summer Semester') value=course.start_summer_semester %}
+        </div>
+        <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Starting Month Winter Semester') value=course.start_winter_semester %}
+        </div>
     {% if form %}
       </form>
     {% endif %}
   </div>
+
+  <div class="mdl-cell mdl-cell--12-col">
+    <h5 class="mdl-typography--headline">{% trans 'Current fees' %}</h5>
+  </div>
+  {% include "snippets/course_fees.html" with fees=course.active_fees %}
+
+  {% if course.past_fees %}
+    <div class="mdl-cell mdl-cell--12-col">
+      <h5 class="mdl-typography--headline">{% trans 'Past fees' %}</h5>
+    </div>
+    {% for fees in course.past_fees %}
+      {% include "snippets/course_fees.html" with fees=fees collapsed=True %}
+    {% endfor %}
+  {% endif %}
 {% endblock %}

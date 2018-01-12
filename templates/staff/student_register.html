@@ -1,0 +1,49 @@
+{% extends 'staff/dashboard.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'New student' %}{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static '/css/mdDateTimePicker.min.css' %}" />
+{% endblock %}
+
+{% block content %}
+  {{ block.super }}
+  {% include "snippets/student_account_create.html" with class="csp--full-width" form=form %}
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rome/2.1.22/rome.js"></script>
+  <script src="{% static '/js/mdDateTimePicker.min.js' %}"></script>
+
+<script defer>
+  !function() {
+    "use strict";
+    const birth_date = document.querySelector('#id_geburtsdatum');
+    var dialog = new mdDateTimePicker.default({
+      type: 'date',
+      init: moment(),
+      past: moment().subtract(50, 'years'),
+      future: moment(),
+      trigger: birth_date
+    });
+    birth_date.addEventListener('focus', function() {
+      dialog.toggle();
+    });
+    birth_date.addEventListener('onOk', function(d) {
+      this.value = dialog.time.format("YYYY-MM-DD");
+      this.parentNode.classList.add('is-dirty');
+    });
+    birth_date.addEventListener('onCancel', function(d) {
+      if (! this.value)
+        this.parentNode.classList.remove('is-dirty');
+    });
+  }();
+  </script>
+
+{% endblock %}

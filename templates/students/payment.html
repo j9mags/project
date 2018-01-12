@@ -34,14 +34,19 @@
             <a href="{% url 'integration:dashboard' %}"
                class="mdl-button">{% trans 'Back' %}</a>
             <div class="mdl-layout-spacer"></div>
-            <button id="btn-revoke-mandate"
+
+            <div id="btn-revoke-mandate-tt"><button id="btn-revoke-mandate" {% if open_payments > 0 %}disabled{% endif %}
                     class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
                 {% trans 'Revoke mandate' %}
-            </button>
+            </button></div>
         </div>
     </form>
 </div>
-
+{% if open_payments > 0 %}
+<div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" data-mdl-for="btn-revoke-mandate-tt">
+    {% trans 'There are open payments on this Mandate. Only after all the open payments have been processed will you be able to revoke the mandate.' %}
+</div>
+{% endif %}
 {% include 'dialogs/revoke-mandate.html' with form=rvk_form %}
 {% endblock %}
 

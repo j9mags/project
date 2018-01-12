@@ -17,15 +17,19 @@ class UserLogin(LoginView):
         response = super(UserLogin, self).get(request, *args, **kwargs)
         response.context_data.update(forgot_form=ForgotPasswordForm())
 
+        flip = 'show-front'
+
         if 'msg' in request.GET.keys():
             code = request.GET.get('msg')
             msg = {
-                'pw-ch--success': _('Your request has been successfully processed.'),
-                'pw-ch--failed': _('Something went wrong with your request.'),
+                'pw-ch--success': _("Your request has been successfully processed."),
+                'pw-ch--failed': _("Something went wrong with your request."),
+                'pw-ch--missing': _("We couldn't find a user with that email."),
             }.get(code, None)
             if msg:
+                flip = 'show-left'
                 response.context_data.update(message=msg)
-
+        response.context_data.update(cube_flip=flip)
         return response
 
 
@@ -94,12 +98,7 @@ class PasswordSet(View):
 
 class PasswordChange(View):
 
-    template_success = 'generic/success.html'
-    template_failure = 'generic/failure.html'
-
     def post(self, request, *args, **kwargs):
-        context = {}
-
         form = ForgotPasswordForm(request.POST)
         rc = reverse('authentication:login')
 
@@ -111,8 +110,9 @@ class PasswordChange(View):
                 user = qs.first()
                 pt = user.get_srecord()
                 pt.request_new_password()
-
-            rc += '?msg=pw-ch--success'
+                rc += '?msg=pw-ch--success'
+            else:
+                rc += '?msg=pw-ch--missing'
         else:
             rc += '?msg=pw-ch--failed'
 

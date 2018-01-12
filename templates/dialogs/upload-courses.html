@@ -9,6 +9,8 @@
 
         {% csrf_token %}
         <input type="hidden" name="view_name" value="{{ view.template_name }}">
+        <input type="hidden" name="courses" value="true">
+
         <div class="mdl-dialog__content">
             {% include 'snippets/input-file.html' with field=form.csv type='file' pref='cs_' accept=".xls, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" %}
             <div id="upload-progress-cs" class="mdl-spinner mdl-js-spinner"></div>

@@ -399,6 +399,8 @@ class Contact(models.Model, PerishableTokenMixin):
     cancel_bank_account = models.BooleanField(custom=True, verbose_name='CancelBankAccount',
                                               default=models.DEFAULTED_ON_CREATE)
 
+    mandate_open_payments = models.DecimalField(custom=True, max_digits=4, decimal_places=0, blank=True, null=True)
+
     objects = managers.DefaultManager()
     university_staff = managers.UniversityManager()
     students = managers.StudentManager()
@@ -505,6 +507,52 @@ class DegreeCourse(models.Model):
         verbose_name_plural = _('Degree Courses')
         # keyPrefix = 'a00'
 
+    @property
+    def unique_name(self):
+        return "{self.university.id}-{self.name}".format(self=self)
+
+    @property
+    def active_fees(self):
+        return self.degreecoursefees_set.filter(valid_from__lte=timezone.now()).order_by('-valid_from').first()
+
+    @property
+    def past_fees(self):
+        return self.degreecoursefees_set.filter(valid_from__lt=self.active_fees.valid_from).order_by('-valid_from')
+
+    def __str__(self):
+        return "[{self.university.name}] {self.name}".format(self=self)
+
+
+class DegreeCourseFees(models.Model):
+    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    name = models.CharField(max_length=80, verbose_name='Auto Number', sf_read_only=models.READ_ONLY)
+    degree_course_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True,
+                                          sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
+    valid_from = models.DateField(custom=True, verbose_name=_('Valid from'))
+    cost_per_month = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Cost per Month'),
+                                         blank=True, null=True)
+    cost_per_month_beyond_standard = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                                         verbose_name=_('Cost per Month > Standard Study Period'),
+                                                         blank=True, null=True)
+    cost_per_semester = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                            verbose_name=_('Cost per Semester'), blank=True, null=True)
+    fee_semester_abroad = models.DecimalField(custom=True, max_digits=18, decimal_places=2, blank=True, null=True)
+    fee_semester_off = models.DecimalField(custom=True, max_digits=18, decimal_places=2, blank=True, null=True)
+    matriculation_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2, blank=True, null=True)
+    semester_fee = models.DecimalField(custom=True, max_digits=18, decimal_places=2, blank=True, null=True)
+    total_tuition_fees_auto = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                                  verbose_name=_('Tuition Fees Total'), sf_read_only=models.READ_ONLY,
+                                                  blank=True, null=True)
+
+    class Meta(models.Model.Meta):
+        db_table = 'DegreeCourseFees__c'
+        verbose_name = 'Degree Course Fees'
+        verbose_name_plural = 'Degree Courses Fees'
+        # keyPrefix = 'a0P'
+
+    def __str__(self):
+        return "{self.degree_course_ref.name} from {self.valid_from}".format(self=self)
+
 
 class Contract(models.Model):
     record_type = models.ForeignKey(RecordType, models.DO_NOTHING, blank=True, null=True,
@@ -519,6 +567,8 @@ class Contract(models.Model):
                                        related_name='contract_universityref_set', blank=True, null=True)
     studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True, blank=True, null=True,
                                         verbose_name=_('Degree Course'))
+    degree_course_fees_ref = models.ForeignKey('DegreeCourseFees', models.DO_NOTHING, custom=True, blank=True,
+                                               null=True)
     payment_interval = models.CharField(custom=True, max_length=255, choices=Choices.Payment, blank=True, null=True,
                                         verbose_name=_('Payment Interval'))
     first_payment = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
@@ -562,11 +612,14 @@ class Contract(models.Model):
     start_winter_semester_ref = models.CharField(custom=True, max_length=1300,
                                                  verbose_name=_('Starting Month Winter Semester'),
                                                  sf_read_only=models.READ_ONLY, blank=True, null=True)
+    start_of_studies_auto = models.DateField(custom=True, verbose_name=_('Start of Studies'),
+                                             sf_read_only=models.READ_ONLY, blank=True, null=True)
     discount_helper_auto = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
                                                verbose_name=_('Discount Helper'), sf_read_only=models.READ_ONLY,
                                                blank=True, null=True)
     active_discounts = models.BooleanField(custom=True, verbose_name=_('Active Discounts'),
                                            sf_read_only=models.READ_ONLY)
+    active_payment = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
     include_in_invoice_creation_process_auto = models.BooleanField(custom=True,
                                                                    verbose_name=_(
                                                                        'Include In Invoice Creation Process'),
