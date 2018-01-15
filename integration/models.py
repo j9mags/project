@@ -341,8 +341,8 @@ class Account(models.Model, PerishableTokenMixin):
 
     def get_active_courses(self):
         if not self._is_student():
-            min_date = date.today() - timedelta(31)
-            return self.degreecourse_set.filter(start_of_studies__gte=min_date)
+            # min_date = date.today() - timedelta(31)
+            return self.degreecourse_set.all()  # filter(start_of_studies__gte=min_date)
         return None
 
 
