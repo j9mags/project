@@ -1,0 +1,62 @@
+{% extends 'staff/dashboard.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ application.lead_ref.name }}{% endblock %}
+
+{% block content %}
+  {{ block.super }}
+
+<div class="mdl-cell mdl-cell--12-col">
+  <h5 class="mdl-typography--headline">{% trans 'Application data' %}</h5>
+</div>
+<div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+  {% if form %}
+  <form method="post">
+    {% csrf_token %}
+    {% endif %}
+    <div class="mdl-card__supporting-text mdl-grid">
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('University') value=application.hochschule_ref.name %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Degree Course') value=application.studiengang_ref.name %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Start Semester') value=application.studiengang_ref.name %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('First Name') value=application.lead_ref.first_name %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Last Name') value=application.lead_ref.last_name %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Date of birth') value=application.lead_ref.date_of_birth type='date' %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Email') value=application.lead_ref.email %}
+      </div>
+      <div class="mdl-cell">
+        {% include 'snippets/field-text.html' with label=_('Phone') value=application.lead_ref.phone %}
+      </div>
+      <div class="mdl-cell">
+        {% if form %}
+        {% include 'snippets/select.html' with field=form.status %}
+        {% else %}
+        {% include 'snippets/field-text.html' with label=_('Status') value=application.lead_ref.status %}
+        {% endif %}
+      </div>
+    </div>
+    {% if form %}
+    <div class="mdl-dialog__actions">
+      <input type="submit"
+             class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+             value="{% trans 'Confirm changes' %}">
+    </div>
+  </form>
+  {% endif %}
+</div>
+
+{% endblock %}
