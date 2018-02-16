@@ -6,7 +6,7 @@
 {# TODO: Add Search feature #}
 
 {% block title %}
-  {% if students %}
+  {% if items %}
     {% trans 'Displaying' %} {{ items.object_list | length }} / {{ items.paginator.count}}
   {% else %}
     {% trans 'No applications found to match this criteria' %}
@@ -46,7 +46,7 @@
                 <td class="csp-table--action">
                     <a class="mdl-color-text--primary" href="{% url 'integration:application_review' item.pk %}">
                         <i class="material-icons md-18">content_paste</i>{% trans 'Details' %}</a></td>
-                <td class="mdl-data-table__cell--non-numeric">{{ item.name }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ item.lead_ref.name }}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ item.lead_ref.email }}</td>
                 <td class="mdl-data-table__cell">{{ item.lead_ref.phone | default:"--" }}</td>
                 <!-- td class="mdl-data-table__cell--non-numeric">{{ student.geschlecht | default:"--" }}</td -->

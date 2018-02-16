@@ -526,7 +526,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         else:
             if status:
                 status = "" if status == "None" else status
-                items = items.filter(status=status)
+                items = items.filter(lead_ref__status=status)
                 filters.append((_('Status'), status, 'status'))
 
             if course:
@@ -535,8 +535,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
                     items = items.filter(studiengang_ref__pk=course)
                     filters.append(
                         (_('Course'),
-                         items.first().contract_account_set.filter(
-                             studiengang_ref__pk=course).first().studiengang_ref.name,
+                         items.first().studiengang_ref.name,
                          'course'
                          ))
 
