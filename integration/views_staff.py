@@ -14,7 +14,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 
 from authentication.models import CsvUpload
-from .models import DegreeCourse, Contract, Account, RecordType
+from .models import DegreeCourse, Contract, Account, RecordType, Lead, Application
 from .forms import *
 
 from django.core.paginator import Paginator, EmptyPage
@@ -152,7 +152,7 @@ class DashboardStudents(StaffMixin, TemplateView):
                     filters.append(
                         (_('Course'),
                          students.first().contract_account_set.filter(
-                             studiengang_ref__pk=course).first().studiengang_ref.name_studiengang_auto,
+                             studiengang_ref__pk=course).first().studiengang_ref.name,
                          'course'
                          ))
 
@@ -484,3 +484,68 @@ class BulkActions(StaffMixin, View):
                 #     contract.save()
 
         return HttpResponseRedirect('/')
+
+
+class DashboardUGVApplications(StaffMixin, TemplateView):
+    template_name = 'staff/dashboard_ugvapplications.html'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_staff_context()
+        context.update(super(DashboardUGVApplications, self).get_context_data(**kwargs))
+        context.update(can_search=True)
+
+        if 'CeG' not in self.contact.account.customer_type:
+            raise PermissionDenied()
+
+        p = int(self.request.GET.get('p', '1'))
+        o = self.request.GET.get('o', 'pk')
+        s = int(self.request.GET.get('s', '10'))
+        q = self.request.GET.get('q')
+
+        status = self.request.GET.get('status')
+        course = self.request.GET.get('course')
+
+        items = Application.objects.filter(hochschule_ref=self.contact.account).order_by(o)
+        if q:
+            context.update(q=q)
+            items = items.filter(Q(lead_ref__name__icontains=q) | Q(lead_ref__email__icontains=q))
+
+        filters = []
+        if not items:
+            items = []
+            if status:
+                status = "" if status == "None" else status
+                filters.append((_('Status'), status))
+            if course:
+                course = None if course == "None" else course
+                if course is not None:
+                    filters.append(
+                        (_('Course'),
+                         self.contact.account.get_active_courses().get(
+                             pk=course).name))
+        else:
+            if status:
+                status = "" if status == "None" else status
+                items = items.filter(status=status)
+                filters.append((_('Status'), status, 'status'))
+
+            if course:
+                course = None if course == "None" else course
+                if course is not None:
+                    items = items.filter(studiengang_ref__pk=course)
+                    filters.append(
+                        (_('Course'),
+                         items.first().contract_account_set.filter(
+                             studiengang_ref__pk=course).first().studiengang_ref.name,
+                         'course'
+                         ))
+
+            paginator = Paginator(items, s)
+            try:
+                items = paginator.page(p)
+            except EmptyPage:
+                items = paginator.page(paginator.num_pages if p > 1 else 0)
+
+        bulk_form = BulkActionsForm(self.contact.account)
+        context.update(items=items, filters=filters, bulk_form=bulk_form)
+        return context
