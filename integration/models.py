@@ -264,7 +264,7 @@ class Application(models.Model):
     lead_ref = models.ForeignKey('Lead', models.DO_NOTHING, custom=True, blank=True, null=True)
     hochschule_ref = models.ForeignKey('Account', models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
     studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 1
-    studienstart = models.DateField(custom=True, verbose_name='Start Semester', blank=True, null=True)
+    studienstart = models.DateField(custom=True, verbose_name=_('Start Semester'), blank=True, null=True)
     already_student = models.BooleanField(custom=True, verbose_name='Already student', default=models.DEFAULTED_ON_CREATE)
 
     class Meta(models.Model.Meta):

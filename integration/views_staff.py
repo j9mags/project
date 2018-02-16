@@ -548,3 +548,62 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         bulk_form = BulkActionsForm(self.contact.account)
         context.update(items=items, filters=filters, bulk_form=bulk_form)
         return context
+
+
+class UGVApplicationReview(StaffMixin, DetailView):
+    model = Application
+    template_name = 'staff/ugvapplication_review.html'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_staff_context()
+        context.update(super(UGVApplicationReview, self).get_context_data(**kwargs))
+
+        application = context.get('application')
+        if self.contact.account.pk != application.hochschule_ref.pk:
+            raise ObjectDoesNotExist()
+
+        # payload = self.request.POST if 'status' in self.request.POST else {'status': application.lead_ref.status}
+        # context.update(acc_form=StudentAccountForm(payload))
+        # contract = account.get_active_contract()
+        # if contract:
+        #     context.update(contract=contract)
+        #     payload = self.request.POST if 'contract' in self.request.POST else None
+        #     if payload:
+        #         if payload.get('discount_type') == Choices.DiscountType[1][0]:
+        #             dsc_form_str = DiscountForm(payload, instance=contract.get_semester_discount())
+        #             dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
+        #         elif payload.get('discount_type') == Choices.DiscountType[0][0]:
+        #             dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
+        #             dsc_form_ttn = DiscountForm(payload, instance=contract.get_tuition_discount())
+        #         else:
+        #             dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
+        #             dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
+        #     else:
+        #         dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
+        #         dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
+        #     context.update(dsc_form_str=dsc_form_str, dsc_form_ttn=dsc_form_ttn)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_staff_context()
+        context.update(self.get_context_data(object=self.object, **kwargs))
+        # if 'status' in request.POST:
+        #     ctr_form = context.get('acc_form')
+        #     if ctr_form.is_valid():
+        #         account = context.get('account')
+        #         account.status = ctr_form.cleaned_data.get('status')
+        #         account.save()
+        # elif 'contract' in request.POST:
+        #     if request.POST.get('discount_type') == Choices.DiscountType[1][0]:
+        #         dsc_form = context.get('dsc_form_str')
+        #     elif request.POST.get('discount_type') == Choices.DiscountType[0][0]:
+        #         dsc_form = context.get('dsc_form_ttn')
+        #
+        #     if dsc_form.is_valid():
+        #         dsc_form.save()
+        #         contract = context.get('contract')
+        #         context.update(dsc_form_str=DiscountForm(instance=contract.get_semester_discount()))
+        #         context.update(dsc_form_ttn=DiscountForm(instance=contract.get_tuition_discount()))
+
+        return self.render_to_response(context)

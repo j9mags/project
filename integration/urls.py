@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^university/$', staff.DashboardUniversity.as_view(), name='university'),
     url(r'^course/(?P<pk>.+)/$', staff.CourseReview.as_view(), name='course_review'),
     url(r'^courses/$', staff.DashboardCourses.as_view(), name='courses'),
-    url(r'^application/(?P<pk>.+)/$', staff.StudentReview.as_view(), name='application_review'),
+    url(r'^application/(?P<pk>.+)/$', staff.UGVApplicationReview.as_view(), name='application_review'),
     url(r'^applications/$', staff.DashboardUGVApplications.as_view(), name='applications'),
 
     url(r'^language/$',
