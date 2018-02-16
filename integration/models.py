@@ -188,6 +188,12 @@ class Choices:
                       ('Draft', _('Draft')), ('Deaktiviert', _('Deactivated'))]
     DiscountType = [('Discount Tuition Fee', _('Discount Tuition Fee')),
                     ('Discount Semester Fee', _('Discount Semester Fee'))]
+    LeadStatus = [('Prospect', _('Prospect')), ('Applicant', _('Applicant')), ('Nurturing', _('Nurturing')),
+                  ('Pending', _('Pending')), ('Qualified', _('Qualifiziert')), ('Unqualified', _('Unqualifiziert'))]
+    UGVStatus = [('Not applied yet', _('Not applied yet')), ('Confirmed applicant', _('Confirmed applicant')),
+                 ('Rejected applicant', _('Rejected applicant')), ('Accepted applicant', _('Accepted applicant')),
+                 ('Already student', _('Already student'))]
+    CustomerType = [('CS', 'CS'), ('CeG', 'CeG'), ('CS+CeG', 'CS+CeG')]
 
 
 class RecordType(models.Model):
@@ -211,6 +217,63 @@ class RecordType(models.Model):
         return self.name
 
 
+class Lead(models.Model):
+    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    master_record = models.ForeignKey('self', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    last_name = models.CharField(max_length=80)
+    first_name = models.CharField(max_length=40, blank=True, null=True)
+    name = models.CharField(max_length=121, verbose_name=_('Full Name'), sf_read_only=models.READ_ONLY)
+    record_type = models.ForeignKey('RecordType', models.DO_NOTHING, blank=True, null=True)
+
+    street = models.TextField(blank=True, null=True)
+    city = models.CharField(max_length=40, blank=True, null=True)
+    state = models.CharField(max_length=80, verbose_name=_('State/Province'), blank=True, null=True)
+    postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
+    citizenship_new = models.CharField(custom=True, max_length=255, verbose_name=_('Citizenship'), choices=Choices.Nationality, blank=True, null=True)
+
+    phone = models.CharField(max_length=40, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+
+    date_of_birth = models.DateField(custom=True, verbose_name=_('Date of birth'), blank=True, null=True)
+    place_of_birth = models.CharField(custom=True, max_length=255, verbose_name=_('Place of Birth'), blank=True,
+                                      null=True)
+    no_oecdpassport = models.BooleanField(custom=True, db_column='NoOECDPassport__c',
+                                          verbose_name=_('No OECD Passport'), default=models.DEFAULTED_ON_CREATE)
+    kommunicationssprache = models.CharField(custom=True, max_length=255, verbose_name=_('Communication Language'),
+                                             choices=[('English', 'English'), ('German', 'Deutsch')], blank=True,
+                                             null=True)
+    start_semester = models.DateField(custom=True, verbose_name=_('Start semester'), blank=True, null=True)
+    university_status = models.CharField(custom=True, max_length=255, choices=Choices.UGVStatus, blank=True,
+                                         null=True)
+
+    status = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=Choices.LeadStatus)
+    confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by University', default=models.DEFAULTED_ON_CREATE)
+
+    ugv_students = managers.UGVStudentManager()
+
+    class Meta(models.Model.Meta):
+        db_table = 'Lead'
+        verbose_name = 'Lead'
+        verbose_name_plural = 'Leads'
+        # keyPrefix = '00Q'
+
+
+class Application(models.Model):
+    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    name = models.CharField(max_length=80, verbose_name='Application Name', default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
+    lead_ref = models.ForeignKey('Lead', models.DO_NOTHING, custom=True, blank=True, null=True)
+    hochschule_ref = models.ForeignKey(Account, models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
+    studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 1
+    studienstart = models.DateField(custom=True, verbose_name='Start Semester', blank=True, null=True)
+    already_student = models.BooleanField(custom=True, verbose_name='Already student', default=models.DEFAULTED_ON_CREATE)
+
+    class Meta(models.Model.Meta):
+        db_table = 'Application__c'
+        verbose_name = 'Application'
+        verbose_name_plural = 'Applications'
+        # keyPrefix = 'a0N'
+
+
 class Account(models.Model, PerishableTokenMixin):
     record_type = models.ForeignKey(RecordType, models.DO_NOTHING, blank=True, null=True,
                                     limit_choices_to={'sobject_type': 'Account'})
@@ -230,6 +293,9 @@ class Account(models.Model, PerishableTokenMixin):
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     status = models.CharField(custom=True, max_length=255, choices=Choices.AccountStatus, verbose_name=_('Status'),
                               blank=True, null=True)
+    customer_type = models.CharField(custom=True, max_length=255, verbose_name=_('Customer type'),
+                                     choices=Choices.CustomerType, blank=True, null=True)
+
 
     abwicklungsgebuhr_pro_einzug_pro_student = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                                    verbose_name=_(
