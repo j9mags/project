@@ -51,14 +51,6 @@ class UploadForm(forms.Form):
         return cleaned_data
 
 
-#class StudentsUploadForm(UploadForm):
-#    def __init__(self, university, *args, **kwargs):
-#        super(StudentsUploadForm, self).__init__(*args, **kwargs)
-#        self.fields['course'] = forms.ChoiceField(
-#            choices=[(o.pk, o.name_studiengang_auto) for o in university.get_active_courses()]
-#        )
-
-
 class LanguageSelectForm(forms.ModelForm):
     class Meta:
         model = Account
@@ -227,3 +219,7 @@ class UGVApplicationForm(forms.ModelForm):
     class Meta:
         model = Lead
         fields = ['university_status']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['university_status'].widget.choices[0] = ("", "")
