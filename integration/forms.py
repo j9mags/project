@@ -19,6 +19,7 @@ NationalityChoices = [('', '')] + Choices.Nationality
 LanguageChoices = [('', '')] + Choices.Language
 BillingChoices = [('', '')] + Choices.Payment
 
+
 KEEP_CURRENT = _('-- Keep current --')
 
 
@@ -222,6 +223,4 @@ class BulkActionsForm(forms.Form):
 
 
 class UGVApplicationForm(forms.Form):
-    STATUS_CHOICES = [('not-registered', _('Not registered')), ('already-applied', _('Already applied')),
-                      ('already-student', _('Already student'))]
-    status = forms.ChoiceField(choices=STATUS_CHOICES, required=True)
+    status = forms.ChoiceField(choices=Choices.UGVStatus, required=True)

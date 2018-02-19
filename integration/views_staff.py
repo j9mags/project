@@ -566,15 +566,9 @@ class UGVApplicationReview(StaffMixin, DetailView):
         if self.contact.account.pk != application.hochschule_ref.pk:
             raise ObjectDoesNotExist()
 
-        status = UGVApplicationForm.STATUS_CHOICES[0][0]
-        if application.already_student:
-            status = UGVApplicationForm.STATUS_CHOICES[2][0]
-        elif application.confirmed_by_university:
-            status = UGVApplicationForm.STATUS_CHOICES[1][0]
-
         payload = self.request.POST if 'status' in self.request.POST else None
 
-        context.update(form=UGVApplicationForm(payload, initial={'status': status}))
+        context.update(form=UGVApplicationForm(payload, initial={'status': application.lead_ref.university_status}))
         return context
 
     def post(self, request, *args, **kwargs):
@@ -588,16 +582,16 @@ class UGVApplicationReview(StaffMixin, DetailView):
                 status = form.cleaned_data.get('status')
 
                 application = context.get('application')
-                application.already_student = False
-                application.confirmed_by_university = False
+                # application.already_student = False
+                # application.confirmed_by_university = False
 
-                if status == UGVApplicationForm.STATUS_CHOICES[2][0]:
-                    application.already_student = True
-                    application.confirmed_by_university = True
-                elif status == UGVApplicationForm.STATUS_CHOICES[1][0]:
-                    application.confirmed_by_university = True
-
-                application.save()
+                # if status == UGVApplicationForm.STATUS_CHOICES[2][0]:
+                #     application.already_student = True
+                #     application.confirmed_by_university = True
+                # elif status == UGVApplicationForm.STATUS_CHOICES[1][0]:
+                #     application.confirmed_by_university = True
+                application.lead_ref.university_status = status
+                application.lead_ref.save()
             else:
                 context.update(form=form)
 
