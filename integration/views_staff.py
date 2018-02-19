@@ -531,7 +531,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         else:
             if status:
                 status = "" if status == "None" else status
-                items = items.filter(lead_ref__status=status)
+                items = items.filter(lead_ref__university_status=status)
                 filters.append((_('Status'), status, 'status'))
 
             if course:
