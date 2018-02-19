@@ -484,9 +484,6 @@ class BulkActions(StaffMixin, View):
                 contracts = Contract.objects.filter(pk__in=contracts_pk)
                 course = contact.account.degreecourse_set.get(pk=course_pk)
                 contracts.update(studiengang_ref=course)
-                # for contract in contracts:
-                #     contract.studiengang_ref = course
-                #     contract.save()
 
         return HttpResponseRedirect('/')
 
@@ -566,9 +563,9 @@ class UGVApplicationReview(StaffMixin, DetailView):
         if self.contact.account.pk != application.hochschule_ref.pk:
             raise ObjectDoesNotExist()
 
-        payload = self.request.POST if 'status' in self.request.POST else None
+        payload = self.request.POST if 'university_status' in self.request.POST else None
 
-        context.update(form=UGVApplicationForm(payload, initial={'status': application.lead_ref.university_status}))
+        context.update(form=UGVApplicationForm(payload, instance=application.lead_ref))  # initial={'status': application.lead_ref.university_status}))
         return context
 
     def post(self, request, *args, **kwargs):
@@ -579,10 +576,10 @@ class UGVApplicationReview(StaffMixin, DetailView):
         if 'status' in request.POST:
             form = context.get('form')
             if form.is_valid():
-                status = form.cleaned_data.get('status')
+                # status = form.cleaned_data.get('status')
 
-                application = context.get('application')
-                lead = Lead.ugv_students.get(pk=application.lead_ref.pk)
+                # application = context.get('application')
+                # lead = Lead.ugv_students.get(pk=application.lead_ref.pk)
                 # application.already_student = False
                 # application.confirmed_by_university = False
 
@@ -591,8 +588,9 @@ class UGVApplicationReview(StaffMixin, DetailView):
                 #     application.confirmed_by_university = True
                 # elif status == UGVApplicationForm.STATUS_CHOICES[1][0]:
                 #     application.confirmed_by_university = True
-                lead.university_status = status
-                lead.save()
+                # application.lead_ref.university_status = status
+                # application.lead_ref.save()
+                form.save()
             else:
                 context.update(form=form)
 

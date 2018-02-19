@@ -6,7 +6,7 @@ from pandas.io import json
 import logging
 
 from authentication.models import CsvUpload
-from .models import Choices, Contact
+from .models import Choices, Contact, Lead
 from .models import Account
 from .models import Rabatt
 
@@ -222,5 +222,8 @@ class BulkActionsForm(forms.Form):
         )
 
 
-class UGVApplicationForm(forms.Form):
-    status = forms.ChoiceField(choices=Choices.UGVStatus, required=True)
+class UGVApplicationForm(forms.ModelForm):
+    # status = forms.ChoiceField(choices=Choices.UGVStatus, required=True)
+    class Meta:
+        model = Lead
+        fields = ['university_status']
