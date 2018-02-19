@@ -275,8 +275,6 @@ class Application(models.Model):
         # keyPrefix = 'a0N'
 
 
-
-
 class Account(models.Model, PerishableTokenMixin):
     record_type = models.ForeignKey(RecordType, models.DO_NOTHING, blank=True, null=True,
                                     limit_choices_to={'sobject_type': 'Account'})
