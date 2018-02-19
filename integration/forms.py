@@ -219,3 +219,7 @@ class BulkActionsForm(forms.Form):
             choices=[('--', KEEP_CURRENT)] + [(o.pk, o.name) for o in university.get_active_courses()],
             required=False
         )
+
+
+class UGVApplicationForm(forms.Form):
+    status = forms.ChoiceField(choices=Choices.LeadStatus)

@@ -545,8 +545,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
             except EmptyPage:
                 items = paginator.page(paginator.num_pages if p > 1 else 0)
 
-        bulk_form = BulkActionsForm(self.contact.account)
-        context.update(items=items, filters=filters, bulk_form=bulk_form)
+        context.update(items=items, filters=filters, form=UGVApplicationForm())
         return context
 
 
