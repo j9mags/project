@@ -545,7 +545,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
             except EmptyPage:
                 items = paginator.page(paginator.num_pages if p > 1 else 0)
 
-        context.update(items=items, filters=filters, form=UGVApplicationForm())
+        context.update(items=items, filters=filters)
         return context
 
 
@@ -581,6 +581,7 @@ class UGVApplicationReview(StaffMixin, DetailView):
         #         dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
         #         dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
         #     context.update(dsc_form_str=dsc_form_str, dsc_form_ttn=dsc_form_ttn)
+        context.update(form=UGVApplicationForm())
         return context
 
     def post(self, request, *args, **kwargs):
