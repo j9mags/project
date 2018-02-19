@@ -581,7 +581,7 @@ class UGVApplicationReview(StaffMixin, DetailView):
         #         dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
         #         dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
         #     context.update(dsc_form_str=dsc_form_str, dsc_form_ttn=dsc_form_ttn)
-        context.update(form=UGVApplicationForm())
+        context.update(form=UGVApplicationForm(initial={'status':application.lead_ref.status}))
         return context
 
     def post(self, request, *args, **kwargs):
