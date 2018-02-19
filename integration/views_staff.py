@@ -561,11 +561,11 @@ class UGVApplicationReview(StaffMixin, DetailView):
         if self.contact.account.pk != application.hochschule_ref.pk:
             raise ObjectDoesNotExist()
 
-        status = UGVApplicationForm.STATUS_CHOICES[0]
+        status = UGVApplicationForm.STATUS_CHOICES[0][0]
         if application.already_student:
-            status = UGVApplicationForm.STATUS_CHOICES[2]
+            status = UGVApplicationForm.STATUS_CHOICES[2][0]
         elif application.confirmed_by_university:
-            status = UGVApplicationForm.STATUS_CHOICES[1]
+            status = UGVApplicationForm.STATUS_CHOICES[1][0]
 
         payload = self.request.POST if 'status' in self.request.POST else None
 
@@ -586,10 +586,10 @@ class UGVApplicationReview(StaffMixin, DetailView):
                 application.already_student = False
                 application.confirmed_by_university = False
 
-                if status == UGVApplicationForm.STATUS_CHOICES[2]:
+                if status == UGVApplicationForm.STATUS_CHOICES[2][0]:
                     application.already_student = True
                     application.confirmed_by_university = True
-                elif status == UGVApplicationForm.STATUS_CHOICES[1]:
+                elif status == UGVApplicationForm.STATUS_CHOICES[1][0]:
                     application.confirmed_by_university = True
 
                 application.save()
