@@ -573,25 +573,24 @@ class UGVApplicationReview(StaffMixin, DetailView):
         context = self.get_staff_context()
         context.update(self.get_context_data(object=self.object, **kwargs))
 
-        if 'status' in request.POST:
-            form = context.get('form')
-            if form.is_valid():
-                # status = form.cleaned_data.get('status')
+        form = context.get('form')
+        if form.is_valid():
+            # status = form.cleaned_data.get('status')
 
-                # application = context.get('application')
-                # lead = Lead.ugv_students.get(pk=application.lead_ref.pk)
-                # application.already_student = False
-                # application.confirmed_by_university = False
+            # application = context.get('application')
+            # lead = Lead.ugv_students.get(pk=application.lead_ref.pk)
+            # application.already_student = False
+            # application.confirmed_by_university = False
 
-                # if status == UGVApplicationForm.STATUS_CHOICES[2][0]:
-                #     application.already_student = True
-                #     application.confirmed_by_university = True
-                # elif status == UGVApplicationForm.STATUS_CHOICES[1][0]:
-                #     application.confirmed_by_university = True
-                # application.lead_ref.university_status = status
-                # application.lead_ref.save()
-                form.save()
-            else:
-                context.update(form=form)
+            # if status == UGVApplicationForm.STATUS_CHOICES[2][0]:
+            #     application.already_student = True
+            #     application.confirmed_by_university = True
+            # elif status == UGVApplicationForm.STATUS_CHOICES[1][0]:
+            #     application.confirmed_by_university = True
+            # application.lead_ref.university_status = status
+            # application.lead_ref.save()
+            form.save()
+        else:
+            context.update(form=form)
 
         return self.render_to_response(context)
