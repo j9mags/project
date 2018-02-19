@@ -36,5 +36,21 @@
             </div>
         </div>
     </div>
+    {% if applications %}
+    <div class="mdl-cell">
+        <div class="mdl-card mdl-color--white mdl-shadow--6dp">
+            <div class="mdl-card__title mdl-card--expand mdl-card__title mdl-card--expand mdl-color--accent mdl-color-text--white">
+                <h2 class="mdl-card__title-text">{{ applications|length }} {% trans 'UGV Applications' %}</h2>
+                <div class="csp-card__title-icon">
+                    <i class="material-icons md-96">content_paste</i>
+                </div>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="{% url 'integration:applications' %}"
+                   class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{% trans 'View applications' %}</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

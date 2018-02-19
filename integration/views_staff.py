@@ -72,6 +72,11 @@ class DashboardHome(StaffMixin, TemplateView):
         courses = DegreeCourse.objects.filter(university=self.contact.account)
 
         context.update(students=students, courses=courses)
+
+        if self.contact.account.is_eg_customer():
+            applications = Application.objects.filter(hochschule_ref=self.contact.account)
+            context.update(applications=applications)
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -494,7 +499,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         context.update(super(DashboardUGVApplications, self).get_context_data(**kwargs))
         context.update(can_search=True)
 
-        if 'CeG' not in self.contact.account.customer_type:
+        if not self.contact.account.is_eg_customer():
             raise PermissionDenied()
 
         p = int(self.request.GET.get('p', '1'))

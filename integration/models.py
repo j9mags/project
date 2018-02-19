@@ -374,6 +374,9 @@ class Account(models.Model, PerishableTokenMixin):
     def _is_student(self):
         return self.record_type.developer_name == 'Sofortzahler'
 
+    def is_eg_customer(self):
+        return (not self._is_student()) and ('CeG' in self.customer_type)
+
     def get_user_email(self):
         return self.unimailadresse
 
