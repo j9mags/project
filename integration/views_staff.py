@@ -564,8 +564,9 @@ class UGVApplicationReview(StaffMixin, DetailView):
             raise ObjectDoesNotExist()
 
         payload = self.request.POST if 'university_status' in self.request.POST else None
+        lead = Lead.ugv_students.get(pk=application.lead_ref.pk)
 
-        context.update(form=UGVApplicationForm(payload, instance=application.lead_ref))  # initial={'status': application.lead_ref.university_status}))
+        context.update(form=UGVApplicationForm(payload, instance=lead))  # initial={'status': application.lead_ref.university_status}))
         return context
 
     def post(self, request, *args, **kwargs):
