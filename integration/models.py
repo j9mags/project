@@ -266,6 +266,7 @@ class Application(models.Model):
     studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 1
     studienstart = models.DateField(custom=True, verbose_name=_('Start Semester'), blank=True, null=True)
     already_student = models.BooleanField(custom=True, verbose_name='Already student', default=models.DEFAULTED_ON_CREATE)
+    confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by university', default=models.DEFAULTED_ON_CREATE)
 
     class Meta(models.Model.Meta):
         db_table = 'Application__c'

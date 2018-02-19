@@ -42,12 +42,13 @@
         {% include 'snippets/field-text.html' with label=_('Phone') value=application.lead_ref.phone %}
       </div>
       <div class="mdl-cell">
-        {% if form %}
-        {% include 'snippets/select.html' with field=form.status %}
-        {% else %}
-        {% include 'snippets/field-text.html' with label=_('Status') value=application.lead_ref.status %}
-        {% endif %}
+        {% include 'snippets/field-text.html' with label=_('UGV Status') value=application.lead_ref.status %}
       </div>
+      {% if form %}
+        <div class="mdl-cell">
+          {% include 'snippets/select.html' with field=form.status %}
+        </div>
+      {% endif %}
     </div>
     {% if form %}
     <div class="mdl-dialog__actions">

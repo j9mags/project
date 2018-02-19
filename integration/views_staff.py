@@ -581,29 +581,34 @@ class UGVApplicationReview(StaffMixin, DetailView):
         #         dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
         #         dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
         #     context.update(dsc_form_str=dsc_form_str, dsc_form_ttn=dsc_form_ttn)
-        context.update(form=UGVApplicationForm(initial={'status':application.lead_ref.status}))
+        status = UGVApplicationForm.STATUS_CHOICES[0]
+        if application.already_student:
+            status = UGVApplicationForm.STATUS_CHOICES[2]
+        elif application.confirmed_by_university:
+            status = UGVApplicationForm.STATUS_CHOICES[1]
+
+        context.update(form=UGVApplicationForm(initial={'status': status}))
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_staff_context()
         context.update(self.get_context_data(object=self.object, **kwargs))
-        # if 'status' in request.POST:
-        #     ctr_form = context.get('acc_form')
-        #     if ctr_form.is_valid():
-        #         account = context.get('account')
-        #         account.status = ctr_form.cleaned_data.get('status')
-        #         account.save()
-        # elif 'contract' in request.POST:
-        #     if request.POST.get('discount_type') == Choices.DiscountType[1][0]:
-        #         dsc_form = context.get('dsc_form_str')
-        #     elif request.POST.get('discount_type') == Choices.DiscountType[0][0]:
-        #         dsc_form = context.get('dsc_form_ttn')
-        #
-        #     if dsc_form.is_valid():
-        #         dsc_form.save()
-        #         contract = context.get('contract')
-        #         context.update(dsc_form_str=DiscountForm(instance=contract.get_semester_discount()))
-        #         context.update(dsc_form_ttn=DiscountForm(instance=contract.get_tuition_discount()))
+        if 'status' in request.POST:
+            form = context.get('form')
+            if form.is_valid():
+                status = form.cleaned_data.get('status')
+
+                application = context.get('application')
+                application.already_student = False
+                application.confirmed_by_university = False
+
+                if status == UGVApplicationForm.STATUS_CHOICES[2]:
+                    application.already_student = True
+                    application.confirmed_by_university = True
+                elif status == UGVApplicationForm.STATUS_CHOICES[1]:
+                    application.confirmed_by_university = True
+
+                application.save()
 
         return self.render_to_response(context)
