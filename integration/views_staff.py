@@ -594,6 +594,7 @@ class UGVApplicationReview(StaffMixin, DetailView):
         self.object = self.get_object()
         context = self.get_staff_context()
         context.update(self.get_context_data(object=self.object, **kwargs))
+        
         if 'status' in request.POST:
             form = context.get('form')
             if form.is_valid():
