@@ -582,7 +582,7 @@ class UGVApplicationReview(StaffMixin, DetailView):
                 status = form.cleaned_data.get('status')
 
                 application = context.get('application')
-                lead = Lead.objects.get(pk=application.lead_ref.pk)
+                lead = Lead.ugv_students.get(pk=application.lead_ref.pk)
                 # application.already_student = False
                 # application.confirmed_by_university = False
 
