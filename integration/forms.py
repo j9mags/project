@@ -224,4 +224,4 @@ class BulkActionsForm(forms.Form):
 class UGVApplicationForm(forms.Form):
     STATUS_CHOICES = [('not-registered', _('Not registered')), ('already-applied', _('Already applied')),
                       ('already-student', _('Already student'))]
-    status = forms.ChoiceField(choices=STATUS_CHOICES)
+    status = forms.ChoiceField(choices=STATUS_CHOICES, required=True)
