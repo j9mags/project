@@ -264,7 +264,7 @@ class Lead(models.Model):
 
     @property
     def application(self):
-        return self.application_set.first()
+        return self.application_set.filter(hochschule_ref__isnull=False).first()
 
 
 class Application(models.Model):
