@@ -249,6 +249,11 @@ class Lead(models.Model):
     status = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=Choices.LeadStatus)
     confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by University', default=models.DEFAULTED_ON_CREATE)
 
+    is_converted = models.BooleanField(verbose_name='Converted', sf_read_only=models.NOT_UPDATEABLE, default=models.DEFAULTED_ON_CREATE)
+    converted_date = models.DateField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    converted_account = models.ForeignKey('Account', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    converted_contact = models.ForeignKey('Contact', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
+
     ugv_students = managers.UGVStudentManager()
 
     class Meta(models.Model.Meta):
@@ -256,6 +261,10 @@ class Lead(models.Model):
         verbose_name = 'Lead'
         verbose_name_plural = 'Leads'
         # keyPrefix = '00Q'
+
+    @property
+    def application(self):
+        return self.application_set.first()
 
 
 class Application(models.Model):

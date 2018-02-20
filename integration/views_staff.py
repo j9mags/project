@@ -507,10 +507,10 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
-        items = Application.objects.filter(hochschule_ref=self.contact.account).order_by(o)
+        items = Lead.ugv_students.filter(application_set__hochschule_ref=self.contact.account).order_by(o)  # Application.objects.filter(hochschule_ref=self.contact.account).order_by(o)
         if q:
             context.update(q=q)
-            items = items.filter(Q(lead_ref__name__icontains=q) | Q(lead_ref__email__icontains=q))
+            items = items.filter(Q(name__icontains=q) | Q(email__icontains=q))
 
         filters = []
         if not items:
@@ -528,16 +528,16 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         else:
             if status:
                 status = "" if status == "None" else status
-                items = items.filter(lead_ref__university_status=status)
+                items = items.filter(university_status=status)
                 filters.append((_('Status'), status, 'status'))
 
             if course:
                 course = None if course == "None" else course
                 if course is not None:
-                    items = items.filter(studiengang_ref__pk=course)
+                    items = items.filter(application_set__studiengang_ref__pk=course)
                     filters.append(
                         (_('Course'),
-                         items.first().studiengang_ref.name,
+                         items.first().application.studiengang_ref.name,
                          'course'
                          ))
 
@@ -552,20 +552,23 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
 
 
 class UGVApplicationReview(StaffMixin, DetailView):
-    model = Application
+    model = Lead
     template_name = 'staff/ugvapplication_review.html'
 
     def get_context_data(self, **kwargs):
         context = self.get_staff_context()
         context.update(super(UGVApplicationReview, self).get_context_data(**kwargs))
 
-        application = context.get('application')
-        if self.contact.account.pk != application.hochschule_ref.pk:
+        lead = context.get('lead')
+        application = lead.application
+
+        if application is None:
             raise ObjectDoesNotExist()
 
-        payload = self.request.POST if 'university_status' in self.request.POST else None
-        lead = Lead.ugv_students.get(pk=application.lead_ref.pk)
+        if self.contact.account.pk != application.hochschule_ref.pk:
+            raise PermissionDenied()
 
+        payload = self.request.POST if 'university_status' in self.request.POST else None
         context.update(form=UGVApplicationForm(payload, instance=lead))  # initial={'status': application.lead_ref.university_status}))
         return context
 

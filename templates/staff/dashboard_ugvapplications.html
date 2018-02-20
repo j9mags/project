@@ -44,16 +44,16 @@
                 <td class="csp-table--action">
                     <a class="mdl-color-text--primary" href="{% url 'integration:application_review' item.pk %}">
                         <i class="material-icons md-18">content_paste</i>{% trans 'Details' %}</a></td>
-                <td class="mdl-data-table__cell--non-numeric">{{ item.lead_ref.name }}</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ item.lead_ref.email }}</td>
-                <td class="mdl-data-table__cell">{{ item.lead_ref.phone | default:"--" }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ item.name }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ item.email }}</td>
+                <td class="mdl-data-table__cell">{{ item.phone | default:"--" }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
-                  <a class="filter csp-table--action" href="#" data-filter="course" data-filter-value="{{ item.studiengang_ref.pk }}">
-                      <i class="material-icons md-18">filter_list</i>{{ item.studiengang_ref.name }}</a>
+                  <a class="filter csp-table--action" href="#" data-filter="course" data-filter-value="{{ item.application.studiengang_ref.pk }}">
+                      <i class="material-icons md-18">filter_list</i>{{ item.application.studiengang_ref.name }}</a>
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">
-                  <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ item.lead_ref.university_status }}">
-                      <i class="material-icons md-18">filter_list</i>{{ item.lead_ref.university_status | default:"--" }}</a>
+                  <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ item.university_status }}">
+                      <i class="material-icons md-18">filter_list</i>{{ item.university_status | default:"--" }}</a>
                 </td>
             </tr>
         {% endfor %}

@@ -24,25 +24,25 @@
         {% include 'snippets/field-text.html' with label=_('Degree Course') value=application.studiengang_ref.name %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Start Semester') value=application.lead_ref.start_semester %}
+        {% include 'snippets/field-text.html' with label=_('Start Semester') value=lead.start_semester %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('First Name') value=application.lead_ref.first_name %}
+        {% include 'snippets/field-text.html' with label=_('First Name') value=lead.first_name %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Last Name') value=application.lead_ref.last_name %}
+        {% include 'snippets/field-text.html' with label=_('Last Name') value=lead.last_name %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Date of birth') value=application.lead_ref.date_of_birth type='date' %}
+        {% include 'snippets/field-text.html' with label=_('Date of birth') value=lead.date_of_birth type='date' %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Email') value=application.lead_ref.email %}
+        {% include 'snippets/field-text.html' with label=_('Email') value=lead.email %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Phone') value=application.lead_ref.phone %}
+        {% include 'snippets/field-text.html' with label=_('Phone') value=lead.phone %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('UGV Status') value=application.lead_ref.status %}
+        {% include 'snippets/field-text.html' with label=_('UGV Status') value=lead.status %}
       </div>
       {% if form %}
         <div class="mdl-cell">
