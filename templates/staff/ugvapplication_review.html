@@ -24,7 +24,7 @@
         {% include 'snippets/field-text.html' with label=_('Degree Course') value=application.studiengang_ref.name %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Start Semester') value=lead.studienstart %}
+        {% include 'snippets/field-text.html' with label=_('Start Semester') value=application.studienstart %}
       </div>
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('First Name') value=lead.first_name %}
