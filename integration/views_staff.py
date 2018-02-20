@@ -507,7 +507,9 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
-        items = Lead.ugv_students.filter(application_set__hochschule_ref=self.contact.account).order_by(o)  # Application.objects.filter(hochschule_ref=self.contact.account).order_by(o)
+        apps = Application.objects.filter(hochschule_ref=self.contact.account)
+        lead_ids = [app.lead_ref.pk for app in apps]
+        items = Lead.ugv_students.filter(pk__in=lead_ids).order_by(o)  #
         if q:
             context.update(q=q)
             items = items.filter(Q(name__icontains=q) | Q(email__icontains=q))
