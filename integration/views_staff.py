@@ -571,7 +571,7 @@ class UGVApplicationReview(StaffMixin, DetailView):
             raise PermissionDenied()
 
         payload = self.request.POST if 'university_status' in self.request.POST else None
-        context.update(form=UGVApplicationForm(payload, instance=lead))  # initial={'status': application.lead_ref.university_status}))
+        context.update(application=application, form=UGVApplicationForm(payload, instance=lead))  # initial={'status': application.lead_ref.university_status}))
         return context
 
     def post(self, request, *args, **kwargs):
