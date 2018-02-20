@@ -507,7 +507,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
-        apps = Application.objects.filter(hochschule_ref=self.contact.account)
+        apps = Application.objects.filter(hochschule_ref=self.contact.account, lead_ref__isnull=False)
 
         filters = []
         if apps:
