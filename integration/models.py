@@ -257,6 +257,7 @@ class Lead(models.Model):
     converted_account = models.ForeignKey('Account', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
     converted_contact = models.ForeignKey('Contact', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
 
+    objects = managers.DefaultManager()
     ugv_students = managers.UGVStudentManager()
 
     class Meta(models.Model.Meta):
