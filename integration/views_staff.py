@@ -581,8 +581,10 @@ class UGVApplicationReview(StaffMixin, DetailView):
 
         form = context.get('form')
         if form.is_valid():
-            # status = form.cleaned_data.get('status')
-
+            status = form.cleaned_data.get('university_status')
+            lead = context.get('lead')
+            lead.university_status = status
+            lead.save()
             # application = context.get('application')
             # lead = Lead.ugv_students.get(pk=application.lead_ref.pk)
             # application.already_student = False
@@ -595,7 +597,7 @@ class UGVApplicationReview(StaffMixin, DetailView):
             #     application.confirmed_by_university = True
             # application.lead_ref.university_status = status
             # application.lead_ref.save()
-            form.save()
+            # form.save()
         else:
             context.update(form=form)
 

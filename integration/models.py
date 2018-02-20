@@ -229,7 +229,8 @@ class Lead(models.Model):
     city = models.CharField(max_length=40, blank=True, null=True)
     state = models.CharField(max_length=80, verbose_name=_('State/Province'), blank=True, null=True)
     postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
-    citizenship_new = models.CharField(custom=True, max_length=255, verbose_name=_('Citizenship'), choices=Choices.Nationality, blank=True, null=True)
+    citizenship_new = models.CharField(custom=True, max_length=255, verbose_name=_('Citizenship'),
+                                       choices=Choices.Nationality, blank=True, null=True)
 
     phone = models.CharField(max_length=40, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
@@ -247,9 +248,11 @@ class Lead(models.Model):
                                          null=True)
 
     status = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=Choices.LeadStatus)
-    confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by University', default=models.DEFAULTED_ON_CREATE)
+    confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by University',
+                                                  default=models.DEFAULTED_ON_CREATE)
 
-    is_converted = models.BooleanField(verbose_name='Converted', sf_read_only=models.NOT_UPDATEABLE, default=models.DEFAULTED_ON_CREATE)
+    is_converted = models.BooleanField(verbose_name='Converted', sf_read_only=models.NOT_UPDATEABLE,
+                                       default=models.DEFAULTED_ON_CREATE)
     converted_date = models.DateField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     converted_account = models.ForeignKey('Account', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
     converted_contact = models.ForeignKey('Contact', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
