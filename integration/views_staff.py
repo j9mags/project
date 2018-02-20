@@ -508,14 +508,35 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         course = self.request.GET.get('course')
 
         apps = Application.objects.filter(hochschule_ref=self.contact.account)
-        lead_ids = [app.lead_ref.pk for app in apps]
-        items = Lead.ugv_students.filter(pk__in=lead_ids).order_by(o)  #
-        if q:
-            context.update(q=q)
-            items = items.filter(Q(name__icontains=q) | Q(email__icontains=q))
 
         filters = []
-        if not items:
+        if apps:
+            if course:
+                course = None if course == "None" else course
+                if course is not None:
+                    apps = apps.filter(studiengang_ref__pk=course)
+                    filters.append(
+                        (_('Course'),
+                         apps.first().studiengang_ref.name,
+                         'course'
+                         ))
+            lead_ids = [app.lead_ref.pk for app in apps]
+            items = Lead.ugv_students.filter(pk__in=lead_ids).order_by(o)  #
+            if status:
+                status = "" if status == "None" else status
+                items = items.filter(university_status=status)
+                filters.append((_('Status'), status, 'status'))
+
+            if q:
+                context.update(q=q)
+                items = items.filter(Q(name__icontains=q) | Q(email__icontains=q))
+
+            paginator = Paginator(items, s)
+            try:
+                items = paginator.page(p)
+            except EmptyPage:
+                items = paginator.page(paginator.num_pages if p > 1 else 0)
+        else:
             items = []
             if status:
                 status = "" if status == "None" else status
@@ -527,27 +548,6 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
                         (_('Course'),
                          self.contact.account.get_active_courses().get(
                              pk=course).name))
-        else:
-            if status:
-                status = "" if status == "None" else status
-                items = items.filter(university_status=status)
-                filters.append((_('Status'), status, 'status'))
-
-            if course:
-                course = None if course == "None" else course
-                if course is not None:
-                    items = items.filter(application_set__studiengang_ref__pk=course)
-                    filters.append(
-                        (_('Course'),
-                         items.first().application.studiengang_ref.name,
-                         'course'
-                         ))
-
-            paginator = Paginator(items, s)
-            try:
-                items = paginator.page(p)
-            except EmptyPage:
-                items = paginator.page(paginator.num_pages if p > 1 else 0)
 
         context.update(items=items, filters=filters)
         return context
