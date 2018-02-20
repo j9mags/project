@@ -273,13 +273,19 @@ class Lead(models.Model):
 
 class Application(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-    name = models.CharField(max_length=80, verbose_name='Application Name', default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
+    name = models.CharField(max_length=80, verbose_name='Application Name', default=models.DEFAULTED_ON_CREATE,
+                            blank=True, null=True)
     lead_ref = models.ForeignKey('Lead', models.DO_NOTHING, custom=True, blank=True, null=True)
     hochschule_ref = models.ForeignKey('Account', models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
-    studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 1
+    studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True,
+                                        sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 1
     studienstart = models.DateField(custom=True, verbose_name=_('Start Semester'), blank=True, null=True)
-    already_student = models.BooleanField(custom=True, verbose_name='Already student', default=models.DEFAULTED_ON_CREATE)
-    confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by university', default=models.DEFAULTED_ON_CREATE)
+    start_of_study_trig = models.CharField(custom=True, max_length=255, verbose_name=_('Start of Study'),
+                                           blank=True, null=True)
+    already_student = models.BooleanField(custom=True, verbose_name='Already student',
+                                          default=models.DEFAULTED_ON_CREATE)
+    confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by university',
+                                                  default=models.DEFAULTED_ON_CREATE)
 
     class Meta(models.Model.Meta):
         db_table = 'Application__c'
