@@ -6,7 +6,7 @@
 {# TODO: Add Search feature #}
 
 {% block title %}
-  {% if students %}
+  {% if items %}
     {% trans 'Displaying' %} {{ items.object_list | length }} / {{ items.paginator.count}}
   {% else %}
     {% trans 'No applications found to match this criteria' %}
@@ -34,8 +34,6 @@
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Student name' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Email' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Phone' %}</th>
-          <!-- th class="mdl-data-table__cell--non-numeric">{% trans 'Gender' %}</th -->
-          <th class="mdl-data-table__cell--non-numeric">{% trans 'Language' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Course' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Status' %}</th>
         </tr>
@@ -47,17 +45,15 @@
                     <a class="mdl-color-text--primary" href="{% url 'integration:application_review' item.pk %}">
                         <i class="material-icons md-18">content_paste</i>{% trans 'Details' %}</a></td>
                 <td class="mdl-data-table__cell--non-numeric">{{ item.name }}</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ item.lead_ref.email }}</td>
-                <td class="mdl-data-table__cell">{{ item.lead_ref.phone | default:"--" }}</td>
-                <!-- td class="mdl-data-table__cell--non-numeric">{{ student.geschlecht | default:"--" }}</td -->
-                <td class="mdl-data-table__cell--non-numeric">{{ item.lead_ref.kommunikationssprache | default:"--" }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ item.email }}</td>
+                <td class="mdl-data-table__cell">{{ item.phone | default:"--" }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
-                  <a class="filter csp-table--action" href="#" data-filter="course" data-filter-value="{{ item.studiengang_ref.pk }}">
-                      <i class="material-icons md-18">filter_list</i>{{ item.studiengang_ref.name }}</a>
+                  <a class="filter csp-table--action" href="#" data-filter="course" data-filter-value="{{ item.application.studiengang_ref.pk }}">
+                      <i class="material-icons md-18">filter_list</i>{{ item.application.studiengang_ref.name }}</a>
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">
-                  <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ item.lead_ref.status }}">
-                      <i class="material-icons md-18">filter_list</i>{{ item.lead_ref.status | default:"--" }}</a>
+                  <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ item.university_status }}">
+                      <i class="material-icons md-18">filter_list</i>{{ item.university_status | default:"--" }}</a>
                 </td>
             </tr>
         {% endfor %}

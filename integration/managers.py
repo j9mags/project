@@ -19,4 +19,5 @@ class StudentManager(DefaultManager):
 class UGVStudentManager(DefaultManager):
 
     def get_queryset(self):
-        return super(UGVStudentManager, self).get_queryset().filter(record_type__developer_name='UGVStudents')
+        return super(UGVStudentManager, self).get_queryset().filter(record_type__developer_name='UGVStudents',
+                                                                    is_converted=False)
