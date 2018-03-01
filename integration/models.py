@@ -229,7 +229,8 @@ class Lead(models.Model):
     city = models.CharField(max_length=40, blank=True, null=True)
     state = models.CharField(max_length=80, verbose_name=_('State/Province'), blank=True, null=True)
     postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
-    citizenship_new = models.CharField(custom=True, max_length=255, verbose_name=_('Citizenship'), choices=Choices.Nationality, blank=True, null=True)
+    citizenship_new = models.CharField(custom=True, max_length=255, verbose_name=_('Citizenship'),
+                                       choices=Choices.Nationality, blank=True, null=True)
 
     phone = models.CharField(max_length=40, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
@@ -247,8 +248,18 @@ class Lead(models.Model):
                                          null=True)
 
     status = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=Choices.LeadStatus)
-    confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by University', default=models.DEFAULTED_ON_CREATE)
+    confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by University',
+                                                  default=models.DEFAULTED_ON_CREATE)
 
+    is_converted = models.BooleanField(verbose_name='Converted', sf_read_only=models.NOT_UPDATEABLE,
+                                       default=models.DEFAULTED_ON_CREATE)
+    converted_date = models.DateField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    converted_account = models.ForeignKey('Account', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    converted_contact = models.ForeignKey('Contact', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
+
+    active_application = models.ForeignKey('Application', models.DO_NOTHING, custom=True, blank=True, null=True)
+
+    objects = managers.DefaultManager()
     ugv_students = managers.UGVStudentManager()
 
     class Meta(models.Model.Meta):
@@ -257,15 +268,26 @@ class Lead(models.Model):
         verbose_name_plural = 'Leads'
         # keyPrefix = '00Q'
 
+    @property
+    def application(self):
+        return self.active_application
+
 
 class Application(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-    name = models.CharField(max_length=80, verbose_name='Application Name', default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
+    name = models.CharField(max_length=80, verbose_name='Application Name', default=models.DEFAULTED_ON_CREATE,
+                            blank=True, null=True)
     lead_ref = models.ForeignKey('Lead', models.DO_NOTHING, custom=True, blank=True, null=True)
-    hochschule_ref = models.ForeignKey(Account, models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
-    studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 1
-    studienstart = models.DateField(custom=True, verbose_name='Start Semester', blank=True, null=True)
-    already_student = models.BooleanField(custom=True, verbose_name='Already student', default=models.DEFAULTED_ON_CREATE)
+    hochschule_ref = models.ForeignKey('Account', models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
+    studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True,
+                                        sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 1
+    studienstart = models.DateField(custom=True, verbose_name=_('Start Semester'), blank=True, null=True)
+    start_of_study_trig = models.CharField(custom=True, max_length=255, verbose_name=_('Start of Study'),
+                                           blank=True, null=True)
+    already_student = models.BooleanField(custom=True, verbose_name='Already student',
+                                          default=models.DEFAULTED_ON_CREATE)
+    confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by university',
+                                                  default=models.DEFAULTED_ON_CREATE)
 
     class Meta(models.Model.Meta):
         db_table = 'Application__c'
@@ -372,6 +394,9 @@ class Account(models.Model, PerishableTokenMixin):
 
     def _is_student(self):
         return self.record_type.developer_name == 'Sofortzahler'
+
+    def is_eg_customer(self):
+        return (not self._is_student()) and ('CeG' in self.customer_type)
 
     def get_user_email(self):
         return self.unimailadresse
@@ -678,6 +703,7 @@ class Contract(models.Model):
 #    start_winter_semester_ref = models.CharField(custom=True, max_length=1300,
 #                                                 verbose_name=_('Starting Month Winter Semester'),
 #                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
+
     start_of_studies_auto = models.DateField(custom=True, verbose_name=_('Start of Studies'),
                                              sf_read_only=models.READ_ONLY, blank=True, null=True)
     discount_helper_auto = models.DecimalField(custom=True, max_digits=3, decimal_places=0,

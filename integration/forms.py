@@ -6,7 +6,7 @@ from pandas.io import json
 import logging
 
 from authentication.models import CsvUpload
-from .models import Choices, Contact
+from .models import Choices, Contact, Lead
 from .models import Account
 from .models import Rabatt
 
@@ -18,6 +18,7 @@ GenderChoices = [('', '')] + Choices.Gender
 NationalityChoices = [('', '')] + Choices.Nationality
 LanguageChoices = [('', '')] + Choices.Language
 BillingChoices = [('', '')] + Choices.Payment
+
 
 KEEP_CURRENT = _('-- Keep current --')
 
@@ -48,14 +49,6 @@ class UploadForm(forms.Form):
                 self.add_error('csv', _('There is a problem with the file.'))
 
         return cleaned_data
-
-
-#class StudentsUploadForm(UploadForm):
-#    def __init__(self, university, *args, **kwargs):
-#        super(StudentsUploadForm, self).__init__(*args, **kwargs)
-#        self.fields['course'] = forms.ChoiceField(
-#            choices=[(o.pk, o.name_studiengang_auto) for o in university.get_active_courses()]
-#        )
 
 
 class LanguageSelectForm(forms.ModelForm):
@@ -219,3 +212,14 @@ class BulkActionsForm(forms.Form):
             choices=[('--', KEEP_CURRENT)] + [(o.pk, o.name) for o in university.get_active_courses()],
             required=False
         )
+
+
+class UGVApplicationForm(forms.ModelForm):
+    # status = forms.ChoiceField(choices=Choices.UGVStatus, required=True)
+    class Meta:
+        model = Lead
+        fields = ['university_status']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['university_status'].widget.choices[0] = ("", "")
