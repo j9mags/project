@@ -74,7 +74,7 @@ class DashboardHome(StaffMixin, TemplateView):
         context.update(students=students, courses=courses)
 
         if self.contact.account.is_eg_customer():
-            applications = Application.objects.filter(hochschule_ref=self.contact.account)
+            applications = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
             context.update(applications=applications)
 
         return context
