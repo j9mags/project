@@ -257,6 +257,8 @@ class Lead(models.Model):
     converted_account = models.ForeignKey('Account', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
     converted_contact = models.ForeignKey('Contact', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
 
+    active_application = models.ForeignKey('Application', models.DO_NOTHING, custom=True, blank=True, null=True)
+
     objects = managers.DefaultManager()
     ugv_students = managers.UGVStudentManager()
 
@@ -268,7 +270,7 @@ class Lead(models.Model):
 
     @property
     def application(self):
-        return self.application_set.filter(hochschule_ref__isnull=False).first()
+        return self.active_application
 
 
 class Application(models.Model):

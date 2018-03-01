@@ -507,37 +507,38 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
-        apps = Application.objects.filter(hochschule_ref=self.contact.account, lead_ref__isnull=False)
+        # apps = Application.objects.filter(hochschule_ref=self.contact.account, lead_ref__isnull=False)
+        leads = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
 
         filters = []
-        if apps:
+        if leads:
             if course:
                 course = None if course == "None" else course
                 if course is not None:
-                    apps = apps.filter(studiengang_ref__pk=course)
+                    leads = leads.filter(active_application__studiengang_ref__pk=course)
                     filters.append(
                         (_('Course'),
-                         apps.first().studiengang_ref.name,
+                         leads.first().active_application.studiengang_ref.name,
                          'course'
                          ))
-            lead_ids = [app.lead_ref.pk for app in apps]
-            items = Lead.ugv_students.filter(pk__in=lead_ids).order_by(o)  #
+            # lead_ids = [app.lead_ref.pk for app in apps]
+            # items = Lead.ugv_students.filter(pk__in=lead_ids).order_by(o)  #
             if status:
                 status = "" if status == "None" else status
-                items = items.filter(university_status=status)
+                leads = leads.filter(university_status=status)
                 filters.append((_('Status'), status, 'status'))
 
             if q:
                 context.update(q=q)
-                items = items.filter(Q(name__icontains=q) | Q(email__icontains=q))
+                leads = leads.filter(Q(name__icontains=q) | Q(email__icontains=q))
 
-            paginator = Paginator(items, s)
+            paginator = Paginator(leads, s)
             try:
-                items = paginator.page(p)
+                leads = paginator.page(p)
             except EmptyPage:
-                items = paginator.page(paginator.num_pages if p > 1 else 0)
+                leads = paginator.page(paginator.num_pages if p > 1 else 0)
         else:
-            items = []
+            leads = []
             if status:
                 status = "" if status == "None" else status
                 filters.append((_('Status'), status))
@@ -549,7 +550,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
                          self.contact.account.get_active_courses().get(
                              pk=course).name))
 
-        context.update(items=items, filters=filters)
+        context.update(items=leads, filters=filters)
         return context
 
 
