@@ -13,7 +13,7 @@ class HtmlToImageView(View):
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
-        payload = request.POST
+        payload = request.body
         img_format = payload.get('format', 'png')
         sources = payload.get('sources', [])
 
