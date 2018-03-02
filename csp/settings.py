@@ -61,7 +61,7 @@ INSTALLED_APPS = [
 
     'integration.apps.IntegrationConfig',
     'authentication.apps.AuthenticationConfig',
-    'services.apps.ServicesApp',
+    'services.apps.ServicesConfig',
 ]
 
 MIDDLEWARE = [
