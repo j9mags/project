@@ -21,12 +21,12 @@ class HtmlToImageView(View):
         if sources and not isinstance(sources, (list, tuple)):
             sources = [sources]
 
-        data = {img_format: [], 'sources': sources, 'payload': payload}
+        data = {img_format: []}
         tmp_fname = '/tmp/out.{}'.format(img_format)
 
         for html in sources:
             imgkit.from_string(html, tmp_fname, options={"xvfb": ""})
             with open(tmp_fname, 'rb') as img:
-                data[img_format].append(base64.encodestring(img.read()))
+                data[img_format].append(base64.b64encode(img.read()))
 
         return JsonResponse(data)
