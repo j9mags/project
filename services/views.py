@@ -1,10 +1,13 @@
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
 from django.views.generic.base import View
+from django.views.decorators.csrf import csrf_exempt
 
 import imgkit
 import base64
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class HtmlToImageView(View):
 
     http_method_names = ['post']
