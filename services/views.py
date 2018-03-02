@@ -20,7 +20,7 @@ class HtmlToImageView(View):
         if sources and not isinstance(sources, (list, tuple)):
             sources = [sources]
 
-        data = {img_format: []}
+        data = {img_format: [], 'sources': sources}
         tmp_fname = '/tmp/out.{}'.format(img_format)
 
         for html in sources:
