@@ -3,8 +3,9 @@ from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from django.views.decorators.csrf import csrf_exempt
 
-import imgkit
 import base64
+import imgkit
+import json
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -13,7 +14,7 @@ class HtmlToImageView(View):
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
-        payload = request.body
+        payload = json.loads(request.body)
         img_format = payload.get('format', 'png')
         sources = payload.get('sources', [])
 
