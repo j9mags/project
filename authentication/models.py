@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from django.core import exceptions
 
@@ -19,7 +20,9 @@ class User(AbstractEmailUser):
         swappable = 'AUTH_USER_MODEL'
 
     def is_student(self):
-        return Account.students.filter(unimailadresse=self.email).exists()
+        return Account.students.filter(Q(unimailadresse=self.email) | (
+                    Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
+                person_email=self.email))).exists()
 
     def is_unistaff(self):
         return Contact.university_staff.filter(email=self.email).exists()
@@ -233,7 +236,8 @@ class CsvUpload(models.Model):
             course = DegreeCourse()
             course.university = university
             course.name = row.get('Name des Studiengangs')
-            course.start_of_studies = row.get('Startdatum des Studiengangs')  # datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
+            course.start_of_studies = row.get(
+                'Startdatum des Studiengangs')  # datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
             course.standard_period_of_study = row.get('Regelstudienzeit (in Semestern)')
 
             courses.append(course)
