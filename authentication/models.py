@@ -21,8 +21,8 @@ class User(AbstractEmailUser):
 
     def is_student(self):
         return Account.students.filter(Q(unimailadresse=self.email) | (
-                    Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
-                person_email=self.email))).exists()
+                Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
+            person_email=self.email))).exists()
 
     def is_unistaff(self):
         return Contact.university_staff.filter(email=self.email).exists()
@@ -32,7 +32,9 @@ class User(AbstractEmailUser):
         if self.is_unistaff():
             rc = Contact.university_staff.get(email=self.email)
         elif self.is_student():
-            rc = Account.students.get(unimailadresse=self.email)
+            rc = Account.students.get(Q(unimailadresse=self.email) | (
+                        Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
+                    person_email=self.email)))
         return rc
 
     def create_token(self, token=None, hours=96):
