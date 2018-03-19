@@ -87,7 +87,7 @@ class PasswordSet(View):
             user.save()
             pt.cspassword_token = None
             pt.cspassword_time = None
-            pt.save()
+            pt.save(update_fields=['cspassword_token', 'cspassword_time'])
 
             return render(request, self.template_done, context)
 

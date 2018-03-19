@@ -426,7 +426,7 @@ class Account(models.Model, PerishableTokenMixin):
 
     def get_active_contract(self):
         if self._is_student():
-            return self.contract_account_set.first()
+            return self.contract_account_set.filter(record_type__developer_name='Sofortzahler').first()
         return None
 
     def get_course(self):
