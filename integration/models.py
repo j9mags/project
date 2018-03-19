@@ -318,6 +318,12 @@ class Account(models.Model, PerishableTokenMixin):
     customer_type = models.CharField(custom=True, max_length=255, verbose_name=_('Customer type'),
                                      choices=Choices.CustomerType, blank=True, null=True)
 
+    # Person Account
+    person_contact = models.ForeignKey('Contact', models.DO_NOTHING, related_name='account_personcontact_set', sf_read_only=models.READ_ONLY, blank=True, null=True)
+    is_person_account = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
+    person_email = models.EmailField(verbose_name='Email', blank=True, null=True)
+
+
 
     abwicklungsgebuhr_pro_einzug_pro_student = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                                    verbose_name=_(
@@ -403,7 +409,7 @@ class Account(models.Model, PerishableTokenMixin):
         return (not self._is_student()) and ('CeG' in self.customer_type)
 
     def get_user_email(self):
-        return self.unimailadresse
+        return self.person_email if self.is_person_account else self.unimailadresse
 
     def get_master_contact(self):
         return self.get_student_contact()
