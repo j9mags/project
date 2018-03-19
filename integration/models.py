@@ -416,7 +416,7 @@ class Account(models.Model, PerishableTokenMixin):
 
     def get_student_contact(self):
         if self._is_student():
-            return self.student_contact
+            return self.person_contact if self.is_person_account else self.student_contact
         return None
 
     def get_payment_contact(self):

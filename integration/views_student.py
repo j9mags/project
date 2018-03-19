@@ -49,7 +49,7 @@ class SetLanguage(StudentMixin, View):
 
         lang = get_language()
         account = self.get_queryset()
-        print(lang, account.kommunikationssprache)
+
         if account.kommunikationssprache and not account.kommunikationssprache.startswith(lang):
             user_lang = account.kommunikationssprache.lower()[:2]
             activate(user_lang)
