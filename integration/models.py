@@ -260,7 +260,7 @@ class Lead(models.Model):
     active_application = models.ForeignKey('Application', models.DO_NOTHING, custom=True, blank=True, null=True)
 
     objects = managers.DefaultManager()
-    ugv_students = managers.UGVStudentManager()
+    ugv_students = managers.UGVLeadManager()
 
     class Meta(models.Model.Meta):
         db_table = 'Lead'
@@ -379,6 +379,9 @@ class Account(models.Model, PerishableTokenMixin):
     initial_review_completed = models.BooleanField(custom=True, verbose_name='Initial Review Completed',
                                                    default=models.DEFAULTED_ON_CREATE)
 
+    has_sofortzahler_contract_auto = models.BooleanField(custom=True, verbose_name='Has Sofortzahler Contract',
+                                                         sf_read_only=models.READ_ONLY)
+
     objects = managers.DefaultManager()
     universities = managers.UniversityManager()
     students = managers.StudentManager()
@@ -393,7 +396,8 @@ class Account(models.Model, PerishableTokenMixin):
         return self.name
 
     def _is_student(self):
-        return self.record_type.developer_name == 'Sofortzahler'
+        return self.record_type.developer_name == 'Sofortzahler' or \
+               (self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto)
 
     def is_eg_customer(self):
         return (not self._is_student()) and ('CeG' in self.customer_type)
