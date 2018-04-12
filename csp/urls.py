@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^admin/', include('loginas.urls')),
     url(r'^auth/', include('authtools.urls')),
+    url(r'^services/', include('services.urls', namespace='services')),
     url(r'', include('integration.urls', namespace='integration')),
 ]
 
