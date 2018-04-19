@@ -78,10 +78,11 @@ class PasswordSet(View):
         if form.is_valid():
             pt = get_token_or_raise(form.cleaned_data.get('token'))
             UserModel = get_user_model()
-            if UserModel.objects.filter(email=pt.get_user_email()).exists():
-                user = UserModel.objects.get(email=pt.get_user_email())
+            query = UserModel.objects.filter(email=pt.user_email)
+            if query.exists():
+                user = query
             else:
-                user = UserModel(email=pt.get_user_email(), is_active=True)
+                user = UserModel(email=pt.user_email, is_active=True)
                 pt.recordcreated = True
             user.set_password(form.cleaned_data.get('password1'))
             user.save()
@@ -108,7 +109,7 @@ class PasswordChange(View):
 
             if qs.exists():
                 user = qs.first()
-                pt = user.get_srecord()
+                pt = user.srecord()
                 pt.request_new_password()
                 rc += '?msg=pw-ch--success'
             else:

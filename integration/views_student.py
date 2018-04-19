@@ -21,14 +21,14 @@ class StudentMixin(LoginRequiredMixin):
     login_url = '/authentication/login'
 
     def get_queryset(self):
-        return self.request.user.get_srecord()
+        return self.request.user.srecord
 
     def dispatch(self, request, *args, **kwargs):
         rc = super(StudentMixin, self).dispatch(request, *args, **kwargs)
         if not 200 <= rc.status_code < 300:
             return rc
 
-        if not request.user.is_student():
+        if not request.user.is_student:
             raise PermissionDenied()
 
         lang = get_language()
@@ -67,13 +67,13 @@ class Dashboard(StudentMixin, TemplateView):
         context = super(Dashboard, self).get_context_data(**kwargs)
         self.account = self.get_queryset()
 
-        contact = self.account.get_master_contact()
-        contract = self.account.get_active_contract()
+        contact = self.account.master_contact
+        contract = self.account.active_contract
         invoices = contract.get_all_invoices()
 
         context['account'] = self.account
         context['master_contact'] = contact
-        context['payment_contact'] = self.account.get_payment_contact()
+        context['payment_contact'] = self.account.payment_contact
         context['active_contract'] = contract
         context['ignore_drawer'] = True
 
@@ -169,7 +169,7 @@ class PaymentDetails(StudentMixin, TemplateView):
         self.account = self.get_queryset()
 
         master_contact = self.account.get_student_contact()
-        payment_contact = self.account.get_payment_contact()
+        payment_contact = self.account.payment_contact()
 
         if master_contact == payment_contact:
             context['rvk_form'] = StudentRevokeMandateForm(instance=payment_contact)
@@ -223,8 +223,8 @@ class Onboarding(StudentMixin, View):
             if step not in self.steps[:2]:
                 step = 'data'
 
-        context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.get_master_contact(),
-                   'title_centered': True, 'sf_contract': self.account.get_active_contract(), 'ignore_drawer': True,
+        context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.master_contact,
+                   'title_centered': True, 'sf_contract': self.account.active_contract, 'ignore_drawer': True,
                    'stepper': (
                        {
                            'title': 'Willkommen! | Welcome! ',
@@ -290,7 +290,7 @@ class Onboarding(StudentMixin, View):
             # 'salutation': contact.salutation,
 
             'private_email': contact.email,
-            'mobile_phone': contact.mobile_phone,
+            'mobile_phone': account.phone if account.is_ugv else contact.mobile_phone,
             'home_phone': contact.home_phone,
 
             'mailing_street': contact.mailing_street,
@@ -347,6 +347,7 @@ class Onboarding(StudentMixin, View):
             try:
                 form.save()
             except Exception as e:
+                print(e)
                 form.add_error(None, str(e))
                 return render(request, self.template, context)
 
@@ -372,20 +373,28 @@ class Onboarding(StudentMixin, View):
 
             return redirect('integration:onboarding', step='data')
         elif step == 'data':
-            form = StudentOnboardingForm(request.POST)
+            account = context.get('sf_account')
+            _post = request.POST.copy()
+            if account.is_ugv:
+                _post.update(private_email=account.person_email)
+            form = StudentOnboardingForm(_post)
             context.update(form=form)
 
             if not form.is_valid():
                 return render(request, self.template, context)
 
-            account = context.get('sf_account')
             contact = context.get('sf_contact')
             contract = context.get('sf_contract')
 
             data = form.cleaned_data
 
             contact.email = data.get('private_email')
-            contact.mobile_phone = data.get('mobile_phone')
+
+            if account.is_ugv:
+                account.phone = data.get('mobile_phone')
+            else:
+                contact.mobile_phone = data.get('mobile_phone')
+
             contact.home_phone = data.get('home_phone')
             contact.mailing_street = data.get('mailing_street')
             contact.mailing_city = data.get('mailing_city')
@@ -404,13 +413,14 @@ class Onboarding(StudentMixin, View):
 
             contract.payment_interval = data.get('billing_option')
 
-            try:
-                account.save()
-                contact.save()
-                contract.save()
-            except Exception as e:
-                form.add_error(None, str(e))
-                return render(request, self.template, context)
+            # try:
+            account.save()
+            contact.save()
+            contract.save()
+            # except Exception as e:
+            #     print(e)
+            #     form.add_error(None, str(e))
+            #     return render(request, self.template, context)
 
             return redirect('integration:onboarding', step='sepa')
         elif step == 'sepa':

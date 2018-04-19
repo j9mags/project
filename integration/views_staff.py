@@ -31,7 +31,7 @@ class StaffMixin(LoginRequiredMixin):
         if not 200 <= rc.status_code < 300:
             return rc
 
-        if not request.user.is_unistaff():
+        if not request.user.is_unistaff:
             raise PermissionDenied()
 
         lang = get_language()
@@ -43,7 +43,7 @@ class StaffMixin(LoginRequiredMixin):
         return rc
 
     def get_staff_context(self):
-        self.contact = self.request.user.get_srecord()
+        self.contact = self.request.user.srecord
         return dict(contact=self.contact, st_form=UploadForm(), cs_form=UploadForm())
 
 
@@ -73,7 +73,7 @@ class DashboardHome(StaffMixin, TemplateView):
 
         context.update(students=students, courses=courses)
 
-        if self.contact.account.is_eg_customer():
+        if self.contact.account.is_eg_customer:
             applications = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
             context.update(applications=applications)
 
@@ -467,7 +467,7 @@ class ContractReview(StaffMixin, DetailView):
 
 class BulkActions(StaffMixin, View):
     def post(self, request, *args, **kwargs):
-        contact = request.user.get_srecord()
+        contact = request.user.srecord()
         form = BulkActionsForm(contact.account, request.POST)
 
         if form.is_valid():
@@ -480,7 +480,7 @@ class BulkActions(StaffMixin, View):
 
             course_pk = form.cleaned_data.get('course')
             if course_pk != '--':
-                contracts_pk = [s.get_active_contract().pk for s in students if s.get_active_contract() is not None]
+                contracts_pk = [s.active_contract().pk for s in students if s.active_contract() is not None]
                 contracts = Contract.objects.filter(pk__in=contracts_pk)
                 course = contact.account.degreecourse_set.get(pk=course_pk)
                 contracts.update(studiengang_ref=course)
@@ -496,7 +496,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         context.update(super(DashboardUGVApplications, self).get_context_data(**kwargs))
         context.update(can_search=True)
 
-        if not self.contact.account.is_eg_customer():
+        if not self.contact.account.is_eg_customer:
             raise PermissionDenied()
 
         p = int(self.request.GET.get('p', '1'))

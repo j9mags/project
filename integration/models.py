@@ -166,7 +166,7 @@ class Choices:
                    ('amerikanisch', 'amerikanisch'), ('britisch', 'britisch'), ('vietnamesisch', 'vietnamesisch'),
                    ('weißrussisch', 'weißrussisch'), ('zentralafrikanisch', 'zentralafrikanisch'),
                    ('zyprisch', 'zyprisch')]
-    Language = [('deutsch', 'deutsch'), ('englisch', 'english')]
+    Language = [('German', 'deutsch'), ('English', 'english')]
     Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
     Month = [('Januar', _('January')), ('Februar', _('February')), ('März', _('March')), ('April', _('April')),
              ('Mai', _('May')), ('Juni', _('June')), ('Juli', _('July')), ('August', _('August')),
@@ -254,8 +254,10 @@ class Lead(models.Model):
     is_converted = models.BooleanField(verbose_name='Converted', sf_read_only=models.NOT_UPDATEABLE,
                                        default=models.DEFAULTED_ON_CREATE)
     converted_date = models.DateField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    converted_account = models.ForeignKey('Account', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    converted_contact = models.ForeignKey('Contact', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    converted_account = models.ForeignKey('Account', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True,
+                                          null=True)
+    converted_contact = models.ForeignKey('Contact', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True,
+                                          null=True)
 
     active_application = models.ForeignKey('Application', models.DO_NOTHING, custom=True, blank=True, null=True)
 
@@ -278,7 +280,8 @@ class Application(models.Model):
     name = models.CharField(max_length=80, verbose_name='Application Name', default=models.DEFAULTED_ON_CREATE,
                             blank=True, null=True)
     lead_ref = models.ForeignKey('Lead', models.DO_NOTHING, custom=True, blank=True, null=True)
-    hochschule_ref = models.ForeignKey('Account', models.DO_NOTHING, custom=True, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
+    hochschule_ref = models.ForeignKey('Account', models.DO_NOTHING, custom=True,
+                                       sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
     studiengang_ref = models.ForeignKey('DegreeCourse', models.DO_NOTHING, custom=True,
                                         sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 1
     studienstart = models.DateField(custom=True, verbose_name=_('Start Semester'), blank=True, null=True)
@@ -319,11 +322,11 @@ class Account(models.Model, PerishableTokenMixin):
                                      choices=Choices.CustomerType, blank=True, null=True)
 
     # Person Account
-    person_contact = models.ForeignKey('Contact', models.DO_NOTHING, related_name='account_personcontact_set', sf_read_only=models.READ_ONLY, blank=True, null=True)
+    person_contact = models.ForeignKey('Contact', models.DO_NOTHING, related_name='account_personcontact_set',
+                                       sf_read_only=models.READ_ONLY, blank=True, null=True)
     is_person_account = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
     person_email = models.EmailField(verbose_name='Email', blank=True, null=True)
-
-
+    phone = models.CharField(max_length=40, verbose_name='Phone', blank=True, null=True)
 
     abwicklungsgebuhr_pro_einzug_pro_student = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                                    verbose_name=_(
@@ -398,50 +401,67 @@ class Account(models.Model, PerishableTokenMixin):
         verbose_name_plural = _('Accounts')
         # keyPrefix = '001'
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        update_fields = update_fields or [x.attname for x in self._meta.fields if not x.primary_key]
+        if self.is_person_account:
+            update_fields.remove('name')
+        return super(Account, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                         update_fields=update_fields)
+
     def __str__(self):
         return self.name
 
-    def _is_student(self):
+    @property
+    def is_student(self):
         return self.record_type.developer_name == 'Sofortzahler' or \
                (self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto)
 
-    def is_eg_customer(self):
-        return (not self._is_student()) and ('CeG' in self.customer_type)
+    @property
+    def is_ugv(self):
+        return self.record_type.developer_name == 'UGVStudents'
 
-    def get_user_email(self):
+    @property
+    def is_eg_customer(self):
+        return (not self.is_student) and ('CeG' in self.customer_type)
+
+    @property
+    def user_email(self):
         return self.person_email if self.is_person_account else self.unimailadresse
 
-    def get_master_contact(self):
+    @property
+    def master_contact(self):
         return self.get_student_contact()
 
-    def get_student_contact(self):
-        if self._is_student():
-            return self.person_contact if self.is_person_account else self.student_contact
-        return None
-
-    def get_payment_contact(self):
-        if self._is_student():
+    @property
+    def payment_contact(self):
+        if self.is_student:
             return self.zahlungskontakt_ref
         return None
 
-    def get_active_contract(self):
-        if self._is_student():
+    @property
+    def active_contract(self):
+        if self.is_student:
             return self.contract_account_set.filter(record_type__developer_name='Sofortzahler').first()
         return None
 
-    def get_course(self):
-        if self._is_student():
-            contract = self.get_active_contract()
-            return contract.studiengang_ref if contract else None
+    @property
+    def course(self):
+        if self.is_student:
+            return self.active_contract.studiengang_ref if self.active_contract else None
+        return None
+
+    def get_student_contact(self):
+        if self.is_student:
+            return self.person_contact if self.is_person_account else self.student_contact
         return None
 
     def get_all_invoices(self):
-        if self._is_student():
+        if self.is_student:
             return Invoice.objects.filter(contract__account__pk=self.pk)
         return None
 
     def get_active_courses(self):
-        if not self._is_student():
+        if not self.is_student:
             # min_date = date.today() - timedelta(31)
             return self.degreecourse_set.all()  # filter(start_of_studies__gte=min_date)
         return None
@@ -512,22 +532,35 @@ class Contact(models.Model, PerishableTokenMixin):
         verbose_name_plural = _('Contacts')
         # keyPrefix = '003'
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        update_fields = update_fields or [x.attname for x in self._meta.fields if not x.primary_key]
+        print(update_fields)
+        if self.account.is_person_account:
+            update_fields.remove('account_id')
+        return super(Contact, self).save(force_insert=force_insert, force_update=force_update, using=using,
+                                         update_fields=update_fields)
+
+
     def __str__(self):
         return self.name
 
+    @property
     def _is_staff(self):
         return self.record_type.developer_name == 'Hochschule'
 
-    def get_user_email(self):
+    @property
+    def user_email(self):
         return self.email
 
-    def get_bank_account(self):
-        if not self._is_staff():
+    @property
+    def bank_account(self):
+        if not self._is_staff:
             rc = self.customerbankaccount_set.filter(enabled=True)
             if rc.exists():
                 return rc.first()
 
-    def get_address_html(self):
+    @property
+    def address_html(self):
         return '{self.mailing_street}<br>{self.mailing_city}, {self.mailing_postal_code}<br>{self.mailing_country}'.format(
             self=self)
 
@@ -687,9 +720,9 @@ class Contract(models.Model):
     matriculation_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                 verbose_name=_('Matriculation Fee'), sf_read_only=models.READ_ONLY,
                                                 blank=True, null=True)
-#    start_summer_semester_ref = models.CharField(custom=True, max_length=1300,
-#                                                 verbose_name=_('Starting Month Summer Semester'),
-#                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
+    #    start_summer_semester_ref = models.CharField(custom=True, max_length=1300,
+    #                                                 verbose_name=_('Starting Month Summer Semester'),
+    #                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
     semester_fee_ref = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
                                            sf_read_only=models.READ_ONLY, blank=True, null=True)
     total_amount_of_rates_auto = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
@@ -707,12 +740,12 @@ class Contract(models.Model):
     count_invoices = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
                                          verbose_name=_('Count of Invoices'),
                                          sf_read_only=models.READ_ONLY, blank=True, null=True)
-#    start_of_studies_month_ref = models.CharField(custom=True, max_length=1300,
-#                                                  verbose_name=_('Start of Studies Month'),
-#                                                  sf_read_only=models.READ_ONLY, blank=True, null=True)
-#    start_winter_semester_ref = models.CharField(custom=True, max_length=1300,
-#                                                 verbose_name=_('Starting Month Winter Semester'),
-#                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
+    #    start_of_studies_month_ref = models.CharField(custom=True, max_length=1300,
+    #                                                  verbose_name=_('Start of Studies Month'),
+    #                                                  sf_read_only=models.READ_ONLY, blank=True, null=True)
+    #    start_winter_semester_ref = models.CharField(custom=True, max_length=1300,
+    #                                                 verbose_name=_('Starting Month Winter Semester'),
+    #                                                 sf_read_only=models.READ_ONLY, blank=True, null=True)
 
     start_of_studies_auto = models.DateField(custom=True, verbose_name=_('Start of Studies'),
                                              sf_read_only=models.READ_ONLY, blank=True, null=True)

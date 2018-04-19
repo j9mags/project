@@ -19,19 +19,22 @@ class User(AbstractEmailUser):
     class Meta:
         swappable = 'AUTH_USER_MODEL'
 
+    @property
     def is_student(self):
         return Account.students.filter(Q(unimailadresse=self.email) | (
                 Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
             person_email=self.email))).exists()
 
+    @property
     def is_unistaff(self):
         return Contact.university_staff.filter(email=self.email).exists()
 
-    def get_srecord(self):
+    @property
+    def srecord(self):
         rc = None
-        if self.is_unistaff():
+        if self.is_unistaff:
             rc = Contact.university_staff.get(email=self.email)
-        elif self.is_student():
+        elif self.is_student:
             rc = Account.students.get(Q(unimailadresse=self.email) | (
                         Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
                     person_email=self.email)))

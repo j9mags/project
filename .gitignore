@@ -101,3 +101,4 @@ ENV/
 /.idea
 /assets
 *.sqlite3
+integration/inspected_all.py
