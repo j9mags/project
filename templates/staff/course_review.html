@@ -36,7 +36,9 @@
   <div class="mdl-cell mdl-cell--12-col">
     <h5 class="mdl-typography--headline">{% trans 'Current fees' %}</h5>
   </div>
-  {% include "snippets/course_fees.html" with fees=course.active_fees %}
+  {% if course.active_fees %}
+    {% include "snippets/course_fees.html" with fees=course.active_fees %}
+  {% endif %}
 
   {% if course.past_fees %}
     <div class="mdl-cell mdl-cell--12-col">
@@ -46,4 +48,23 @@
       {% include "snippets/course_fees.html" with fees=fees collapsed=True %}
     {% endfor %}
   {% endif %}
+
+  {% if course.ugv_contracts %}
+    <div class="mdl-cell mdl-cell--12-col">
+        <h5 class="mdl-typography--headline">{% trans 'UGV Contracts' %}</h5>
+    </div>
+    {% for tpl in course.ugv_contracts %}
+      <div class="mdl-cell mdl-card mdl-shadow--2dp">
+          <div class="mdl-card__title">
+              <div class="mdl-card__title-text">{{ tpl.application_form_display_name }}</div>
+          </div>
+          <div class="mdl-card__supporting-text">
+              {% include "snippets/field-text.html" with label=_('Valid from') value=tpl.valid_from type='date' %}
+              {% include "snippets/field-text.html" with label=_('Repayment amount') value=tpl.repayment_amount type='currency' %}
+              {% include "snippets/field-text.html" with label=_('Semester fee') value=tpl.ugv_semester_fee type='currency' %}
+          </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+
 {% endblock %}

@@ -509,3 +509,12 @@ td.csp-table--action {
     max-height: 500px;
     padding: inherit;
 }
+
+.yscrollable {
+    overflow-y: auto;
+}
+
+.mdl-cell>.mdl-card {
+    max-width:100%;
+    margin: 0 auto;
+}

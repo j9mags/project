@@ -6,9 +6,9 @@
         DIALOG_ID_STS = 'dlg-add-students',
         addStudents_dlg = document.getElementById(DIALOG_ID_STS),
         addStudents_btn = document.getElementById('fab-add-students'),
-        DIALOG_ID_CS = 'dlg-add-courses',
-        addCourses_dlg = document.getElementById(DIALOG_ID_CS),
-        addCourses_btn = document.getElementById('fab-add-courses'),
+//        DIALOG_ID_CS = 'dlg-add-courses',
+//        addCourses_dlg = document.getElementById(DIALOG_ID_CS),
+//        addCourses_btn = document.getElementById('fab-add-courses'),
         DIALOG_ID_BLK = 'dlg-bulk-actions',
         blkActions_dlg = document.getElementById(DIALOG_ID_BLK),
         blkActions_btn = document.getElementById('bulk-form--btn'),
@@ -31,22 +31,22 @@
             document.addEventListener('click', processClick);
           }
         },
-        showDlgCs = function(e) {
-            var processClick = function (evt) {
-              var target = evt.target.closest('#' + DIALOG_ID_CS);
-              
-              if ((e !== evt) && (target === null)) {
-                addCourses_dlg.classList.remove(VISIBLE_CLASS);
-                addCourses_dlg.IS_SHOWING = false;
-                document.removeEventListener('click', processClick);
-              }
-            };
-            if (!addCourses_dlg.IS_SHOWING) {
-              addCourses_dlg.IS_SHOWING = true;
-              addCourses_dlg.classList.add(VISIBLE_CLASS);
-              document.addEventListener('click', processClick);
-            }
-        },
+//        showDlgCs = function(e) {
+//            var processClick = function (evt) {
+//              var target = evt.target.closest('#' + DIALOG_ID_CS);
+//
+//              if ((e !== evt) && (target === null)) {
+//                addCourses_dlg.classList.remove(VISIBLE_CLASS);
+//                addCourses_dlg.IS_SHOWING = false;
+//                document.removeEventListener('click', processClick);
+//              }
+//            };
+//            if (!addCourses_dlg.IS_SHOWING) {
+//              addCourses_dlg.IS_SHOWING = true;
+//              addCourses_dlg.classList.add(VISIBLE_CLASS);
+//              document.addEventListener('click', processClick);
+//            }
+//        },
         showDlgBlk = function(e) {
             var processClick = function (evt) {
               var target = evt.target.closest('#' + DIALOG_ID_BLK);
@@ -83,7 +83,7 @@
             window.location.href = '/student/register/';
         };
     addStudents_btn.addEventListener('click', showDlgSts);
-    addCourses_btn.addEventListener('click', showDlgCs);
+    // addCourses_btn.addEventListener('click', showDlgCs);
     addStudent_btn.addEventListener('click', gotoAddSt);
     if (blkActions_btn !== null)
       blkActions_btn.addEventListener('click', showDlgBlk);
@@ -91,7 +91,7 @@
       smsUpdate_btn.addEventListener('click', showDlgSms);
 
     window.showDlgSts = showDlgSts;
-    window.showDlgCs = showDlgCs;
+    // window.showDlgCs = showDlgCs;
     window.showDlgBlk = showDlgBlk;
     window.showDlgSms = showDlgSms;
 

@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '5^ta7yitxe!_ic(v9-a&ukrh$$!*8+v9-zh-i4ar%)12=cm%pf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # True
+DEBUG = True  # True
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
@@ -105,12 +105,14 @@ WSGI_APPLICATION = 'csp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'csp-staging',
-        'USER': 'chancen',
-        'PASSWORD': 'services',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'csp-staging',
+        # 'USER': 'chancen',
+        # 'PASSWORD': 'services',
+        # 'HOST': '127.0.0.1',
+        # 'PORT': '5432',
     },
     'salesforce': {
 #        'ENGINE': 'salesforce.backend',
@@ -125,7 +127,7 @@ DATABASES = {
         'CONSUMER_KEY': '3MVG92u_V3UMpV.hj5oYbP7_bEfS3i8S1wAC35b7LIgKIH99PY85rn23G0gWKI8WlXaOJYSj8jG6Nhn5VHXue',
         'CONSUMER_SECRET': '2985604239647087554',
         'USER': 'irle@chancen-eg.de.empaua',
-        'PASSWORD': 'LidPyctEckTeuW55B4Urtwhvyv4ndUKNsGw0OFg',
+        'PASSWORD': 'mGdCiwX2yUnfmcHqGzrTQ2VQ8GObnxzZLBlB',
         'HOST': 'https://test.salesforce.com',
     }
 }

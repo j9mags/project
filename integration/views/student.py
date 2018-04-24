@@ -11,8 +11,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .forms import *
-from .models import Attachment, Contact, RecordType
+from ..forms import *
+from ..models import Attachment, Contact, RecordType
 
 _logger = logging.getLogger(__name__)
 
@@ -69,7 +69,7 @@ class Dashboard(StudentMixin, TemplateView):
 
         contact = self.account.master_contact
         contract = self.account.active_contract
-        invoices = contract.get_all_invoices()
+        invoices = contract.all_invoices
 
         context['account'] = self.account
         context['master_contact'] = contact

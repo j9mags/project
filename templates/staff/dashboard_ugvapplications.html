@@ -26,7 +26,7 @@
             disabled="disabled">{% trans 'Bulk update' %}</button>
   </div -->
 
-  <div class="mdl-cell mdl-cell--12-col">
+  <div class="mdl-cell mdl-cell--12-col yscrollable">
     <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp csp--full-width">
       <thead>
         <tr>
@@ -59,7 +59,8 @@
         {% endfor %}
       </tbody>
     </table>
-
+  </div>
+  <div class="mdl-cell mdl-cell--12-col">
     {% include 'snippets/paginator_basic.html' with class="mdl-cell mdl-cell--12-col" page=items %}
   </div>
 {% endblock %}

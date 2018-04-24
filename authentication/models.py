@@ -12,7 +12,7 @@ from uuid import uuid4
 from authtools.models import AbstractEmailUser
 from pandas.io import json
 
-from integration.models import RecordType, Account, Contact, Contract, DegreeCourse, DegreeCourseFees
+from integration.models import RecordType, Account, Contact, Contract, DegreeCourse, DegreeCourseFees, Lead, Application
 
 
 class User(AbstractEmailUser):
@@ -72,13 +72,17 @@ class CsvUpload(models.Model):
                                 "Kosten pro Monat", "Kosten pro Monat über der Regelstudienzeit",
                                 "Immatrikulationsgebühr (einmalig)", "Auslandssemestergebühr pro Monat",
                                 "Urlaubssemestergebühr pro Monat", "Startdatum des Studiengangs"]
+    expected_application_headers = ["Nachname", "Vorname", "Staatsbürgerschaft", "Geburtsdatum", "Geburtsort",
+                                    "private E-Mail-Adresse", "Handynummer", "Straße und Hausnummer", "PLZ", "Stadt",
+                                    "Land", "Studiengang", "Bevorzugte Kontaktsprache", "Startdatum",
+                                    "Studiert bereits an dieser Hochschule", "Finanzierungsvariante (optional)"]
 
     def __str__(self):
         return "{course} by {user}".format(course=self.course, user=self.user)
 
     @staticmethod
     def is_valid(data, is_course):
-        headers = CsvUpload.expected_courses_headers if is_course else CsvUpload.expected_student_headers
+        headers = CsvUpload.expected_application_headers if is_course else CsvUpload.expected_student_headers
         headers_checked = 0
 
         for header in data.keys():
@@ -92,7 +96,7 @@ class CsvUpload(models.Model):
         data = json.loads(self.content)
         rc = []
         i, done = 1, False
-        headers = CsvUpload.expected_courses_headers if self.course else CsvUpload.expected_student_headers
+        headers = CsvUpload.expected_application_headers if self.course else CsvUpload.expected_student_headers
 
         while not done:
             i += 1
@@ -110,10 +114,10 @@ class CsvUpload(models.Model):
         return rc
 
     def process(self):
-        if self.course:
-            rc = self._create_courses()
-        else:
-            rc = self._create_students()
+        # if self.course:
+        #     rc = self._create_courses()
+        # else:
+        rc = self._create_students()
         if rc:
             self.delete()
         return rc
@@ -135,9 +139,9 @@ class CsvUpload(models.Model):
         ctc_rt = RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler').id
         ctr_id = RecordType.objects.get(sobject_type='Contract', developer_name='Sofortzahler').id
 
-        university = self.user.get_srecord().account
-        # course = university.degreecourse_set.get(pk=self.course)
-        courses = {}
+        university = self.user.srecord.account
+
+        courses = {x.name: x for x in university.degreecourse_set.all()}
 
         for row in data:
             if not (any(row) and all(row)):
@@ -174,8 +178,8 @@ class CsvUpload(models.Model):
             contacts.update({acc.immatrikulationsnummer: ctc})
 
             course_name = row.get('Studiengang')
-            if course_name not in courses:
-                courses.update({course_name: university.degreecourse_set.get(name=course_name)})
+            # if course_name not in courses:
+            #     courses.update({course_name: university.degreecourse_set.get(name=course_name)})
             course = courses.get(course_name)
 
             if not course:
@@ -222,57 +226,129 @@ class CsvUpload(models.Model):
 
         return True
 
-    def _create_courses(self):
+    def create_applications(self):
         if not self.user.is_unistaff:
             raise exceptions.PermissionDenied()
 
         if not self.content:
             raise exceptions.ObjectDoesNotExist()
 
-        university = self.user.get_srecord().account
-        courses = []
-        courses_names = []
-        courses_fees = {}
+        university = self.user.srecord.account
+        courses = {x.name: x for x in university.degreecourse_set.all()}
+        contracts = {}
+        for c in university.contract_set.filter(template=True):
+            if contracts.get(c.studiengang_ref) is None:
+                contracts.update({c.studiengang_ref: []})
+            contracts.get(c.studiengang_ref).append(c)
+
         data = self.parse_data()
+
+        leads = []
+        lead_rt = RecordType.objects.get(sobject_type='Lead', developer_name='UGVStudents').id
+
+        appsByLead = {}
+
         for row in data:
             if not (any(row) and all(row)):
                 return False
 
-            course = DegreeCourse()
-            course.university = university
-            course.name = row.get('Name des Studiengangs')
-            course.start_of_studies = row.get(
-                'Startdatum des Studiengangs')  # datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
-            course.standard_period_of_study = row.get('Regelstudienzeit (in Semestern)')
+            lead = Lead()
+            lead.record_type_id = lead_rt
+            lead.first_name = row.get('Vorname')
+            lead.last_name = row.get('Nachname')
+            lead.citizenship_new = row.get('Staatsbürgerschaft')
+            lead.date_of_birth = row.get('Geburtsdatum')
+            lead.place_of_birth = row.get('Geburtsort')
+            lead.email = row.get('private E-Mail-Adresse')
+            lead.phone = row.get('Handynummer')
+            lead.street = row.get('Straße und Hausnummer')
+            lead.postal_code = row.get('PLZ')
+            lead.city = row.get('Stadt')
+            lead.country_0 = row.get('Land')
+            lead.kommunicationssprache = row.get('Bevorzugte Kontaktsprache')
 
-            courses.append(course)
-            courses_names.append(course.name)
+            lead.confirmed_by_university = True
+            leads.append(lead)
 
-            fees = DegreeCourseFees()
-            fees.valid_from = timezone.now()
-            fees.cost_per_semester = row.get('Kosten pro Semester')
-            fees.cost_per_month = row.get('Kosten pro Monat')
-            fees.cost_per_month_beyond_standard = row.get('Kosten pro Monat über der Regelstudienzeit')
-            fees.matriculation_fee = row.get('Immatrikulationsgebühr (einmalig)')
-            fees.fee_semester_abroad = row.get('Auslandssemestergebühr pro Monat')
-            fees.fee_semester_off = row.get('Urlaubssemestergebühr pro Monat')
+            app = Application()
+            app.hochschule_ref = university
+            app.studiengang_ref = courses.get(row.get('Studiengang'))
+            if app.studiengang_ref is None:
+                raise Exception()
+            app.already_student = row.get('Studiert bereits an dieser Hochschule')
+            app.start_of_study_trig = row.get('Startdatum')
+            candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Finanzierungsvariante (optional)')]
+            if candidates:
+                app.contract_ref = candidates[0]
 
-            courses_fees.update({course.unique_name: fees})
+            app.confirmed_by_university = True
+            appsByLead.update({lead.email: app})
 
-        DegreeCourse.objects.bulk_create(courses)
+        Lead.objects.bulk_create(leads)
+        leads = Lead.ugv_students.filter(email__in=appsByLead.keys())
 
-        sf_courses = DegreeCourse.objects.filter(university=university, name__in=courses_names)
-        linked = 0
-        for course in sf_courses:
-            fee = courses_fees.get(course.unique_name)
-            if fee is None:
-                continue
-            fee.degree_course_ref = course
-            linked += 1
+        for lead in leads:
+            appsByLead.get(lead.email).lead_ref = lead
+        Application.objects.bulk_create(appsByLead.values())
+        apps = {a.lead_ref.id: a for a in Application.objects.filter(lead__email__in=appsByLead.keys())}
 
-        if linked != len(courses_fees):
-            print("Mismatch .. caution")
-
-        DegreeCourseFees.objects.bulk_create(courses_fees.values())
+        for lead in leads:
+            lead.active_application = apps.get(lead.id).id
+            lead.save()
 
         return True
+
+    # def _create_courses(self):
+    #     if not self.user.is_unistaff:
+    #         raise exceptions.PermissionDenied()
+    #
+    #     if not self.content:
+    #         raise exceptions.ObjectDoesNotExist()
+    #
+    #     university = self.user.get_srecord().account
+    #     courses = []
+    #     courses_names = []
+    #     courses_fees = {}
+    #     data = self.parse_data()
+    #     for row in data:
+    #         if not (any(row) and all(row)):
+    #             return False
+    #
+    #         course = DegreeCourse()
+    #         course.university = university
+    #         course.name = row.get('Name des Studiengangs')
+    #         course.start_of_studies = row.get(
+    #             'Startdatum des Studiengangs')  # datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
+    #         course.standard_period_of_study = row.get('Regelstudienzeit (in Semestern)')
+    #
+    #         courses.append(course)
+    #         courses_names.append(course.name)
+    #
+    #         fees = DegreeCourseFees()
+    #         fees.valid_from = timezone.now()
+    #         fees.cost_per_semester = row.get('Kosten pro Semester')
+    #         fees.cost_per_month = row.get('Kosten pro Monat')
+    #         fees.cost_per_month_beyond_standard = row.get('Kosten pro Monat über der Regelstudienzeit')
+    #         fees.matriculation_fee = row.get('Immatrikulationsgebühr (einmalig)')
+    #         fees.fee_semester_abroad = row.get('Auslandssemestergebühr pro Monat')
+    #         fees.fee_semester_off = row.get('Urlaubssemestergebühr pro Monat')
+    #
+    #         courses_fees.update({course.unique_name: fees})
+    #
+    #     DegreeCourse.objects.bulk_create(courses)
+    #
+    #     sf_courses = DegreeCourse.objects.filter(university=university, name__in=courses_names)
+    #     linked = 0
+    #     for course in sf_courses:
+    #         fee = courses_fees.get(course.unique_name)
+    #         if fee is None:
+    #             continue
+    #         fee.degree_course_ref = course
+    #         linked += 1
+    #
+    #     if linked != len(courses_fees):
+    #         print("Mismatch .. caution")
+    #
+    #     DegreeCourseFees.objects.bulk_create(courses_fees.values())
+    #
+    #     return True

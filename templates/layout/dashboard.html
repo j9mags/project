@@ -96,10 +96,20 @@
     </div>
     {% endif %}
   </div>
+
+{% if message %}
+  <div id="general-snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+    <div class="mdl-snackbar__text">{{message}}</div>
+    <button class="mdl-snackbar__action" type="button"></button>
+  </div>
+{% endif %}
+
 {% endblock %}
 
 {% block extrajs %}
+
   {% if not ignore_drawer %}
     <script src="{% static '/js/dashboard.js' %}"></script>
   {% endif %}
+
 {% endblock %}

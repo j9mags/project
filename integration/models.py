@@ -194,6 +194,8 @@ class Choices:
                  ('Rejected applicant', _('Rejected applicant')), ('Accepted applicant', _('Accepted applicant')),
                  ('Already student', _('Already student'))]
     CustomerType = [('CS', 'CS'), ('CeG', 'CeG'), ('CS+CeG', 'CS+CeG')]
+    ContractPeriod = [('Semester', _('Semester')), ('All Upfront', _('All Upfront')),
+                      ('One year Upfront', _('One year Upfront'))]
 
 
 class RecordType(models.Model):
@@ -425,6 +427,10 @@ class Account(models.Model, PerishableTokenMixin):
         return (not self.is_student) and ('CeG' in self.customer_type)
 
     @property
+    def is_services_customer(self):
+        return (not self.is_student) and ('CS' in self.customer_type)
+
+    @property
     def user_email(self):
         return self.person_email if self.is_person_account else self.unimailadresse
 
@@ -534,12 +540,10 @@ class Contact(models.Model, PerishableTokenMixin):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         update_fields = update_fields or [x.attname for x in self._meta.fields if not x.primary_key]
-        print(update_fields)
         if self.account.is_person_account:
             update_fields.remove('account_id')
         return super(Contact, self).save(force_insert=force_insert, force_update=force_update, using=using,
                                          update_fields=update_fields)
-
 
     def __str__(self):
         return self.name
@@ -651,7 +655,13 @@ class DegreeCourse(models.Model):
 
     @property
     def past_fees(self):
-        return self.degreecoursefees_set.filter(valid_from__lt=self.active_fees.valid_from).order_by('-valid_from')
+        if self.active_fees:
+            return self.degreecoursefees_set.filter(valid_from__lt=self.active_fees.valid_from).order_by('-valid_from')
+        return None
+
+    @property
+    def ugv_contracts(self):
+        return self.contract_set.filter(template=True, record_type__developer_name='Ruckzahler')
 
     def __str__(self):
         return "[{self.university.name}] {self.name}".format(self=self)
@@ -770,29 +780,89 @@ class Contract(models.Model):
     status = models.CharField(max_length=40, choices=Choices.ContractStatus, default=models.DEFAULTED_ON_CREATE,
                               verbose_name=_('Status'))
 
+    net_funding_amount = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                             verbose_name=_('Net funding amount'), blank=True, null=True)
+    repayment_period = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
+                                           verbose_name=_('Repayment period'), default=models.DEFAULTED_ON_CREATE,
+                                           blank=True, null=True)
+    relevant_repayment_period = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
+                                                    verbose_name=_('Relevant repayment period'),
+                                                    default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
+    maximum_repayment = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                            verbose_name=_('Maximum repayment'), sf_read_only=models.READ_ONLY,
+                                            blank=True, null=True)
+    repayment_amount = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                           verbose_name=_('Repayment amount'), blank=True, null=True)
+    minimal_monthly_instalments = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                                      verbose_name=_('Minimal monthly instalments'),
+                                                      sf_read_only=models.READ_ONLY, blank=True, null=True)
+    annual_maximum_repayment = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                                   verbose_name=_('Annual maximum repayment'),
+                                                   sf_read_only=models.READ_ONLY, blank=True, null=True)
+    annual_minimum_limit = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                               verbose_name=_('Annual minimum limit'), sf_read_only=models.READ_ONLY,
+                                               blank=True, null=True)
+    annual_minimal_income_indexed = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                                        verbose_name=_('Annual minimal income indexed'), blank=True,
+                                                        null=True)
+    valid_from = models.DateField(custom=True, verbose_name=_('Valid from'), blank=True, null=True)
+    years_of_payment = models.DecimalField(custom=True, max_digits=2, decimal_places=0,
+                                           verbose_name=_('Years of payment'), blank=True, null=True)
+    start_of_repayment = models.DecimalField(custom=True, max_digits=2, decimal_places=0,
+                                             verbose_name=_('Start of repayment'), default=models.DEFAULTED_ON_CREATE,
+                                             blank=True, null=True)
+
+    template = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+    application_form_display_name = models.CharField(custom=True, max_length=255, blank=True, null=True)
+    minimal_relevant_income = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                                  verbose_name=_('Minimal relevant income'),
+                                                  default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
+    full_finanzing = models.BooleanField(custom=True, verbose_name=_('Full Finanzing'),
+                                         default=models.DEFAULTED_ON_CREATE)
+    counterpart = models.ForeignKey('self', models.DO_NOTHING, custom=True, blank=True, null=True)
+    credit_balances_account_number = models.CharField(custom=True, max_length=1300,
+                                                      verbose_name=_('Credit balances account number'),
+                                                      sf_read_only=models.READ_ONLY, blank=True, null=True)
+    period = models.CharField(custom=True, max_length=255, choices=Choices.ContractPeriod, blank=True, null=True)
+    factor = models.DecimalField(custom=True, max_digits=4, decimal_places=0, blank=True, null=True)
+    notice_to_quit = models.DateField(custom=True, verbose_name=_('Notice to quit'), blank=True, null=True)
+    emergence = models.DateField(custom=True, blank=True, null=True)
+
     class Meta(models.Model.Meta):
         db_table = 'Contract'
         verbose_name = _('Contract')
         verbose_name_plural = _('Contracts')
         # keyPrefix = '800'
 
-    def get_current_invoice(self):
+    @property
+    def is_ruckzahler(self):
+        return self.record_type.developer_name == 'Ruckzahler'
+
+    @property
+    def current_invoice(self):
         return self.invoice_set.last()
 
-    def get_all_invoices(self):
+    @property
+    def all_invoices(self):
         return self.invoice_set.exclude(status='Draft').order_by('-invoice_date')
 
-    def get_semester_discount(self):
+    @property
+    def semester_discount(self):
         rc = self.rabatt_set.filter(active=True, discount_type=Choices.DiscountType[1][0]).first()
         if rc is None:
             rc = Rabatt(contract=self, discount_type=Choices.DiscountType[1][0])
         return rc
 
-    def get_tuition_discount(self):
+    @property
+    def tuition_discount(self):
         rc = self.rabatt_set.filter(active=True, discount_type=Choices.DiscountType[0][0]).first()
         if rc is None:
             rc = Rabatt(contract=self, discount_type=Choices.DiscountType[0][0])
         return rc
+
+    @property
+    def ugv_semester_fee(self):
+        return self.net_funding_amount / self.standard_period_of_study_ref
 
 
 class Rabatt(models.Model):

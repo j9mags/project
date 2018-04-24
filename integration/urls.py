@@ -1,8 +1,7 @@
 from django.conf.urls import url
 
-from . import views
-from . import views_student as student
-from . import views_staff as staff
+from .views import dispatch_by_user
+from .views import staff, student
 
 urlpatterns = [
     url(r'^onboarding/(?P<step>{})/$'.format('|'.join(['({})'.format(x) for x in student.Onboarding.steps])),
@@ -18,6 +17,7 @@ urlpatterns = [
     url(r'^student/register/$', staff.StudentRegister.as_view(), name='student_register'),
     url(r'^student/(?P<pk>.+)/$', staff.StudentReview.as_view(), name='student_review'),
     url(r'^students/$', staff.DashboardStudents.as_view(), name='students'),
+    url(r'^ugvers/$', staff.DashboardUGVers.as_view(), name='ugvers'),
     url(r'^bulk/$', staff.BulkActions.as_view(), name='students_bulk'),
     url(r'^university/$', staff.DashboardUniversity.as_view(), name='university'),
     url(r'^course/(?P<pk>.+)/$', staff.CourseReview.as_view(), name='course_review'),
@@ -26,12 +26,12 @@ urlpatterns = [
     url(r'^applications/$', staff.DashboardUGVApplications.as_view(), name='applications'),
 
     url(r'^language/$',
-        views.dispatch_by_user(
+        dispatch_by_user(
             student.SetLanguage.as_view(),
             staff.SetLanguage.as_view()),
         name='language'),
     url(r'^$',
-        views.dispatch_by_user(
+        dispatch_by_user(
             student.Dashboard.as_view(),
             staff.DashboardHome.as_view()),
         name='dashboard'),

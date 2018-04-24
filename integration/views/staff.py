@@ -13,9 +13,8 @@ from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.shortcuts import render, redirect
 
-from authentication.models import CsvUpload
-from .models import DegreeCourse, Contract, Account, RecordType, Lead, Application
-from .forms import *
+from ..models import DegreeCourse, Contract, Account, RecordType, Lead, Application
+from ..forms import *
 
 from django.core.paginator import Paginator, EmptyPage
 
@@ -68,14 +67,17 @@ class DashboardHome(StaffMixin, TemplateView):
         context = self.get_staff_context()
         context.update(super(DashboardHome, self).get_context_data(**kwargs))
 
-        students = Account.students.filter(hochschule_ref=self.contact.account)
         courses = DegreeCourse.objects.filter(university=self.contact.account)
-
-        context.update(students=students, courses=courses)
+        context.update(courses=courses)
+        if self.contact.account.is_services_customer:
+            students = Account.students.filter(hochschule_ref=self.contact.account)
+            context.update(students=students)
 
         if self.contact.account.is_eg_customer:
             applications = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
-            context.update(applications=applications)
+            ugvers = Account.students.filter(hochschule_ref=self.contact.account,
+                                             record_type__developer_name='UGVStudents')
+            context.update(applications=applications, ugvers=ugvers)
 
         return context
 
@@ -126,6 +128,70 @@ class DashboardStudents(StaffMixin, TemplateView):
         course = self.request.GET.get('course')
 
         students = Account.students.filter(hochschule_ref=self.contact.account).order_by(o)
+        if q:
+            context.update(q=q)
+            students = students.filter(
+                Q(name__icontains=q) | Q(immatrikulationsnummer=q) | Q(unimailadresse__icontains=q))
+
+        filters = []
+        if not students:
+            students = []
+            if status:
+                status = "" if status == "None" else status
+                filters.append((_('Status'), status))
+            if course:
+                course = None if course == "None" else course
+                if course is not None:
+                    filters.append(
+                        (_('Course'),
+                         self.contact.account.get_active_courses().get(
+                             pk=course).name))
+        else:
+            if status:
+                status = "" if status == "None" else status
+                students = students.filter(status=status)
+                filters.append((_('Status'), status, 'status'))
+
+            if course:
+                course = None if course == "None" else course
+                if course is not None:
+                    students = students.filter(contract_account_set__studiengang_ref__pk=course)
+                    filters.append(
+                        (_('Course'),
+                         students.first().contract_account_set.filter(
+                             studiengang_ref__pk=course).first().studiengang_ref.name,
+                         'course'
+                         ))
+
+            paginator = Paginator(students, s)
+            try:
+                students = paginator.page(p)
+            except EmptyPage:
+                students = paginator.page(paginator.num_pages if p > 1 else 0)
+
+        bulk_form = BulkActionsForm(self.contact.account)
+        context.update(students=students, filters=filters, bulk_form=bulk_form)
+        return context
+
+
+class DashboardUGVers(StaffMixin, TemplateView):
+    template_name = 'staff/dashboard_ugvers.html'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_staff_context()
+        context.update(super(DashboardUGVers, self).get_context_data(**kwargs))
+        context.update(can_search=True)
+
+        p = int(self.request.GET.get('p', '1'))
+        o = self.request.GET.get('o', 'pk')
+        s = int(self.request.GET.get('s', '10'))
+        q = self.request.GET.get('q')
+
+        status = self.request.GET.get('status')
+        course = self.request.GET.get('course')
+
+        students = Account.students.filter(hochschule_ref=self.contact.account,
+                                           record_type__developer_name='UGVStudents').order_by(o)
         if q:
             context.update(q=q)
             students = students.filter(
@@ -244,6 +310,72 @@ class DashboardUniversity(StaffMixin, TemplateView):
             form.save()
 
         return self.get(request, *args, **kwargs)
+
+
+class DashboardUGVApplications(StaffMixin, TemplateView):
+    template_name = 'staff/dashboard_ugvapplications.html'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_staff_context()
+        context.update(super(DashboardUGVApplications, self).get_context_data(**kwargs))
+        context.update(can_search=True)
+
+        if not self.contact.account.is_eg_customer:
+            raise PermissionDenied()
+
+        p = int(self.request.GET.get('p', '1'))
+        o = self.request.GET.get('o', 'pk')
+        s = int(self.request.GET.get('s', '10'))
+        q = self.request.GET.get('q')
+
+        status = self.request.GET.get('status')
+        course = self.request.GET.get('course')
+
+        # apps = Application.objects.filter(hochschule_ref=self.contact.account, lead_ref__isnull=False)
+        leads = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
+
+        filters = []
+        if leads:
+            if course:
+                course = None if course == "None" else course
+                if course is not None:
+                    leads = leads.filter(active_application__studiengang_ref__pk=course)
+                    filters.append(
+                        (_('Course'),
+                         leads.first().active_application.studiengang_ref.name,
+                         'course'
+                         ))
+            # lead_ids = [app.lead_ref.pk for app in apps]
+            # items = Lead.ugv_students.filter(pk__in=lead_ids).order_by(o)  #
+            if status:
+                status = "" if status == "None" else status
+                leads = leads.filter(university_status=status)
+                filters.append((_('Status'), status, 'status'))
+
+            if q:
+                context.update(q=q)
+                leads = leads.filter(Q(name__icontains=q) | Q(email__icontains=q))
+
+            paginator = Paginator(leads, s)
+            try:
+                leads = paginator.page(p)
+            except EmptyPage:
+                leads = paginator.page(paginator.num_pages if p > 1 else 0)
+        else:
+            leads = []
+            if status:
+                status = "" if status == "None" else status
+                filters.append((_('Status'), status))
+            if course:
+                course = None if course == "None" else course
+                if course is not None:
+                    filters.append(
+                        (_('Course'),
+                         self.contact.account.get_active_courses().get(
+                             pk=course).name))
+
+        context.update(items=leads, filters=filters)
+        return context
 
 
 class FileUpload(StaffMixin, TemplateView):
@@ -407,17 +539,17 @@ class StudentReview(StaffMixin, DetailView):
             payload = self.request.POST if 'contract' in self.request.POST else None
             if payload:
                 if payload.get('discount_type') == Choices.DiscountType[1][0]:
-                    dsc_form_str = DiscountForm(payload, instance=contract.get_semester_discount())
-                    dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
+                    dsc_form_str = DiscountForm(payload, instance=contract.semester_discount())
+                    dsc_form_ttn = DiscountForm(instance=contract.tuition_discount())
                 elif payload.get('discount_type') == Choices.DiscountType[0][0]:
-                    dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
-                    dsc_form_ttn = DiscountForm(payload, instance=contract.get_tuition_discount())
+                    dsc_form_str = DiscountForm(instance=contract.semester_discount())
+                    dsc_form_ttn = DiscountForm(payload, instance=contract.tuition_discount())
                 else:
-                    dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
-                    dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
+                    dsc_form_str = DiscountForm(instance=contract.semester_discount())
+                    dsc_form_ttn = DiscountForm(instance=contract.tuition_discount())
             else:
-                dsc_form_str = DiscountForm(instance=contract.get_semester_discount())
-                dsc_form_ttn = DiscountForm(instance=contract.get_tuition_discount())
+                dsc_form_str = DiscountForm(instance=contract.semester_discount())
+                dsc_form_ttn = DiscountForm(instance=contract.tuition_discount())
             context.update(dsc_form_str=dsc_form_str, dsc_form_ttn=dsc_form_ttn)
         return context
 
@@ -465,95 +597,6 @@ class ContractReview(StaffMixin, DetailView):
     template_name = 'staff/contract_review.html'
 
 
-class BulkActions(StaffMixin, View):
-    def post(self, request, *args, **kwargs):
-        contact = request.user.srecord()
-        form = BulkActionsForm(contact.account, request.POST)
-
-        if form.is_valid():
-            student_pks = [pk for pk in form.cleaned_data.get('students').split(';') if pk]
-            students = Account.objects.filter(pk__in=student_pks)
-
-            new_status = form.cleaned_data.get('status')
-            if new_status != '--':
-                students.update(status=new_status)
-
-            course_pk = form.cleaned_data.get('course')
-            if course_pk != '--':
-                contracts_pk = [s.active_contract().pk for s in students if s.active_contract() is not None]
-                contracts = Contract.objects.filter(pk__in=contracts_pk)
-                course = contact.account.degreecourse_set.get(pk=course_pk)
-                contracts.update(studiengang_ref=course)
-
-        return HttpResponseRedirect('/')
-
-
-class DashboardUGVApplications(StaffMixin, TemplateView):
-    template_name = 'staff/dashboard_ugvapplications.html'
-
-    def get_context_data(self, **kwargs):
-        context = self.get_staff_context()
-        context.update(super(DashboardUGVApplications, self).get_context_data(**kwargs))
-        context.update(can_search=True)
-
-        if not self.contact.account.is_eg_customer:
-            raise PermissionDenied()
-
-        p = int(self.request.GET.get('p', '1'))
-        o = self.request.GET.get('o', 'pk')
-        s = int(self.request.GET.get('s', '10'))
-        q = self.request.GET.get('q')
-
-        status = self.request.GET.get('status')
-        course = self.request.GET.get('course')
-
-        # apps = Application.objects.filter(hochschule_ref=self.contact.account, lead_ref__isnull=False)
-        leads = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
-
-        filters = []
-        if leads:
-            if course:
-                course = None if course == "None" else course
-                if course is not None:
-                    leads = leads.filter(active_application__studiengang_ref__pk=course)
-                    filters.append(
-                        (_('Course'),
-                         leads.first().active_application.studiengang_ref.name,
-                         'course'
-                         ))
-            # lead_ids = [app.lead_ref.pk for app in apps]
-            # items = Lead.ugv_students.filter(pk__in=lead_ids).order_by(o)  #
-            if status:
-                status = "" if status == "None" else status
-                leads = leads.filter(university_status=status)
-                filters.append((_('Status'), status, 'status'))
-
-            if q:
-                context.update(q=q)
-                leads = leads.filter(Q(name__icontains=q) | Q(email__icontains=q))
-
-            paginator = Paginator(leads, s)
-            try:
-                leads = paginator.page(p)
-            except EmptyPage:
-                leads = paginator.page(paginator.num_pages if p > 1 else 0)
-        else:
-            leads = []
-            if status:
-                status = "" if status == "None" else status
-                filters.append((_('Status'), status))
-            if course:
-                course = None if course == "None" else course
-                if course is not None:
-                    filters.append(
-                        (_('Course'),
-                         self.contact.account.get_active_courses().get(
-                             pk=course).name))
-
-        context.update(items=leads, filters=filters)
-        return context
-
-
 class UGVApplicationReview(StaffMixin, DetailView):
     model = Lead
     template_name = 'staff/ugvapplication_review.html'
@@ -583,7 +626,33 @@ class UGVApplicationReview(StaffMixin, DetailView):
         form = context.get('form')
         if form.is_valid():
             form.save()
+            context.update(message=_('UGV Application Status successfully updated.'))
         else:
             context.update(form=form)
 
         return self.render_to_response(context)
+
+
+class BulkActions(StaffMixin, View):
+    def post(self, request, *args, **kwargs):
+        contact = request.user.srecord()
+        form = BulkActionsForm(contact.account, request.POST)
+
+        if form.is_valid():
+            student_pks = [pk for pk in form.cleaned_data.get('students').split(';') if pk]
+            students = Account.objects.filter(pk__in=student_pks)
+
+            new_status = form.cleaned_data.get('status')
+            if new_status != '--':
+                students.update(status=new_status)
+
+            course_pk = form.cleaned_data.get('course')
+            if course_pk != '--':
+                contracts_pk = [s.active_contract().pk for s in students if s.active_contract() is not None]
+                contracts = Contract.objects.filter(pk__in=contracts_pk)
+                course = contact.account.degreecourse_set.get(pk=course_pk)
+                contracts.update(studiengang_ref=course)
+
+        return HttpResponseRedirect('/')
+
+
