@@ -425,18 +425,3 @@ class Onboarding(StudentMixin, View):
             return redirect('integration:onboarding', step='sepa')
         elif step == 'sepa':
             return redirect(self.account.get_student_contact().sepamandate_url_auto)
-
-
-class DownloadAttachment(StudentMixin, View):
-    def get(self, *args, **kwargs):
-        att_id = kwargs.get('att_id')
-        att = Attachment.objects.get(pk=att_id)
-        if not att:
-            raise ObjectDoesNotExist()
-
-        rc = att.fetch_content()
-
-        response = HttpResponse(rc, content_type=att.content_type)
-        response['Content-Disposition'] = 'attachment; filename="{}"'.format(att.name)
-
-        return response

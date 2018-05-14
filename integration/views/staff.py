@@ -77,7 +77,8 @@ class DashboardHome(StaffMixin, TemplateView):
             applications = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
             ugvers = Account.students.filter(hochschule_ref=self.contact.account,
                                              record_type__developer_name='UGVStudents')
-            context.update(applications=applications, ugvers=ugvers)
+            invoices = self.contact.account.get_all_invoices()
+            context.update(applications=applications, ugvers=ugvers, invoices=invoices)
 
         return context
 
@@ -375,6 +376,51 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
                              pk=course).name))
 
         context.update(items=leads, filters=filters)
+        return context
+
+
+class DashboardInvoices(StaffMixin, TemplateView):
+    template_name = 'staff/dashboard_invoices.html'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_staff_context()
+        context.update(super(DashboardInvoices, self).get_context_data(**kwargs))
+
+        if not self.contact.account.is_eg_customer:
+            raise PermissionDenied()
+
+        p = int(self.request.GET.get('p', '1'))
+        # o = self.request.GET.get('o', 'invoice_date')
+        s = int(self.request.GET.get('s', '10'))
+        # q = self.request.GET.get('q')
+
+        status = self.request.GET.get('status')
+
+        invoices = self.contact.account.get_all_invoices()
+        filters = []
+
+        if invoices:
+            if status:
+                status = "" if status == "None" else status
+                invoices = invoices.filter(status=status)
+                filters.append((_('Status'), status, 'status'))
+
+            # if q:
+            #     context.update(q=q)
+            #     invoices = invoices.filter(Q(name__icontains=q) | Q(email__icontains=q))
+
+            paginator = Paginator(invoices, s)
+            try:
+                invoices = paginator.page(p)
+            except EmptyPage:
+                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
+        else:
+            invoices = []
+            if status:
+                status = "" if status == "None" else status
+                filters.append((_('Status'), status))
+
+        context.update(items=invoices, filters=filters)
         return context
 
 

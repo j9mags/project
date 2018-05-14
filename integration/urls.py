@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import dispatch_by_user
+from .views import dispatch_by_user, download_attachment
 from .views import staff, student
 
 urlpatterns = [
@@ -9,7 +9,6 @@ urlpatterns = [
     url(r'^onboarding/$',student.Onboarding.as_view(), name='onboarding'),
     url(r'^contact/(?P<pk>(.+)|(new))/$', student.ContactDetails.as_view(), name='contact'),
     url(r'^payment/$', student.PaymentDetails.as_view(), name='payment'),
-    url(r'^attachment/(?P<att_id>.+)/$', student.DownloadAttachment.as_view(), name='download_attachment'),
 
     url(r'^review/(?P<uuid>.+)/(?P<action>(confirm)|(discard))/$',
         staff.FileUploadAction.as_view(), name='upload_action'),
@@ -24,7 +23,9 @@ urlpatterns = [
     url(r'^courses/$', staff.DashboardCourses.as_view(), name='courses'),
     url(r'^application/(?P<pk>.+)/$', staff.UGVApplicationReview.as_view(), name='application_review'),
     url(r'^applications/$', staff.DashboardUGVApplications.as_view(), name='applications'),
+    url(r'^invoices/$', staff.DashboardInvoices.as_view(), name='invoices'),
 
+    url(r'^attachment/(?P<att_id>.+)/$', download_attachment, name='download_attachment'),
     url(r'^language/$',
         dispatch_by_user(
             student.SetLanguage.as_view(),
