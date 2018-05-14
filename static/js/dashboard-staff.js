@@ -6,6 +6,9 @@
         DIALOG_ID_STS = 'dlg-add-students',
         addStudents_dlg = document.getElementById(DIALOG_ID_STS),
         addStudents_btn = document.getElementById('fab-add-students'),
+        DIALOG_ID_APP = 'dlg-add-applications',
+        addApplications_dlg = document.getElementById(DIALOG_ID_APP),
+        addApplications_btn = document.getElementById('fab-add-applications'),
 //        DIALOG_ID_CS = 'dlg-add-courses',
 //        addCourses_dlg = document.getElementById(DIALOG_ID_CS),
 //        addCourses_btn = document.getElementById('fab-add-courses'),
@@ -28,6 +31,22 @@
           if (!addStudents_dlg.IS_SHOWING) {
             addStudents_dlg.IS_SHOWING = true;
             addStudents_dlg.classList.add(VISIBLE_CLASS);
+            document.addEventListener('click', processClick);
+          }
+        },
+        showDlgApp = function(e) {
+          var processClick = function (evt) {
+            var target = evt.target.closest('#' + DIALOG_ID_APP);
+
+            if ((e !== evt) && (target === null)) {
+              addApplications_dlg.classList.remove(VISIBLE_CLASS);
+              addApplications_dlg.IS_SHOWING = false;
+              document.removeEventListener('click', processClick);
+            }
+          };
+          if (!addApplications_dlg.IS_SHOWING) {
+            addApplications_dlg.IS_SHOWING = true;
+            addApplications_dlg.classList.add(VISIBLE_CLASS);
             document.addEventListener('click', processClick);
           }
         },
@@ -82,15 +101,20 @@
         gotoAddSt = function(e){
             window.location.href = '/student/register/';
         };
-    addStudents_btn.addEventListener('click', showDlgSts);
+    if (addStudents_btn !== null)
+        addStudents_btn.addEventListener('click', showDlgSts);
     // addCourses_btn.addEventListener('click', showDlgCs);
-    addStudent_btn.addEventListener('click', gotoAddSt);
+    if (addStudent_btn !== null)
+        addStudent_btn.addEventListener('click', gotoAddSt);
+    if (addApplications_btn !== null)
+        addApplications_btn.addEventListener('click', showDlgApp);
     if (blkActions_btn !== null)
       blkActions_btn.addEventListener('click', showDlgBlk);
     if (smsUpdate_btn !== null)
       smsUpdate_btn.addEventListener('click', showDlgSms);
 
     window.showDlgSts = showDlgSts;
+    window.showDlgApp = showDlgApp;
     // window.showDlgCs = showDlgCs;
     window.showDlgBlk = showDlgBlk;
     window.showDlgSms = showDlgSms;

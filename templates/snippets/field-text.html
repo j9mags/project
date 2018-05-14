@@ -5,6 +5,8 @@
     <div class="mdl-typography--font-light mdl-typography--title">{{ value | default:"0" | floatformat:"0" }}</div>
   {% elif type == 'float' %}
     <div class="mdl-typography--font-light mdl-typography--title">{{ value | floatformat:"2" }}</div>
+  {% elif type == 'percent' %}
+  <div class="mdl-typography--font-light mdl-typography--title">{{ value | floatformat:"2" }} %</div>
   {% elif type == 'currency' %}
     <div class="mdl-typography--font-light mdl-typography--title">{{ value | currency }}</div>
   {% elif type == 'date' %}

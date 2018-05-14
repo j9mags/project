@@ -60,7 +60,7 @@
           </div>
           <div class="mdl-card__supporting-text">
               {% include "snippets/field-text.html" with label=_('Valid from') value=tpl.valid_from type='date' %}
-              {% include "snippets/field-text.html" with label=_('Repayment amount') value=tpl.repayment_amount type='currency' %}
+              {% include "snippets/field-text.html" with label=_('Repayment amount') value=tpl.repayment_amount type='percent' %}
               {% include "snippets/field-text.html" with label=_('Semester fee') value=tpl.ugv_semester_fee type='currency' %}
           </div>
       </div>

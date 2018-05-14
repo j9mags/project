@@ -21,8 +21,13 @@
 {% endblock %}
 
 {% block content%}
-{% include 'dialogs/upload-students.html' with form=st_form %}
-{% include 'dialogs/upload-courses.html' with form=cs_form %}
+{% if contact.account.is_services_customer %}
+  {% include 'dialogs/upload-students.html' with form=st_form %}
+{% endif %}
+{% if contact.account.is_eg_customer %}
+  {% include 'dialogs/upload-applications.html' with form=ap_form %}
+{% endif %}
+{# include 'dialogs/upload-courses.html' with form=cs_form #}
 {% include 'dialogs/bulk-actions.html' with form=bulk_form %}
 {% endblock %}
 
@@ -34,7 +39,7 @@
     <button class="mdl-snackbar__action" type="button"></button>
 </div>
 {% endif %}
-
+{% if contact.account.is_services_customer %}
 <button id="fab-add-student" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
     <i class="material-icons">person</i>
 </button>
@@ -50,9 +55,18 @@
 <div class="mdl-tooltip mdl-tooltip--left" data-mdl-for="fab-add-students">
   {% trans 'Students' %}
 </div>
-<div class="mdl-tooltip mdl-tooltip--left" data-mdl-for="fab-add-courses">
-  {% trans 'Courses' %}
+{% endif %}
+{% if contact.account.is_eg_customer %}
+<button id="fab-add-applications" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+    <i class="material-icons">content_paste</i>
+</button>
+<div class="mdl-tooltip mdl-tooltip--left" data-mdl-for="fab-add-applications">
+    {% trans 'UGV Applicants' %}
 </div>
+{% endif %}
+<!-- div class="mdl-tooltip mdl-tooltip--left" data-mdl-for="fab-add-courses">
+  {% trans 'Courses' %}
+</div-->
 {% endblock %}
 
 {% block extrajs %}
@@ -63,8 +77,10 @@
     (function() {
       {% if display_st %}
         var showDlg = window.showDlgSts;
-      {% elif display_cs %}
-        var showDlg = window.showDlgCs;
+      {% elif display_ap %}
+        var showDlg = window.showDlgApp;
+      {# % elif display_cs %}
+        var showDlg = window.showDlgCs; #}
       {% elif display_semester_fee %}
         var showDlg = window.showDlgSms;
       {% elif display_bulk %}
