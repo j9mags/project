@@ -80,7 +80,7 @@ class PasswordSet(View):
             UserModel = get_user_model()
             query = UserModel.objects.filter(email=pt.user_email)
             if query.exists():
-                user = query[0]
+                user = query.first()
             else:
                 user = UserModel(email=pt.user_email, is_active=True)
                 pt.recordcreated = True
