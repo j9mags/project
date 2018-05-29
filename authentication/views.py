@@ -109,7 +109,7 @@ class PasswordChange(View):
 
             if qs.exists():
                 user = qs.first()
-                pt = user.srecord()
+                pt = user.srecord
                 pt.request_new_password()
                 rc += '?msg=pw-ch--success'
             else:
