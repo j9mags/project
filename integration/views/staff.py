@@ -94,18 +94,17 @@ class DashboardHome(StaffMixin, TemplateView):
                 d[key].pop('0')
                 d[key].pop('1')
             upd = request.user.csvupload_set.create(
-                course=form.cleaned_data.get('courses'),
+                upload_type=form.cleaned_data.get('upload_type'),
                 uuid=str(uuid4()),
                 content=json.dumps(d)
             )
             return redirect('integration:upload_review', uuid=upd.uuid)
 
-        is_course = form.data.get('courses', False)
         context.update(
-            display_st=not is_course,
-            display_cs=is_course,
+            display_st=form.data.get('upload_type') == 'st',
+            display_ap=form.data.get('upload_type') == 'ap',
             st_form=form,
-            cs_form=form,
+            ap_form=form,
             form=form,
         )
 
@@ -681,7 +680,7 @@ class UGVApplicationReview(StaffMixin, DetailView):
 
 class BulkActions(StaffMixin, View):
     def post(self, request, *args, **kwargs):
-        contact = request.user.srecord()
+        contact = request.user.srecord
         form = BulkActionsForm(contact.account, request.POST)
 
         if form.is_valid():
@@ -694,7 +693,7 @@ class BulkActions(StaffMixin, View):
 
             course_pk = form.cleaned_data.get('course')
             if course_pk != '--':
-                contracts_pk = [s.active_contract().pk for s in students if s.active_contract() is not None]
+                contracts_pk = [s.active_contract.pk for s in students if s.active_contract is not None]
                 contracts = Contract.objects.filter(pk__in=contracts_pk)
                 course = contact.account.degreecourse_set.get(pk=course_pk)
                 contracts.update(studiengang_ref=course)

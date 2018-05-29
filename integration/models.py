@@ -262,6 +262,7 @@ class Lead(models.Model):
                                           null=True)
 
     active_application = models.ForeignKey('Application', models.DO_NOTHING, custom=True, blank=True, null=True)
+    uploaded_via_portal_trig = models.BooleanField(custom=True, verbose_name='Uploaded via Portal', default=models.DEFAULTED_ON_CREATE)
 
     objects = managers.DefaultManager()
     ugv_students = managers.UGVLeadManager()

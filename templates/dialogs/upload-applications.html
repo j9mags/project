@@ -10,7 +10,7 @@
         {% csrf_token %}
 
         <input type="hidden" name="view_name" value="{{ view.template_name }}">
-        <input type="hidden" name="courses" value="false">
+        <input type="hidden" name="upload_type" value="ap">
 
         <div class="mdl-dialog__content">
             {% include 'snippets/input-file.html' with field=form.csv type='file' pref='st_' accept=".xls, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" %}

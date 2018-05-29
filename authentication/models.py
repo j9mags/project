@@ -61,28 +61,29 @@ class PerishableToken(models.Model):
 
 class CsvUpload(models.Model):
     user = models.ForeignKey(User)
-    course = models.BooleanField()
+    # course = models.BooleanField()
+    upload_type = models.CharField(max_length=2)
     uuid = models.CharField(max_length=50)
     content = models.TextField(blank=True, null=True)
 
     expected_student_headers = ["Immatrikulationsnummer", "Nachname", "Vorname", "Geburtsdatum",
                                 "Straße und Hausnummer", "PLZ", "Stadt", "universitäre E-Mail-Adresse",
                                 "private E-Mail-Adresse", "Handynummer", "Studiengang"]
-    expected_courses_headers = ["Name des Studiengangs", "Regelstudienzeit (in Semestern)", "Kosten pro Semester",
-                                "Kosten pro Monat", "Kosten pro Monat über der Regelstudienzeit",
-                                "Immatrikulationsgebühr (einmalig)", "Auslandssemestergebühr pro Monat",
-                                "Urlaubssemestergebühr pro Monat", "Startdatum des Studiengangs"]
+    # expected_courses_headers = ["Name des Studiengangs", "Regelstudienzeit (in Semestern)", "Kosten pro Semester",
+    #                             "Kosten pro Monat", "Kosten pro Monat über der Regelstudienzeit",
+    #                             "Immatrikulationsgebühr (einmalig)", "Auslandssemestergebühr pro Monat",
+    #                             "Urlaubssemestergebühr pro Monat", "Startdatum des Studiengangs"]
     expected_application_headers = ["Nachname", "Vorname", "Staatsbürgerschaft", "Geburtsdatum", "Geburtsort",
                                     "private E-Mail-Adresse", "Handynummer", "Straße und Hausnummer", "PLZ", "Stadt",
                                     "Land", "Studiengang", "Bevorzugte Kontaktsprache", "Startdatum",
                                     "Studiert bereits an dieser Hochschule", "Finanzierungsvariante (optional)"]
 
-    def __str__(self):
-        return "{course} by {user}".format(course=self.course, user=self.user)
-
     @staticmethod
-    def is_valid(data, is_course):
-        headers = CsvUpload.expected_application_headers if is_course else CsvUpload.expected_student_headers
+    def is_valid(data, upload_type):
+        headers = {
+            'ap': CsvUpload.expected_application_headers,
+            'st': CsvUpload.expected_student_headers
+            }.get(upload_type, ['Wrong'])
         headers_checked = 0
 
         for header in data.keys():
@@ -117,19 +118,28 @@ class CsvUpload(models.Model):
         # if self.course:
         #     rc = self._create_courses()
         # else:
-        rc = self._create_students()
+        data = self.parse_data()
+        row = data and data[0]
+
+        if not row:
+            return False
+
+        rc = {
+            'ap': self._create_applications,
+            'st': self._create_students,
+        }.get(self.upload_type, lambda x: False)(data)
+
         if rc:
             self.delete()
         return rc
 
-    def _create_students(self):
+    def _create_students(self, data):
         if not self.user.is_unistaff:
             raise exceptions.PermissionDenied()
 
         if not self.content:
             raise exceptions.ObjectDoesNotExist()
 
-        data = self.parse_data()
         accs = []
         contacts = {}
         contracts = {}
@@ -226,7 +236,7 @@ class CsvUpload(models.Model):
 
         return True
 
-    def create_applications(self):
+    def _create_applications(self, data):
         if not self.user.is_unistaff:
             raise exceptions.PermissionDenied()
 
@@ -240,8 +250,6 @@ class CsvUpload(models.Model):
             if contracts.get(c.studiengang_ref) is None:
                 contracts.update({c.studiengang_ref: []})
             contracts.get(c.studiengang_ref).append(c)
-
-        data = self.parse_data()
 
         leads = []
         lead_rt = RecordType.objects.get(sobject_type='Lead', developer_name='UGVStudents').id
@@ -268,6 +276,8 @@ class CsvUpload(models.Model):
             lead.kommunicationssprache = row.get('Bevorzugte Kontaktsprache')
 
             lead.confirmed_by_university = True
+            lead.university_status = 'Confirmed applicant'
+            lead.uploaded_via_portal_trig = True
             leads.append(lead)
 
             app = Application()

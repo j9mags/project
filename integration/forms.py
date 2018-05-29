@@ -25,7 +25,7 @@ KEEP_CURRENT = _('-- Keep current --')
 
 class UploadForm(forms.Form):
     csv = forms.FileField()
-    courses = forms.BooleanField(required=False)
+    upload_type = forms.CharField(max_length=2)
 
     def is_course(self):
         return self.courses
@@ -33,14 +33,14 @@ class UploadForm(forms.Form):
     def clean(self):
         cleaned_data = super(UploadForm, self).clean()
         csv = cleaned_data.get('csv')
+        upload_type = cleaned_data.get('upload_type')
 
         if csv is not None:
             try:
                 json_data = pandas.read_excel(csv.temporary_file_path()).to_json()
                 data = json.loads(json_data)
 
-                is_course = cleaned_data.get('courses')
-                if not CsvUpload.is_valid(data, is_course):
+                if not CsvUpload.is_valid(data, upload_type):
                     self.add_error('csv', _('File content is not correct.'))
                 else:
                     cleaned_data.update(raw_data=json_data)

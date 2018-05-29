@@ -169,7 +169,7 @@ class PaymentDetails(StudentMixin, TemplateView):
         self.account = self.get_queryset()
 
         master_contact = self.account.get_student_contact()
-        payment_contact = self.account.payment_contact()
+        payment_contact = self.account.payment_contact
 
         if master_contact == payment_contact:
             context['rvk_form'] = StudentRevokeMandateForm(instance=payment_contact)
