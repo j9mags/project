@@ -406,7 +406,7 @@ class Account(models.Model, PerishableTokenMixin):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         update_fields = update_fields or [x.attname for x in self._meta.fields if not x.primary_key]
-        if self.is_person_account:
+        if self.is_person_account and ('name' in update_fields):
             update_fields.remove('name')
         return super(Account, self).save(force_insert=force_insert, force_update=force_update, using=using,
                                          update_fields=update_fields)
