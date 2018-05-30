@@ -393,6 +393,7 @@ class Account(models.Model, PerishableTokenMixin):
 
     has_sofortzahler_contract_auto = models.BooleanField(custom=True, verbose_name='Has Sofortzahler Contract',
                                                          sf_read_only=models.READ_ONLY)
+    student_template_id = models.CharField(custom=True, max_length=18, blank=True, null=True)
 
     objects = managers.DefaultManager()
     universities = managers.UniversityManager()
