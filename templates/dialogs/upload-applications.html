@@ -21,8 +21,14 @@
                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
                    value="{% trans 'Upload' %}">
             <div class="mdl-layout-spacer"></div>
-            <!-- a href="{% static '/templates/Import_Studierende_Vorlage.xlsx' %}"
-               class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download template' %}</a -->
+            <a
+                {% if contact.account.applicant_template_id is not None%}
+                href="{% url 'integration:download_attachment' att_id=contact.account.applicant_template_id %}"
+                {% else %}
+                href="{% static '/templates/Import_Bewerber_Vorlage.xlsx' %}"
+                {% endif %}
+                class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download template' %}
+            </a>
         </div>
     </form>
 </dialog>
