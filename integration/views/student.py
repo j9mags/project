@@ -1,5 +1,5 @@
 from django.utils.translation import ugettext as _
-from django.utils.translation import get_language, activate
+from django.utils.translation import get_language, activate, check_for_language
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.conf import settings
 from django.core.exceptions import *
@@ -19,6 +19,7 @@ _logger = logging.getLogger(__name__)
 
 class StudentMixin(LoginRequiredMixin):
     login_url = '/authentication/login'
+    default_lang = 'en'
 
     def get_queryset(self):
         return self.request.user.srecord
@@ -31,13 +32,16 @@ class StudentMixin(LoginRequiredMixin):
         if not request.user.is_student:
             raise PermissionDenied()
 
-        lang = get_language()
-        account = self.get_queryset()
-        if account.kommunikationssprache and not account.kommunikationssprache.startswith(lang):
-            user_lang = account.kommunikationssprache.lower()[:2]
-            activate(user_lang)
-            request.session[LANGUAGE_SESSION_KEY] = user_lang
-            rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_lang)
+        lang = request.session.get(LANGUAGE_SESSION_KEY)
+
+        if lang is None:
+            account = self.get_queryset()
+            lang = account.kommunikationssprache.lower()[:2] \
+                if account.kommunikationssprache is not None else get_language()
+            lang = lang if check_for_language(lang) else self.default_lang
+            activate(lang)
+            request.session[LANGUAGE_SESSION_KEY] = lang
+            rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
 
         return rc
 
@@ -47,14 +51,19 @@ class SetLanguage(StudentMixin, View):
         next = request.GET.get('next', '/')
         rc = redirect(next)
 
-        lang = get_language()
+        lang = kwargs.get('language')
         account = self.get_queryset()
 
-        if account.kommunikationssprache and not account.kommunikationssprache.startswith(lang):
-            user_lang = account.kommunikationssprache.lower()[:2]
-            activate(user_lang)
-            request.session[LANGUAGE_SESSION_KEY] = user_lang
-            rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_lang)
+        if not check_for_language(lang):
+            lang = account.kommunikationssprache.lower()[:2] \
+                if account.kommunikationssprache is not None else get_language()
+
+        if not check_for_language(lang):
+            lang = self.default_lang
+
+        activate(lang)
+        request.session[LANGUAGE_SESSION_KEY] = lang
+        rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
 
         return rc
 

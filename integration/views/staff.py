@@ -1,7 +1,7 @@
 import pandas
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import get_language, activate
+from django.utils.translation import get_language, activate, check_for_language
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.conf import settings
 from django.core.exceptions import *
@@ -33,11 +33,13 @@ class StaffMixin(LoginRequiredMixin):
         if not request.user.is_unistaff:
             raise PermissionDenied()
 
-        lang = get_language()
-        if lang != self.default_lang:
-            activate(self.default_lang)
-            request.session[LANGUAGE_SESSION_KEY] = self.default_lang
-            rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, self.default_lang)
+        lang = request.session.get(LANGUAGE_SESSION_KEY)
+
+        if lang is None:
+            lang = get_language() if check_for_language(lang) else self.default_lang
+            activate(lang)
+            request.session[LANGUAGE_SESSION_KEY] = lang
+            rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
 
         return rc
 
@@ -51,11 +53,13 @@ class SetLanguage(StaffMixin, View):
         next = request.GET.get('next', '/')
         rc = redirect(next)
 
-        lang = get_language()
-        if lang != self.default_lang:
-            activate(self.default_lang)
-            request.session[LANGUAGE_SESSION_KEY] = self.default_lang
-            rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, self.default_lang)
+        lang = kwargs.get('language', get_language())
+        if not check_for_language(lang):
+            lang = self.default_lang
+
+        activate(lang)
+        request.session[LANGUAGE_SESSION_KEY] = lang
+        rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
 
         return rc
 
