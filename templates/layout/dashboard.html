@@ -26,6 +26,23 @@
         </form>
         <div class="mdl-layout-spacer"></div>
         {% endif %}
+        <a href="{% url 'integration:setlanguage' 'de' %}"
+           class="mdl-js-ripple-effect"
+           id="chancen-language-switch-de-button">
+          <img src="{% static 'img/flag_de.png' %}" class="language-switch">
+        </a>
+        <div class="mdl-tooltip" data-mdl-for="chancen-language-switch-de-button">
+          {% trans 'Switch to german' %}
+        </div>
+        &nbsp;&#47;&nbsp;
+        <a href="{% url 'integration:setlanguage' 'en' %}"
+           class="mdl-js-ripple-effect csp-button--icon"
+           id="chancen-language-switch-en-button">
+          <img src="{% static 'img/flag_en.png' %}" class="language-switch">
+        </a>
+        <div class="mdl-tooltip" data-mdl-for="chancen-language-switch-en-button">
+          {% trans 'Switch to english' %}
+        </div>
         <a href="{% url 'authentication:logout' %}"
            class="mdl-cell--hide-phone mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white csp-button--icon"
            id="chancen-logout-button">

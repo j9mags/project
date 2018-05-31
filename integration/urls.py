@@ -31,6 +31,11 @@ urlpatterns = [
             student.SetLanguage.as_view(),
             staff.SetLanguage.as_view()),
         name='language'),
+    url(r'^language/(?P<language>.+)/$',
+        dispatch_by_user(
+            student.SetLanguage.as_view(),
+            staff.SetLanguage.as_view()),
+        name='setlanguage'),
     url(r'^$',
         dispatch_by_user(
             student.Dashboard.as_view(),
