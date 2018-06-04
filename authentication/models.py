@@ -276,7 +276,7 @@ class CsvUpload(models.Model):
             lead.kommunicationssprache = row.get('Bevorzugte Kontaktsprache')
 
             lead.confirmed_by_university = True
-            lead.university_status = 'Confirmed applicant'
+            lead.university_status = 'Accepted applicant'
             lead.uploaded_via_portal_trig = True
             leads.append(lead)
 
