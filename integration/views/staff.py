@@ -588,17 +588,17 @@ class StudentReview(StaffMixin, DetailView):
             payload = self.request.POST if 'contract' in self.request.POST else None
             if payload:
                 if payload.get('discount_type') == Choices.DiscountType[1][0]:
-                    dsc_form_str = DiscountForm(payload, instance=contract.semester_discount())
-                    dsc_form_ttn = DiscountForm(instance=contract.tuition_discount())
+                    dsc_form_str = DiscountForm(payload, instance=contract.semester_discount)
+                    dsc_form_ttn = DiscountForm(instance=contract.tuition_discount)
                 elif payload.get('discount_type') == Choices.DiscountType[0][0]:
-                    dsc_form_str = DiscountForm(instance=contract.semester_discount())
-                    dsc_form_ttn = DiscountForm(payload, instance=contract.tuition_discount())
+                    dsc_form_str = DiscountForm(instance=contract.semester_discount)
+                    dsc_form_ttn = DiscountForm(payload, instance=contract.tuition_discount)
                 else:
-                    dsc_form_str = DiscountForm(instance=contract.semester_discount())
-                    dsc_form_ttn = DiscountForm(instance=contract.tuition_discount())
+                    dsc_form_str = DiscountForm(instance=contract.semester_discount)
+                    dsc_form_ttn = DiscountForm(instance=contract.tuition_discount)
             else:
-                dsc_form_str = DiscountForm(instance=contract.semester_discount())
-                dsc_form_ttn = DiscountForm(instance=contract.tuition_discount())
+                dsc_form_str = DiscountForm(instance=contract.semester_discount)
+                dsc_form_ttn = DiscountForm(instance=contract.tuition_discount)
             context.update(dsc_form_str=dsc_form_str, dsc_form_ttn=dsc_form_ttn)
         return context
 
@@ -621,8 +621,8 @@ class StudentReview(StaffMixin, DetailView):
             if dsc_form.is_valid():
                 dsc_form.save()
                 contract = context.get('contract')
-                context.update(dsc_form_str=DiscountForm(instance=contract.get_semester_discount()))
-                context.update(dsc_form_ttn=DiscountForm(instance=contract.get_tuition_discount()))
+                context.update(dsc_form_str=DiscountForm(instance=contract.get_semester_discount))
+                context.update(dsc_form_ttn=DiscountForm(instance=contract.get_tuition_discount))
 
         return self.render_to_response(context)
 
