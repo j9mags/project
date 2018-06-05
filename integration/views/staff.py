@@ -582,7 +582,7 @@ class StudentReview(StaffMixin, DetailView):
 
         payload = self.request.POST if 'status' in self.request.POST else {'status': account.status}
         context.update(acc_form=StudentAccountForm(payload))
-        contract = account.get_active_contract()
+        contract = account.active_contract
         if contract:
             context.update(contract=contract)
             payload = self.request.POST if 'contract' in self.request.POST else None
