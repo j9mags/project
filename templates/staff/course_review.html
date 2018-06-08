@@ -11,7 +11,7 @@
   <div class="mdl-cell mdl-cell--12-col">
     <h5 class="mdl-typography--headline">{% trans 'Course data' %}</h5>
   </div>
-  <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col mdl-grid">
+  <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--4-col mdl-grid">
     {% if form %}
       <form method="post">
         {% csrf_token %}
@@ -20,13 +20,10 @@
           {% include 'snippets/field-text.html' with label=_('Standard Period of Studies') value=course.standard_period_of_study type="int" %}
         </div>
         <div class="mdl-cell">
-          {% include 'snippets/field-text.html' with label=_('Start of Studies') value=course.start_of_studies type="date" %}
+          {% include 'snippets/field-text.html' with label=_('Standard Study Period (No. of Semesters)') value=course.standard_period_of_study type="int" %}
         </div>
         <div class="mdl-cell">
-          {% include 'snippets/field-text.html' with label=_('Starting Month Summer Semester') value=course.start_summer_semester %}
-        </div>
-        <div class="mdl-cell">
-          {% include 'snippets/field-text.html' with label=_('Starting Month Winter Semester') value=course.start_winter_semester %}
+          {% include 'snippets/field-text.html' with label=_('Cost per Semester') value=course.cost_per_semester type="currency" %}
         </div>
     {% if form %}
       </form>

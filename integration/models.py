@@ -600,6 +600,7 @@ class DegreeCourse(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
     name = models.CharField(max_length=80, verbose_name=_('Name'), default=models.DEFAULTED_ON_CREATE,
                             blank=True, null=True)
+    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
     university = models.ForeignKey(Account, models.DO_NOTHING, custom=True,
                                    sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
     course_id = models.CharField(custom=True, max_length=1300, sf_read_only=models.READ_ONLY, blank=True, null=True)
@@ -610,13 +611,15 @@ class DegreeCourse(models.Model):
                                                    verbose_name=_('Standard Study Period (No. of Semesters)'),
                                                    blank=True,
                                                    null=True)
-    start_of_studies = models.DateField(custom=True, verbose_name=_('Start of Studies'), blank=True, null=True)
-    start_summer_semester = models.CharField(custom=True, max_length=255,
-                                             verbose_name=_('Starting Month Summer Semester'),
-                                             choices=Choices.Month, blank=True, null=True)
-    start_winter_semester = models.CharField(custom=True, max_length=255,
-                                             verbose_name=_('Starting Month Winter Semester'),
-                                             choices=Choices.Month, blank=True, null=True)
+    start_of_study = models.CharField(custom=True, max_length=4099, verbose_name='Start of Study',
+                                      choices=[('January', 'January'), ('February', 'February'), ('March', 'March'),
+                                               ('April', 'April'), ('May', 'May'), ('June', 'June'), ('July', 'July'),
+                                               ('August', 'August'), ('September', 'September'), ('October', 'October'),
+                                               ('November', 'November'), ('December', 'December')], blank=True,
+                                      null=True)
+    standard_period_of_study = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
+                                                   verbose_name='Standard Study Period (No. of Semesters)', blank=True,
+                                                   null=True)
     start_of_studies_month = models.CharField(custom=True, max_length=255, verbose_name=_('Starting Month of Studies'),
                                               choices=Choices.Month, blank=True, null=True)
 
