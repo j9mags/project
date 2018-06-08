@@ -1,0 +1,17 @@
+<div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label{% if field.errors %} is-invalid{% endif %}">
+    <select id="{{ field.id_for_label }}" class="mdl-selectfield__select" name="{{ field.html_name }}">
+        {% for opt in field %}
+            {{ opt }}
+        {% endfor %}
+    </select>
+    <div class="mdl-selectfield__icon"><i class="material-icons">arrow_drop_down</i></div>
+    <label class="mdl-selectfield__label" for="{{ field.id_for_label }}">{{ field.label }}
+        {% if field.field.required %}<span class="mdl-color-text--red">*</span>{% endif %}
+    </label>
+    {% if field.help_text %}
+    <span class="mdl-selectfield__help">{{ field.help_text }}</span>
+    {% endif %}
+    {% if field.errors %}
+        <span class="mdl-selectfield__error">{{ field.errors | first | escape }}</span>
+    {% endif %}
+</div>

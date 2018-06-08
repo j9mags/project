@@ -1,0 +1,26 @@
+<div class="mdl-grid {{ class }}">
+  <div class="mdl-cell mdl-cell--1-col-phone mdl-cell--2-col-tablet mdl-cell--3-col-desktop mdl-typography--text-right">
+    <a {% if page.has_previous %} href="#" data-filter="p" data-filter-value="1"{% endif %} 
+       class="filter mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored{% if not page.has_previous %} mdl-button--disabled{% endif %}">
+       <i class="material-icons mdl-color-text--white">first_page</i>
+    </a>
+  </div>
+  <div class="filter mdl-cell mdl-cell--1-col-phone mdl-cell--2-col-tablet mdl-cell--3-col-desktop mdl-typography--text-center">
+    <a {% if page.has_previous %} href="#" data-filter="p" data-filter-value="{{ page.previous_page_number }}"{% endif %} 
+       class="filter mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored{% if not page.has_previous %} mdl-button--disabled{% endif %}">
+       <i class="material-icons mdl-color-text--white">chevron_left</i>
+    </a>
+  </div>
+  <div class="filter mdl-cell mdl-cell--1-col-phone mdl-cell--2-col-tablet mdl-cell--3-col-desktop mdl-typography--text-center">
+    <a {% if page.has_next %} href="#" data-filter="p" data-filter-value="{{ page.next_page_number }}"{% endif %} 
+       class="filter mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored{% if not page.has_next %} mdl-button--disabled{% endif %}">
+       <i class="material-icons mdl-color-text--white">chevron_right</i>
+    </a>
+  </div>
+  <div class="filter mdl-cell mdl-cell--1-col-phone mdl-cell--2-col-tablet mdl-cell--3-col-desktop mdl-typography--text-left">
+    <a {% if page.has_next %} href="#" data-filter="p" data-filter-value="{{ page.paginator.num_pages }}"{% endif %} 
+       class="filter mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored{% if not page.has_next %} mdl-button--disabled{% endif %}">
+       <i class="material-icons mdl-color-text--white">last_page</i>
+    </a>
+  </div>
+</div>

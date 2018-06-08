@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load static %}
+
+<dialog id="dlg-add-courses" class="mdl-dialog">
+    <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
+    <form enctype="multipart/form-data" method="post" action="{% url 'integration:dashboard' %}"
+          onsubmit="document.getElementById('upload-progress-cs').classList.add('is-active')"
+          onabort="document.getElementById('upload-progress-cs').classList.remove('is-active')">
+
+        {% csrf_token %}
+        <input type="hidden" name="view_name" value="{{ view.template_name }}">
+        <input type="hidden" name="courses" value="true">
+
+        <div class="mdl-dialog__content">
+            {% include 'snippets/input-file.html' with field=form.csv type='file' pref='cs_' accept=".xls, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" %}
+            <div id="upload-progress-cs" class="mdl-spinner mdl-js-spinner"></div>
+        </div>
+        <div class="mdl-dialog__actions">
+            <input type="submit"
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
+                   value="{% trans 'Upload' %}">
+            <div class="mdl-layout-spacer"></div>
+            <a href="{% static '/templates/Import_Studiengänge_Vorlage.xlsx' %}"
+               class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download template' %}</a>
+        </div>
+    </form>
+</dialog>

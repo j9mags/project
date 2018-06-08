@@ -1,0 +1,13 @@
+server {
+    listen 80;
+    server_name portal.chancen.services;
+
+    location /assets/ {
+        root /home/chancen/chancen-services-portal/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/chancen/chancen-services-portal/csp.sock;
+    }
+}

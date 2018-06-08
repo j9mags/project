@@ -1,0 +1,66 @@
+{% extends 'staff/dashboard.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{# TODO: Add Search feature #}
+
+{% block title %}
+  {% if items %}
+    {% trans 'Displaying' %} {{ items.object_list | length }} / {{ items.paginator.count}}
+  {% else %}
+    {% trans 'No applications found to match this criteria' %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {{ block.super }}
+  <div class="mdl-cell mdl-cell--8-col">
+    {% for f in filters %}
+      {% include 'snippets/chip.html' with field=f.0 value=f.1 filter=f.2 %}
+    {% endfor %}
+  </div>
+
+  <!-- div class="mdl-cell mdl-cell--4-col mdl-cell--4-offset-tablet mdl-typography--text-right">
+    <button id="bulk-form--btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color-text--white"
+            disabled="disabled">{% trans 'Bulk update' %}</button>
+  </div -->
+
+  <div class="mdl-cell mdl-cell--12-col yscrollable">
+    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp csp--full-width">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Student name' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Email' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Phone' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Course' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Status' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+            <tr data-item="{{ item.pk }}">
+                <td class="csp-table--action">
+                    <a class="mdl-color-text--primary" href="{% url 'integration:application_review' item.pk %}">
+                        <i class="material-icons md-18">content_paste</i>{% trans 'Details' %}</a></td>
+                <td class="mdl-data-table__cell--non-numeric">{{ item.name }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ item.email }}</td>
+                <td class="mdl-data-table__cell">{{ item.phone | default:"--" }}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <a class="filter csp-table--action" href="#" data-filter="course" data-filter-value="{{ item.application.studiengang_ref.pk }}">
+                      <i class="material-icons md-18">filter_list</i>{{ item.application.studiengang_ref.name }}</a>
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ item.university_status }}">
+                      <i class="material-icons md-18">filter_list</i>{{ item.university_status | default:"--" }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="mdl-cell mdl-cell--12-col">
+    {% include 'snippets/paginator_basic.html' with class="mdl-cell mdl-cell--12-col" page=items %}
+  </div>
+{% endblock %}

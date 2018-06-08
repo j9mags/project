@@ -1,0 +1,72 @@
+{% extends 'layout/registration.html' %}
+
+{% load i18n %}
+
+{% block registration %}
+  {% if form.non_field_errors %}
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+      <div class="mdl-snackbar__text">{{ form.non_field_errors | first }}</div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+  {% elif message %}
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+      <div class="mdl-snackbar__text">{{ message }}</div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+  {% endif %}
+  <section class="container">
+    <div id="cube" class="{{ cube_flip }}">
+      <figure class="front">
+        <form method="post">
+
+          {% csrf_token %}
+
+          <div class="mdl-card mdl-shadow--6dp">
+            <div class="mdl-card__title mdl-color--primary mdl-color-text--white relative">
+              <h2 class="mdl-card__title-text">{% trans 'Sign in' %}</h2>
+            </div>
+
+            <div class="mdl-card__supporting-text mdl-card--expand">
+              {% include 'snippets/input.html' with field=form.username type='email'%}
+              {% include 'snippets/input.html' with field=form.password type='password'%}
+            </div>
+
+            <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
+              <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+                     value="{% trans 'Login' %}">
+              <div class="mdl-layout-spacer"></div>
+              <a onClick='flip("show-left")' class="mdl-color-text--primary csp--dialog-action">{% trans 'Forgot your Password?' %}</a>
+            </div>
+          </div>
+        </form>
+      </figure>
+
+      <figure class="left">
+        <form method="post" action="{% url 'authentication:password-change' %}">
+
+          {% csrf_token %}
+      
+          <div class="mdl-card mdl-shadow--6dp">
+            <div class="mdl-card__title mdl-color--primary mdl-color-text--white relative">
+              <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+                 onClick='flip("show-front")'>
+                <i class="material-icons">arrow_back</i>
+              </a>
+              <h2 class="mdl-card__title-text">{% trans 'Lost Password' %}</h2>
+            </div>
+
+            <div class="mdl-card__supporting-text mdl-card--expand">
+              {% include 'snippets/input.html' with field=forgot_form.email type='email'%}
+            </div>
+
+            <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
+                <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                  {% trans 'Reset Password' %}
+                </button>
+            </div>
+          </div>
+        </form>
+      </figure>
+    </div>
+  </section>
+{% endblock %}

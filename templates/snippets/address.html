@@ -1,0 +1,21 @@
+{% load i18n %}
+
+{% if label %}
+<div class="mdl-cell mdl-cell--12-col">
+    <span class="mdl-typography--title">{{ label }}</span>
+</div>
+{% endif %}
+<div class="mdl-address mdl-grid {{ class }}">
+    <div class="mdl-cell mdl-cell--8-col">
+        {% include 'snippets/input.html' with field=street type='text' %}
+    </div>
+    <div class="mdl-cell mdl-cell--4-col">
+        {% include 'snippets/input.html' with field=zip type='text' %}
+    </div>
+    <div class="mdl-cell mdl-cell--6-col">
+        {% include 'snippets/input.html' with field=city type='text' %}
+    </div>
+    <div class="mdl-cell mdl-cell--6-col">
+        {% include 'snippets/select.html' with field=country %}
+    </div>
+</div>

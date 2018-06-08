@@ -1,0 +1,41 @@
+{% load l10n %}
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label {% if field.errors %}is-invalid{% endif %}">
+    <input class="mdl-textfield__input" 
+           id="{{ field.id_for_label }}" 
+           name="{{ field.html_name }}" 
+           {% if type == "date" %}
+              type="text" 
+              pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])"
+              value="{{ field.value | default:"" | date:"Y-m-d" | localize }}"
+           {% elif type == "phone" %}
+              type="tel"
+              pattern="[\+]{0,1}(\d|-\d| \d){1,}"
+              value="{{ field.value | default:"" }}"
+           {% elif type == "integer" %}
+              type="text" style="text-align:right"
+              pattern="[0-9]+"
+              value="{{ field.value | floatformat:"0" }}"
+           {% elif type == "number" %}
+               type="text" style="text-align:right"
+               pattern="[0-9]+([\.,][0-9]+)?"
+               value="{{ field.value | floatformat:"2" | localize }}"
+           {% else %}
+              type="{{ type }}"
+              value="{{ field.value | default:"" }}"
+           {% endif %}
+           />
+    <label class="mdl-textfield__label" 
+           for="{{ field.id_for_label }}">{{ field.label }}
+        {% if field.field.required %}
+        <span class="mdl-color-text--red">*</span>
+        {% endif %}
+    </label>
+
+    {% if field.help_text %}
+    <span class="mdl-textfield__help">{{ field.help_text }}</span>
+    {% endif %}
+
+    {% if field.errors %}
+        <span class="mdl-textfield__error">{{ field.errors | first | escape }}</span>
+    {% endif %}
+</div>

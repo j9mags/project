@@ -1,0 +1,16 @@
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label {% if field.errors %}is-invalid{% endif %}">
+    <input class="mdl-textfield__input" 
+           type="{{ type }}" 
+           id="{{ field.id_for_label }}" 
+           name="{{ field.html_name }}" 
+           value="{{ field.value | default:"" }}"
+           readonly />
+    <label class="mdl-textfield__label" 
+           for="{{ field.id_for_label }}">
+        {{ field.label }}
+    </label>
+
+    {% if field.help_text %}
+    <span class="mdl-textfield__help">{{ field.help_text }}</span>
+    {% endif %}
+</div>

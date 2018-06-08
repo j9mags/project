@@ -97,3 +97,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+/.idea
+/assets
+*.sqlite3
+integration/inspected_all.py

@@ -1,0 +1,520 @@
+/**
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+html, body {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.chancen-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+}
+
+.chancen-layout {
+  background: url(/assets/material/imgs/background.svg);
+}
+
+.chancen-layout .mdl-layout__header,
+.chancen-layout .mdl-layout__header .mdl-layout__drawer-button {
+  color: white;
+}
+
+.chancen-layout .mdl-layout-title {
+  max-width: 85%;
+}
+
+.chancen-layout .mdl-menu__item > a {
+  display: block;
+}
+
+.mdl-layout__drawer .avatar {
+  margin-bottom: 16px;
+}
+.chancen-drawer {
+  border: none;
+}
+.chancen-drawer .chancen-services--logo {
+  padding: 8px;
+}
+
+/* iOS Safari specific workaround */
+.chancen-drawer .mdl-menu__container {
+  z-index: -1;
+}
+.chancen-drawer .chancen-navigation {
+  z-index: -2;
+}
+/* END iOS Safari specific workaround */
+.chancen-drawer .mdl-menu .mdl-menu__item {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.chancen-drawer-header {
+  box-sizing: border-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 16px;
+  height: 151px;
+  background: url(/assets/material/imgs/sidenav.svg);
+  color: white;
+}
+/* .chancen-drawer-logo {
+    width: 100%;
+}
+.chancen-drawer-logo img {
+    max-width: 100%;
+    max-height: 100%;
+} */
+.chancen-avatar-dropdown {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+}
+
+.chancen-navigation {
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.chancen-layout .chancen-navigation .mdl-navigation__link {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-weight: 500;
+}
+
+.chancen-navigation .mdl-navigation__link .material-icons {
+  font-size: 24px;
+  margin-right: 32px;
+}
+
+.chancen-content {
+  max-width: 1280px;
+}
+
+.chancen-cards {
+  -webkit-align-items: flex-start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-align-content: flex-start;
+      -ms-flex-line-pack: start;
+          align-content: flex-start;
+}
+.chancen-cards .chancen-separator {
+  height: 32px;
+}
+.chancen-cards .mdl-card__title.mdl-card__title {
+  color: white;
+  font-size: 24px;
+  font-weight: 400;
+}
+.chancen-cards ul {
+  padding: 0;
+}
+.chancen-cards h3 {
+  font-size: 1em;
+}
+.chancen-updates .mdl-card__title {
+  min-height: 200px;
+  background-image: url('images/dog.png');
+  background-position: 90% 100%;
+  background-repeat: no-repeat;
+}
+.chancen-cards .mdl-card__actions a {
+  /*color: #00BCD4;*/
+  text-decoration: none;
+}
+
+.chancen-options h3 {
+  margin: 0;
+}
+.chancen-options .mdl-checkbox__box-outline {
+  border-color: rgba(255, 255, 255, 0.89);
+}
+.chancen-options ul {
+  margin: 0;
+  list-style-type: none;
+}
+.chancen-options li {
+  margin: 4px 0;
+}
+.chancen-options .material-icons {
+  color: rgba(255, 255, 255, 0.89);
+}
+.chancen-options .mdl-card__actions {
+  height: 64px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.chancen-registration--bottom {
+  position: fixed;
+  width: calc(100% - 32px);
+  bottom: 0;
+  padding:16px;
+  text-align: center;
+}
+.chancen-registration--bottom img {
+  max-width: 100%;
+}
+
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+.material-icons.md-64 { font-size: 64px; }
+.material-icons.md-96 { font-size: 96px; }
+
+.csp-button--icon .material-icons {
+  padding-left: 8px;
+}
+
+#fab_ctn {
+  position: fixed;
+  display: block;
+  right: 0;
+  bottom: 0;
+  margin-right: 40px;
+  margin-bottom: 40px;
+  z-index: 900;
+}
+
+.mdl-button--fab_flinger-container {
+ position: fixed;
+ bottom: 10px;
+ right: 10px;
+}
+.mdl-button--fab_flinger-container > button i {
+  transition: transform 0.1s linear;
+}
+.mdl-button--fab_flinger-container.is-showing-options > button i {
+  transform: translate(-12px, -12px) rotate(45deg);
+}
+.mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button {
+  display: block;
+  animation-name: enter;
+  animation-fill-mode: forwards;
+  animation-duration: 0.1s;
+  transform-origin: bottom center;
+}
+.mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(1) {
+  animation-delay: 0.1s;
+}
+.mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+.mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(3) {
+  animation-delay: 0.3s;
+}
+.mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(4) {
+  animation-delay: 0.4s;
+}
+.mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(5) {
+  animation-delay: 0.5s;
+}
+.mdl-button--fab_flinger-container.is-showing-options .mdl-button--fab_flinger-options button:nth-of-type(6) {
+  animation-delay: 0.6s;
+}
+.mdl-button--fab_flinger-container .mdl-button--fab_flinger-options {
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: 10px;
+}
+.mdl-button--fab_flinger-container .mdl-button--fab_flinger-options button {
+  transform: scale(0);
+  display: none;
+}
+@keyframes enter {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(0.8);
+  }
+}
+
+#account-panel.has-snack {
+  padding-bottom: 96px;
+}
+
+.mdl-dialog {
+  display: block;
+  position:fixed;
+  background-color: white;
+  top: 20%;
+  left: 50%;
+  width: 30em;
+  margin-left: -15em; /*set to a negative number 1/2 of your width*/
+  z-index: 900;
+  transform: scale(0);
+  transition: transform .5s cubic-bezier(0.68, -0.1, 0.27, 1.1);
+}
+
+.mdl-dialog.is-showing-dialog {
+  transform: scale(1);
+}
+
+#dlg-add-students .mdl-spinner,
+#dlg-add-courses .mdl-spinner {
+  display: block;
+  margin: 0 auto;
+}
+
+.mdl-button--file input {
+  cursor: pointer;
+  height: 100%;
+  right: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 300px;
+  z-index: 4;
+}
+.mdl-textfield--file .mdl-textfield__input {
+  box-sizing: border-box;
+  width: calc(100% - 32px);
+}
+.mdl-textfield--file .mdl-button--file {
+  right: 0;
+}
+.mdl-textfield .mdl-typography--title {
+  margin-top: 8px;
+}
+
+.mdl-underlined {
+  border-bottom: solid
+}
+
+.mdl-underlined--1 {
+  border-width: 1px;
+  border-color: rgba(0,0,0, 0.24);
+}
+
+.mdl-date-textfield--floating-label.is-focused .mdl-date-textfield__label, 
+.mdl-date-textfield--floating-label.is-dirty .mdl-date-textfield__label, 
+.mdl-date-textfield--floating-label.has-placeholder .mdl-date-textfield__label {
+  color: rgb(139,195,74);
+}
+
+.mdl-address.mdl-grid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.mdl-address .mdl-cell {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.chancen-content .mdl-textfield,
+.chancen-content .mdl-radiofield,
+.chancen-content .mdl-selectfield {
+  width: 100%;
+}
+
+.csp--full-width {
+  width: 100%;
+}
+
+.csp--word-wrap {
+  word-wrap: break-word;
+}
+
+.csp--dialog-action {
+  line-height: 36px;
+}
+
+.mdl-radiofield {
+  position: relative;
+  font-size: 16px;
+  display: inline-block;
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 0;
+  padding: 20px 0;
+}
+
+.mdl-radiofield__error {
+  color: #d50000;
+  position: absolute;
+  font-size: 12px;
+  margin-top: 3px;
+  visibility: hidden;
+  display: block;
+}
+
+.mdl-checkfield.is-invalid,
+.mdl-radiofield.is-invalid {
+  color: #d50000;
+}
+
+.mdl-checkfield.is-invalid .mdl-checkfield__error,
+.mdl-radiofield.is-invalid .mdl-radiofield__error {
+    visibility: visible;
+}
+
+.mdl-checkfield__error,
+.mdl-radiofield__error {
+    color: #d50000;
+    position: absolute;
+    font-size: 12px;
+    margin-top: 3px;
+    visibility: hidden;
+    display: block;
+}
+
+.mdl-card {
+    transition: min-height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.mdl-card--summary {
+    min-height: 0;
+}
+
+.mdl-card--summary .mdl-card__supporting-text {
+    visibility: hidden;
+}
+
+.mdl-card__supporting-text.mdl-card--expand {
+    width: calc(100% - 32px);
+    overflow-x: auto;
+    padding: 16px 0;
+    margin: 0 16px;
+}
+
+#onboarding-stepper {
+    margin: 16px auto;
+    max-width: 840px;
+}
+
+.mdl-step {
+    height: initial!important;
+}
+
+.mdl-step__label {
+    cursor: default!important;
+}
+
+.mdl-step__label-indicator {
+    background-color: rgb(255,171,64)!important;
+}
+
+.mdl-step__actions {
+    justify-content: space-evenly!important;
+}
+
+.mdl-stepper:not(.mdl-stepper--horizontal) .mdl-step__label:hover,
+.mdl-stepper:not(.mdl-stepper--horizontal) .mdl-step__label:active,
+.mdl-stepper:not(.mdl-stepper--horizontal) .mdl-step__label:focus {
+    background-color: transparent!important;
+}
+
+.csp-card__title-icon {
+    position: absolute;
+    left: calc(50% - 48px);
+    top: 8px;
+}
+
+.mdl-textfield__help,
+.mdl-date-textfield__help,
+.mdl-checkfield__help,
+.mdl-selectfield__help {
+    position: absolute;
+    font-size: 12px;
+    line-height: 13px;
+    margin-top: 3px;
+    display: block;
+}
+
+.mdl-textfield.is-invalid .mdl-textfield__help,
+.mdl-date-textfield.is-invalid .mdl-date-textfield__help,
+.mdl-checkfield.is-invalid .mdl-checkfield__help,
+.mdl-selectfield.is-invalid .mdl-selectfield__help {
+    visibility: hidden;
+}
+
+td.csp-table--action {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.csp-table--action .material-icons {
+    vertical-align: text-bottom;
+    margin-right: 4px;
+}
+
+.course-fees.collapsed .mdl-card__supporting-text {
+    transition: all .3s ease-in;
+}
+
+.course-fees.collapsed .mdl-card__supporting-text {
+    max-height: 0;
+    padding: 0;
+}
+
+.course-fees.collapsed:hover .mdl-card__supporting-text {
+    max-height: 500px;
+    padding: inherit;
+}
+
+.yscrollable {
+    overflow-y: auto;
+}
+
+.mdl-cell>.mdl-card {
+    max-width:100%;
+    margin: 0 auto;
+}

@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=chancen
+Group=www-data
+WorkingDirectory=/home/chancen/chancen-services-portal
+ExecStart=/home/chancen/chancen-services-portal/.env/bin/gunicorn --access-logfile csp-access.log --log-file csp-debug.log --capture-output --workers 3 --bind unix:csp.sock csp.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

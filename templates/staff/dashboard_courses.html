@@ -1,0 +1,60 @@
+{% extends 'staff/dashboard.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load csp %}
+
+{% block title %}
+  {% if courses %}
+    {% trans 'Displaying' %} {{ courses.object_list | length }} / {{ courses.paginator.count}}
+  {% else %}
+    {% trans 'No courses found to match this criteria' %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {{ block.super }}
+  <div class="mdl-cell mdl-cell--1-col mdl-cell--10-offset-desktop mdl-cell--6-offset-tablet">
+    {% include 'snippets/field-text.html' with label=_('Semester fee') value=contact.account.semester_fee_new type="currency" %}
+  </div>
+  <div class="mdl-cell mdl-cell--1-col mdl-cell--middle">
+    <button id="semester-fee--btn" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored mdl-button--accent">
+      <i class="material-icons">edit</i>
+    </button>
+  </div>
+  {% include 'dialogs/update-semester-fee.html' with form=form %}
+
+  <div class="mdl-cell mdl-cell--12-col yscrollable">
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp csp--full-width">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="mdl-data-table__cell--non-numeric csp--full-width">{% trans 'Course name' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Standard Period of Studies' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Cost per semester' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Cost per month' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Matriculation fee' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Start of Studies' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+          <tr data-student="{{ course.pk }}">
+            <td class="csp-table--action">
+              <a class="mdl-color-text--primary" href="{% url 'integration:course_review' course.pk %}">
+                <i class="material-icons md-18">school</i>{% trans 'Details' %}</a></td>
+            <td class="mdl-data-table__cell--non-numeric">{{ course.name }}</td>
+            <td class="mdl-data-table__cell">{{ course.standard_period_of_study|floatformat:"0" }}</td>
+            <td class="mdl-data-table__cell">{{ course.cost_per_semester|currency }}</td>
+            <td class="mdl-data-table__cell">{{ course.cost_per_month|currency }}</td>
+            <td class="mdl-data-table__cell">{{ course.matriculation_fee | currency }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ course.start_of_studies|date:"d.m.Y" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="mdl-cell mdl-cell--12-col">
+    {% include 'snippets/paginator_basic.html' with class="mdl-cell mdl-cell--12-col" page=courses %}
+  </div>
+{% endblock %}

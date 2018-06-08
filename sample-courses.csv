@@ -1,0 +1,12 @@
+Name des Studiengangs;Regelstudienzeit (in Semestern);Kosten pro Semester;Kosten pro Monat;Kosten pro Monat über der Regelstudienzeit;Immatrikulationsgebühr (einmalig);Auslandssemestergebühr pro Monat;Urlaubssemestergebühr pro Monat;Startmonat des Studiengangs;Startdatum des Studiengangs;Startmonat des Sommersemesters;Startmonat des Wintersemesters
+Studiengang Name;Standard Study Period;Cost per Semester;Cost per Month;Cost per Month beyond Standard Study Period;Matriculation Fee;Semester abroad Fee;Semester off Fee;Starting Month of Studies;Start of Studies;Starting Month Summer Semester;Starting Month Winter Semester
+Gang Eins;6;360;60;80;120;80;40;September;2017-09-04;September;März
+;;;;;;;;;;;
+Gang Zwei;6;360;60;80;120;80;40;September;2017-09-04;September;März
+Gang Drei;6;360;60;80;120;80;40;September;2017-09-04;September;März
+Gang Vier;6;360;60;80;120;80;40;September;2017-09-04;September;März
+;;;
+Gang Fünf;6;360;60;80;120;80;40;September;2017-09-04;September;März
+Gang Sechs;6;360;60;80;120;80;40;September;2017-09-04;September;März
+
+;;;

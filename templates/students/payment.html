@@ -1,0 +1,65 @@
+{% extends 'layout/dashboard.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Payment data' %}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+
+{% if form.non_field_errors %}
+<div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+    <div class="mdl-snackbar__text">{{ form.non_field_errors | first }}</div>
+    <button class="mdl-snackbar__action" type="button"></button>
+</div>
+{% endif %}
+
+<div class="mdl-card mdl-card-account mdl-shadow--6dp csp--full-width">
+    <form method="post">
+        {% csrf_token %}
+        <div class="mdl-card__supporting-text mdl-grid">
+            <div class="mdl-cell--8-col">
+                {% include 'snippets/address.html' with label=_('Billing address') street=form.billing_street zip=form.billing_postal_code city=form.billing_city country=form.billing_country %}
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
+            <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
+                   value="{% trans 'Confirm' %}">
+            <a href="{% url 'integration:dashboard' %}"
+               class="mdl-button">{% trans 'Back' %}</a>
+            <div class="mdl-layout-spacer"></div>
+
+            <div id="btn-revoke-mandate-tt"><button id="btn-revoke-mandate" {% if open_payments > 0 %}disabled{% endif %}
+                    class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                {% trans 'Revoke mandate' %}
+            </button></div>
+        </div>
+    </form>
+</div>
+{% if open_payments > 0 %}
+<div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" data-mdl-for="btn-revoke-mandate-tt">
+    {% trans 'There are open payments on this Mandate. Only after all the open payments have been processed will you be able to revoke the mandate.' %}
+</div>
+{% endif %}
+{% include 'dialogs/revoke-mandate.html' with form=rvk_form %}
+{% endblock %}
+
+
+{% block extrajs %}
+{{ block.super }}
+<script src="{% static '/js/mdl-selectfield.min.js' %}"></script>
+<script src="{% static '/js/dashboard-student.js' %}"></script>
+{% if display_dlg %}
+<script>
+    (function() {
+        setTimeout(window.showDlg, 100);
+    }.call(this));
+  </script>
+{% endif %}
+{% endblock %}

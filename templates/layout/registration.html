@@ -1,0 +1,21 @@
+{% extends 'layout/base.html' %}
+
+{% load static %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static "/css/login.css" %}"/>
+{% endblock %}
+
+{% block layout %}
+  <div class="chancen-layout mdl-layout mdl-js-layout">
+      <section class="top">
+          <img src="{% static 'img/chancen-services--logo__dark.png' %}">
+      </section>
+    {% block registration %}
+    {% endblock %}
+  </div>
+{% endblock %}
+
+{% block extrajs %}
+  <script src="{% static '/js/login.js' %}"></script>
+{% endblock %}
