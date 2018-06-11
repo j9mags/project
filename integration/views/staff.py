@@ -251,12 +251,11 @@ class DashboardCourses(StaffMixin, TemplateView):
         context.update(can_search=True)
 
         p = int(self.request.GET.get('p', '1'))
-        o = self.request.GET.get('o', '-start_of_studies')
         s = int(self.request.GET.get('s', '10'))
 
         q = self.request.GET.get('q')
 
-        courses = DegreeCourse.objects.filter(university=self.contact.account).order_by(o)
+        courses = DegreeCourse.objects.filter(university=self.contact.account).order_by('created_date')
         if q:
             context.update(q=q)
             courses = courses.filter(Q(name_studiengang_auto__icontains=q))
