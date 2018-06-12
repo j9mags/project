@@ -103,7 +103,8 @@
 
     {% if not ignore_drawer %}
     <div id="fab_ctn" class="mdl-button--fab_flinger-container">
-      <button id="fab_btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+      <input type="hidden" id="is_drawer_enabled" name="is_drawer_enabled" value="{{ contact.account.is_drawer_enabled }}">
+      <button id="fab_btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored {% if not contact.account.is_drawer_enabled %}mdl-button--disabled{% endif %}">
         <i class="material-icons mdl-color-text--white">add</i>
       </button>
       <div class="mdl-button--fab_flinger-options">

@@ -2,6 +2,7 @@
   var VISIBLE_CLASS = 'is-showing-options',
       fab_btn = document.getElementById('fab_btn'),
       fab_ctn = document.getElementById('fab_ctn'),
+      is_drawer_enabled = document.getElementById('is_drawer_enabled').value == "True",
       showOpts = function(e) {
         var processClick = function (evt) {
           if (e !== evt) {
@@ -16,5 +17,7 @@
           document.addEventListener('click', processClick);
         }
       };
-  fab_btn.addEventListener('click', showOpts);
+  if(is_drawer_enabled){
+      fab_btn.addEventListener('click', showOpts);
+  }
 }.call(this));
