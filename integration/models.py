@@ -395,6 +395,7 @@ class Account(models.Model, PerishableTokenMixin):
                                                          sf_read_only=models.READ_ONLY)
     student_template_id = models.CharField(custom=True, max_length=18, blank=True, null=True)
     applicant_template_id = models.CharField(custom=True, max_length=18, blank=True, null=True)
+    applicant_upload_functionality_enabled = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
     objects = managers.DefaultManager()
     universities = managers.UniversityManager()
@@ -428,6 +429,14 @@ class Account(models.Model, PerishableTokenMixin):
     @property
     def is_eg_customer(self):
         return (not self.is_student) and ('CeG' in self.customer_type)
+
+    @property
+    def is_uploader(self):
+        return self.is_eg_customer and self.applicant_upload_functionality_enabled
+
+    @property
+    def is_drawer_enabled(self):
+        return self.is_uploader or self.is_services_customer
 
     @property
     def is_services_customer(self):
