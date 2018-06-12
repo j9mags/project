@@ -463,6 +463,12 @@ class Account(models.Model, PerishableTokenMixin):
         return None
 
     @property
+    def ruckzahler_contract(self):
+        if self.is_student:
+            return self.contract_account_set.filter(record_type__developer_name='Ruckzahler').first()
+        return None
+
+    @property
     def course(self):
         if self.is_student:
             return self.active_contract.studiengang_ref if self.active_contract else None
