@@ -18,6 +18,13 @@ class StudentManager(DefaultManager):
                     Q(record_type__developer_name='UGVStudents') & Q(has_sofortzahler_contract_auto=True)))
 
 
+class UGVStudentManager(DefaultManager):
+
+    def get_queryset(self):
+        return super(UGVStudentManager, self).get_queryset().filter(Q(record_type__developer_name='UGVStudents')
+                                                                 & Q(has_sofortzahler_contract_auto=False))
+
+
 class UGVLeadManager(DefaultManager):
 
     def get_queryset(self):

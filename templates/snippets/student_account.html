@@ -26,7 +26,7 @@
       {% endif %}
     </div>
     <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.get_course.name_studiengang_auto %}
+      {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.course.name_studiengang_auto %}
     </div>
     {% if contract %}
     <div class="mdl-cell">
