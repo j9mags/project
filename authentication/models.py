@@ -26,6 +26,12 @@ class User(AbstractEmailUser):
             person_email=self.email))).exists()
 
     @property
+    def is_ugv_student(self):
+        return Account.ugv_students.filter(Q(unimailadresse=self.email) | (
+                Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
+            person_email=self.email))).exists()
+
+    @property
     def is_unistaff(self):
         return Contact.university_staff.filter(email=self.email).exists()
 
@@ -36,8 +42,12 @@ class User(AbstractEmailUser):
             rc = Contact.university_staff.get(email=self.email)
         elif self.is_student:
             rc = Account.students.get(Q(unimailadresse=self.email) | (
-                        Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
-                    person_email=self.email)))
+                    Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
+                person_email=self.email)))
+        elif self.is_ugv_student:
+            rc = Account.ugv_students.get(Q(unimailadresse=self.email) | (
+                    Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
+                person_email=self.email)))
         return rc
 
     def create_token(self, token=None, hours=96):
@@ -61,7 +71,7 @@ class PerishableToken(models.Model):
 
 class CsvUpload(models.Model):
     user = models.ForeignKey(User)
-    # course = models.BooleanField()
+    course = False
     upload_type = models.CharField(max_length=2)
     uuid = models.CharField(max_length=50)
     content = models.TextField(blank=True, null=True)

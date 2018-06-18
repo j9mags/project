@@ -7,7 +7,7 @@
 
 {% block content %}
 
-  {% if not account.sepalastschriftmandat_erteilt_auto %}
+  {% if account.is_student and not account.sepalastschriftmandat_erteilt_auto %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
       <div class="mdl-snackbar__text">{% trans 'You have not authorise us to debit your account. Without permission from you we cannot debit your tuition fees from your account and you are not able to commence your studies.' %}</div>
       <button class="mdl-snackbar__action" type="button"></button>
@@ -36,7 +36,7 @@
         <div class="mdl-cell mdl-cell--12-col">
           <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
         </div>
-        {% if not payment_contact %}
+        {% if account.is_student and not payment_contact %}
         <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
           <div class="mdl-cell mdl-cell--12-col">
             <p class="mdl-typography--body-2">
@@ -54,7 +54,7 @@
             <p class="mdl-typography--title mdl-typography--font-light mdl-color-text--accent">{{ master_contact.sepamandate_url_auto }}</p>
           </div>
         </div>
-        {% elif payment_contact == master_contact %}
+        {% elif payment_contact == master_contact or account.is_ugv_student %}
           {% include 'snippets/student_payment.html' with ba=master_contact.get_bank_account class="mdl-cell csp--full-width" %}
         {% else %}
           <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">

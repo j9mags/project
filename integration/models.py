@@ -262,7 +262,8 @@ class Lead(models.Model):
                                           null=True)
 
     active_application = models.ForeignKey('Application', models.DO_NOTHING, custom=True, blank=True, null=True)
-    uploaded_via_portal_trig = models.BooleanField(custom=True, verbose_name='Uploaded via Portal', default=models.DEFAULTED_ON_CREATE)
+    uploaded_via_portal_trig = models.BooleanField(custom=True, verbose_name='Uploaded via Portal',
+                                                   default=models.DEFAULTED_ON_CREATE)
 
     objects = managers.DefaultManager()
     ugv_students = managers.UGVLeadManager()
@@ -400,6 +401,7 @@ class Account(models.Model, PerishableTokenMixin):
     objects = managers.DefaultManager()
     universities = managers.UniversityManager()
     students = managers.StudentManager()
+    ugv_students = managers.UGVStudentManager()
 
     class Meta(models.Model.Meta):
         db_table = 'Account'
@@ -421,6 +423,10 @@ class Account(models.Model, PerishableTokenMixin):
     def is_student(self):
         return self.record_type.developer_name == 'Sofortzahler' or \
                (self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto)
+
+    @property
+    def is_ugv_student(self):
+        return self.record_type.developer_name == 'UGVStudents' and not self.has_sofortzahler_contract_auto
 
     @property
     def is_ugv(self):
@@ -452,30 +458,30 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def payment_contact(self):
-        if self.is_student:
+        if self.is_student or self.is_ugv_student:
             return self.zahlungskontakt_ref
         return None
 
     @property
     def active_contract(self):
-        if self.is_student:
+        if self.is_student or self.is_ugv_student:
             return self.contract_account_set.filter(record_type__developer_name='Sofortzahler').first()
         return None
 
     @property
     def ruckzahler_contract(self):
-        if self.is_student:
+        if self.is_student or self.is_ugv_student:
             return self.contract_account_set.filter(record_type__developer_name='Ruckzahler').first()
         return None
 
     @property
     def course(self):
-        if self.is_student:
+        if self.is_student or self.is_ugv_student:
             return self.active_contract.studiengang_ref if self.active_contract else None
         return None
 
     def get_student_contact(self):
-        if self.is_student:
+        if self.is_student or self.is_ugv_student:
             return self.person_contact if self.is_person_account else self.student_contact
         return None
 
@@ -485,7 +491,7 @@ class Account(models.Model, PerishableTokenMixin):
         # return None
 
     def get_active_courses(self):
-        if not self.is_student:
+        if not self.is_student and not self.is_ugv_student:
             # min_date = date.today() - timedelta(31)
             return self.degreecourse_set.all()  # filter(start_of_studies__gte=min_date)
         return None
@@ -518,10 +524,6 @@ class Contact(models.Model, PerishableTokenMixin):
     mailing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
     mailing_country = models.CharField(max_length=80, blank=True, null=True, verbose_name=_('Country'),
                                        choices=Choices.Country)
-
-    sepalastschriftmandat_erteilt = models.BooleanField(custom=True, db_column='SEPALastschriftmandatErteilt__c',
-                                                        verbose_name='SEPA Direct Debit Mandate Granted?',
-                                                        default=models.DEFAULTED_ON_CREATE)
     zahlungskontakt_auto = models.BooleanField(custom=True, verbose_name='Payment Contact',
                                                sf_read_only=models.READ_ONLY)
 
@@ -533,6 +535,9 @@ class Contact(models.Model, PerishableTokenMixin):
     password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
     invoice_contact = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+    sepalastschriftmandat_erteilt = models.BooleanField(custom=True, db_column='SEPALastschriftmandatErteilt__c',
+                                                        verbose_name='SEPA Direct Debit Mandate Granted?',
+                                                        default=models.DEFAULTED_ON_CREATE)
     sepamandate_form_auto = models.CharField(custom=True, db_column='SEPAMandateFormAuto__c', max_length=1300,
                                              verbose_name='SEPA Mandate Form', sf_read_only=models.READ_ONLY,
                                              blank=True, null=True)
