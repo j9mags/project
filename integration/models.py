@@ -391,7 +391,8 @@ class Account(models.Model, PerishableTokenMixin):
                                            default=models.DEFAULTED_ON_CREATE)
     initial_review_completed = models.BooleanField(custom=True, verbose_name='Initial Review Completed',
                                                    default=models.DEFAULTED_ON_CREATE)
-
+    zahlungskontakt_auto = models.BooleanField(db_column='ZahlungskontaktAuto__pc', verbose_name='Payment Contact',
+                                                  sf_read_only=models.READ_ONLY)
     has_sofortzahler_contract_auto = models.BooleanField(custom=True, verbose_name='Has Sofortzahler Contract',
                                                          sf_read_only=models.READ_ONLY)
     student_template_id = models.CharField(custom=True, max_length=18, blank=True, null=True)
@@ -479,6 +480,10 @@ class Account(models.Model, PerishableTokenMixin):
         if self.is_student or self.is_ugv_student:
             return self.active_contract.studiengang_ref if self.active_contract else None
         return None
+
+    @property
+    def review_completed(self):
+        return self.initial_review_completed or self.master_contact.zahlungskontakt_auto
 
     def get_student_contact(self):
         if self.is_student or self.is_ugv_student:

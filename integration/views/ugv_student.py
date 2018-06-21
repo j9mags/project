@@ -101,7 +101,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        if not context['master_contact'].sepalastschriftmandat_erteilt:
+        if not self.account.review_completed:
             step = 'sepa'
             return redirect('integration:onboarding', step=step)
 
@@ -250,7 +250,7 @@ class Onboarding(UgvStudentMixin, View):
         context = self.get_context_data(**kwargs)
         account = context.get('sf_account')
 
-        if account.initial_review_completed:
+        if account.review_completed:
             return redirect('integration:dashboard')
 
         return render(request, self.template, context)
