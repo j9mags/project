@@ -101,7 +101,7 @@ class Dashboard(StudentMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        if not self.account.initial_review_completed:
+        if not self.account.review_completed:
             step = 'sepa'
             if not self.account.kommunikationssprache:
                 step = 'lang'
@@ -341,7 +341,7 @@ class Onboarding(StudentMixin, View):
         context = self.get_context_data(**kwargs)
         account = context.get('sf_account')
 
-        if account.initial_review_completed:
+        if account.review_completed:
             return redirect('integration:dashboard')
 
         return render(request, self.template, context)
