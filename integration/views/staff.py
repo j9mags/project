@@ -1,24 +1,22 @@
-import pandas
-from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import get_language, activate, check_for_language
-from django.utils.translation import LANGUAGE_SESSION_KEY
-from django.conf import settings
-from django.core.exceptions import *
-from django.views.generic import DetailView
-from django.views.generic.base import View
-from django.views.generic.base import TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
-from django.db.models import Q
-from django.shortcuts import render, redirect
-
-from ..models import DegreeCourse, Contract, Account, RecordType, Lead, Application
-from ..forms import *
-
-from django.core.paginator import Paginator, EmptyPage
-
 from uuid import uuid4
+
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import *
+from django.core.paginator import Paginator, EmptyPage
+from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.utils.translation import get_language, activate, check_for_language
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import DetailView
+from django.views.generic.base import TemplateView
+from django.views.generic.base import View
+
+from ..forms import *
+from ..models import DegreeCourse, Contract, RecordType
 
 
 class StaffMixin(LoginRequiredMixin):
@@ -327,15 +325,22 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
             raise PermissionDenied()
 
         p = int(self.request.GET.get('p', '1'))
-        o = self.request.GET.get('o', 'pk')
+        o = self.request.GET.get('o')
         s = int(self.request.GET.get('s', '10'))
         q = self.request.GET.get('q')
 
+        university_status = self.request.GET.get('university_status')
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
+        if o:
+            context['sort_' + o] = '-' if o[0] != '-' else ''
+
         # apps = Application.objects.filter(hochschule_ref=self.contact.account, lead_ref__isnull=False)
         leads = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
+        if q:
+            context.update(q=q)
+            leads = leads.filter(Q(name__icontains=q) | Q(email__icontains=q))
 
         filters = []
         if leads:
@@ -350,14 +355,18 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
                          ))
             # lead_ids = [app.lead_ref.pk for app in apps]
             # items = Lead.ugv_students.filter(pk__in=lead_ids).order_by(o)  #
+            if university_status:
+                university_status = "" if university_status == "None" else university_status
+                leads = leads.filter(university_status=university_status)
+                filters.append((_('University-Status'), university_status, 'university_status'))
             if status:
                 status = "" if status == "None" else status
-                leads = leads.filter(university_status=status)
+                leads = leads.filter(status=status)
                 filters.append((_('Status'), status, 'status'))
 
-            if q:
-                context.update(q=q)
-                leads = leads.filter(Q(name__icontains=q) | Q(email__icontains=q))
+            if o:
+                leads = sorted(leads, key=lambda x: (getattr(x, o, 'pk') is None, getattr(x, o, 'pk')),
+                               reverse=True if o[0] == '-' else False)
 
             paginator = Paginator(leads, s)
             try:
