@@ -35,7 +35,14 @@
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Email' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Phone' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Course' %}</th>
-          <th class="mdl-data-table__cell--non-numeric">{% trans 'Status' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">
+              <a class="filter csp-table--action" href="#" data-filter="o" data-filter-value="{{sort_university_status}}university_status">
+                  {% trans 'University-Status' %}</a>
+          </th>
+          <th class="mdl-data-table__cell--non-numeric">
+              <a class="filter csp-table--action" href="#" data-filter="o" data-filter-value="{{sort_status}}status">
+                  {% trans 'Lead-Status' %}</a>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -52,8 +59,12 @@
                       <i class="material-icons md-18">filter_list</i>{{ item.application.studiengang_ref.name }}</a>
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">
-                  <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ item.university_status }}">
-                      <i class="material-icons md-18">filter_list</i>{{ item.university_status | default:"--" }}</a>
+                    <a class="filter csp-table--action" href="#" data-filter="university_status" data-filter-value="{{ item.university_status }}">
+                        <i class="material-icons md-18">filter_list</i>{{ item.university_status | default:"--" }}</a>
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                    <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ item.status }}">
+                        <i class="material-icons md-18">filter_list</i>{{ item.status | default:"--" }}</a>
                 </td>
             </tr>
         {% endfor %}
