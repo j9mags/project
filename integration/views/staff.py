@@ -15,6 +15,8 @@ from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 
+from django.contrib import messages
+
 from ..forms import *
 from ..models import DegreeCourse, Contract, RecordType
 
@@ -703,6 +705,8 @@ class BulkActions(StaffMixin, View):
             if new_status != '--':
                 students.update(status=new_status)
 
-        return HttpResponseRedirect('/')
+        message = _("Students have been successfully updated. It may take a while to see the results.")
+        messages.add_message(request, messages.INFO, message)
+        return redirect('integration:students')
 
 
