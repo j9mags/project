@@ -41,6 +41,14 @@
     <button class="mdl-snackbar__action" type="button"></button>
 </div>
 {% endif %}
+
+{% for message in messages %}
+<div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+    <div class="mdl-snackbar__text">{{ message }}</div>
+    <button class="mdl-snackbar__action" type="button"></button>
+</div>
+{% endfor %}
+
 {% if contact.account.is_services_customer %}
 <!-- button id="fab-add-student" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
     <i class="material-icons">person</i>
