@@ -703,13 +703,6 @@ class BulkActions(StaffMixin, View):
             if new_status != '--':
                 students.update(status=new_status)
 
-            course_pk = form.cleaned_data.get('course')
-            if course_pk != '--':
-                contracts_pk = [s.active_contract.pk for s in students if s.active_contract is not None]
-                contracts = Contract.objects.filter(pk__in=contracts_pk)
-                course = contact.account.degreecourse_set.get(pk=course_pk)
-                contracts.update(studiengang_ref=course)
-
         return HttpResponseRedirect('/')
 
 
