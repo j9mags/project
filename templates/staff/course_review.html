@@ -11,7 +11,7 @@
   <div class="mdl-cell mdl-cell--12-col">
     <h5 class="mdl-typography--headline">{% trans 'Course data' %}</h5>
   </div>
-  <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--4-col mdl-grid">
+  <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--6-col mdl-grid">
     {% if form %}
       <form method="post">
         {% csrf_token %}
@@ -19,12 +19,12 @@
         <div class="mdl-cell">
           {% include 'snippets/field-text.html' with label=_('Standard Period of Studies') value=course.standard_period_of_study type="int" %}
         </div>
-        <div class="mdl-cell">
-          {% include 'snippets/field-text.html' with label=_('Standard Study Period (No. of Semesters)') value=course.standard_period_of_study type="int" %}
-        </div>
-        <div class="mdl-cell">
-          {% include 'snippets/field-text.html' with label=_('Cost per Semester') value=course.cost_per_semester type="currency" %}
-        </div>
+          <div class="mdl-cell">
+              {% include 'snippets/field-text.html' with label=_('Cost per Semester') value=course.cost_per_semester type="currency" %}
+          </div>
+          <div class="mdl-cell">
+              {% include 'snippets/field-text.html' with label=_('Start of Studies') value=course.start_of_study %}
+          </div>
     {% if form %}
       </form>
     {% endif %}
@@ -59,6 +59,8 @@
               {% include "snippets/field-text.html" with label=_('Valid from') value=tpl.valid_from type='date' %}
               {% include "snippets/field-text.html" with label=_('Repayment amount') value=tpl.repayment_amount type='percent' %}
               {% include "snippets/field-text.html" with label=_('Semester fee') value=tpl.ugv_semester_fee type='currency' %}
+              {% include "snippets/field-text.html" with label=_('Relevant repayment period') value=tpl.relevant_repayment_period type='int' %}
+              {% include "snippets/field-text.html" with label=_('Repayment period') value=tpl.repayment_period type='int' %}
           </div>
       </div>
     {% endfor %}
