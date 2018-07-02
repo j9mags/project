@@ -26,12 +26,12 @@ class StaffMixin(LoginRequiredMixin):
     login_url = '/authentication/login/'
 
     def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and not request.user.is_unistaff:
+            raise PermissionDenied()
+
         rc = super(StaffMixin, self).dispatch(request, *args, **kwargs)
         if not 200 <= rc.status_code < 300:
             return rc
-
-        if not request.user.is_unistaff:
-            raise PermissionDenied()
 
         lang = request.session.get(LANGUAGE_SESSION_KEY)
 
@@ -97,6 +97,7 @@ class DashboardHome(StaffMixin, TemplateView):
             for key in d.keys():
                 d[key].pop('0')
                 d[key].pop('1')
+                d[key].pop('2')
             upd = request.user.csvupload_set.create(
                 upload_type=form.cleaned_data.get('upload_type'),
                 uuid=str(uuid4()),

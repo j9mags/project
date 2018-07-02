@@ -91,7 +91,7 @@ class Choices:
                ('Vereinigte Staaten', 'Vereinigte Staaten'), ('Vereinigtes Königreich', 'Vereinigtes Königreich'),
                ('Vietnam', 'Vietnam'), ('Weißrussland', 'Weißrussland'), ('Westsahara', 'Westsahara'),
                ('Zentral\xadafrikanische Republik', 'Zentral\xadafrikanische Republik'), ('Zypern', 'Zypern')]
-    Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('non-binary'))]
+    Gender = [('Female', _('female')), ('Male', _('male')), ('Third gender', _('non-binary'))]
     Nationality = [('afghanisch', 'afghanisch'), ('ägyptisch', 'ägyptisch'), ('albanisch', 'albanisch'),
                    ('algerisch', 'algerisch'), ('andorranisch', 'andorranisch'), ('angolanisch', 'angolanisch'),
                    ('antiguanisch', 'antiguanisch'), ('äquatorialguineisch', 'äquatorialguineisch'),
@@ -166,7 +166,7 @@ class Choices:
                    ('amerikanisch', 'amerikanisch'), ('britisch', 'britisch'), ('vietnamesisch', 'vietnamesisch'),
                    ('weißrussisch', 'weißrussisch'), ('zentralafrikanisch', 'zentralafrikanisch'),
                    ('zyprisch', 'zyprisch')]
-    Language = [('German', 'deutsch'), ('English', 'english')]
+    Language = [('German', _('Deutsch')), ('English', _('English'))]
     Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
     Month = [('Januar', _('January')), ('Februar', _('February')), ('März', _('March')), ('April', _('April')),
              ('Mai', _('May')), ('Juni', _('June')), ('Juli', _('July')), ('August', _('August')),
@@ -243,7 +243,7 @@ class Lead(models.Model):
     no_oecdpassport = models.BooleanField(custom=True, db_column='NoOECDPassport__c',
                                           verbose_name=_('No OECD Passport'), default=models.DEFAULTED_ON_CREATE)
     kommunicationssprache = models.CharField(custom=True, max_length=255, verbose_name=_('Communication Language'),
-                                             choices=[('English', 'English'), ('German', 'Deutsch')], blank=True,
+                                             choices=Choices.Language, blank=True,
                                              null=True)
     start_semester = models.DateField(custom=True, verbose_name=_('Start semester'), blank=True, null=True)
     university_status = models.CharField(custom=True, max_length=255, choices=Choices.UGVStatus, blank=True,
@@ -264,6 +264,19 @@ class Lead(models.Model):
     active_application = models.ForeignKey('Application', models.DO_NOTHING, custom=True, blank=True, null=True)
     uploaded_via_portal_trig = models.BooleanField(custom=True, verbose_name='Uploaded via Portal',
                                                    default=models.DEFAULTED_ON_CREATE)
+    biological_sex = models.CharField(custom=True, max_length=255, verbose_name='Biological sex',
+                                      choices=Choices.Gender, blank=True, null=True)
+    postal_street = models.CharField(custom=True, max_length=255, blank=True, null=True)
+    postal_code_0 = models.CharField(db_column='PostalCode__c', custom=True, max_length=20, blank=True,
+                                     null=True)  # Field renamed because of name conflict.
+    postal_city = models.CharField(custom=True, max_length=255, blank=True, null=True)
+    postal_country = models.CharField(custom=True, max_length=255, choices=Choices.Country, blank=True, null=True)
+    link_zu_weiteren_dokumenten = models.URLField(custom=True, verbose_name='Link zu weiteren Dokumenten', blank=True,
+                                                  null=True)
+    risiko_nicht_bei_chancen = models.BooleanField(custom=True, db_column='RisikoNichtBeiCHANCENeG__c',
+                                                      verbose_name='Risiko nicht bei CHANCEN eG',
+                                                      default=models.DEFAULTED_ON_CREATE)
+
 
     objects = managers.DefaultManager()
     ugv_students = managers.UGVLeadManager()
@@ -693,6 +706,10 @@ class DegreeCourse(models.Model):
     @property
     def ugv_contracts(self):
         return self.contract_set.filter(template=True, record_type__developer_name='Ruckzahler')
+
+    @property
+    def templates(self):
+        return self.contract_set.filter(template=True)
 
     def __str__(self):
         return "[{self.university.name}] {self.name}".format(self=self)
