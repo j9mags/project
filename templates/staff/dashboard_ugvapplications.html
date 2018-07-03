@@ -39,10 +39,11 @@
               <a class="filter csp-table--action" href="#" data-filter="o" data-filter-value="{{sort_university_status}}university_status">
                   {% trans 'University-Status' %}</a>
           </th>
-          <th class="mdl-data-table__cell--non-numeric">
-              <a class="filter csp-table--action" href="#" data-filter="o" data-filter-value="{{sort_status}}status">
-                  {% trans 'Lead-Status' %}</a>
-          </th>
+            <th class="mdl-data-table__cell--non-numeric">
+                <a class="filter csp-table--action" href="#" data-filter="o" data-filter-value="{{sort_status}}status">
+                    {% trans 'Lead-Status' %}</a>
+            </th>
+            <th class="mdl-data-table__cell--non-numeric">{% trans 'Created' %}</th>
         </tr>
       </thead>
       <tbody>
@@ -66,6 +67,7 @@
                     <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ item.status }}">
                         <i class="material-icons md-18">filter_list</i>{{ item.status | default:"--" }}</a>
                 </td>
+                <td class="mdl-data-table__cell">{{ item.created_date | default:"--" }}</td>
             </tr>
         {% endfor %}
       </tbody>

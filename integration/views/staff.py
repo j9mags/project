@@ -340,7 +340,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
             context['sort_' + o] = '-' if o[0] != '-' else ''
 
         # apps = Application.objects.filter(hochschule_ref=self.contact.account, lead_ref__isnull=False)
-        leads = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
+        leads = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account).order_by('-pk')
         if q:
             context.update(q=q)
             leads = leads.filter(Q(name__icontains=q) | Q(email__icontains=q))

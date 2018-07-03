@@ -70,10 +70,6 @@ class PerishableToken(models.Model):
         return self.expires_at < timezone.now()
 
 
-def convert_to_boolean(param):
-    return True if param == 'Ja' else False
-
-
 class CsvUpload(models.Model):
     user = models.ForeignKey(User)
     upload_type = models.CharField(max_length=2)
@@ -263,9 +259,9 @@ class CsvUpload(models.Model):
 
         if not self.content:
             raise exceptions.ObjectDoesNotExist()
-
-        languages = dict((y, x) for x, y in Choices.Language)
-        sex = dict((y, x) for x, y in Choices.Gender)
+        languages = {'Deutsch': 'German', 'Englisch': 'English'}
+        sex = {'weiblich': 'Female', 'männlich': 'Male', 'geschlechtsneutral': 'Third gender'}
+        boolean_answer = {'Ja': True, 'Nein': False}
 
         university = self.user.srecord.account
         courses = {}
@@ -298,7 +294,7 @@ class CsvUpload(models.Model):
             lead.date_of_birth = row.get('Geburtsdatum')
             lead.place_of_birth = row.get('Geburtsort')
             lead.citizenship_new = row.get('Staatsbürgerschaft')
-            lead.no_oecdpassport = convert_to_boolean(row.get('Kein OECD Ausweis'))
+            lead.no_oecdpassport = boolean_answer.get(row.get('Kein OECD Ausweis'))
 
             lead.postal_street = row.get('Aktuelle Straße und Hausnummer')
             lead.postal_code_0 = row.get('Aktuelle PLZ ')
@@ -308,7 +304,7 @@ class CsvUpload(models.Model):
             lead.phone = row.get('Handynummer')
             lead.email = row.get('private E-Mail-Adresse')
             lead.university_status = row.get('Hochschulstatus')
-            lead.risiko_nicht_bei_chancen = convert_to_boolean(row.get('Risiko nicht bei CHANCEN eG'))
+            lead.risiko_nicht_bei_chancen = boolean_answer.get(row.get('Risiko nicht bei CHANCEN eG'))
             lead.link_zu_weiteren_dokumenten = row.get('Link zu weiteren Dokumenten')
 
             lead.confirmed_by_university = True
@@ -320,7 +316,7 @@ class CsvUpload(models.Model):
             app.studiengang_ref = courses.get(row.get('Studiengang'))
             if app.studiengang_ref is None:
                 raise Exception()
-            app.already_student = convert_to_boolean(row.get('Bereits Student an dieser Hochschule'))
+            app.already_student = boolean_answer.get(row.get('Bereits Student an dieser Hochschule'))
             app.start_of_study_trig = row.get('Studienbeginn')
             candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag')]
             if candidates:
@@ -335,11 +331,6 @@ class CsvUpload(models.Model):
         for lead in leads:
             appsByLead.get(lead.email).lead_ref = lead
         Application.objects.bulk_create(appsByLead.values())
-        apps = {a.lead_ref.id: a for a in Application.objects.filter(lead__email__in=appsByLead.keys())}
-
-        for lead in leads:
-            lead.active_application = apps.get(lead.id).id
-            lead.save()
 
         return True
 
