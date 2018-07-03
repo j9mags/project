@@ -91,7 +91,8 @@ class Choices:
                ('Vereinigte Staaten', 'Vereinigte Staaten'), ('Vereinigtes Königreich', 'Vereinigtes Königreich'),
                ('Vietnam', 'Vietnam'), ('Weißrussland', 'Weißrussland'), ('Westsahara', 'Westsahara'),
                ('Zentral\xadafrikanische Republik', 'Zentral\xadafrikanische Republik'), ('Zypern', 'Zypern')]
-    Gender = [('Female', _('female')), ('Male', _('male')), ('Third gender', _('non-binary'))]
+    Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('non-binary'))]
+    Biological_Sex = [('Female', _('female')), ('Male', _('male')), ('Third gender', _('non-binary'))]
     Nationality = [('afghanisch', 'afghanisch'), ('ägyptisch', 'ägyptisch'), ('albanisch', 'albanisch'),
                    ('algerisch', 'algerisch'), ('andorranisch', 'andorranisch'), ('angolanisch', 'angolanisch'),
                    ('antiguanisch', 'antiguanisch'), ('äquatorialguineisch', 'äquatorialguineisch'),
@@ -221,6 +222,7 @@ class RecordType(models.Model):
 
 class Lead(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
     master_record = models.ForeignKey('self', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
     last_name = models.CharField(max_length=80)
     first_name = models.CharField(max_length=40, blank=True, null=True)
@@ -265,7 +267,7 @@ class Lead(models.Model):
     uploaded_via_portal_trig = models.BooleanField(custom=True, verbose_name='Uploaded via Portal',
                                                    default=models.DEFAULTED_ON_CREATE)
     biological_sex = models.CharField(custom=True, max_length=255, verbose_name='Biological sex',
-                                      choices=Choices.Gender, blank=True, null=True)
+                                      choices=Choices.Biological_Sex, blank=True, null=True)
     postal_street = models.CharField(custom=True, max_length=255, blank=True, null=True)
     postal_code_0 = models.CharField(db_column='PostalCode__c', custom=True, max_length=20, blank=True,
                                      null=True)  # Field renamed because of name conflict.

@@ -25,12 +25,12 @@ class StudentMixin(LoginRequiredMixin):
         return self.request.user.srecord
 
     def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and not request.user.is_student:
+            raise PermissionDenied()
+
         rc = super(StudentMixin, self).dispatch(request, *args, **kwargs)
         if not 200 <= rc.status_code < 300:
             return rc
-
-        if not request.user.is_student:
-            raise PermissionDenied()
 
         lang = request.session.get(LANGUAGE_SESSION_KEY)
 
