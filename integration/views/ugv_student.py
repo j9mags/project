@@ -1,18 +1,21 @@
-from django.utils.translation import ugettext as _
-from django.utils.translation import get_language, activate, check_for_language
-from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.conf import settings
-from django.core.exceptions import *
-from django.core.paginator import Paginator, EmptyPage
-from django.views.generic.base import View
-from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.core.exceptions import *
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.utils.translation import get_language, activate, check_for_language
+from django.utils.translation import ugettext as _
+from django.views.generic.base import TemplateView
+from django.views.generic.base import View
 
+from integration.views.student import ContactDetails
 from ..forms import *
-from ..models import Attachment, Contact, RecordType
+from ..models import Contact, RecordType, Attachment
+
+import base64
 
 _logger = logging.getLogger(__name__)
 
@@ -25,12 +28,12 @@ class UgvStudentMixin(LoginRequiredMixin):
         return self.request.user.srecord
 
     def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and not request.user.is_ugv_student:
+            raise PermissionDenied()
+
         rc = super(UgvStudentMixin, self).dispatch(request, *args, **kwargs)
         if not 200 <= rc.status_code < 300:
             return rc
-
-        if not request.user.is_ugv_student:
-            raise PermissionDenied()
 
         lang = request.session.get(LANGUAGE_SESSION_KEY)
 
@@ -44,6 +47,35 @@ class UgvStudentMixin(LoginRequiredMixin):
             rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
 
         return rc
+
+    def get_student_context(self):
+        context = {}
+        self.account = self.get_queryset()
+
+        contact = self.account.master_contact
+        contract = self.account.active_contract
+        invoices = contract.all_invoices if contract is not None else None
+        uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
+
+        context['account'] = self.account
+        context['master_contact'] = contact
+        context['payment_contact'] = self.account.payment_contact
+        context['active_contract'] = contract
+        context['ignore_drawer'] = True
+
+        p = int(self.request.GET.get('p', '1'))
+        s = int(self.request.GET.get('s', '10'))
+
+        if invoices:
+            paginator = Paginator(invoices, s)
+            try:
+                invoices = paginator.page(p)
+            except EmptyPage:
+                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
+
+        context['invoices'] = invoices
+        context['uploaded_files'] = uploaded_files
+        return context
 
 
 class SetLanguage(UgvStudentMixin, View):
@@ -73,30 +105,8 @@ class Dashboard(UgvStudentMixin, TemplateView):
     title = 'Student dashboard'
 
     def get_context_data(self, **kwargs):
-        context = super(Dashboard, self).get_context_data(**kwargs)
-        self.account = self.get_queryset()
-
-        contact = self.account.master_contact
-        contract = self.account.active_contract
-        invoices = contract.all_invoices if contract is not None else None
-
-        context['account'] = self.account
-        context['master_contact'] = contact
-        context['payment_contact'] = self.account.payment_contact
-        context['active_contract'] = contract
-        context['ignore_drawer'] = True
-
-        p = int(self.request.GET.get('p', '1'))
-        s = int(self.request.GET.get('s', '10'))
-
-        if invoices:
-            paginator = Paginator(invoices, s)
-            try:
-                invoices = paginator.page(p)
-            except EmptyPage:
-                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
-
-        context['invoices'] = invoices
+        context = self.get_student_context()
+        context.update(super(Dashboard, self).get_context_data(**kwargs))
         return context
 
     def get(self, request, *args, **kwargs):
@@ -220,15 +230,16 @@ class Onboarding(UgvStudentMixin, View):
         step = 'sepa'
 
         context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.master_contact,
-                   'title_centered': True, 'sf_contract': self.account.active_contract, 'ignore_drawer': True,
+                   'sf_contract': self.account.active_contract, 'ignore_drawer': True,
                    'stepper': (
                        {
                            'title': _('SEPA Mandate'),
-                           'caption': _('We require authorisation to debit a bank account for your tuition fees.'),
+                           'caption': _('We require authorisation to debit a bank account for your membership share(s).'),
                            'template': 'students/onboarding_sepa.html',
                            'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
                            'submit': _('Grant mandate'),
-                           'skip_submit': True
+                           'skip_submit': True,
+                           'is_active': True
                        },
                    )}
 
@@ -343,3 +354,32 @@ class Onboarding(UgvStudentMixin, View):
             return redirect('integration:onboarding', step='sepa')
         elif step == 'sepa':
             return redirect(self.account.get_student_contact().sepamandate_url_auto)
+
+
+class UploadFile(UgvStudentMixin, View):
+    template_name = 'students/dashboard.html'
+
+    def get(self, request, *args, **kwargs):
+        return redirect('integration:dashboard')
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_student_context()
+        form = UploadForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            file = form.cleaned_data.get('file')
+            if file is not None:
+
+                with open(file.temporary_file_path(), "rb") as f:
+                    body = base64.b64encode(f.read())
+
+                attachment = Attachment(name=file.name, parent_id=self.account.pk, body=body.decode("utf-8"))
+                attachment.save()
+                return redirect('integration:dashboard')
+        context.update(
+            form=form,
+            message=_('Upload failed')
+        )
+
+        return render(request, self.template_name, context)
+

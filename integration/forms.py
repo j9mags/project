@@ -23,7 +23,7 @@ BillingChoices = [('', '')] + Choices.Payment
 KEEP_CURRENT = _('-- Keep current --')
 
 
-class UploadForm(forms.Form):
+class UploadCsvForm(forms.Form):
     csv = forms.FileField()
     upload_type = forms.CharField(max_length=2)
 
@@ -31,7 +31,7 @@ class UploadForm(forms.Form):
         return self.courses
 
     def clean(self):
-        cleaned_data = super(UploadForm, self).clean()
+        cleaned_data = super(UploadCsvForm, self).clean()
         csv = cleaned_data.get('csv')
         upload_type = cleaned_data.get('upload_type')
 
@@ -49,6 +49,10 @@ class UploadForm(forms.Form):
                 self.add_error('csv', _('There is a problem with the file.'))
 
         return cleaned_data
+
+
+class UploadForm(forms.Form):
+    file = forms.FileField()
 
 
 class LanguageSelectForm(forms.ModelForm):

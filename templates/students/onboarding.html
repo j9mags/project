@@ -9,9 +9,7 @@
     <link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
 {% endblock %}
 
-{% block title %}
-    <img src="{% static '/img/chancen-services--logo-inline__dark.png' %}">
-{% endblock %}
+{% block title %}{% trans 'My CHANCEN SERVICES Account' %}{% endblock %}
 
 {% block content %}
     {% include 'snippets/stepper.html' with id='onboarding-stepper'%}

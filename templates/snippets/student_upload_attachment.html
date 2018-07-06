@@ -1,0 +1,32 @@
+{% load i18n %}
+{% load csp %}
+
+<div class="mdl-cell mdl-cell--12-col mdl-shadow--6dp">
+    <h4 class="mdl-dialog__title">{% trans 'Upload from your computer' %}</h4>
+    <form enctype="multipart/form-data" method="post" action="{% url 'integration:upload_file' %}"
+          onsubmit="document.getElementById('upload-progress-cs').classList.add('is-active')"
+          onabort="document.getElementById('upload-progress-cs').classList.remove('is-active')">
+
+        {% csrf_token %}
+        <input type="hidden" name="view_name" value="{{ view.template_name }}">
+        <input type="hidden" name="courses" value="true">
+
+        <div class="mdl-dialog__content">
+            {% include 'snippets/input-file.html' with field=form.file type='file' pref='cs_' %}
+            <div id="upload-progress-cs" class="mdl-spinner mdl-js-spinner"></div>
+        </div>
+        <div class="mdl-dialog__actions">
+            <input type="submit"
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
+                   value="{% trans 'Upload' %}">
+            <div class="mdl-layout-spacer"></div>
+        </div>
+    </form>
+</div>
+{% if uploaded_files %}
+    {% include "snippets/student_uploaded_files.html" %}
+{% else %}
+    <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col mdl-grid">
+        <h3 class="mdl-typography--headline">{% trans 'Nothing uploaded yet' %}</h3>
+    </div>
+{% endif %}

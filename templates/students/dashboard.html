@@ -18,6 +18,9 @@
     <div class="mdl-tabs__tab-bar">
         <a id="account-tab" href="#account-panel" class="mdl-tabs__tab">{% trans 'Account' %}</a>
         <a id="invoices-tab" href="#invoices-panel" class="mdl-tabs__tab">{% trans 'Invoices' %}</a>
+        {% if account.is_ugv_student %}
+          <a id="uploader-tab" href="#uploader-panel" class="mdl-tabs__tab">{% trans 'Upload files' %}</a>
+        {% endif %}
     </div>
 
     <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %}" id="account-panel">
@@ -66,12 +69,16 @@
 
     <div class="mdl-tabs__panel" id="invoices-panel">
       {% if invoices %}
-        {% include "snippets/student_invoices.html" %}
+      {% include "snippets/student_invoices.html" %}
       {% else %}
       <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col mdl-grid">
         <h3 class="mdl-typography--headline">{% trans 'No invoices found' %}</h3>
       </div>
       {% endif %}
+    </div>
+
+    <div class="mdl-tabs__panel" id="uploader-panel">
+      {% include 'snippets/student_upload_attachment.html' %}
     </div>
   </div>
 {% endblock %}

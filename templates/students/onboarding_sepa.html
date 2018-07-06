@@ -3,19 +3,26 @@
 <div class="mdl-card__supporting-text mdl-card--expand mdl-grid">
     <div class="mdl-cell mdl-cell--12-col">
         <p class="mdl-typography--body-2">
-            {% trans 'Authorize us to collect the study fees by direct debit from your account.' %}
+            {% if request.user.is_ugv_student %}
+                {% trans 'Please authorize us to collect the due amount for your membership share(s) by direct debit from your account.' %}
+            {% else %}
+                {% trans 'Authorize us to collect the study fees by direct debit from your account.' %}
+            {% endif %}
         </p>
     </div>
     <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
         <input class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised mdl-color-text--white"
                type="submit" value="{{ step.submit }}">
     </div>
-    <div class="mdl-cell mdl-cell--12-col">
-        <p class="mdl-typography--body-2">
-            {% trans 'If someone else is paying your tuition fees, please send them the following link and close this window.' %}</p>
-    </div>
-    <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center csp--word-wrap">
-        <p class="mdl-typography--title mdl-typography--font-light mdl-color-text--accent">{{ sf_contact.sepamandate_url_auto }}</p>
-    </div>
+
+    {% if request.user.is_student %}
+        <div class="mdl-cell mdl-cell--12-col">
+            <p class="mdl-typography--body-2">
+                {% trans 'If someone else is paying your tuition fees, please send them the following link and close this window.' %}</p>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center csp--word-wrap">
+            <p class="mdl-typography--title mdl-typography--font-light mdl-color-text--accent">{{ sf_contact.sepamandate_url_auto }}</p>
+        </div>
+    {% endif %}
 </div>
 

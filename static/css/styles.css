@@ -518,3 +518,7 @@ td.csp-table--action {
     max-width:100%;
     margin: 0 auto;
 }
+
+.stepper-length-1 > .mdl-step__label-indicator {
+    display: none;
+}

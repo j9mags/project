@@ -1,0 +1,28 @@
+{% load i18n %}
+{% load csp %}
+
+<div class="mdl-cell mdl-cell--12-col">
+  <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp csp--full-width">
+    <thead>
+    <tr>
+      <th class="mdl-data-table__cell--non-numeric">{% trans 'Name' %}</th>
+      <th class="mdl-data-table__cell--non-numeric">{% trans 'Created Date' %}</th>
+      <th class="mdl-data-table__cell--non-numeric"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for uploaded_file in uploaded_files %}
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">{{ uploaded_file.name }}</td>
+      <td class="mdl-data-table__cell--non-numeric">{{ uploaded_file.created_date|date:"d.m.Y"  }}</td>
+      <td class="mdl-data-table__cell">
+        <a href="{% url 'integration:download_attachment' att_id=uploaded_file.pk %}">
+          <i class="material-icons">file_download</i>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+</div>

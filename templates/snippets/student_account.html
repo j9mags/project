@@ -1,9 +1,11 @@
 {% load i18n %}
+{% load csp %}
 
 <div class="mdl-cell mdl-cell--12-col">
   <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
 </div>
 <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+  {% with form|classname as form_class %}
   {% if form %}
     <form method="post">
       {% csrf_token %}
@@ -19,14 +21,14 @@
       {% include 'snippets/field-text.html' with label=_('Email') value=account.unimailadresse %}
     </div>
     <div class="mdl-cell">
-      {% if form %}
+      {% if form and form_class != 'UploadForm' %}
       {% include 'snippets/select.html' with field=form.status %}
       {% else %}
       {% include 'snippets/field-text.html' with label=_('Status') value=account.status %}
       {% endif %}
     </div>
     <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.course.name_studiengang_auto %}
+      {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.course.name %}
     </div>
     {% if contract %}
     <div class="mdl-cell">
@@ -34,7 +36,7 @@
     </div>
     {% endif %}
   </div>
-  {% if form %}
+  {% if form and form_class != 'UploadForm' %}
       <div class="mdl-dialog__actions">
         <input type="submit"
                class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
@@ -43,6 +45,7 @@
     </form>
   {% endif %}
 </div>
+{% endwith %}
 
 <div class="mdl-cell mdl-cell--12-col">
   <h5 class="mdl-typography--headline">{% trans 'Personal data' %}</h5>
