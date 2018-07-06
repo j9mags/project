@@ -16,3 +16,8 @@ def get(od, key):
 def currency(value):
     value = value or 0
     return locale.currency(value, grouping=True)
+
+
+@register.filter()
+def classname(obj):
+    return obj.__class__.__name__

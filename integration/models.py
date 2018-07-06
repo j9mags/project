@@ -5,7 +5,9 @@ from datetime import date, timedelta
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
-from django.db import connections
+from django.db import connections, models as django_models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from . import managers
 
@@ -480,8 +482,10 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def active_contract(self):
-        if self.is_student or self.is_ugv_student:
+        if self.is_student:
             return self.contract_account_set.filter(record_type__developer_name='Sofortzahler').first()
+        elif self.is_ugv_student:
+            return self.contract_account_set.filter(record_type__developer_name='Ruckzahler').first()
         return None
 
     @property
@@ -975,7 +979,7 @@ class Invoice(models.Model):
         # keyPrefix = 'a09'
 
     def get_current_attachment(self):
-        return self.attachment_set.last()
+        return Attachment.objects.filter(parent_id=self.pk).last()
 
 
 class Attachment(models.Model):
@@ -983,10 +987,10 @@ class Attachment(models.Model):
         verbose_name='Deleted',
         sf_read_only=models.READ_ONLY,
         default=False)
-    parent = models.ForeignKey(
-        Invoice,
-        models.DO_NOTHING,
-        sf_read_only=models.NOT_UPDATEABLE)
+
+    parent_id = models.CharField(max_length=18)
+    parent_type = models.CharField(max_length=50, db_column='Parent.Type', sf_read_only=models.READ_ONLY)
+
     name = models.CharField(
         max_length=255,
         verbose_name='File Name')
@@ -1002,6 +1006,7 @@ class Attachment(models.Model):
         blank=True,
         null=True)
     body = models.TextField()
+    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
 
     def fetch_content(self):
         session = connections['salesforce'].sf_session

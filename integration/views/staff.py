@@ -45,7 +45,7 @@ class StaffMixin(LoginRequiredMixin):
 
     def get_staff_context(self):
         self.contact = self.request.user.srecord
-        return dict(contact=self.contact, st_form=UploadForm(), cs_form=UploadForm())
+        return dict(contact=self.contact, st_form=UploadCsvForm(), cs_form=UploadCsvForm())
 
 
 class SetLanguage(StaffMixin, View):
@@ -89,7 +89,7 @@ class DashboardHome(StaffMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        form = UploadForm(request.POST, request.FILES)
+        form = UploadCsvForm(request.POST, request.FILES)
 
         if form.is_valid():
             json_data = form.cleaned_data.get('raw_data')

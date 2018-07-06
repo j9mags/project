@@ -26,6 +26,8 @@ urlpatterns = [
         None
     ), name='payment'),
 
+    url(r'^upload_file/$', ugv_student.UploadFile.as_view(), name='upload_file'),
+
     url(r'^review/(?P<uuid>.+)/(?P<action>(confirm)|(discard))/$',
         staff.FileUploadAction.as_view(), name='upload_action'),
     url(r'^review/(?P<uuid>.+)/$', staff.FileUpload.as_view(), name='upload_review'),

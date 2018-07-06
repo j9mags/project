@@ -78,7 +78,7 @@ class Dashboard(StudentMixin, TemplateView):
 
         contact = self.account.master_contact
         contract = self.account.active_contract
-        invoices = contract.all_invoices
+        invoices = contract.all_invoices if contract is not None else None
 
         context['account'] = self.account
         context['master_contact'] = contact
@@ -233,7 +233,7 @@ class Onboarding(StudentMixin, View):
                 step = 'data'
 
         context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.master_contact,
-                   'title_centered': True, 'sf_contract': self.account.active_contract, 'ignore_drawer': True,
+                   'sf_contract': self.account.active_contract, 'ignore_drawer': True,
                    'stepper': (
                        {
                            'title': 'Willkommen! | Welcome! ',
