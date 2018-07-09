@@ -297,7 +297,7 @@ class CsvUpload(models.Model):
             lead.date_of_birth = row.get('Geburtsdatum')
             lead.place_of_birth = row.get('Geburtsort')
             lead.citizenship_new = row.get('Staatsbürgerschaft')
-            lead.no_oecdpassport = boolean_answer.get(row.get('Kein OECD Ausweis'))
+            lead.no_oecdpassport = boolean_answer.get(row.get('Kein OECD Ausweis'), False)
 
             lead.postal_street = row.get('Aktuelle Straße und Hausnummer')
             lead.postal_code_0 = row.get('Aktuelle PLZ ')
@@ -307,7 +307,7 @@ class CsvUpload(models.Model):
             lead.phone = row.get('Handynummer')
             lead.email = row.get('private E-Mail-Adresse')
             lead.university_status = row.get('Hochschulstatus')
-            lead.risiko_nicht_bei_chancen = boolean_answer.get(row.get('Risiko nicht bei CHANCEN eG'))
+            lead.risiko_nicht_bei_chancen = boolean_answer.get(row.get('Risiko nicht bei CHANCEN eG'), False)
             lead.link_zu_weiteren_dokumenten = row.get('Link zu weiteren Dokumenten')
 
             lead.confirmed_by_university = True
@@ -319,7 +319,7 @@ class CsvUpload(models.Model):
             app.studiengang_ref = courses.get(row.get('Studiengang'))
             if app.studiengang_ref is None:
                 raise Exception()
-            app.already_student = boolean_answer.get(row.get('Bereits Student an dieser Hochschule'))
+            app.already_student = boolean_answer.get(row.get('Bereits Student an dieser Hochschule'), False)
             app.start_of_study_trig = row.get('Studienbeginn')
             candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag')]
             if candidates:

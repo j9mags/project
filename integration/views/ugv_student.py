@@ -380,6 +380,5 @@ class UploadFile(UgvStudentMixin, View):
             form=form,
             message=_('Upload failed')
         )
-
         return render(request, self.template_name, context)
 

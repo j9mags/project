@@ -8,8 +8,8 @@
           onabort="document.getElementById('upload-progress-cs').classList.remove('is-active')">
 
         {% csrf_token %}
+
         <input type="hidden" name="view_name" value="{{ view.template_name }}">
-        <input type="hidden" name="courses" value="true">
 
         <div class="mdl-dialog__content">
             {% include 'snippets/input-file.html' with field=form.file type='file' pref='cs_' %}
