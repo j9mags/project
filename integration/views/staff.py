@@ -15,6 +15,8 @@ from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 
+import re
+
 from django.contrib import messages
 
 from ..forms import *
@@ -730,8 +732,14 @@ class BulkActions(StaffMixin, View):
             if new_status != '--':
                 students.update(status=new_status)
 
+        referer = request.META.get('HTTP_REFERER')
+        if referer is not None:
+            referer = re.sub('^https?:\/\/', '', referer).split('/')
+            referer = referer[1]
+        else:
+            referer = 'students'
         message = _("Students have been successfully updated. It may take a while to see the results.")
         messages.add_message(request, messages.INFO, message)
-        return redirect('integration:students')
+        return redirect('integration:' + referer)
 
 
