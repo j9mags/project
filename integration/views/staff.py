@@ -474,8 +474,7 @@ class FileUpload(StaffMixin, TemplateView):
 
         err = self.request.GET.get('err')
         err_msg = {
-            '1': _('There seem to be missing values, please review the data thoroughly.'),
-            '2': _('There seem to be wrong values or incorrectly formatted, please review the data thoroughly.')
+            '1': _('There seem to be missing values, please review the data thoroughly.')
         }.get(err)
 
         if err_msg:
@@ -505,8 +504,33 @@ class FileUploadAction(StaffMixin, View):
                 upload.process()
             except Exception as e:
                 print(e)
+                errors = [_('There seem to be wrong values or incorrectly formatted, please review the data thoroughly.')]
+                try:
+                    #bulk-case
+                    if len(e.args) > 1:
+                        for error in e.args[0].get('results'):
+                            if error.get('statusCode') != 201:
+                                error_results = error.get('result')
+                                for error_result in error_results:
+                                    if error_result.get('errorCode') is not None and error_result.get(
+                                            'message') is not None:
+                                        if error_result.get('errorCode') == 'INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST':
+                                            errors.append(error_result.get('message'))
+                                        # elif error_result.get('errorCode') == 'DUPLICATE_VALUE':
+                                        #     message = error_result.get('message')
+                                        #     matches = regex.match(r'^.*\s([a-zA-Z0-9]{18}|[a-zA-Z0-9]{15})$', message)
+                                        #     if matches:
+                                        #         duplicate_ids.append(matches.group(1))
+                                    else:
+                                        errors.append(error)
+                    else:
+                        errors.append(e.data.get('message'))
+                except Exception:
+                    errors.append(e)
                 rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
-                return redirect(rc+'?err=2')
+                message = '\n'.join(str(x) for x in errors)
+                messages.add_message(request, messages.INFO, message)
+                return redirect(rc)
         return redirect('integration:dashboard')
 
 
