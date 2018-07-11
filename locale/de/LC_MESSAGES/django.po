@@ -5,17 +5,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-06 13:19+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2018-07-11 10:55+0200\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.0.8\n"
 
 #: authentication/admin.py:44
 msgid "Fill out both fields"
@@ -862,10 +863,8 @@ msgstr "Semesterbeitrag erfolgreich aktualisiert."
 
 #: integration/views/staff.py:364
 #: templates/staff/dashboard_ugvapplications.html:40
-#, fuzzy
-#| msgid "University"
 msgid "University-Status"
-msgstr "Hochschule"
+msgstr "Hochschul-Status"
 
 #: integration/views/staff.py:477
 msgid "There seem to be missing values, please review the data thoroughly."
@@ -932,9 +931,6 @@ msgid "Grant mandate"
 msgstr "Mandat vergeben"
 
 #: integration/views/ugv_student.py:237
-#, fuzzy
-#| msgid ""
-#| "We require authorisation to debit a bank account for your tuition fees."
 msgid ""
 "We require authorisation to debit a bank account for your membership "
 "share(s)."
@@ -1306,10 +1302,8 @@ msgid "View applications"
 msgstr ""
 
 #: templates/staff/dashboard_home.html:81
-#, fuzzy
-#| msgid "Invoices"
 msgid "View invoices"
-msgstr "Rechnungen"
+msgstr "Rechnungen ansehen"
 
 #: templates/staff/dashboard_invoices.html:13
 #: templates/students/dashboard.html:75
@@ -1493,9 +1487,6 @@ msgid "University email address"
 msgstr "Universitäre E-Mail-Adresse"
 
 #: templates/students/onboarding_sepa.html:7
-#, fuzzy
-#| msgid ""
-#| "Authorize us to collect the study fees by direct debit from your account."
 msgid ""
 "Please authorize us to collect the due amount for your membership share(s) "
 "by direct debit from your account."
