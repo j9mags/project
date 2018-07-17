@@ -324,6 +324,8 @@ class CsvUpload(models.Model):
             candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag')]
             if candidates:
                 app.contract_ref = candidates[0]
+            if app.studiengang_ref is not None and app.contract_ref is None:
+                raise Exception()
 
             app.confirmed_by_university = True
             appsByLead.update({lead.email: app})

@@ -312,6 +312,7 @@ class Application(models.Model):
                                           default=models.DEFAULTED_ON_CREATE)
     confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by university',
                                                   default=models.DEFAULTED_ON_CREATE)
+    contract_ref = models.ForeignKey('Contract', models.DO_NOTHING, custom=True, blank=True, null=True)
 
     class Meta(models.Model.Meta):
         db_table = 'Application__c'
