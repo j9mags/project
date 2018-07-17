@@ -24,10 +24,8 @@
             <a
                 {% if contact.account.applicant_template_id is not None%}
                 href="{% url 'integration:download_attachment' att_id=contact.account.applicant_template_id %}"
-                {% else %}
-                href="{% static '/templates/Import_Bewerber_Vorlage.xlsx' %}"
                 {% endif %}
-                class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download template' %}
+                class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent {% if contact.account.applicant_template_id is None%}mdl-button--disabled{% endif%}">{% trans 'Download template' %}
             </a>
         </div>
     </form>

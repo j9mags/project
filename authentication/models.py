@@ -305,7 +305,7 @@ class CsvUpload(models.Model):
             lead.postal_country = row.get('Aktuelles Land')
             lead.kommunicationssprache = languages.get(row.get('Kommunikationssprache'))
             lead.phone = row.get('Handynummer')
-            lead.email = row.get('private E-Mail-Adresse')
+            lead.email = row.get('private E-Mail-Adresse').lower()
             lead.university_status = row.get('Hochschulstatus')
             lead.risiko_nicht_bei_chancen = boolean_answer.get(row.get('Risiko nicht bei CHANCEN eG'), False)
             lead.link_zu_weiteren_dokumenten = row.get('Link zu weiteren Dokumenten')
