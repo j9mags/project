@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 
 import pandas
+from numpy import nan
 from pandas.io import json
 import logging
 

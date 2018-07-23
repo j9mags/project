@@ -126,7 +126,7 @@ class CsvUpload(models.Model):
                 if not str(i) in data[k]:
                     done = True
                     break
-                if 'datum' in k:
+                if 'datum' in k and data[k][str(i)] is not None:
                     d_.update({k: datetime.fromtimestamp(int(data[k][str(i)]) / 1000).date()})
                 else:
                     d_.update({k: data[k][str(i)]})
@@ -145,7 +145,7 @@ class CsvUpload(models.Model):
             return False
 
         rc = {
-            'ap': self._create_applications,
+            'ap': self._create_applicants,
             'st': self._create_students,
         }.get(self.upload_type, lambda x: False)(data)
 
@@ -256,7 +256,7 @@ class CsvUpload(models.Model):
 
         return True
 
-    def _create_applications(self, data):
+    def _create_applicants(self, data):
         if not self.user.is_unistaff:
             raise exceptions.PermissionDenied()
 
@@ -282,7 +282,7 @@ class CsvUpload(models.Model):
         appsByLead = {}
 
         for row in data:
-            if not (any(row) and all(row)):
+            if not (any(row) and all(row) and row.get('Nachname') is None):
                 return False
 
             lead = Lead()
@@ -305,7 +305,7 @@ class CsvUpload(models.Model):
             lead.postal_country = row.get('Aktuelles Land')
             lead.kommunicationssprache = languages.get(row.get('Kommunikationssprache'))
             lead.phone = row.get('Handynummer')
-            lead.email = row.get('private E-Mail-Adresse').lower()
+            lead.email = row.get('private E-Mail-Adresse').lower() if row.get('private E-Mail-Adresse') is not None else None
             lead.university_status = 'Accepted applicant'
             # row.get('Hochschulstatus')
             lead.status = 'Qualified'
@@ -318,9 +318,7 @@ class CsvUpload(models.Model):
 
             app = Application()
             app.hochschule_ref = university
-            app.studiengang_ref = courses.get(row.get('Studiengang'))
-            if app.studiengang_ref is None:
-                raise Exception()
+            app.studiengang_ref = courses.get(row.get('Studiengang'), None)
             app.already_student = boolean_answer.get(row.get('Bereits Student an dieser Hochschule'), False)
             app.start_of_study_trig = row.get('Studienbeginn')
             candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag')]
