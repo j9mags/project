@@ -47,7 +47,8 @@ class StaffMixin(LoginRequiredMixin):
 
     def get_staff_context(self):
         self.contact = self.request.user.srecord
-        return dict(contact=self.contact, st_form=UploadCsvForm(), cs_form=UploadCsvForm())
+        form = UploadCsvForm()
+        return dict(contact=self.contact, st_form=form, ap_form=form, cs_form=form, form=form)
 
 
 class SetLanguage(StaffMixin, View):
