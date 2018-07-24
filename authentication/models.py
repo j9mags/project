@@ -127,7 +127,10 @@ class CsvUpload(models.Model):
                     done = True
                     break
                 if 'datum' in k and data[k][str(i)] is not None:
-                    d_.update({k: datetime.fromtimestamp(int(data[k][str(i)]) / 1000).date()})
+                    try:
+                        d_.update({k: datetime.fromtimestamp(int(data[k][str(i)]) / 1000).date()})
+                    except ValueError:
+                        d_.update({k: None})
                 else:
                     d_.update({k: data[k][str(i)]})
             if d_:
