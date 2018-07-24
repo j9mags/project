@@ -282,7 +282,7 @@ class CsvUpload(models.Model):
         appsByLead = {}
 
         for row in data:
-            if not (any(row) and all(row) and row.get('Nachname') is None):
+            if not (any(row) and all(row)):
                 return False
 
             lead = Lead()

@@ -38,7 +38,8 @@ class UploadCsvForm(forms.Form):
 
         if csv is not None:
             try:
-                json_data = pandas.read_excel(csv.temporary_file_path()).to_json()
+                raw_data = pandas.read_excel(csv.temporary_file_path()).dropna(how='all')
+                json_data = raw_data.to_json()
                 data = json.loads(json_data)
 
                 if not CsvUpload.is_valid(data, upload_type):
