@@ -52,12 +52,18 @@ class UgvStudentMixin(LoginRequiredMixin):
         context = {}
         self.account = self.get_queryset()
 
+        account = self.account
         contact = self.account.master_contact
         contract = self.account.active_contract
         invoices = contract.all_invoices if contract is not None else None
         uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
 
-        context['account'] = self.account
+        account.unimailadresse = account.person_email
+        account.geschlecht = account.biological_sex
+        account.staatsangehoerigkeit = account.citizenship
+
+        context['account'] = account
+
         context['master_contact'] = contact
         context['payment_contact'] = self.account.payment_contact
         context['active_contract'] = contract
@@ -326,7 +332,7 @@ class Onboarding(UgvStudentMixin, View):
 
             contact.home_phone = data.get('home_phone')
             contact.mailing_street = data.get('mailing_street')
-            contact.mailing_city = data.get('mailing_city')
+            contact.mailing_citcitizenshipy = data.get('mailing_city')
             contact.mailing_postal_code = data.get('mailing_zip')
             contact.mailing_country = data.get('mailing_country')
 

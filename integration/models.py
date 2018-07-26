@@ -416,6 +416,9 @@ class Account(models.Model, PerishableTokenMixin):
     student_template_id = models.CharField(custom=True, max_length=18, blank=True, null=True)
     applicant_template_id = models.CharField(custom=True, max_length=18, blank=True, null=True)
     applicant_upload_functionality_enabled = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+    citizenship = models.CharField(custom=True, max_length=255, choices=Choices.Nationality, blank=True, null=True)
+    biological_sex = models.CharField(custom=True, max_length=255, verbose_name='Biological sex',  blank=True, null=True,
+                                      db_column='BiologicalSex__pc', choices=Choices.Biological_Sex)
 
     objects = managers.DefaultManager()
     universities = managers.UniversityManager()
