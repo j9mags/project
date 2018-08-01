@@ -91,8 +91,7 @@ class CsvUpload(models.Model):
                                     "Kein OECD Ausweis", "Aktuelle Straße und Hausnummer", "Aktuelle PLZ ",
                                     "Aktuelle Stadt", "Aktuelles Land", "Kommunikationssprache", "Handynummer",
                                     "private E-Mail-Adresse", "Studiengang", "Vertrag", "Studienbeginn",
-                                    "Hochschulstatus", "Bereits Student an dieser Hochschule",
-                                    "Risiko nicht bei CHANCEN eG", "Link zu weiteren Dokumenten"]
+                                    "Hochschulstatus", "Risiko nicht bei CHANCEN eG", "Link zu weiteren Dokumenten"]
 
     @staticmethod
     def is_valid(data, upload_type):
@@ -321,7 +320,6 @@ class CsvUpload(models.Model):
             app = Application()
             app.hochschule_ref = university
             app.studiengang_ref = courses.get(row.get('Studiengang'), None)
-            app.already_student = boolean_answer.get(row.get('Bereits Student an dieser Hochschule'), False)
             app.start_of_study_trig = row.get('Studienbeginn')
             candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag')]
             if candidates:
