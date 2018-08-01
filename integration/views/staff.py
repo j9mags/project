@@ -510,14 +510,14 @@ class FileUploadAction(StaffMixin, View):
                 errors = [_('There seem to be wrong values or incorrectly formatted, please review the data thoroughly.')]
                 try:
                     #bulk-case
-                    if len(e.args) > 1:
+                    if len(e.args[0].get('results')) > 1:
                         for error in e.args[0].get('results'):
                             if error.get('statusCode') != 201:
                                 error_results = error.get('result')
                                 for error_result in error_results:
                                     if error_result.get('errorCode') is not None and error_result.get(
                                             'message') is not None:
-                                        if error_result.get('errorCode') == 'INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST':
+                                        if error_result.get('message') is not None:
                                             errors.append(error_result.get('message'))
                                         # elif error_result.get('errorCode') == 'DUPLICATE_VALUE':
                                         #     message = error_result.get('message')
@@ -531,7 +531,7 @@ class FileUploadAction(StaffMixin, View):
                 except Exception:
                     errors.append(e)
                 rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
-                message = '\n'.join(str(x) for x in errors)
+                message = '\n'.join(str(x) for x in set(errors))
                 messages.add_message(request, messages.INFO, message)
                 return redirect(rc)
         return redirect('integration:dashboard')
@@ -618,7 +618,8 @@ class StudentReview(StaffMixin, DetailView):
         # ugv-mapping is a bit different
         if account.is_ugv_student:
             account.unimailadresse = account.person_email
-            account.geschlecht = account.biological_sex
+            contact = account.get_student_contact()
+            account.geschlecht = contact.biological_sex
             account.staatsangehoerigkeit = account.citizenship
 
         if self.contact.account.pk != account.hochschule_ref.pk:
