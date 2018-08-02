@@ -5,7 +5,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.core import exceptions
-from django.utils.dateparse import parse_date
+import dateutil.parser
+import re
 
 
 from datetime import datetime
@@ -249,7 +250,10 @@ class CsvUpload(models.Model):
             return False
 
         try:
-            Contract.objects.bulk_create(ctr_to_insert)
+            contracts = Contract.objects.filter(account_id__in=[c.account_id for c in Contract.objects.bulk_create(ctr_to_insert)])
+            for c in contracts:
+                c.status = 'Active'
+            contracts.update()
         except Exception as e:
             print(e)
             for account in accounts:
@@ -321,9 +325,27 @@ class CsvUpload(models.Model):
             app.hochschule_ref = university
             app.studiengang_ref = courses.get(row.get('Studiengang'), None)
             app.start_of_study_trig = row.get('Studienbeginn')
-            candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag')]
+            rep = {
+                'Januar': 'January',
+                'Februar': 'February',
+                'März': 'March',
+                'April': 'April',
+                'Mai': 'May',
+                'Juni': 'June',
+                'Juli': 'July',
+                'August': 'August',
+                'September': 'September',
+                'Oktober': 'October',
+                'November': 'November',
+                'Dezember': 'December'
+            }
+
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            start_of_study = dateutil.parser.parse(pattern.sub(lambda m: rep[re.escape(m.group(0))], '1st ' + row.get('Studienbeginn'))).date()
+            candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag') and c.valid_from < start_of_study]
             if candidates:
-                app.contract_ref = candidates[0]
+                app.contract_ref = candidates[len(candidates)-1]
             if app.studiengang_ref is not None and app.contract_ref is None:
                 raise Exception()
 

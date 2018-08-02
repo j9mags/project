@@ -59,7 +59,7 @@ class UgvStudentMixin(LoginRequiredMixin):
         uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
 
         account.unimailadresse = account.person_email
-        account.geschlecht = account.biological_sex
+        account.geschlecht = account.get_student_contact().biological_sex
         account.staatsangehoerigkeit = account.citizenship
 
         context['account'] = account

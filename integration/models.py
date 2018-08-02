@@ -188,7 +188,7 @@ class Choices:
                      ('MatriculationFee', _('Matriculation Fee')), ('Dunning Fee', _('Dunning Fee')),
                      ('Fee Semester abroad', _('Fee Semester abroad')), ('Fee Semester off', _('Fee Semester off'))]
     ContractStatus = [('In Approval Process', _('In Approval Process')), ('Activated', _('Activated')),
-                      ('Draft', _('Draft')), ('Deaktiviert', _('Deactivated'))]
+                      ('Draft', _('Draft')), ('Deaktiviert', _('Deactivated')), ('Active', _('Active'))]
     DiscountType = [('Discount Tuition Fee', _('Discount Tuition Fee')),
                     ('Discount Semester Fee', _('Discount Semester Fee'))]
     LeadStatus = [('Prospect', _('Prospect')), ('Applicant', _('Applicant')), ('Nurturing', _('Nurturing')),
