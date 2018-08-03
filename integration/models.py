@@ -466,7 +466,7 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def is_services_customer(self):
-        return (not self.is_student) and ('CS' == self.customer_type)
+        return (not self.is_student) and ('CS' in self.customer_type)
 
     @property
     def user_email(self):
