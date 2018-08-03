@@ -58,10 +58,6 @@ class UgvStudentMixin(LoginRequiredMixin):
         invoices = contract.all_invoices if contract is not None else None
         uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
 
-        account.unimailadresse = account.person_email
-        account.geschlecht = account.get_student_contact().biological_sex
-        account.staatsangehoerigkeit = account.citizenship
-
         context['account'] = account
 
         context['master_contact'] = contact

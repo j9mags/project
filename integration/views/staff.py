@@ -615,12 +615,6 @@ class StudentReview(StaffMixin, DetailView):
         context.update(super(StudentReview, self).get_context_data(**kwargs))
 
         account = context.get('account')
-        # ugv-mapping is a bit different
-        if account.is_ugv_student:
-            account.unimailadresse = account.person_email
-            contact = account.get_student_contact()
-            account.geschlecht = contact.biological_sex
-            account.staatsangehoerigkeit = account.citizenship
 
         if self.contact.account.pk != account.hochschule_ref.pk:
             raise ObjectDoesNotExist()

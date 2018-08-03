@@ -8,6 +8,8 @@ from django.core import exceptions
 import dateutil.parser
 import re
 
+import traceback
+
 
 from datetime import datetime
 from datetime import timedelta
@@ -223,6 +225,7 @@ class CsvUpload(models.Model):
                 studiengang_ref=course,
                 degree_course_fees_ref=course.active_fees,
                 record_type_id=ctr_id,
+                status='Deaktiviert'
             )
             contracts.update({acc.immatrikulationsnummer: ctr})
 
@@ -250,12 +253,10 @@ class CsvUpload(models.Model):
             return False
 
         try:
-            contracts = Contract.objects.filter(account_id__in=[c.account_id for c in Contract.objects.bulk_create(ctr_to_insert)])
-            for c in contracts:
-                c.status = 'Active'
-            contracts.update()
+            Contract.objects.bulk_create(ctr_to_insert)
         except Exception as e:
-            print(e)
+            print(repr(e), e)
+            traceback.print_exc()
             for account in accounts:
                 account.delete()
             return False
