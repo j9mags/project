@@ -13,7 +13,7 @@
 <a class="mdl-navigation__link" href="{% url 'integration:courses' %}">
     <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">school</i>{% trans 'Courses' %}</a>
 <a class="mdl-navigation__link" href="{% url 'integration:students' %}">
-    <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">group</i>{% trans 'Students' %}</a>
+    <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">group</i>{% if contact.account.is_services_customer %}{% trans 'Sofortzahler' %}{% else %}{% trans 'Students' %}{% endif %}</a>
 {% if contact.account.is_eg_customer %}
 <a class="mdl-navigation__link" href="{% url 'integration:applications' %}">
     <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">content_paste</i>{% trans 'Applications' %}</a>
@@ -60,10 +60,10 @@
   <i class="material-icons">school</i>
 </button -->
 <div class="mdl-tooltip mdl-tooltip--left" data-mdl-for="fab-add-student">
-    {% trans 'Student' %}
+    {% if contact.account.is_services_customer %}{% trans 'Sofortzahler' %}{% else %}{% trans 'Student' %}{% endif %}
 </div>
 <div class="mdl-tooltip mdl-tooltip--left" data-mdl-for="fab-add-students">
-  {% trans 'Students' %}
+    {% if contact.account.is_services_customer %}{% trans 'Sofortzahler' %}{% else %}{% trans 'Students' %}{% endif %}
 </div>
 {% endif %}
 {% if contact.account.is_eg_customer %}
