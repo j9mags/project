@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-04 11:43+0000\n"
-"PO-Revision-Date: 2018-08-03 09:25+0200\n"
+"POT-Creation-Date: 2018-08-05 18:33+0000\n"
+"PO-Revision-Date: 2018-08-05 19:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: authentication/admin.py:44
 msgid "Fill out both fields"
@@ -413,7 +413,7 @@ msgstr ""
 
 #: integration/models.py:194
 msgid "Applicant"
-msgstr ""
+msgstr "Bewerbung eingegangen"
 
 #: integration/models.py:194
 msgid "Nurturing"
@@ -421,15 +421,15 @@ msgstr ""
 
 #: integration/models.py:195
 msgid "Pending"
-msgstr ""
+msgstr "In Bearbeitung"
 
 #: integration/models.py:195
 msgid "Qualifiziert"
-msgstr ""
+msgstr "Finanzierung zugesagt"
 
 #: integration/models.py:195
 msgid "Unqualifiziert"
-msgstr ""
+msgstr "Finanzierung abgesagt"
 
 #: integration/models.py:196
 msgid "Not applied yet"
@@ -445,15 +445,13 @@ msgstr "Bewerbung abgelehnt"
 
 #: integration/models.py:197
 msgid "Accepted applicant"
-msgstr "Bewerber angenommen"
+msgstr "Bewerbung angenommen"
 
 #: integration/models.py:198
 msgid "Already student"
 msgstr "Bereits Studierender"
 
 #: integration/models.py:200
-#, fuzzy
-#| msgid "Semester Off"
 msgid "Semester"
 msgstr "Urlaubssemester"
 
@@ -478,8 +476,6 @@ msgid "Citizenship"
 msgstr ""
 
 #: integration/models.py:244 templates/staff/ugvapplication_review.html:36
-#, fuzzy
-#| msgid "Date of Birth"
 msgid "Date of birth"
 msgstr "Geburtsdatum"
 
@@ -504,8 +500,6 @@ msgid "Start Semester"
 msgstr "Start Semester"
 
 #: integration/models.py:309 templates/staff/ugvapplication_review.html:27
-#, fuzzy
-#| msgid "Start of Studies"
 msgid "Start of Study"
 msgstr "Beginn des Studiums"
 
@@ -657,8 +651,6 @@ msgid "Valid from"
 msgstr "Gültig ab"
 
 #: integration/models.py:737
-#, fuzzy
-#| msgid "Cost per Month>Standard Study Period"
 msgid "Cost per Month > Standard Study Period"
 msgstr "Kosten pro Monat über der Regelstudienzeit"
 
@@ -863,11 +855,11 @@ msgstr ""
 "Es scheint falsche Werte zu geben oder falsch formatiert zu sein, bitte "
 "überprüfen Sie die Daten sorgfältig."
 
-#: integration/views/staff.py:717
+#: integration/views/staff.py:719
 msgid "UGV Application Status successfully updated."
 msgstr ""
 
-#: integration/views/staff.py:743
+#: integration/views/staff.py:745
 msgid ""
 "Students have been successfully updated. It may take a while to see the "
 "results."
@@ -1233,7 +1225,7 @@ msgstr "Studierende"
 
 #: templates/staff/dashboard.html:19
 msgid "Applications"
-msgstr ""
+msgstr "Bewerbungen"
 
 #: templates/staff/dashboard.html:63
 #, fuzzy
@@ -1313,8 +1305,6 @@ msgid "Invoice number"
 msgstr "Rechnungsnummer"
 
 #: templates/staff/dashboard_invoices.html:36
-#, fuzzy
-#| msgid "Invoice Date"
 msgid "Invoice date"
 msgstr "Rechnungsdatum"
 
@@ -1323,8 +1313,6 @@ msgid "Total"
 msgstr ""
 
 #: templates/staff/dashboard_invoices.html:48
-#, fuzzy
-#| msgid "Download template"
 msgid "Download"
 msgstr "Vorlage herunterladen"
 
@@ -1349,8 +1337,6 @@ msgid "University email"
 msgstr "Universitäre E-Mail-Adresse"
 
 #: templates/staff/dashboard_ugvapplications.html:12
-#, fuzzy
-#| msgid "No courses found to match this criteria"
 msgid "No applications found to match this criteria"
 msgstr "Es wurden keine Studiengänge gefunden, die diesen Kriterien entspreche"
 
@@ -1379,32 +1365,28 @@ msgid "University data. Handle with care!"
 msgstr "Universitäts Daten. Bitte mit Vorsicht handeln!"
 
 #: templates/staff/student_register.html:6
-#, fuzzy
-#| msgid "View students"
 msgid "New student"
 msgstr "Studierende ansehen"
 
 #: templates/staff/ugvapplication_review.html:12
-#, fuzzy
-#| msgid "Matriculation data"
 msgid "Application data"
 msgstr "Immatrikulations Daten"
 
 #: templates/staff/ugvapplication_review.html:30
-#, fuzzy
-#| msgid "First name"
 msgid "First Name"
 msgstr "Vorname"
 
 #: templates/staff/ugvapplication_review.html:33
-#, fuzzy
-#| msgid "Last name"
 msgid "Last Name"
 msgstr "Nachname"
 
 #: templates/staff/ugvapplication_review.html:45
 msgid "UGV Status"
 msgstr ""
+
+#: templates/staff/ugvapplication_review.html:49
+msgid "University Status"
+msgstr "Hochschulstatus"
 
 #: templates/staff/upload_review.html:33
 msgid "Carefully review the data before confirming"

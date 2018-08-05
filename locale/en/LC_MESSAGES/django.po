@@ -825,11 +825,11 @@ msgid ""
 "data thoroughly."
 msgstr ""
 
-#: integration/views/staff.py:717
+#: integration/views/staff.py:719
 msgid "UGV Application Status successfully updated."
 msgstr ""
 
-#: integration/views/staff.py:743
+#: integration/views/staff.py:745
 msgid ""
 "Students have been successfully updated. It may take a while to see the "
 "results."
@@ -1332,6 +1332,10 @@ msgstr ""
 
 #: templates/staff/ugvapplication_review.html:45
 msgid "UGV Status"
+msgstr ""
+
+#: templates/staff/ugvapplication_review.html:49
+msgid "University Status"
 msgstr ""
 
 #: templates/staff/upload_review.html:33

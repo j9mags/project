@@ -694,6 +694,8 @@ class UGVApplicationReview(StaffMixin, DetailView):
         context.update(super(UGVApplicationReview, self).get_context_data(**kwargs))
 
         lead = context.get('lead')
+        translated_statuses = dict(Choices.LeadStatus)
+        lead.translated_status = translated_statuses.get(lead.status, lead.status)
         application = lead.application
 
         if application is None:

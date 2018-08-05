@@ -42,11 +42,11 @@
         {% include 'snippets/field-text.html' with label=_('Phone') value=lead.phone %}
       </div>
       <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('UGV Status') value=lead.status %}
+        {% include 'snippets/field-text.html' with label=_('UGV Status') value=lead.translated_status %}
       </div>
       {% if form %}
         <div class="mdl-cell">
-          {% include 'snippets/select.html' with field=form.university_status %}
+          {% include 'snippets/select.html' with label=_('University Status') field=form.university_status %}
         </div>
       {% endif %}
     </div>
