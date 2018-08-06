@@ -1354,7 +1354,7 @@ msgstr "Vertragsstatus"
 
 #: templates/staff/dashboard_ugvapplications.html:46
 msgid "Created"
-msgstr ""
+msgstr "Erstellt"
 
 #: templates/staff/dashboard_ugvers.html:41
 msgid "Contract-Status"

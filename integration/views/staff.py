@@ -392,6 +392,11 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
                          self.contact.account.get_active_courses().get(
                              pk=course).name))
 
+        translated_statuses = dict(Choices.LeadStatus)
+        translated_university_statuses = dict(Choices.UGVStatus)
+        for lead in leads:
+            lead.translated_status = translated_statuses.get(lead.status, lead.status)
+            lead.translated_university_status = translated_university_statuses.get(lead.university_status, lead.university_status)
         context.update(items=leads, filters=filters)
         return context
 

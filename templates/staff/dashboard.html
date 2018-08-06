@@ -23,14 +23,16 @@
 {% endblock %}
 
 {% block content%}
-{% if contact.account.is_services_customer %}
+{% if st_form is not None %}
   {% include 'dialogs/upload-students.html' with form=st_form %}
 {% endif %}
-{% if contact.account.is_eg_customer %}
+{% if ap_form is not None %}
   {% include 'dialogs/upload-applications.html' with form=ap_form %}
 {% endif %}
 {# include 'dialogs/upload-courses.html' with form=cs_form #}
-{% include 'dialogs/bulk-actions.html' with form=bulk_form %}
+{% if bulk_form is not None %}
+  {% include 'dialogs/bulk-actions.html' with form=bulk_form %}
+{% endif %}
 {% endblock %}
 
 {% block fab_options %}
