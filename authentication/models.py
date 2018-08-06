@@ -342,8 +342,8 @@ class CsvUpload(models.Model):
 
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
-            app.start_of_study_trig = pattern.sub(lambda m: rep[re.escape(m.group(0))], '1st ' + row.get('Studienbeginn'));
-            start_of_study = dateutil.parser.parse(app.start_of_study_trig).date()
+            app.start_of_study_trig = pattern.sub(lambda m: rep[re.escape(m.group(0))], row.get('Studienbeginn'));
+            start_of_study = dateutil.parser.parse('1st ' + app.start_of_study_trig).date()
             candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag') and c.valid_from < start_of_study]
             if candidates:
                 app.contract_ref = candidates[len(candidates)-1]
