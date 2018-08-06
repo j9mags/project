@@ -719,7 +719,7 @@ class DegreeCourse(models.Model):
 
     @property
     def templates(self):
-        return self.contract_set.filter(template=True)
+        return self.contract_set.filter(template=True).order_by('valid_from')
 
     def __str__(self):
         return "[{self.university.name}] {self.name}".format(self=self)
