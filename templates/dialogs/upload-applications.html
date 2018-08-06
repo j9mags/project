@@ -13,7 +13,7 @@
         <input type="hidden" name="upload_type" value="ap">
 
         <div class="mdl-dialog__content">
-            {% include 'snippets/input-file.html' with field=form.csv type='file' pref='st_' accept=".xls, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" %}
+            {% include 'snippets/input-file.html' with field=form.csv type='file' pref='app_' accept=".xls, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" %}
             <div id="upload-progress-st" class="mdl-spinner mdl-js-spinner"></div>
         </div>
         <div class="mdl-dialog__actions">
