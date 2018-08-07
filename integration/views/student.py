@@ -349,6 +349,7 @@ class Onboarding(StudentMixin, View):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         step = context.get('step')
+        languages = {'German': 'de', 'English': 'en'}
         if step == 'lang':
             form = context.get('form')
             if not form.is_valid():
@@ -359,8 +360,8 @@ class Onboarding(StudentMixin, View):
                 print(e)
                 form.add_error(None, str(e))
                 return render(request, self.template, context)
-
-            response = redirect(reverse('integration:language'))
+            lang = languages.get(form.cleaned_data.get('kommunikationssprache'), 'en')
+            response = redirect(reverse('integration:setlanguage', kwargs={'language': lang}))
             response['location'] += '?next=' + reverse('integration:onboarding', kwargs={'step': 'review'})
             return response
         elif step == 'review':
