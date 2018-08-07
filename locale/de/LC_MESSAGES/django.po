@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-05 18:33+0000\n"
-"PO-Revision-Date: 2018-08-05 19:39+0200\n"
+"POT-Creation-Date: 2018-08-07 15:28+0000\n"
+"PO-Revision-Date: 2018-08-07 17:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -76,7 +76,6 @@ msgid "Bank account"
 msgstr "Bank Konto"
 
 #: integration/admin.py:49 templates/snippets/student_payment.html:15
-#: templates/students/onboarding_data.html:51
 #: templates/students/payment.html:28
 msgid "Billing address"
 msgstr "Rechnungsadresse"
@@ -514,8 +513,8 @@ msgstr ""
 #: integration/models.py:977 integration/views/staff.py:149
 #: integration/views/staff.py:161 integration/views/staff.py:213
 #: integration/views/staff.py:225 integration/views/staff.py:371
-#: integration/views/staff.py:386 integration/views/staff.py:423
-#: integration/views/staff.py:438 templates/snippets/student_account.html:31
+#: integration/views/staff.py:386 integration/views/staff.py:428
+#: integration/views/staff.py:443 templates/snippets/student_account.html:31
 #: templates/snippets/student_invoices.html:8
 #: templates/staff/dashboard_invoices.html:39
 #: templates/staff/dashboard_students.html:41
@@ -816,7 +815,7 @@ msgstr "Rechnungsdatum"
 msgid "Invoice"
 msgstr "Rechnung"
 
-#: integration/models.py:982 templates/staff/dashboard.html:21
+#: integration/models.py:982 templates/staff/dashboard.html:26
 #: templates/staff/dashboard_home.html:74 templates/students/dashboard.html:20
 msgid "Invoices"
 msgstr "Rechnungen"
@@ -842,12 +841,12 @@ msgstr "Semesterbeitrag erfolgreich aktualisiert."
 msgid "University-Status"
 msgstr "Hochschule"
 
-#: integration/views/staff.py:480
+#: integration/views/staff.py:485
 msgid "There seem to be missing values, please review the data thoroughly."
 msgstr ""
 "Es scheinen fehlende Werte zu sein, bitte überprüfen Sie die Daten gründlich."
 
-#: integration/views/staff.py:510
+#: integration/views/staff.py:515
 msgid ""
 "There seem to be wrong values or incorrectly formatted, please review the "
 "data thoroughly."
@@ -855,11 +854,11 @@ msgstr ""
 "Es scheint falsche Werte zu geben oder falsch formatiert zu sein, bitte "
 "überprüfen Sie die Daten sorgfältig."
 
-#: integration/views/staff.py:719
+#: integration/views/staff.py:724
 msgid "UGV Application Status successfully updated."
 msgstr ""
 
-#: integration/views/staff.py:745
+#: integration/views/staff.py:750
 msgid ""
 "Students have been successfully updated. It may take a while to see the "
 "results."
@@ -1206,36 +1205,35 @@ msgstr "UGV Vertragskonditionen"
 msgid "Semester fee"
 msgstr "Semesterbeitrag"
 
-#: templates/staff/dashboard.html:14 templates/staff/dashboard.html:78
+#: templates/staff/dashboard.html:14 templates/staff/dashboard.html:86
 #: templates/staff/dashboard_home.html:13
 msgid "Courses"
 msgstr "Studiengänge"
 
-#: templates/staff/dashboard.html:16 templates/staff/dashboard.html:63
-#: templates/staff/dashboard.html:66 templates/staff/dashboard_home.html:29
-#, fuzzy
-#| msgid "Number of Sofortzahler"
+#: templates/staff/dashboard.html:17 templates/staff/dashboard.html:71
+#: templates/staff/dashboard.html:74 templates/staff/dashboard_home.html:29
 msgid "Sofortzahler"
-msgstr "Anzahl der Sofortzahler"
+msgstr "Sofortzahler"
 
-#: templates/staff/dashboard.html:16 templates/staff/dashboard.html:66
-#: templates/staff/dashboard_home.html:29
+#: templates/staff/dashboard.html:22
+msgid "UGV Students"
+msgstr "UGV Studierende"
+
+#: templates/staff/dashboard.html:24 templates/staff/dashboard_home.html:60
+msgid "UGV Applications"
+msgstr "UGV Bewerbungen"
+
+#: templates/staff/dashboard.html:71
+msgid "Student"
+msgstr "Student"
+
+#: templates/staff/dashboard.html:74 templates/staff/dashboard_home.html:29
 msgid "Students"
 msgstr "Studierende"
 
-#: templates/staff/dashboard.html:19
-msgid "Applications"
-msgstr "Bewerbungen"
-
-#: templates/staff/dashboard.html:63
-#, fuzzy
-#| msgid "Students"
-msgid "Student"
-msgstr "Studierende"
-
-#: templates/staff/dashboard.html:74
+#: templates/staff/dashboard.html:82
 msgid "UGV Applicants"
-msgstr "UGV Bewerber hinzufügen"
+msgstr "UGV Bewerbungen"
 
 #: templates/staff/dashboard_courses.html:9
 #: templates/staff/dashboard_invoices.html:11
@@ -1275,10 +1273,6 @@ msgstr "UGV Studierende"
 #: templates/staff/dashboard_home.html:53
 msgid "View UGVers"
 msgstr "UGV Studierende ansehen"
-
-#: templates/staff/dashboard_home.html:60
-msgid "UGV Applications"
-msgstr "UGV Bewerbungen"
 
 #: templates/staff/dashboard_home.html:67
 msgid "View applications"
@@ -1447,10 +1441,6 @@ msgstr ""
 msgid "Someone else is paying for you"
 msgstr "Jemand anderes bezahlt für dich"
 
-#: templates/students/onboarding_data.html:43
-msgid "Billing data"
-msgstr "Rechnungsdaten"
-
 #: templates/students/onboarding_review.html:31
 msgid "University email address"
 msgstr "Universitäre E-Mail-Adresse"
@@ -1475,6 +1465,12 @@ msgid ""
 "There are open payments on this Mandate. Only after all the open payments "
 "have been processed will you be able to revoke the mandate."
 msgstr ""
+
+#~ msgid "Applications"
+#~ msgstr "Bewerbungen"
+
+#~ msgid "Billing data"
+#~ msgstr "Rechnungsdaten"
 
 #~ msgid "Starting Month Summer Semester"
 #~ msgstr "Startmonat Sommersemester"

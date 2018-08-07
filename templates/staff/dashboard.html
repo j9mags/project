@@ -12,14 +12,20 @@
 {% block navigation %}
 <a class="mdl-navigation__link" href="{% url 'integration:courses' %}">
     <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">school</i>{% trans 'Courses' %}</a>
+{% if contact.account.is_services_customer %}
 <a class="mdl-navigation__link" href="{% url 'integration:students' %}">
-    <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">group</i>{% if contact.account.is_services_customer %}{% trans 'Sofortzahler' %}{% else %}{% trans 'Students' %}{% endif %}</a>
+    <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">group</i>{% trans 'Sofortzahler' %}</a>
+{% endif %}
+
 {% if contact.account.is_eg_customer %}
+<a class="mdl-navigation__link" href="{% url 'integration:ugvers' %}">
+    <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">group</i>{% trans 'UGV Students' %}</a>
 <a class="mdl-navigation__link" href="{% url 'integration:applications' %}">
-    <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">content_paste</i>{% trans 'Applications' %}</a>
+    <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">content_paste</i>{% trans 'UGV Applications' %}</a>
 <a class="mdl-navigation__link" href="{% url 'integration:invoices' %}">
     <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">receipt</i>{% trans 'Invoices' %}</a>
 {% endif %}
+
 {% endblock %}
 
 {% block content%}
