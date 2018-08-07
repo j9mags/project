@@ -82,7 +82,7 @@ class DashboardHome(StaffMixin, TemplateView):
 
         if self.contact.account.is_eg_customer:
             applications = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
-            ugvers = Account.students.filter(hochschule_ref=self.contact.account,
+            ugvers = Account.ugv_students.filter(hochschule_ref=self.contact.account,
                                              record_type__developer_name='UGVStudents')
             invoices = self.contact.account.get_all_invoices()
             context.update(applications=applications, ugvers=ugvers, invoices=invoices)
@@ -198,7 +198,7 @@ class DashboardUGVers(StaffMixin, TemplateView):
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
-        students = Account.students.filter(hochschule_ref=self.contact.account,
+        students = Account.ugv_students.filter(hochschule_ref=self.contact.account,
                                            record_type__developer_name='UGVStudents').order_by(o)
         if q:
             context.update(q=q)
