@@ -203,7 +203,10 @@ class DashboardUGVers(StaffMixin, TemplateView):
         if q:
             context.update(q=q)
             students = students.filter(
-                Q(name__icontains=q) | Q(immatrikulationsnummer=q) | Q(unimailadresse__icontains=q))
+                Q(name__icontains=q) |
+                Q(immatrikulationsnummer=q) |
+                Q(person_email__icontains=q)
+            )
 
         filters = []
         if not students:
@@ -346,7 +349,10 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
         leads = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account).order_by('-pk')
         if q:
             context.update(q=q)
-            leads = leads.filter(Q(name__icontains=q) | Q(email__icontains=q))
+            leads = leads.filter(
+                            Q(name__icontains=q) |
+                            Q(email__icontains=q)
+            )
 
         filters = []
         if leads:
