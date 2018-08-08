@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-07 15:28+0000\n"
-"PO-Revision-Date: 2018-08-07 17:31+0200\n"
+"PO-Revision-Date: 2018-08-08 15:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -906,9 +906,6 @@ msgid "Grant mandate"
 msgstr "Mandat vergeben"
 
 #: integration/views/ugv_student.py:239
-#, fuzzy
-#| msgid ""
-#| "We require authorisation to debit a bank account for your tuition fees."
 msgid ""
 "We require authorisation to debit a bank account for your membership "
 "share(s)."
@@ -1446,9 +1443,6 @@ msgid "University email address"
 msgstr "Universitäre E-Mail-Adresse"
 
 #: templates/students/onboarding_sepa.html:7
-#, fuzzy
-#| msgid ""
-#| "Authorize us to collect the study fees by direct debit from your account."
 msgid ""
 "Please authorize us to collect the due amount for your membership share(s) "
 "by direct debit from your account."
