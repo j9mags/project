@@ -1,23 +1,26 @@
-from django.utils.translation import ugettext as _
-from django.utils.translation import get_language, activate, check_for_language
-from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.conf import settings
-from django.core.exceptions import *
-from django.core.paginator import Paginator, EmptyPage
-from django.views.generic.base import View
-from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.core.exceptions import *
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.utils.translation import get_language, activate, check_for_language
+from django.utils.translation import ugettext as _
+from django.views.generic.base import TemplateView
+from django.views.generic.base import View
 
+from integration.views.student import ContactDetails
 from ..forms import *
-from ..models import Attachment, Contact, RecordType
+from ..models import Contact, RecordType, Attachment
+
+import base64
 
 _logger = logging.getLogger(__name__)
 
 
-class StudentMixin(LoginRequiredMixin):
+class UgvStudentMixin(LoginRequiredMixin):
     login_url = '/authentication/login'
     default_lang = 'en'
 
@@ -25,10 +28,10 @@ class StudentMixin(LoginRequiredMixin):
         return self.request.user.srecord
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and not request.user.is_student:
+        if request.user.is_authenticated and not request.user.is_ugv_student:
             raise PermissionDenied()
 
-        rc = super(StudentMixin, self).dispatch(request, *args, **kwargs)
+        rc = super(UgvStudentMixin, self).dispatch(request, *args, **kwargs)
         if not 200 <= rc.status_code < 300:
             return rc
 
@@ -45,8 +48,39 @@ class StudentMixin(LoginRequiredMixin):
 
         return rc
 
+    def get_student_context(self):
+        context = {}
+        self.account = self.get_queryset()
 
-class SetLanguage(StudentMixin, View):
+        account = self.account
+        contact = self.account.master_contact
+        contract = self.account.active_contract
+        invoices = contract.all_invoices if contract is not None else None
+        uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
+
+        context['account'] = account
+
+        context['master_contact'] = contact
+        context['payment_contact'] = self.account.payment_contact
+        context['active_contract'] = contract
+        context['ignore_drawer'] = True
+
+        p = int(self.request.GET.get('p', '1'))
+        s = int(self.request.GET.get('s', '10'))
+
+        if invoices:
+            paginator = Paginator(invoices, s)
+            try:
+                invoices = paginator.page(p)
+            except EmptyPage:
+                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
+
+        context['invoices'] = invoices
+        context['uploaded_files'] = uploaded_files
+        return context
+
+
+class SetLanguage(UgvStudentMixin, View):
     def get(self, request, *args, **kwargs):
         next = request.GET.get('next', '/')
         rc = redirect(next)
@@ -68,47 +102,19 @@ class SetLanguage(StudentMixin, View):
         return rc
 
 
-class Dashboard(StudentMixin, TemplateView):
+class Dashboard(UgvStudentMixin, TemplateView):
     template_name = 'students/dashboard.html'
     title = 'Student dashboard'
 
     def get_context_data(self, **kwargs):
-        context = super(Dashboard, self).get_context_data(**kwargs)
-        self.account = self.get_queryset()
-
-        contact = self.account.master_contact
-        contract = self.account.active_contract
-        invoices = contract.all_invoices if contract is not None else None
-
-        context['account'] = self.account
-        context['master_contact'] = contact
-        context['payment_contact'] = self.account.payment_contact
-        context['active_contract'] = contract
-        context['ignore_drawer'] = True
-
-        p = int(self.request.GET.get('p', '1'))
-        s = int(self.request.GET.get('s', '10'))
-
-        if invoices:
-            paginator = Paginator(invoices, s)
-            try:
-                invoices = paginator.page(p)
-            except EmptyPage:
-                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
-
-        context['invoices'] = invoices
+        context = self.get_student_context()
+        context.update(super(Dashboard, self).get_context_data(**kwargs))
         return context
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if not self.account.review_completed:
             step = 'sepa'
-            if not self.account.kommunikationssprache:
-                step = 'lang'
-            elif not self.account.student_approved:
-                step = 'review'
-            elif not self.account.geburtsort:
-                step = 'data'
             return redirect('integration:onboarding', step=step)
 
         return super(Dashboard, self).get(request, *args, **kwargs)
@@ -124,7 +130,7 @@ class Dashboard(StudentMixin, TemplateView):
         return render(request, self.template_name, context=context)
 
 
-class ContactDetails(StudentMixin, TemplateView):
+class ContactDetails(UgvStudentMixin, TemplateView):
     model = Contact
     template_name = 'students/contact.html'
 
@@ -167,7 +173,7 @@ class ContactDetails(StudentMixin, TemplateView):
         return render(request, self.template_name, context)
 
 
-class PaymentDetails(StudentMixin, TemplateView):
+class PaymentDetails(UgvStudentMixin, TemplateView):
     model = Contact
     template_name = 'students/payment.html'
 
@@ -212,8 +218,8 @@ class PaymentDetails(StudentMixin, TemplateView):
         return render(request, self.template_name, context)
 
 
-class Onboarding(StudentMixin, View):
-    steps = ['lang', 'review', 'data', 'sepa']
+class Onboarding(UgvStudentMixin, View):
+    steps = ['sepa']
     template = 'students/onboarding.html'
 
     def get_context_data(self, **kwargs):
@@ -223,110 +229,26 @@ class Onboarding(StudentMixin, View):
 
         self.account = self.get_queryset()
 
-        if not self.account.kommunikationssprache:
-            step = 'lang'
-        elif not self.account.student_approved:
-            if step not in self.steps[:1]:
-                step = 'review'
-        elif not self.account.geburtsort:
-            if step not in self.steps[:2]:
-                step = 'data'
+        step = 'sepa'
 
         context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.master_contact,
                    'sf_contract': self.account.active_contract, 'ignore_drawer': True,
                    'stepper': (
                        {
-                           'title': 'Willkommen! | Welcome! ',
-                           'caption': 'Bitte wähle deine bevorzugte Sprache. | Please select your preferred language.',
-                           'template': 'students/onboarding_lang.html',
-                           'action': reverse('integration:onboarding', kwargs={'step': 'lang'}),
-                           'submit': 'Continue | Fortsetzen',
-                       },
-                       {
-                           'title': _('Data Review'),
-                           'caption': _(
-                               'Your university sent us important data for your profile. Please check it carefully. '
-                               'Should you find any discrepancies, please contact your university to correct this.'),
-                           'template': 'students/onboarding_review.html',
-                           'action': reverse('integration:onboarding', kwargs={'step': 'review'}),
-                           'back': 'lang',
-                           'submit': _('Continue'),
-                       },
-                       {
-                           'title': _('Data input'),
-                           'caption': _('Please complete the missing information.'),
-                           'template': 'students/onboarding_data.html',
-                           'action': reverse('integration:onboarding', kwargs={'step': 'data'}),
-                           'back': 'review',
-                           'submit': _('Continue'),
-                       },
-                       {
                            'title': _('SEPA Mandate'),
-                           'caption': _('We require authorisation to debit a bank account for your tuition fees.'),
+                           'caption': _('We require authorisation to debit a bank account for your membership share(s).'),
                            'template': 'students/onboarding_sepa.html',
                            'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
-                           'back': 'data',
                            'submit': _('Grant mandate'),
-                           'skip_submit': True
+                           'skip_submit': True,
+                           'is_active': True
                        },
                    )}
 
         return self.update_context_for(step, context)
 
-    def _get_lang_context(self, context):
-        if self.request.POST:
-            form = LanguageSelectForm(self.request.POST, instance=self.account)
-        else:
-            form = LanguageSelectForm(instance=self.account)
-
-        context.update(form=form)
-        context['stepper'][0].update(is_active=True)
-        return context
-
-    def _get_review_context(self, context):
-        context.update(form=OnboardingReviewForm(initial={'approved': self.account.student_approved}))
-        context['stepper'][1].update(is_active=True)
-        return context
-
-    def _get_data_context(self, context):
-        account = context.get('sf_account')
-        contact = context.get('sf_contact')
-        contract = context.get('sf_contract')
-
-        form = StudentOnboardingForm(initial={
-            'first_name': contact.first_name,
-            'last_name': contact.last_name,
-            # 'salutation': contact.salutation,
-
-            'private_email': contact.email,
-            'mobile_phone': account.phone if account.is_ugv else contact.mobile_phone,
-            'home_phone': contact.home_phone,
-
-            'mailing_street': contact.mailing_street,
-            'mailing_city': contact.mailing_city,
-            'mailing_zip': contact.mailing_postal_code,
-            'mailing_country': contact.mailing_country,
-
-            'gender': account.geschlecht,
-            'language': account.kommunikationssprache,
-            'nationality': account.staatsangehoerigkeit,
-            'birth_city': account.geburtsort,
-            'birth_country': account.geburtsland,
-
-            'billing_street': account.billing_street,
-            'billing_city': account.billing_city,
-            'billing_zip': account.billing_postal_code,
-            'billing_country': account.billing_country,
-
-            'billing_option': contract.payment_interval,
-        })
-
-        context.update(form=form)
-        context['stepper'][2].update(is_active=True)
-        return context
-
     def _get_sepa_context(self, context):
-        context['stepper'][3].update(is_active=True)
+        context['stepper'][0].update(is_active=True)
         return context
 
     def update_context_for(self, step, context):
@@ -349,7 +271,6 @@ class Onboarding(StudentMixin, View):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         step = context.get('step')
-        languages = {'German': 'de', 'English': 'en'}
         if step == 'lang':
             form = context.get('form')
             if not form.is_valid():
@@ -360,8 +281,8 @@ class Onboarding(StudentMixin, View):
                 print(e)
                 form.add_error(None, str(e))
                 return render(request, self.template, context)
-            lang = languages.get(form.cleaned_data.get('kommunikationssprache'), 'en')
-            response = redirect(reverse('integration:setlanguage', kwargs={'language': lang}))
+
+            response = redirect(reverse('integration:language'))
             response['location'] += '?next=' + reverse('integration:onboarding', kwargs={'step': 'review'})
             return response
         elif step == 'review':
@@ -407,7 +328,7 @@ class Onboarding(StudentMixin, View):
 
             contact.home_phone = data.get('home_phone')
             contact.mailing_street = data.get('mailing_street')
-            contact.mailing_city = data.get('mailing_city')
+            contact.mailing_citcitizenshipy = data.get('mailing_city')
             contact.mailing_postal_code = data.get('mailing_zip')
             contact.mailing_country = data.get('mailing_country')
 
@@ -435,3 +356,31 @@ class Onboarding(StudentMixin, View):
             return redirect('integration:onboarding', step='sepa')
         elif step == 'sepa':
             return redirect(self.account.get_student_contact().sepamandate_url_auto)
+
+
+class UploadFile(UgvStudentMixin, View):
+    template_name = 'students/dashboard.html'
+
+    def get(self, request, *args, **kwargs):
+        return redirect('integration:dashboard')
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_student_context()
+        form = UploadForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            file = form.cleaned_data.get('file')
+            if file is not None:
+
+                with open(file.temporary_file_path(), "rb") as f:
+                    body = base64.b64encode(f.read())
+
+                attachment = Attachment(name=file.name, parent_id=self.account.pk, body=body.decode("utf-8"))
+                attachment.save()
+                return redirect('integration:dashboard')
+        context.update(
+            form=form,
+            message=_('Upload failed')
+        )
+        return render(request, self.template_name, context)
+

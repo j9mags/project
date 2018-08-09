@@ -1,24 +1,26 @@
-import pandas
-from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import get_language, activate, check_for_language
-from django.utils.translation import LANGUAGE_SESSION_KEY
-from django.conf import settings
-from django.core.exceptions import *
-from django.views.generic import DetailView
-from django.views.generic.base import View
-from django.views.generic.base import TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
-from django.db.models import Q
-from django.shortcuts import render, redirect
-
-from ..models import DegreeCourse, Contract, Account, RecordType, Lead, Application
-from ..forms import *
-
-from django.core.paginator import Paginator, EmptyPage
-
 from uuid import uuid4
+
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import *
+from django.core.paginator import Paginator, EmptyPage
+from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.utils.translation import get_language, activate, check_for_language
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import DetailView
+from django.views.generic.base import TemplateView
+from django.views.generic.base import View
+
+import re
+
+from django.contrib import messages
+
+from ..forms import *
+from ..models import DegreeCourse, Contract, RecordType
 
 
 class StaffMixin(LoginRequiredMixin):
@@ -26,12 +28,12 @@ class StaffMixin(LoginRequiredMixin):
     login_url = '/authentication/login/'
 
     def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and not request.user.is_unistaff:
+            raise PermissionDenied()
+
         rc = super(StaffMixin, self).dispatch(request, *args, **kwargs)
         if not 200 <= rc.status_code < 300:
             return rc
-
-        if not request.user.is_unistaff:
-            raise PermissionDenied()
 
         lang = request.session.get(LANGUAGE_SESSION_KEY)
 
@@ -45,7 +47,8 @@ class StaffMixin(LoginRequiredMixin):
 
     def get_staff_context(self):
         self.contact = self.request.user.srecord
-        return dict(contact=self.contact, st_form=UploadForm(), cs_form=UploadForm())
+        form = UploadCsvForm()
+        return dict(contact=self.contact, st_form=form, ap_form=form, cs_form=form, form=form)
 
 
 class SetLanguage(StaffMixin, View):
@@ -79,7 +82,7 @@ class DashboardHome(StaffMixin, TemplateView):
 
         if self.contact.account.is_eg_customer:
             applications = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
-            ugvers = Account.students.filter(hochschule_ref=self.contact.account,
+            ugvers = Account.ugv_students.filter(hochschule_ref=self.contact.account,
                                              record_type__developer_name='UGVStudents')
             invoices = self.contact.account.get_all_invoices()
             context.update(applications=applications, ugvers=ugvers, invoices=invoices)
@@ -89,7 +92,7 @@ class DashboardHome(StaffMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        form = UploadForm(request.POST, request.FILES)
+        form = UploadCsvForm(request.POST, request.FILES)
 
         if form.is_valid():
             json_data = form.cleaned_data.get('raw_data')
@@ -97,6 +100,7 @@ class DashboardHome(StaffMixin, TemplateView):
             for key in d.keys():
                 d[key].pop('0')
                 d[key].pop('1')
+                d[key].pop('2')
             upd = request.user.csvupload_set.create(
                 upload_type=form.cleaned_data.get('upload_type'),
                 uuid=str(uuid4()),
@@ -194,12 +198,15 @@ class DashboardUGVers(StaffMixin, TemplateView):
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
-        students = Account.students.filter(hochschule_ref=self.contact.account,
+        students = Account.ugv_students.filter(hochschule_ref=self.contact.account,
                                            record_type__developer_name='UGVStudents').order_by(o)
         if q:
             context.update(q=q)
             students = students.filter(
-                Q(name__icontains=q) | Q(immatrikulationsnummer=q) | Q(unimailadresse__icontains=q))
+                Q(name__icontains=q) |
+                Q(immatrikulationsnummer=q) |
+                Q(person_email__icontains=q)
+            )
 
         filters = []
         if not students:
@@ -251,12 +258,11 @@ class DashboardCourses(StaffMixin, TemplateView):
         context.update(can_search=True)
 
         p = int(self.request.GET.get('p', '1'))
-        o = self.request.GET.get('o', '-start_of_studies')
         s = int(self.request.GET.get('s', '10'))
 
         q = self.request.GET.get('q')
 
-        courses = DegreeCourse.objects.filter(university=self.contact.account).order_by(o)
+        courses = DegreeCourse.objects.filter(university=self.contact.account).order_by('created_date')
         if q:
             context.update(q=q)
             courses = courses.filter(Q(name_studiengang_auto__icontains=q))
@@ -328,15 +334,25 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
             raise PermissionDenied()
 
         p = int(self.request.GET.get('p', '1'))
-        o = self.request.GET.get('o', 'pk')
+        o = self.request.GET.get('o')
         s = int(self.request.GET.get('s', '10'))
         q = self.request.GET.get('q')
 
+        university_status = self.request.GET.get('university_status')
         status = self.request.GET.get('status')
         course = self.request.GET.get('course')
 
+        if o:
+            context['sort_' + o] = '-' if o[0] != '-' else ''
+
         # apps = Application.objects.filter(hochschule_ref=self.contact.account, lead_ref__isnull=False)
-        leads = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
+        leads = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account).order_by('-pk')
+        if q:
+            context.update(q=q)
+            leads = leads.filter(
+                            Q(name__icontains=q) |
+                            Q(email__icontains=q)
+            )
 
         filters = []
         if leads:
@@ -351,14 +367,18 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
                          ))
             # lead_ids = [app.lead_ref.pk for app in apps]
             # items = Lead.ugv_students.filter(pk__in=lead_ids).order_by(o)  #
+            if university_status:
+                university_status = "" if university_status == "None" else university_status
+                leads = leads.filter(university_status=university_status)
+                filters.append((_('University-Status'), university_status, 'university_status'))
             if status:
                 status = "" if status == "None" else status
-                leads = leads.filter(university_status=status)
+                leads = leads.filter(status=status)
                 filters.append((_('Status'), status, 'status'))
 
-            if q:
-                context.update(q=q)
-                leads = leads.filter(Q(name__icontains=q) | Q(email__icontains=q))
+            if o:
+                leads = sorted(leads, key=lambda x: (getattr(x, o, 'pk') is None, getattr(x, o, 'pk')),
+                               reverse=True if o[0] == '-' else False)
 
             paginator = Paginator(leads, s)
             try:
@@ -378,6 +398,11 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
                          self.contact.account.get_active_courses().get(
                              pk=course).name))
 
+        translated_statuses = dict(Choices.LeadStatus)
+        translated_university_statuses = dict(Choices.UGVStatus)
+        for lead in leads:
+            lead.translated_status = translated_statuses.get(lead.status, lead.status)
+            lead.translated_university_status = translated_university_statuses.get(lead.university_status, lead.university_status)
         context.update(items=leads, filters=filters)
         return context
 
@@ -463,8 +488,7 @@ class FileUpload(StaffMixin, TemplateView):
 
         err = self.request.GET.get('err')
         err_msg = {
-            '1': _('There seem to be missing values, please review the data thoroughly.'),
-            '2': _('There seem to be wrong values or incorrectly formatted, please review the data thoroughly.')
+            '1': _('There seem to be missing values, please review the data thoroughly.')
         }.get(err)
 
         if err_msg:
@@ -494,8 +518,33 @@ class FileUploadAction(StaffMixin, View):
                 upload.process()
             except Exception as e:
                 print(e)
+                errors = [_('There seem to be wrong values or incorrectly formatted, please review the data thoroughly.')]
+                try:
+                    #bulk-case
+                    if len(e.args[0].get('results')) > 1:
+                        for error in e.args[0].get('results'):
+                            if error.get('statusCode') != 201:
+                                error_results = error.get('result')
+                                for error_result in error_results:
+                                    if error_result.get('errorCode') is not None and error_result.get(
+                                            'message') is not None:
+                                        if error_result.get('message') is not None:
+                                            errors.append(error_result.get('message'))
+                                        # elif error_result.get('errorCode') == 'DUPLICATE_VALUE':
+                                        #     message = error_result.get('message')
+                                        #     matches = regex.match(r'^.*\s([a-zA-Z0-9]{18}|[a-zA-Z0-9]{15})$', message)
+                                        #     if matches:
+                                        #         duplicate_ids.append(matches.group(1))
+                                    else:
+                                        errors.append(error)
+                    else:
+                        errors.append(e.data.get('message'))
+                except Exception:
+                    errors.append(e)
                 rc = reverse('integration:upload_review', kwargs={'uuid': uuid})
-                return redirect(rc+'?err=2')
+                message = '\n'.join(str(x) for x in set(errors))
+                messages.add_message(request, messages.INFO, message)
+                return redirect(rc)
         return redirect('integration:dashboard')
 
 
@@ -577,6 +626,7 @@ class StudentReview(StaffMixin, DetailView):
         context.update(super(StudentReview, self).get_context_data(**kwargs))
 
         account = context.get('account')
+
         if self.contact.account.pk != account.hochschule_ref.pk:
             raise ObjectDoesNotExist()
 
@@ -655,6 +705,8 @@ class UGVApplicationReview(StaffMixin, DetailView):
         context.update(super(UGVApplicationReview, self).get_context_data(**kwargs))
 
         lead = context.get('lead')
+        translated_statuses = dict(Choices.LeadStatus)
+        lead.translated_status = translated_statuses.get(lead.status, lead.status)
         application = lead.application
 
         if application is None:
@@ -695,13 +747,14 @@ class BulkActions(StaffMixin, View):
             if new_status != '--':
                 students.update(status=new_status)
 
-            course_pk = form.cleaned_data.get('course')
-            if course_pk != '--':
-                contracts_pk = [s.active_contract.pk for s in students if s.active_contract is not None]
-                contracts = Contract.objects.filter(pk__in=contracts_pk)
-                course = contact.account.degreecourse_set.get(pk=course_pk)
-                contracts.update(studiengang_ref=course)
-
-        return HttpResponseRedirect('/')
+        referer = request.META.get('HTTP_REFERER')
+        if referer is not None:
+            referer = re.sub('^https?:\/\/', '', referer).split('/')
+            referer = referer[1]
+        else:
+            referer = 'students'
+        message = _("Students have been successfully updated. It may take a while to see the results.")
+        messages.add_message(request, messages.INFO, message)
+        return redirect('integration:' + referer)
 
 

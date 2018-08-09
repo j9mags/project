@@ -3,7 +3,7 @@
 <ul class="mdl-stepper mdl-stepper--linear mdl-stepper--feedback" id="{{ id }}">
     {% for step in stepper %}
     <li class="mdl-step {% if step.is_active %}is-active{% endif %}">
-        <span class="mdl-step__label">
+        <span class="mdl-step__label stepper-length-{{ stepper|length }}">
             <span class="mdl-step__title">
                 <span class="mdl-step__title-text mdl-typography--title">{{ step.title }}</span>
                 {% if step.is_active %}

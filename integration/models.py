@@ -5,7 +5,9 @@ from datetime import date, timedelta
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
-from django.db import connections
+from django.db import connections, models as django_models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from . import managers
 
@@ -92,6 +94,7 @@ class Choices:
                ('Vietnam', 'Vietnam'), ('Weißrussland', 'Weißrussland'), ('Westsahara', 'Westsahara'),
                ('Zentral\xadafrikanische Republik', 'Zentral\xadafrikanische Republik'), ('Zypern', 'Zypern')]
     Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('non-binary'))]
+    Biological_Sex = [('Female', _('female')), ('Male', _('male')), ('Third gender', _('non-binary'))]
     Nationality = [('afghanisch', 'afghanisch'), ('ägyptisch', 'ägyptisch'), ('albanisch', 'albanisch'),
                    ('algerisch', 'algerisch'), ('andorranisch', 'andorranisch'), ('angolanisch', 'angolanisch'),
                    ('antiguanisch', 'antiguanisch'), ('äquatorialguineisch', 'äquatorialguineisch'),
@@ -166,7 +169,7 @@ class Choices:
                    ('amerikanisch', 'amerikanisch'), ('britisch', 'britisch'), ('vietnamesisch', 'vietnamesisch'),
                    ('weißrussisch', 'weißrussisch'), ('zentralafrikanisch', 'zentralafrikanisch'),
                    ('zyprisch', 'zyprisch')]
-    Language = [('German', 'deutsch'), ('English', 'english')]
+    Language = [('German', _('Deutsch')), ('English', _('English'))]
     Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
     Month = [('Januar', _('January')), ('Februar', _('February')), ('März', _('March')), ('April', _('April')),
              ('Mai', _('May')), ('Juni', _('June')), ('Juli', _('July')), ('August', _('August')),
@@ -185,7 +188,7 @@ class Choices:
                      ('MatriculationFee', _('Matriculation Fee')), ('Dunning Fee', _('Dunning Fee')),
                      ('Fee Semester abroad', _('Fee Semester abroad')), ('Fee Semester off', _('Fee Semester off'))]
     ContractStatus = [('In Approval Process', _('In Approval Process')), ('Activated', _('Activated')),
-                      ('Draft', _('Draft')), ('Deaktiviert', _('Deactivated'))]
+                      ('Draft', _('Draft')), ('Deaktiviert', _('Deactivated')), ('Active', _('Active'))]
     DiscountType = [('Discount Tuition Fee', _('Discount Tuition Fee')),
                     ('Discount Semester Fee', _('Discount Semester Fee'))]
     LeadStatus = [('Prospect', _('Prospect')), ('Applicant', _('Applicant')), ('Nurturing', _('Nurturing')),
@@ -221,6 +224,7 @@ class RecordType(models.Model):
 
 class Lead(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
     master_record = models.ForeignKey('self', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
     last_name = models.CharField(max_length=80)
     first_name = models.CharField(max_length=40, blank=True, null=True)
@@ -243,7 +247,7 @@ class Lead(models.Model):
     no_oecdpassport = models.BooleanField(custom=True, db_column='NoOECDPassport__c',
                                           verbose_name=_('No OECD Passport'), default=models.DEFAULTED_ON_CREATE)
     kommunicationssprache = models.CharField(custom=True, max_length=255, verbose_name=_('Communication Language'),
-                                             choices=[('English', 'English'), ('German', 'Deutsch')], blank=True,
+                                             choices=Choices.Language, blank=True,
                                              null=True)
     start_semester = models.DateField(custom=True, verbose_name=_('Start semester'), blank=True, null=True)
     university_status = models.CharField(custom=True, max_length=255, choices=Choices.UGVStatus, blank=True,
@@ -262,7 +266,21 @@ class Lead(models.Model):
                                           null=True)
 
     active_application = models.ForeignKey('Application', models.DO_NOTHING, custom=True, blank=True, null=True)
-    uploaded_via_portal_trig = models.BooleanField(custom=True, verbose_name='Uploaded via Portal', default=models.DEFAULTED_ON_CREATE)
+    uploaded_via_portal_trig = models.BooleanField(custom=True, verbose_name='Uploaded via Portal',
+                                                   default=models.DEFAULTED_ON_CREATE)
+    biological_sex = models.CharField(custom=True, max_length=255, verbose_name='Biological sex',
+                                      choices=Choices.Biological_Sex, blank=True, null=True)
+    postal_street = models.CharField(custom=True, max_length=255, blank=True, null=True)
+    postal_code_0 = models.CharField(db_column='PostalCode__c', custom=True, max_length=20, blank=True,
+                                     null=True)  # Field renamed because of name conflict.
+    postal_city = models.CharField(custom=True, max_length=255, blank=True, null=True)
+    postal_country = models.CharField(custom=True, max_length=255, choices=Choices.Country, blank=True, null=True)
+    link_zu_weiteren_dokumenten = models.URLField(custom=True, verbose_name='Link zu weiteren Dokumenten', blank=True,
+                                                  null=True)
+    risiko_nicht_bei_chancen = models.BooleanField(custom=True, db_column='RisikoNichtBeiCHANCENeG__c',
+                                                      verbose_name='Risiko nicht bei CHANCEN eG',
+                                                      default=models.DEFAULTED_ON_CREATE)
+
 
     objects = managers.DefaultManager()
     ugv_students = managers.UGVLeadManager()
@@ -294,6 +312,7 @@ class Application(models.Model):
                                           default=models.DEFAULTED_ON_CREATE)
     confirmed_by_university = models.BooleanField(custom=True, verbose_name='Confirmed by university',
                                                   default=models.DEFAULTED_ON_CREATE)
+    contract_ref = models.ForeignKey('Contract', models.DO_NOTHING, custom=True, blank=True, null=True)
 
     class Meta(models.Model.Meta):
         db_table = 'Application__c'
@@ -390,15 +409,19 @@ class Account(models.Model, PerishableTokenMixin):
                                            default=models.DEFAULTED_ON_CREATE)
     initial_review_completed = models.BooleanField(custom=True, verbose_name='Initial Review Completed',
                                                    default=models.DEFAULTED_ON_CREATE)
-
+    zahlungskontakt_auto = models.BooleanField(db_column='ZahlungskontaktAuto__pc', verbose_name='Payment Contact',
+                                                  sf_read_only=models.READ_ONLY)
     has_sofortzahler_contract_auto = models.BooleanField(custom=True, verbose_name='Has Sofortzahler Contract',
                                                          sf_read_only=models.READ_ONLY)
     student_template_id = models.CharField(custom=True, max_length=18, blank=True, null=True)
     applicant_template_id = models.CharField(custom=True, max_length=18, blank=True, null=True)
+    applicant_upload_functionality_enabled = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+    citizenship = models.CharField(custom=True, max_length=255, choices=Choices.Nationality, blank=True, null=True)
 
     objects = managers.DefaultManager()
     universities = managers.UniversityManager()
     students = managers.StudentManager()
+    ugv_students = managers.UGVStudentManager()
 
     class Meta(models.Model.Meta):
         db_table = 'Account'
@@ -422,12 +445,24 @@ class Account(models.Model, PerishableTokenMixin):
                (self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto)
 
     @property
+    def is_ugv_student(self):
+        return self.record_type.developer_name == 'UGVStudents' and not self.has_sofortzahler_contract_auto
+
+    @property
     def is_ugv(self):
         return self.record_type.developer_name == 'UGVStudents'
 
     @property
     def is_eg_customer(self):
         return (not self.is_student) and ('CeG' in self.customer_type)
+
+    @property
+    def is_uploader(self):
+        return self.is_eg_customer and self.applicant_upload_functionality_enabled
+
+    @property
+    def is_drawer_enabled(self):
+        return self.is_uploader or self.is_services_customer
 
     @property
     def is_services_customer(self):
@@ -443,7 +478,7 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def payment_contact(self):
-        if self.is_student:
+        if self.is_student or self.is_ugv_student:
             return self.zahlungskontakt_ref
         return None
 
@@ -451,16 +486,28 @@ class Account(models.Model, PerishableTokenMixin):
     def active_contract(self):
         if self.is_student:
             return self.contract_account_set.filter(record_type__developer_name='Sofortzahler').first()
+        elif self.is_ugv_student:
+            return self.contract_account_set.filter(record_type__developer_name='Ruckzahler').first()
+        return None
+
+    @property
+    def ruckzahler_contract(self):
+        if self.is_student or self.is_ugv_student:
+            return self.contract_account_set.filter(record_type__developer_name='Ruckzahler').first()
         return None
 
     @property
     def course(self):
-        if self.is_student:
+        if self.is_student or self.is_ugv_student:
             return self.active_contract.studiengang_ref if self.active_contract else None
         return None
 
+    @property
+    def review_completed(self):
+        return self.initial_review_completed or self.master_contact.zahlungskontakt_auto
+
     def get_student_contact(self):
-        if self.is_student:
+        if self.is_student or self.is_ugv_student:
             return self.person_contact if self.is_person_account else self.student_contact
         return None
 
@@ -470,7 +517,7 @@ class Account(models.Model, PerishableTokenMixin):
         # return None
 
     def get_active_courses(self):
-        if not self.is_student:
+        if not self.is_student and not self.is_ugv_student:
             # min_date = date.today() - timedelta(31)
             return self.degreecourse_set.all()  # filter(start_of_studies__gte=min_date)
         return None
@@ -503,10 +550,6 @@ class Contact(models.Model, PerishableTokenMixin):
     mailing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
     mailing_country = models.CharField(max_length=80, blank=True, null=True, verbose_name=_('Country'),
                                        choices=Choices.Country)
-
-    sepalastschriftmandat_erteilt = models.BooleanField(custom=True, db_column='SEPALastschriftmandatErteilt__c',
-                                                        verbose_name='SEPA Direct Debit Mandate Granted?',
-                                                        default=models.DEFAULTED_ON_CREATE)
     zahlungskontakt_auto = models.BooleanField(custom=True, verbose_name='Payment Contact',
                                                sf_read_only=models.READ_ONLY)
 
@@ -518,6 +561,9 @@ class Contact(models.Model, PerishableTokenMixin):
     password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
     invoice_contact = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+    sepalastschriftmandat_erteilt = models.BooleanField(custom=True, db_column='SEPALastschriftmandatErteilt__c',
+                                                        verbose_name='SEPA Direct Debit Mandate Granted?',
+                                                        default=models.DEFAULTED_ON_CREATE)
     sepamandate_form_auto = models.CharField(custom=True, db_column='SEPAMandateFormAuto__c', max_length=1300,
                                              verbose_name='SEPA Mandate Form', sf_read_only=models.READ_ONLY,
                                              blank=True, null=True)
@@ -528,6 +574,8 @@ class Contact(models.Model, PerishableTokenMixin):
                                           default=models.DEFAULTED_ON_CREATE)
     cancel_bank_account = models.BooleanField(custom=True, verbose_name='CancelBankAccount',
                                               default=models.DEFAULTED_ON_CREATE)
+    biological_sex = models.CharField(custom=True, max_length=255, verbose_name='Biological sex',
+                                      choices=Choices.Biological_Sex, blank=True, null=True)
 
     mandate_open_payments = models.DecimalField(custom=True, max_digits=4, decimal_places=0, blank=True, null=True)
 
@@ -600,6 +648,7 @@ class DegreeCourse(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
     name = models.CharField(max_length=80, verbose_name=_('Name'), default=models.DEFAULTED_ON_CREATE,
                             blank=True, null=True)
+    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
     university = models.ForeignKey(Account, models.DO_NOTHING, custom=True,
                                    sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship 0
     course_id = models.CharField(custom=True, max_length=1300, sf_read_only=models.READ_ONLY, blank=True, null=True)
@@ -610,13 +659,15 @@ class DegreeCourse(models.Model):
                                                    verbose_name=_('Standard Study Period (No. of Semesters)'),
                                                    blank=True,
                                                    null=True)
-    start_of_studies = models.DateField(custom=True, verbose_name=_('Start of Studies'), blank=True, null=True)
-    start_summer_semester = models.CharField(custom=True, max_length=255,
-                                             verbose_name=_('Starting Month Summer Semester'),
-                                             choices=Choices.Month, blank=True, null=True)
-    start_winter_semester = models.CharField(custom=True, max_length=255,
-                                             verbose_name=_('Starting Month Winter Semester'),
-                                             choices=Choices.Month, blank=True, null=True)
+    start_of_study = models.CharField(custom=True, max_length=4099, verbose_name='Start of Study',
+                                      choices=[('January', 'January'), ('February', 'February'), ('March', 'March'),
+                                               ('April', 'April'), ('May', 'May'), ('June', 'June'), ('July', 'July'),
+                                               ('August', 'August'), ('September', 'September'), ('October', 'October'),
+                                               ('November', 'November'), ('December', 'December')], blank=True,
+                                      null=True)
+    standard_period_of_study = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
+                                                   verbose_name='Standard Study Period (No. of Semesters)', blank=True,
+                                                   null=True)
     start_of_studies_month = models.CharField(custom=True, max_length=255, verbose_name=_('Starting Month of Studies'),
                                               choices=Choices.Month, blank=True, null=True)
 
@@ -665,6 +716,10 @@ class DegreeCourse(models.Model):
     @property
     def ugv_contracts(self):
         return self.contract_set.filter(template=True, record_type__developer_name='Ruckzahler')
+
+    @property
+    def templates(self):
+        return self.contract_set.filter(template=True).order_by('valid_from')
 
     def __str__(self):
         return "[{self.university.name}] {self.name}".format(self=self)
@@ -928,7 +983,7 @@ class Invoice(models.Model):
         # keyPrefix = 'a09'
 
     def get_current_attachment(self):
-        return self.attachment_set.last()
+        return Attachment.objects.filter(parent_id=self.pk).last()
 
 
 class Attachment(models.Model):
@@ -936,10 +991,10 @@ class Attachment(models.Model):
         verbose_name='Deleted',
         sf_read_only=models.READ_ONLY,
         default=False)
-    parent = models.ForeignKey(
-        Invoice,
-        models.DO_NOTHING,
-        sf_read_only=models.NOT_UPDATEABLE)
+
+    parent_id = models.CharField(max_length=18)
+    parent_type = models.CharField(max_length=50, db_column='Parent.Type', sf_read_only=models.READ_ONLY)
+
     name = models.CharField(
         max_length=255,
         verbose_name='File Name')
@@ -955,6 +1010,7 @@ class Attachment(models.Model):
         blank=True,
         null=True)
     body = models.TextField()
+    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
 
     def fetch_content(self):
         session = connections['salesforce'].sf_session

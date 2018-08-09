@@ -1,9 +1,15 @@
 from collections import OrderedDict
 
+import dateutil
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.core import exceptions
+import dateutil.parser
+import re
+
+import traceback
+
 
 from datetime import datetime
 from datetime import timedelta
@@ -12,7 +18,8 @@ from uuid import uuid4
 from authtools.models import AbstractEmailUser
 from pandas.io import json
 
-from integration.models import RecordType, Account, Contact, Contract, DegreeCourse, DegreeCourseFees, Lead, Application
+from integration.models import RecordType, Account, Contact, Contract, DegreeCourse, DegreeCourseFees, Lead, \
+    Application, Choices
 
 
 class User(AbstractEmailUser):
@@ -26,6 +33,12 @@ class User(AbstractEmailUser):
             person_email=self.email))).exists()
 
     @property
+    def is_ugv_student(self):
+        return Account.ugv_students.filter(Q(unimailadresse=self.email) | (
+                Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
+            person_email=self.email))).exists()
+
+    @property
     def is_unistaff(self):
         return Contact.university_staff.filter(email=self.email).exists()
 
@@ -36,8 +49,12 @@ class User(AbstractEmailUser):
             rc = Contact.university_staff.get(email=self.email)
         elif self.is_student:
             rc = Account.students.get(Q(unimailadresse=self.email) | (
-                        Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
-                    person_email=self.email)))
+                    Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
+                person_email=self.email)))
+        elif self.is_ugv_student:
+            rc = Account.ugv_students.get(Q(unimailadresse=self.email) | (
+                    Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
+                person_email=self.email)))
         return rc
 
     def create_token(self, token=None, hours=96):
@@ -61,7 +78,6 @@ class PerishableToken(models.Model):
 
 class CsvUpload(models.Model):
     user = models.ForeignKey(User)
-    # course = models.BooleanField()
     upload_type = models.CharField(max_length=2)
     uuid = models.CharField(max_length=50)
     content = models.TextField(blank=True, null=True)
@@ -73,10 +89,12 @@ class CsvUpload(models.Model):
     #                             "Kosten pro Monat", "Kosten pro Monat über der Regelstudienzeit",
     #                             "Immatrikulationsgebühr (einmalig)", "Auslandssemestergebühr pro Monat",
     #                             "Urlaubssemestergebühr pro Monat", "Startdatum des Studiengangs"]
-    expected_application_headers = ["Nachname", "Vorname", "Staatsbürgerschaft", "Geburtsdatum", "Geburtsort",
-                                    "private E-Mail-Adresse", "Handynummer", "Straße und Hausnummer", "PLZ", "Stadt",
-                                    "Land", "Studiengang", "Bevorzugte Kontaktsprache", "Startdatum",
-                                    "Studiert bereits an dieser Hochschule", "Finanzierungsvariante (optional)"]
+    expected_application_headers = ["Nachname", "Vorname", "Biologisches Geschlecht", "Straße und Hausnummer", "PLZ",
+                                    "Stadt", "Land", "Geburtsdatum", "Geburtsort", "Staatsbürgerschaft",
+                                    "Kein OECD Ausweis", "Aktuelle Straße und Hausnummer", "Aktuelle PLZ ",
+                                    "Aktuelle Stadt", "Aktuelles Land", "Kommunikationssprache", "Handynummer",
+                                    "private E-Mail-Adresse", "Studiengang", "Vertrag", "Studienbeginn",
+                                    "Hochschulstatus", "Risiko nicht bei CHANCEN eG", "Link zu weiteren Dokumenten"]
 
     @staticmethod
     def is_valid(data, upload_type):
@@ -96,8 +114,12 @@ class CsvUpload(models.Model):
     def parse_data(self):
         data = json.loads(self.content)
         rc = []
-        i, done = 1, False
-        headers = CsvUpload.expected_application_headers if self.course else CsvUpload.expected_student_headers
+        i, done = 2, False
+
+        headers = {
+            'ap': CsvUpload.expected_application_headers,
+            'st': CsvUpload.expected_student_headers
+        }.get(self.upload_type, ['Wrong'])
 
         while not done:
             i += 1
@@ -106,8 +128,11 @@ class CsvUpload(models.Model):
                 if not str(i) in data[k]:
                     done = True
                     break
-                if 'datum' in k:
-                    d_.update({k: datetime.fromtimestamp(int(data[k][str(i)]) / 1000).date()})
+                if 'datum' in k and data[k][str(i)] is not None:
+                    try:
+                        d_.update({k: datetime.fromtimestamp(int(data[k][str(i)]) / 1000).date()})
+                    except ValueError:
+                        d_.update({k: None})
                 else:
                     d_.update({k: data[k][str(i)]})
             if d_:
@@ -125,7 +150,7 @@ class CsvUpload(models.Model):
             return False
 
         rc = {
-            'ap': self._create_applications,
+            'ap': self._create_applicants,
             'st': self._create_students,
         }.get(self.upload_type, lambda x: False)(data)
 
@@ -200,6 +225,7 @@ class CsvUpload(models.Model):
                 studiengang_ref=course,
                 degree_course_fees_ref=course.active_fees,
                 record_type_id=ctr_id,
+                status='Deaktiviert'
             )
             contracts.update({acc.immatrikulationsnummer: ctr})
 
@@ -229,27 +255,33 @@ class CsvUpload(models.Model):
         try:
             Contract.objects.bulk_create(ctr_to_insert)
         except Exception as e:
-            print(e)
+            print(repr(e), e)
+            traceback.print_exc()
             for account in accounts:
                 account.delete()
             return False
 
         return True
 
-    def _create_applications(self, data):
+    def _create_applicants(self, data):
         if not self.user.is_unistaff:
             raise exceptions.PermissionDenied()
 
         if not self.content:
             raise exceptions.ObjectDoesNotExist()
+        languages = {'Deutsch': 'German', 'Englisch': 'English'}
+        sex = {'weiblich': 'Female', 'männlich': 'Male', 'geschlechtsneutral': 'Third gender'}
+        boolean_answer = {'Ja': True, 'Nein': False}
 
         university = self.user.srecord.account
-        courses = {x.name: x for x in university.degreecourse_set.all()}
+        courses = {}
         contracts = {}
-        for c in university.contract_set.filter(template=True):
-            if contracts.get(c.studiengang_ref) is None:
-                contracts.update({c.studiengang_ref: []})
-            contracts.get(c.studiengang_ref).append(c)
+        for degree_course in university.degreecourse_set.all():
+            courses[degree_course.name] = degree_course
+            for c in degree_course.templates:
+                if contracts.get(c.studiengang_ref) is None:
+                    contracts.update({c.studiengang_ref: []})
+                contracts.get(c.studiengang_ref).append(c)
 
         leads = []
         lead_rt = RecordType.objects.get(sobject_type='Lead', developer_name='UGVStudents').id
@@ -264,32 +296,59 @@ class CsvUpload(models.Model):
             lead.record_type_id = lead_rt
             lead.first_name = row.get('Vorname')
             lead.last_name = row.get('Nachname')
-            lead.citizenship_new = row.get('Staatsbürgerschaft')
-            lead.date_of_birth = row.get('Geburtsdatum')
-            lead.place_of_birth = row.get('Geburtsort')
-            lead.email = row.get('private E-Mail-Adresse')
-            lead.phone = row.get('Handynummer')
+            lead.biological_sex = sex.get(row.get('Biologisches Geschlecht'))
             lead.street = row.get('Straße und Hausnummer')
             lead.postal_code = row.get('PLZ')
             lead.city = row.get('Stadt')
             lead.country_0 = row.get('Land')
-            lead.kommunicationssprache = row.get('Bevorzugte Kontaktsprache')
+            lead.date_of_birth = row.get('Geburtsdatum')
+            lead.place_of_birth = row.get('Geburtsort')
+            lead.citizenship_new = row.get('Staatsbürgerschaft')
+            lead.no_oecdpassport = boolean_answer.get(row.get('Kein OECD Ausweis'), False)
+
+            lead.postal_street = row.get('Aktuelle Straße und Hausnummer')
+            lead.postal_code_0 = row.get('Aktuelle PLZ ')
+            lead.postal_city = row.get('Aktuelle Stadt')
+            lead.postal_country = row.get('Aktuelles Land')
+            lead.kommunicationssprache = languages.get(row.get('Kommunikationssprache'))
+            lead.phone = row.get('Handynummer')
+            lead.email = row.get('private E-Mail-Adresse').lower() if row.get('private E-Mail-Adresse') is not None else None
+            lead.university_status = row.get('Hochschulstatus')
+            lead.status = 'Applicant'
+            lead.risiko_nicht_bei_chancen = boolean_answer.get(row.get('Risiko nicht bei CHANCEN eG'), False)
+            lead.link_zu_weiteren_dokumenten = row.get('Link zu weiteren Dokumenten')
 
             lead.confirmed_by_university = True
-            lead.university_status = 'Accepted applicant'
             lead.uploaded_via_portal_trig = True
             leads.append(lead)
 
             app = Application()
             app.hochschule_ref = university
-            app.studiengang_ref = courses.get(row.get('Studiengang'))
-            if app.studiengang_ref is None:
-                raise Exception()
-            app.already_student = row.get('Studiert bereits an dieser Hochschule')
-            app.start_of_study_trig = row.get('Startdatum')
-            candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Finanzierungsvariante (optional)')]
+            app.studiengang_ref = courses.get(row.get('Studiengang'), None)
+            rep = {
+                'Januar': 'January',
+                'Februar': 'February',
+                'März': 'March',
+                'April': 'April',
+                'Mai': 'May',
+                'Juni': 'June',
+                'Juli': 'July',
+                'August': 'August',
+                'September': 'September',
+                'Oktober': 'October',
+                'November': 'November',
+                'Dezember': 'December'
+            }
+
+            rep = dict((re.escape(k), v) for k, v in rep.items())
+            pattern = re.compile("|".join(rep.keys()))
+            app.start_of_study_trig = pattern.sub(lambda m: rep[re.escape(m.group(0))], row.get('Studienbeginn'));
+            start_of_study = dateutil.parser.parse('1st ' + app.start_of_study_trig).date()
+            candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag') and c.valid_from < start_of_study]
             if candidates:
-                app.contract_ref = candidates[0]
+                app.contract_ref = candidates[len(candidates)-1]
+            if app.studiengang_ref is not None and app.contract_ref is None:
+                raise Exception()
 
             app.confirmed_by_university = True
             appsByLead.update({lead.email: app})
@@ -300,11 +359,6 @@ class CsvUpload(models.Model):
         for lead in leads:
             appsByLead.get(lead.email).lead_ref = lead
         Application.objects.bulk_create(appsByLead.values())
-        apps = {a.lead_ref.id: a for a in Application.objects.filter(lead__email__in=appsByLead.keys())}
-
-        for lead in leads:
-            lead.active_application = apps.get(lead.id).id
-            lead.save()
 
         return True
 

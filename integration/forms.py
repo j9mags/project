@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 
 import pandas
+from numpy import nan
 from pandas.io import json
 import logging
 
@@ -23,7 +24,7 @@ BillingChoices = [('', '')] + Choices.Payment
 KEEP_CURRENT = _('-- Keep current --')
 
 
-class UploadForm(forms.Form):
+class UploadCsvForm(forms.Form):
     csv = forms.FileField()
     upload_type = forms.CharField(max_length=2)
 
@@ -31,13 +32,14 @@ class UploadForm(forms.Form):
         return self.courses
 
     def clean(self):
-        cleaned_data = super(UploadForm, self).clean()
+        cleaned_data = super(UploadCsvForm, self).clean()
         csv = cleaned_data.get('csv')
         upload_type = cleaned_data.get('upload_type')
 
         if csv is not None:
             try:
-                json_data = pandas.read_excel(csv.temporary_file_path()).to_json()
+                raw_data = pandas.read_excel(csv.temporary_file_path()).dropna(how='all')
+                json_data = raw_data.to_json()
                 data = json.loads(json_data)
 
                 if not CsvUpload.is_valid(data, upload_type):
@@ -49,6 +51,10 @@ class UploadForm(forms.Form):
                 self.add_error('csv', _('There is a problem with the file.'))
 
         return cleaned_data
+
+
+class UploadForm(forms.Form):
+    file = forms.FileField()
 
 
 class LanguageSelectForm(forms.ModelForm):

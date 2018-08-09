@@ -50,12 +50,12 @@
                 <td class="mdl-data-table__cell">{{ student.immatrikulationsnummer | default:"--" }}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ student.name }}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ student.unimailadresse }}</td>
-                <td class="mdl-data-table__cell">{{ student.get_master_contact.mobile_phone | default:"--" }}</td>
+                <td class="mdl-data-table__cell">{{ student.master_contact.mobile_phone | default:"--" }}</td>
                 <!-- td class="mdl-data-table__cell--non-numeric">{{ student.geschlecht | default:"--" }}</td -->
                 <td class="mdl-data-table__cell--non-numeric">{{ student.kommunikationssprache | default:"--" }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
-                  <a class="filter csp-table--action" href="#" data-filter="course" data-filter-value="{{ student.get_course.pk }}">
-                      <i class="material-icons md-18">filter_list</i>{{ student.get_course.name_studiengang_auto }}</a>
+                  <a class="filter csp-table--action" href="#" data-filter="course" data-filter-value="{{ student.course.pk }}">
+                      <i class="material-icons md-18">filter_list</i>{{ student.course.name_studiengang_auto }}</a>
                 </td>
                 <td class="mdl-data-table__cell--non-numeric">
                   <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ student.status }}">

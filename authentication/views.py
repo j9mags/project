@@ -24,7 +24,8 @@ class UserLogin(LoginView):
             msg = {
                 'pw-ch--success': _("Your request has been successfully processed."),
                 'pw-ch--failed': _("Something went wrong with your request."),
-                'pw-ch--missing': _("We couldn't find a user with that email."),
+                'pw-ch--missing': _("We couldn't find a user with that email. Please contact info@chancen-eg.de if you "
+                                    "are sure that you used this email address to sign up for the CHANCEN Portal."),
             }.get(code, None)
             if msg:
                 flip = 'show-left'
@@ -40,6 +41,9 @@ class UserLogout(LogoutView):
 def get_token_or_raise(tk):
     rc = Account.students.filter(cspassword_token=tk)
     pt = rc and rc[0]
+    if not pt:
+        rc = Account.ugv_students.filter(cspassword_token=tk)
+        pt = rc and rc[0]
     if not pt:
         rc = Contact.university_staff.filter(cspassword_token=tk)
         pt = rc and rc[0]

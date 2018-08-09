@@ -38,6 +38,7 @@
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Language' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Course' %}</th>
           <th class="mdl-data-table__cell--non-numeric">{% trans 'Status' %}</th>
+          <th class="mdl-data-table__cell--non-numeric">{% trans 'Contract-Status' %}</th>
         </tr>
       </thead>
       <tbody>
@@ -60,6 +61,7 @@
                   <a class="filter csp-table--action" href="#" data-filter="status" data-filter-value="{{ student.status }}">
                       <i class="material-icons md-18">filter_list</i>{{ student.status | default:"--" }}</a>
                 </td>
+                <td class="mdl-data-table__cell--non-numeric">{{ student.ruckzahler_contract.status | default:"--" }}</td>
             </tr>
         {% endfor %}
       </tbody>

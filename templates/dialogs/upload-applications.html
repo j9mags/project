@@ -13,7 +13,7 @@
         <input type="hidden" name="upload_type" value="ap">
 
         <div class="mdl-dialog__content">
-            {% include 'snippets/input-file.html' with field=form.csv type='file' pref='st_' accept=".xls, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" %}
+            {% include 'snippets/input-file.html' with field=form.csv type='file' pref='app_' accept=".xls, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" %}
             <div id="upload-progress-st" class="mdl-spinner mdl-js-spinner"></div>
         </div>
         <div class="mdl-dialog__actions">
@@ -24,10 +24,8 @@
             <a
                 {% if contact.account.applicant_template_id is not None%}
                 href="{% url 'integration:download_attachment' att_id=contact.account.applicant_template_id %}"
-                {% else %}
-                href="{% static '/templates/Import_Bewerber_Vorlage.xlsx' %}"
                 {% endif %}
-                class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent">{% trans 'Download template' %}
+                class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--accent {% if contact.account.applicant_template_id is None%}mdl-button--disabled{% endif%}">{% trans 'Download template' %}
             </a>
         </div>
     </form>
