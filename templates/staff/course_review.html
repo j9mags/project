@@ -13,7 +13,7 @@
   </div>
   <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--4-col mdl-grid">
     {% if form %}
-      <form method="post">
+      <form method="post" class="mdl-cell--12-col">
         {% csrf_token %}
     {% endif %}
         <div class="mdl-cell mdl-cell--12-col">
@@ -23,7 +23,7 @@
               {% include 'snippets/field-text.html' with label=_('Cost per Semester') value=course.cost_per_semester type="currency" %}
           </div>
           <div class="mdl-cell mdl-cell--12-col">
-              {% include 'snippets/field-text.html' with label=_('Start of Studies') value=course.start_of_study %}
+              {% include 'snippets/field-text.html' with label=_('Start of Studies') value=course.translated_start_of_study maxlength=25 id="startOfStudies" tooltip=course.translated_start_of_study %}
           </div>
     {% if form %}
       </form>

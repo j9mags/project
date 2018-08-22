@@ -9,7 +9,7 @@ import dateutil.parser
 import re
 
 import traceback
-
+from django.utils.translation import ugettext_lazy as _
 
 from datetime import datetime
 from datetime import timedelta
@@ -326,29 +326,29 @@ class CsvUpload(models.Model):
             app.hochschule_ref = university
             app.studiengang_ref = courses.get(row.get('Studiengang'), None)
             rep = {
-                'Januar': 'January',
-                'Februar': 'February',
-                'März': 'March',
-                'April': 'April',
-                'Mai': 'May',
-                'Juni': 'June',
-                'Juli': 'July',
-                'August': 'August',
-                'September': 'September',
-                'Oktober': 'October',
-                'November': 'November',
-                'Dezember': 'December'
+                _('Januar'): 'January',
+                _('Februar'): 'February',
+                _('März'): 'March',
+                _('April'): 'April',
+                _('Mai'): 'May',
+                _('Juni'): 'June',
+                _('Juli'): 'July',
+                _('August'): 'August',
+                _('September'): 'September',
+                _('Oktober'): 'October',
+                _('November'): 'November',
+                _('Dezember'): 'December'
             }
 
             rep = dict((re.escape(k), v) for k, v in rep.items())
             pattern = re.compile("|".join(rep.keys()))
-            app.start_of_study_trig = pattern.sub(lambda m: rep[re.escape(m.group(0))], row.get('Studienbeginn'));
+            app.start_of_study_trig = pattern.sub(lambda m: rep[re.escape(m.group(0))], row.get('Studienbeginn'))
             start_of_study = dateutil.parser.parse('1st ' + app.start_of_study_trig).date()
             candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag') and c.valid_from < start_of_study]
             if candidates:
                 app.contract_ref = candidates[len(candidates)-1]
             if app.studiengang_ref is not None and app.contract_ref is None:
-                raise Exception()
+                raise Exception(_('No valid contract found. Please check the spelling.'))
 
             app.confirmed_by_university = True
             appsByLead.update({lead.email: app})

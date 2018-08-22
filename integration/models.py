@@ -171,9 +171,9 @@ class Choices:
                    ('zyprisch', 'zyprisch')]
     Language = [('German', _('Deutsch')), ('English', _('English'))]
     Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
-    Month = [('Januar', _('January')), ('Februar', _('February')), ('März', _('March')), ('April', _('April')),
-             ('Mai', _('May')), ('Juni', _('June')), ('Juli', _('July')), ('August', _('August')),
-             ('September', _('September')), ('Oktober', _('October')), ('November', _('November')),
+    Month = [('January', _('January')), ('February', _('February')), ('March', _('March')), ('April', _('April')),
+             ('May', _('May')), ('June', _('June')), ('July', _('July')), ('August', _('August')),
+             ('September', _('September')), ('October', _('October')), ('November', _('November')),
              ('Dezember', _('December'))]
     Payment = [('Zu Beginn jeden Monats', _('Beginning of each Month')),
                ('Zu Beginn jeden Semesters', _('Beginning of each Semester'))]
@@ -660,10 +660,7 @@ class DegreeCourse(models.Model):
                                                    blank=True,
                                                    null=True)
     start_of_study = models.CharField(custom=True, max_length=4099, verbose_name='Start of Study',
-                                      choices=[('January', 'January'), ('February', 'February'), ('March', 'March'),
-                                               ('April', 'April'), ('May', 'May'), ('June', 'June'), ('July', 'July'),
-                                               ('August', 'August'), ('September', 'September'), ('October', 'October'),
-                                               ('November', 'November'), ('December', 'December')], blank=True,
+                                      choices=Choices.Month, blank=True,
                                       null=True)
     standard_period_of_study = models.DecimalField(custom=True, max_digits=3, decimal_places=0,
                                                    verbose_name='Standard Study Period (No. of Semesters)', blank=True,
@@ -692,6 +689,14 @@ class DegreeCourse(models.Model):
                                                   blank=True, null=True)
     number_of_sofortzahler_trig = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
                                                       verbose_name=_('Number of Sofortzahler'), blank=True, null=True)
+
+    @property
+    def translated_start_of_study(self):
+        if self.start_of_study:
+            translated_months = [dict(Choices.Month).get(study_month, study_month) for study_month in self.start_of_study.split(';') if study_month]
+            return ';'.join(map(str, translated_months))
+        else:
+            return ''
 
     class Meta(models.Model.Meta):
         db_table = 'DegreeCourse__c'
