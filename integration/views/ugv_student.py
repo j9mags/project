@@ -186,7 +186,7 @@ class PaymentDetails(UgvStudentMixin, TemplateView):
         master_contact = self.account.get_student_contact()
         payment_contact = self.account.payment_contact
 
-        if master_contact == payment_contact:
+        if payment_contact == master_contact or self.account.is_ugv_student:
             context['rvk_form'] = StudentRevokeMandateForm(instance=payment_contact)
 
         if self.request.POST:

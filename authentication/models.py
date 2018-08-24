@@ -326,18 +326,18 @@ class CsvUpload(models.Model):
             app.hochschule_ref = university
             app.studiengang_ref = courses.get(row.get('Studiengang'), None)
             rep = {
-                _('Januar'): 'January',
-                _('Februar'): 'February',
-                _('März'): 'March',
-                _('April'): 'April',
-                _('Mai'): 'May',
-                _('Juni'): 'June',
-                _('Juli'): 'July',
-                _('August'): 'August',
-                _('September'): 'September',
-                _('Oktober'): 'October',
-                _('November'): 'November',
-                _('Dezember'): 'December'
+                'Januar': 'January',
+                'Februar': 'February',
+                'März': 'March',
+                'April': 'April',
+                'Mai': 'May',
+                'Juni': 'June',
+                'Juli': 'July',
+                'August': 'August',
+                'September': 'September',
+                'Oktober': 'October',
+                'November': 'November',
+                'Dezember': 'December'
             }
 
             rep = dict((re.escape(k), v) for k, v in rep.items())
