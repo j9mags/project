@@ -3,11 +3,11 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans 'My CHANCEN SERVICES Account' %}{% endblock %}
+{% block title %}{% trans 'My CHANCEN Account' %}{% endblock %}
 
 {% block content %}
 
-  {% if account.is_student and not account.sepalastschriftmandat_erteilt_auto %}
+  {% if account.is_student and not account.master_contact.zahlungskontakt_auto %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
       <div class="mdl-snackbar__text">{% trans 'You have not authorise us to debit your account. Without permission from you we cannot debit your tuition fees from your account and you are not able to commence your studies.' %}</div>
       <button class="mdl-snackbar__action" type="button"></button>
