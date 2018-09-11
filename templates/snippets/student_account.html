@@ -73,11 +73,7 @@
         {% endif %}
       </div>
       <div class="mdl-cell">
-        {% if account.is_ugv_student %}
-        {% include 'snippets/field-text.html' with label=_('Nationality') value=account.citizenship %}
-        {% else %}
-        {% include 'snippets/field-text.html' with label=_('Nationality') value=account.staatsangehoerigkeit %}
-        {% endif %}
+        {% include 'snippets/field-text.html' with label=_('Nationality') value=account.translated_nationality %}
       </div>
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('Language') value=account.kommunikationssprache %}
