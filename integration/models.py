@@ -100,7 +100,7 @@ class Choices:
                ('Venezuela', _('Venezuela')), ('Vereinigte Arabische Emirate', _('Vereinigte Arabische Emirate')),
                ('Vereinigte Staaten', _('Vereinigte Staaten')), ('Vereinigtes Königreich', _('Vereinigtes Königreich')),
                ('Vietnam', _('Vietnam')), ('Weißrussland', _('Weißrussland')), ('Westsahara', _('Westsahara')),
-               ('Zentral\xadafrikanische Republik', _('Zentral\xadafrikanische Republik')), ('Zypern', _('Zypern'))]
+               ('Zentralafrikanische Republik', _('Zentralafrikanische Republik')), ('Zypern', _('Zypern'))]
     Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('non-binary'))]
     Biological_Sex = [('Female', _('female')), ('Male', _('male')), ('Third gender', _('non-binary'))]
     Nationality = [('afghanisch', _('afghanisch')), ('ägyptisch', _('ägyptisch')), ('albanisch', _('albanisch')),

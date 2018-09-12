@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-07 09:04+0000\n"
+"POT-Creation-Date: 2018-09-11 11:29+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -99,8 +99,7 @@ msgid "Gender"
 msgstr ""
 
 #: integration/forms.py:79 integration/models.py:408
-#: templates/snippets/student_account.html:77
-#: templates/snippets/student_account.html:79
+#: templates/snippets/student_account.html:76
 msgid "Nationality"
 msgstr ""
 
@@ -2452,38 +2451,38 @@ msgid ""
 "results."
 msgstr ""
 
-#: integration/views/student.py:246
+#: integration/views/student.py:259
 msgid "Data Review"
 msgstr ""
 
-#: integration/views/student.py:248
+#: integration/views/student.py:261
 msgid ""
 "Your university sent us important data for your profile. Please check it "
 "carefully. Should you find any discrepancies, please contact your university "
 "to correct this."
 msgstr ""
 
-#: integration/views/student.py:253 integration/views/student.py:261
+#: integration/views/student.py:266 integration/views/student.py:274
 msgid "Continue"
 msgstr ""
 
-#: integration/views/student.py:256
+#: integration/views/student.py:269
 msgid "Data input"
 msgstr ""
 
-#: integration/views/student.py:257
+#: integration/views/student.py:270
 msgid "Please complete the missing information."
 msgstr ""
 
-#: integration/views/student.py:264 integration/views/ugv_student.py:238
+#: integration/views/student.py:277 integration/views/ugv_student.py:238
 msgid "SEPA Mandate"
 msgstr ""
 
-#: integration/views/student.py:265
+#: integration/views/student.py:278
 msgid "We require authorisation to debit a bank account for your tuition fees."
 msgstr ""
 
-#: integration/views/student.py:269 integration/views/ugv_student.py:242
+#: integration/views/student.py:282 integration/views/ugv_student.py:242
 #: templates/students/dashboard.html:50
 msgid "Grant mandate"
 msgstr ""
@@ -2716,7 +2715,7 @@ msgstr ""
 msgid "Birth day"
 msgstr ""
 
-#: templates/snippets/student_account.html:83
+#: templates/snippets/student_account.html:79
 #: templates/staff/dashboard_students.html:39
 #: templates/staff/dashboard_ugvers.html:38
 msgid "Language"
@@ -3016,8 +3015,8 @@ msgstr ""
 
 #: templates/students/onboarding_sepa.html:7
 msgid ""
-"Please authorize us to collect the due amount for your membership share(s) "
-"by direct debit from your account."
+"Please authorize us to debit your account for the once off membership fee. "
+"In the future we will also deduct the ISA repayments from this account."
 msgstr ""
 
 #: templates/students/payment.html:40
