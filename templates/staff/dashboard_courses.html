@@ -48,7 +48,7 @@
             <td class="mdl-data-table__cell">{{ course.cost_per_semester|currency }}</td>
             <td class="mdl-data-table__cell">{{ course.cost_per_month|currency }}</td>
             <td class="mdl-data-table__cell">{{ course.matriculation_fee | currency }}</td>
-            <td class="mdl-data-table__cell--non-numeric">{{ course.start_of_study }}</td>
+            <td class="mdl-data-table__cell--non-numeric">{{ course.translated_start_of_study | truncatechars:25 }}</td>
           </tr>
         {% endfor %}
       </tbody>

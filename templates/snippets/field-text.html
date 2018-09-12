@@ -12,7 +12,16 @@
   {% elif type == 'date' %}
     <div class="mdl-typography--font-light mdl-typography--title">{{ value | date:"d.m.Y" }}</div>
   {% else %}
-    <div class="mdl-typography--font-light mdl-typography--title">{{ value | default:"--" | safe }}</div>
+    {% if maxlength and value|length > maxlength  %}
+      <div id="{{ id }}" class="mdl-typography--font-light mdl-typography--title">{{ value | default:"--" | safe | truncatechars:maxlength }}</div>
+        {% if id and tooltip  %}
+          <div class="mdl-tooltip" for="{{ id }}">
+            {{ tooltip }}
+          </div>
+        {% endif %}
+    {% else %}
+      <div class="mdl-typography--font-light mdl-typography--title">{{ value | default:"--" | safe }}</div>
+    {% endif %}
   {% endif %}
   <label class="mdl-textfield__label">{{ label }}</label>
   {% if help_text %}
