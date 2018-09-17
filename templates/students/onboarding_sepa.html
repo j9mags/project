@@ -4,9 +4,9 @@
     <div class="mdl-cell mdl-cell--12-col">
         <p class="mdl-typography--body-2">
             {% if request.user.is_ugv_student %}
-                {% trans 'Please authorize us to debit your account for the once off membership fee. In the future we will also deduct the ISA repayments from this account.' %}
+                {% trans 'Please authorize us to debit your account for the once off membership fee. In future we will also deduct the ISA repayments from this account.' %}
             {% else %}
-                {% trans 'Authorize us to collect the study fees by direct debit from your account.' %}
+                {% trans 'Please authorize us to collect the tuition fees by direct debit from your account.' %}
             {% endif %}
         </p>
     </div>

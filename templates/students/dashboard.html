@@ -9,7 +9,13 @@
 
   {% if account.is_student and not account.master_contact.zahlungskontakt_auto %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
-      <div class="mdl-snackbar__text">{% trans 'You have not authorise us to debit your account. Without permission from you we cannot debit your tuition fees from your account and you are not able to commence your studies.' %}</div>
+      <div class="mdl-snackbar__text">
+          {% if account.is_ugv_student %}
+          {% trans 'You have not authorized us to debit your account. Without permission from you we cannot debit the payments due which are essential part of your ISA (e.g. membership share or repayments).' %}
+          {% else %}
+          {% trans 'You have not authorised us to debit an account for your tuition fees. Without permission from the account holder we cannot debit your tuition fees from an account and you are not able to start your studies.' %}
+          {% endif %}
+      </div>
       <button class="mdl-snackbar__action" type="button"></button>
     </div>
   {% endif %}

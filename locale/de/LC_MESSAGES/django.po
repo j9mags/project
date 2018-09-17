@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-11 11:29+0000\n"
-"PO-Revision-Date: 2018-09-11 13:30+0200\n"
+"POT-Creation-Date: 2018-09-17 10:25+0000\n"
+"PO-Revision-Date: 2018-09-17 12:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -2160,7 +2160,7 @@ msgstr "Ändern Sie diesen Wert, um alle Kurse zu aktualisieren."
 msgid "Payment options"
 msgstr "Zahlungsoptionen"
 
-#: integration/models.py:462 templates/students/dashboard.html:19
+#: integration/models.py:462 templates/students/dashboard.html:25
 msgid "Account"
 msgstr ""
 
@@ -2421,7 +2421,7 @@ msgid "Invoice"
 msgstr "Rechnung"
 
 #: integration/models.py:1022 templates/staff/dashboard.html:26
-#: templates/staff/dashboard_home.html:74 templates/students/dashboard.html:20
+#: templates/staff/dashboard_home.html:74 templates/students/dashboard.html:26
 msgid "Invoices"
 msgstr "Rechnungen"
 
@@ -2506,16 +2506,14 @@ msgstr ""
 "Lastschriftmandat."
 
 #: integration/views/student.py:282 integration/views/ugv_student.py:242
-#: templates/students/dashboard.html:50
+#: templates/students/dashboard.html:56
 msgid "Grant mandate"
 msgstr "Mandat vergeben"
 
 #: integration/views/ugv_student.py:239
-msgid ""
-"We require authorisation to debit a bank account for your membership "
-"share(s)."
+msgid "We require authorisation to debit your bank account."
 msgstr ""
-"Damit wir Deine Studiengebühren einziehen können, benötigen wir ein SEPA-"
+"Damit wir die fälligen Beträge einziehen können, benötigen wir ein SEPA-"
 "Lastschriftmandat."
 
 #: integration/views/ugv_student.py:383
@@ -2644,7 +2642,7 @@ msgstr "Wähle ein neues Passwort"
 msgid "Set"
 msgstr "Bestätigen"
 
-#: templates/snippets/contact_card.html:8 templates/students/dashboard.html:31
+#: templates/snippets/contact_card.html:8 templates/students/dashboard.html:37
 #: templates/students/onboarding_data.html:23
 msgid "Contact data"
 msgstr "Kontaktdaten"
@@ -2881,7 +2879,7 @@ msgid "View invoices"
 msgstr "Rechnungen ansehen"
 
 #: templates/staff/dashboard_invoices.html:13
-#: templates/students/dashboard.html:75
+#: templates/students/dashboard.html:81
 msgid "No invoices found"
 msgstr "Keine Rechnungen gefunden"
 
@@ -2994,37 +2992,46 @@ msgstr "Neuer Kontakt"
 msgid "My CHANCEN Account"
 msgstr "Mein CHANCEN Account"
 
-#: templates/students/dashboard.html:12
+#: templates/students/dashboard.html:14
 msgid ""
-"You have not authorise us to debit your account. Without permission from you "
-"we cannot debit your tuition fees from your account and you are not able to "
-"commence your studies."
+"You have not authorized us to debit your account. Without permission from "
+"you we cannot debit the payments due which are essential part of your ISA (e."
+"g. membership share or repayments)."
 msgstr ""
-"Du hast uns noch kein Lastschriftmandat erteilt. Ohne deine Erlaubnis, dass "
-"wir deine Studiengebühren von deinem Konto einziehen, kannst du dein Studium "
-"nicht beginnen."
+"Du hast uns noch kein SEPA-Lastschriftmandat erteilt. Ohne deine Erlaubnis, "
+"dass wir fällige Beträge von deinem Konto einziehen dürfen, können wir den "
+"UGV nur schwer umsetzen."
 
-#: templates/students/dashboard.html:22
+#: templates/students/dashboard.html:16
+msgid ""
+"You have not authorised us to debit an account for your tuition fees. "
+"Without permission from the account holder we cannot debit your tuition fees "
+"from an account and you are not able to start your studies."
+msgstr ""
+"Du hast uns noch kein SEPA-Lastschriftmandat erteilt. Ohne die Erlaubnis, "
+"dass wir deine Studiengebühren von einem Konto einziehen dürfen, kannst du "
+"dein Studium nicht beginnen."
+
+#: templates/students/dashboard.html:28
 msgid "Upload files"
 msgstr ""
 
-#: templates/students/dashboard.html:36
+#: templates/students/dashboard.html:42
 msgid "No contact information found"
 msgstr "Keine Kontaktinformationen gefunden"
 
-#: templates/students/dashboard.html:40 templates/students/payment.html:6
+#: templates/students/dashboard.html:46 templates/students/payment.html:6
 msgid "Payment data"
 msgstr "Zahlungsdaten"
 
-#: templates/students/dashboard.html:46
-#: templates/students/onboarding_sepa.html:9
+#: templates/students/dashboard.html:52
 msgid ""
 "Authorize us to collect the study fees by direct debit from your account."
 msgstr ""
 "Autorisiere uns, die Studiengebühren mittels Lastschrift von Deinem Konto "
 "einzuziehen."
 
-#: templates/students/dashboard.html:54
+#: templates/students/dashboard.html:60
 #: templates/students/onboarding_sepa.html:21
 msgid ""
 "If someone else is paying your tuition fees, please send them the following "
@@ -3033,7 +3040,7 @@ msgstr ""
 "Sollte jemand anderes deine Studiengebühren bezahlen, sende ihm bitte "
 "folgenden Link zu und schließe dieses Fenster."
 
-#: templates/students/dashboard.html:64
+#: templates/students/dashboard.html:70
 msgid "Someone else is paying for you"
 msgstr "Jemand anderes bezahlt für dich"
 
@@ -3048,11 +3055,19 @@ msgstr "Universitäre E-Mail-Adresse"
 #: templates/students/onboarding_sepa.html:7
 msgid ""
 "Please authorize us to debit your account for the once off membership fee. "
-"In the future we will also deduct the ISA repayments from this account."
+"In future we will also deduct the ISA repayments from this account."
 msgstr ""
 "Bitte erteile uns ein SEPA-Lastschriftmandat, damit wir den Betrag für "
-"deinen Genossenschaftsanteil und die späteren UGV-Rückzahlungen einziehen "
+"deinen Genossenschaftsanteil oder die späteren UGV-Rückzahlungen einziehen "
 "können."
+
+#: templates/students/onboarding_sepa.html:9
+msgid ""
+"Please authorize us to collect the tuition fees by direct debit from your "
+"account."
+msgstr ""
+"Bitte autorisiere uns, die Studiengebühren mittels SEPA-Lastschriftmandat "
+"von Deinem Konto einzuziehen."
 
 #: templates/students/payment.html:40
 msgid "Revoke mandate"
@@ -3063,6 +3078,13 @@ msgid ""
 "There are open payments on this Mandate. Only after all the open payments "
 "have been processed will you be able to revoke the mandate."
 msgstr ""
+
+#~ msgid ""
+#~ "We require authorisation to debit a bank account for your membership "
+#~ "share(s)."
+#~ msgstr ""
+#~ "Damit wir Deine Studiengebühren einziehen können, benötigen wir ein SEPA-"
+#~ "Lastschriftmandat."
 
 #~ msgid "Applications"
 #~ msgstr "Bewerbungen"

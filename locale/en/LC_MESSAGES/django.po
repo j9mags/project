@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-11 11:29+0000\n"
+"POT-Creation-Date: 2018-09-17 10:25+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -2147,7 +2147,7 @@ msgstr ""
 msgid "Payment options"
 msgstr ""
 
-#: integration/models.py:462 templates/students/dashboard.html:19
+#: integration/models.py:462 templates/students/dashboard.html:25
 msgid "Account"
 msgstr ""
 
@@ -2408,7 +2408,7 @@ msgid "Invoice"
 msgstr ""
 
 #: integration/models.py:1022 templates/staff/dashboard.html:26
-#: templates/staff/dashboard_home.html:74 templates/students/dashboard.html:20
+#: templates/staff/dashboard_home.html:74 templates/students/dashboard.html:26
 msgid "Invoices"
 msgstr ""
 
@@ -2483,14 +2483,12 @@ msgid "We require authorisation to debit a bank account for your tuition fees."
 msgstr ""
 
 #: integration/views/student.py:282 integration/views/ugv_student.py:242
-#: templates/students/dashboard.html:50
+#: templates/students/dashboard.html:56
 msgid "Grant mandate"
 msgstr ""
 
 #: integration/views/ugv_student.py:239
-msgid ""
-"We require authorisation to debit a bank account for your membership "
-"share(s)."
+msgid "We require authorisation to debit your bank account."
 msgstr ""
 
 #: integration/views/ugv_student.py:383
@@ -2619,7 +2617,7 @@ msgstr ""
 msgid "Set"
 msgstr ""
 
-#: templates/snippets/contact_card.html:8 templates/students/dashboard.html:31
+#: templates/snippets/contact_card.html:8 templates/students/dashboard.html:37
 #: templates/students/onboarding_data.html:23
 msgid "Contact data"
 msgstr ""
@@ -2856,7 +2854,7 @@ msgid "View invoices"
 msgstr ""
 
 #: templates/staff/dashboard_invoices.html:13
-#: templates/students/dashboard.html:75
+#: templates/students/dashboard.html:81
 msgid "No invoices found"
 msgstr ""
 
@@ -2969,39 +2967,45 @@ msgstr ""
 msgid "My CHANCEN Account"
 msgstr ""
 
-#: templates/students/dashboard.html:12
+#: templates/students/dashboard.html:14
 msgid ""
-"You have not authorise us to debit your account. Without permission from you "
-"we cannot debit your tuition fees from your account and you are not able to "
-"commence your studies."
+"You have not authorized us to debit your account. Without permission from "
+"you we cannot debit the payments due which are essential part of your ISA (e."
+"g. membership share or repayments)."
 msgstr ""
 
-#: templates/students/dashboard.html:22
+#: templates/students/dashboard.html:16
+msgid ""
+"You have not authorised us to debit an account for your tuition fees. "
+"Without permission from the account holder we cannot debit your tuition fees "
+"from an account and you are not able to start your studies."
+msgstr ""
+
+#: templates/students/dashboard.html:28
 msgid "Upload files"
 msgstr ""
 
-#: templates/students/dashboard.html:36
+#: templates/students/dashboard.html:42
 msgid "No contact information found"
 msgstr ""
 
-#: templates/students/dashboard.html:40 templates/students/payment.html:6
+#: templates/students/dashboard.html:46 templates/students/payment.html:6
 msgid "Payment data"
 msgstr ""
 
-#: templates/students/dashboard.html:46
-#: templates/students/onboarding_sepa.html:9
+#: templates/students/dashboard.html:52
 msgid ""
 "Authorize us to collect the study fees by direct debit from your account."
 msgstr ""
 
-#: templates/students/dashboard.html:54
+#: templates/students/dashboard.html:60
 #: templates/students/onboarding_sepa.html:21
 msgid ""
 "If someone else is paying your tuition fees, please send them the following "
 "link and close this window."
 msgstr ""
 
-#: templates/students/dashboard.html:64
+#: templates/students/dashboard.html:70
 msgid "Someone else is paying for you"
 msgstr ""
 
@@ -3016,7 +3020,13 @@ msgstr ""
 #: templates/students/onboarding_sepa.html:7
 msgid ""
 "Please authorize us to debit your account for the once off membership fee. "
-"In the future we will also deduct the ISA repayments from this account."
+"In future we will also deduct the ISA repayments from this account."
+msgstr ""
+
+#: templates/students/onboarding_sepa.html:9
+msgid ""
+"Please authorize us to collect the tuition fees by direct debit from your "
+"account."
 msgstr ""
 
 #: templates/students/payment.html:40
