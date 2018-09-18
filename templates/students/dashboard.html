@@ -7,9 +7,15 @@
 
 {% block content %}
 
-  {% if account.is_student and not account.master_contact.zahlungskontakt_auto %}
+  {% if account.is_student and not account.payment_contact.zahlungskontakt_auto %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
-      <div class="mdl-snackbar__text">{% trans 'You have not authorise us to debit your account. Without permission from you we cannot debit your tuition fees from your account and you are not able to commence your studies.' %}</div>
+      <div class="mdl-snackbar__text">
+          {% if account.is_ugv_student %}
+          {% trans 'You have not authorized us to debit your account. Without permission from you we cannot debit the payments due which are essential part of your ISA (e.g. membership share or repayments).' %}
+          {% else %}
+          {% trans 'You have not authorised us to debit an account for your tuition fees. Without permission from the account holder we cannot debit your tuition fees from an account and you are not able to start your studies.' %}
+          {% endif %}
+      </div>
       <button class="mdl-snackbar__action" type="button"></button>
     </div>
   {% endif %}
@@ -58,7 +64,7 @@
           </div>
         </div>
         {% elif payment_contact == master_contact or account.is_ugv_student %}
-          {% include 'snippets/student_payment.html' with ba=master_contact.get_bank_account class="mdl-cell csp--full-width" %}
+          {% include 'snippets/student_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" %}
         {% else %}
           <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
             <h5 class="mdl-typography--headline">{% trans 'Someone else is paying for you' %}</h5>

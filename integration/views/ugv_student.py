@@ -236,7 +236,7 @@ class Onboarding(UgvStudentMixin, View):
                    'stepper': (
                        {
                            'title': _('SEPA Mandate'),
-                           'caption': _('We require authorisation to debit a bank account for your membership share(s).'),
+                           'caption': _('We require authorisation to debit your bank account.'),
                            'template': 'students/onboarding_sepa.html',
                            'action': reverse('integration:onboarding', kwargs={'step': 'sepa'}),
                            'submit': _('Grant mandate'),
