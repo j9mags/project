@@ -7,7 +7,7 @@
 
 {% block content %}
 
-  {% if account.is_student and not account.master_contact.zahlungskontakt_auto %}
+  {% if account.is_student and not account.payment_contact.zahlungskontakt_auto %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
       <div class="mdl-snackbar__text">
           {% if account.is_ugv_student %}
@@ -64,7 +64,7 @@
           </div>
         </div>
         {% elif payment_contact == master_contact or account.is_ugv_student %}
-          {% include 'snippets/student_payment.html' with ba=master_contact.get_bank_account class="mdl-cell csp--full-width" %}
+          {% include 'snippets/student_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" %}
         {% else %}
           <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
             <h5 class="mdl-typography--headline">{% trans 'Someone else is paying for you' %}</h5>
