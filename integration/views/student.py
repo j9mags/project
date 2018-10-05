@@ -306,33 +306,36 @@ class Onboarding(StudentMixin, View):
         contact = context.get('sf_contact')
         contract = context.get('sf_contract')
 
-        form = StudentOnboardingForm(initial={
-            'first_name': contact.first_name,
-            'last_name': contact.last_name,
-            # 'salutation': contact.salutation,
+        try:
+            form = StudentOnboardingForm(initial={
+                'first_name': contact.first_name,
+                'last_name': contact.last_name,
+                # 'salutation': contact.salutation,
 
-            'private_email': contact.email,
-            'mobile_phone': account.phone if account.is_ugv else contact.mobile_phone,
-            'home_phone': contact.home_phone,
+                'private_email': contact.email,
+                'mobile_phone': account.phone if account.is_ugv else contact.mobile_phone,
+                'home_phone': contact.home_phone,
 
-            'mailing_street': contact.mailing_street,
-            'mailing_city': contact.mailing_city,
-            'mailing_zip': contact.mailing_postal_code,
-            'mailing_country': contact.mailing_country,
+                'mailing_street': contact.mailing_street,
+                'mailing_city': contact.mailing_city,
+                'mailing_zip': contact.mailing_postal_code,
+                'mailing_country': contact.mailing_country,
 
-            'gender': account.geschlecht,
-            'language': account.kommunikationssprache,
-            'nationality': account.staatsangehoerigkeit,
-            'birth_city': account.geburtsort,
-            'birth_country': account.geburtsland,
+                'gender': account.geschlecht,
+                'language': account.kommunikationssprache,
+                'nationality': account.staatsangehoerigkeit,
+                'birth_city': account.geburtsort,
+                'birth_country': account.geburtsland,
 
-            'billing_street': account.billing_street,
-            'billing_city': account.billing_city,
-            'billing_zip': account.billing_postal_code,
-            'billing_country': account.billing_country,
+                'billing_street': account.billing_street,
+                'billing_city': account.billing_city,
+                'billing_zip': account.billing_postal_code,
+                'billing_country': account.billing_country,
 
-            'billing_option': contract.payment_interval,
-        })
+                'billing_option': contract.payment_interval if contract else None
+            })
+        except AttributeError:
+            form = StudentOnboardingForm()
 
         context.update(form=form)
         context['stepper'][2].update(is_active=True)
