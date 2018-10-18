@@ -58,6 +58,9 @@ class UgvStudentMixin(LoginRequiredMixin):
         invoices = contract.all_invoices if contract is not None else None
         uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
 
+        contact.mobile_phone = account.phone
+        contact.mailing_country = account.mailing_country
+
         translated_nationalities = dict(Choices.Nationality)
         translated_languages = dict(Choices.Language)
         translated_countries = dict(Choices.Country)
@@ -67,9 +70,6 @@ class UgvStudentMixin(LoginRequiredMixin):
         contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)
 
         context['account'] = account
-
-        contact.mobile_phone = account.phone if account.is_ugv else contact.mobile_phone
-
         context['master_contact'] = contact
         context['payment_contact'] = self.account.payment_contact
         context['active_contract'] = contract
