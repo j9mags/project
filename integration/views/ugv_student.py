@@ -59,7 +59,6 @@ class UgvStudentMixin(LoginRequiredMixin):
         uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
 
         contact.mobile_phone = account.phone
-        contact.mailing_country = account.mailing_country
 
         translated_nationalities = dict(Choices.Nationality)
         translated_languages = dict(Choices.Language)
