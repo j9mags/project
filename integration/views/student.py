@@ -76,20 +76,16 @@ class Dashboard(StudentMixin, TemplateView):
         context = super(Dashboard, self).get_context_data(**kwargs)
         self.account = self.get_queryset()
         account = self.account
-
-        translated_nationalities = dict(Choices.Nationality)
-        translated_countries = dict(Choices.Country)
-
-        if account.is_ugv_student:
-            nationality = account.citizenship
-        else:
-            nationality = account.staatsangehoerigkeit
-
-        account.translated_nationality = translated_nationalities.get(nationality, nationality)
-
         contact = self.account.master_contact
 
+        translated_nationalities = dict(Choices.Nationality)
+        translated_languages = dict(Choices.Language)
+        translated_countries = dict(Choices.Country)
+
+        account.translated_nationality = translated_nationalities.get(account.staatsangehoerigkeit, account.staatsangehoerigkeit)
+        account.translated_language = translated_languages.get(account.kommunikationssprache, account.kommunikationssprache)
         contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)
+
         contract = self.account.active_contract
         invoices = contract.all_invoices if contract is not None else None
 
