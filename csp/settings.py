@@ -95,6 +95,8 @@ DATABASES = {
     }
 }
 
+SALESFORCE_QUERY_TIMEOUT = (30, 120)
+
 DATABASE_ROUTERS = [
     'salesforce.router.ModelRouter',
 ]
