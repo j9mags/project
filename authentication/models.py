@@ -246,7 +246,8 @@ class CsvUpload(models.Model):
         try:
             Contact.objects.bulk_create(ctc_to_insert)
         except Exception as e:
-            print(e)
+            print(repr(e), e)
+            traceback.print_exc()
             # accounts.delete()
             for account in accounts:
                 account.delete()
