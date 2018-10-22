@@ -205,6 +205,7 @@ class Choices:
                    ('weißrussisch', _('weißrussisch')), ('zentralafrikanisch', _('zentralafrikanisch')),
                    ('zyprisch', _('zyprisch'))]
     Language = [('German', _('Deutsch')), ('English', _('English'))]
+    LanguageCode = [('German', 'DE'), ('English', 'EN')]
     Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
     Month = [('January', _('January')), ('February', _('February')), ('March', _('March')), ('April', _('April')),
              ('May', _('May')), ('June', _('June')), ('July', _('July')), ('August', _('August')),
