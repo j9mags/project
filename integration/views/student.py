@@ -36,9 +36,15 @@ class StudentMixin(LoginRequiredMixin):
 
         if lang is None:
             account = self.get_queryset()
-            lang = account.kommunikationssprache.lower()[:2] \
-                if account.kommunikationssprache is not None else get_language()
-            lang = lang if check_for_language(lang) else self.default_lang
+
+            try:
+                language_code = dict(Choices.LanguageCode).get(account.kommunikationssprache)
+                lang = language_code if language_code is not None else get_language()
+                lang = lang if check_for_language(lang) else self.default_lang
+            except Exception as e:
+                print(e)
+                lang = self.default_lang
+
             activate(lang)
             request.session[LANGUAGE_SESSION_KEY] = lang
             rc.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
