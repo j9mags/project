@@ -27,4 +27,25 @@
     window.showDlg = showDlg;
     if (btn !== null)
         btn.addEventListener('click', showDlg);
+    $('a.filter').click(function(ev){
+        ev.preventDefault();
+        var filter = $(this).data('filter');
+        var value =  $(this).data('filter-value');
+        var hash =  $(this).attr('href');
+        if (filter !== undefined)
+            addOrUpdateUrlParam(filter, value, hash);
+    });
+    function addOrUpdateUrlParam(name, value, hash) {
+        var href = window.location.href;
+        var regex = new RegExp("[&\\?]" + name + "=");
+        if(regex.test(href)) {
+            regex = new RegExp("([&\\?])" + name + "=\\S+");
+            window.location.href = href.replace(regex, "$1" + name + "=" + value + hash);
+        } else {
+            if(href.indexOf("?") > -1)
+                window.location.href = href + "&" + name + "=" + value  + hash;
+            else
+                window.location.href = href + "?" + name + "=" + value + hash;
+        }
+    }
 }.call(this));
