@@ -7,7 +7,7 @@
 
 {% block content %}
 
-  {% if account.is_student and not account.payment_contact.zahlungskontakt_auto %}
+  {% if account.is_student and not account.has_active_payment %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
       <div class="mdl-snackbar__text">
           {% if account.is_ugv_student %}

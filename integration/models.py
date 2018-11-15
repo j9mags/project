@@ -411,7 +411,7 @@ class Account(models.Model, PerishableTokenMixin):
     kommunikationssprache = models.CharField(custom=True, max_length=255, verbose_name=_('Communication Language'),
                                              choices=Choices.Language, null=True)
     unimailadresse = models.EmailField(custom=True, verbose_name=_('University Email Address'), blank=True, null=True)
-
+    active_payment_helper = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
     zahlungskontakt_ref = models.ForeignKey('Contact', models.DO_NOTHING, custom=True,
                                             related_name='account_zahlungskontaktref_set', blank=True, null=True)
     student_contact = models.ForeignKey('Contact', models.DO_NOTHING, custom=True,
@@ -516,6 +516,10 @@ class Account(models.Model, PerishableTokenMixin):
         if self.is_student or self.is_ugv_student:
             return self.zahlungskontakt_ref
         return None
+
+    @property
+    def has_active_payment(self):
+        return self.active_payment_helper or self.payment_contact.zahlungskontakt_auto
 
     @property
     def active_contract(self):
