@@ -576,6 +576,7 @@ class Contact(models.Model, PerishableTokenMixin):
 
     title = models.CharField(max_length=128, blank=True, null=True, verbose_name=_('title'))
     email = models.EmailField(verbose_name=_('Private email address'))
+    phone = models.CharField(max_length=40, verbose_name='Phone', blank=True, null=True)
     mobile_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Mobile phone'))
     home_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Home phone'))
     other_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Other phone'))
