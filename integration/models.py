@@ -649,7 +649,7 @@ class Contact(models.Model, PerishableTokenMixin):
 
     @property
     def bank_account(self):
-        if not self._is_staff:
+        if not self.account.is_person_account and not self._is_staff:
             rc = self.customerbankaccount_set.filter(enabled=True)
             if rc.exists():
                 return rc.first()
