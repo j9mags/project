@@ -88,6 +88,7 @@ class Dashboard(StudentMixin, TemplateView):
         translated_languages = dict(Choices.Language)
         translated_countries = dict(Choices.Country)
 
+        account.translated_sex = account.geschlecht
         account.translated_nationality = translated_nationalities.get(account.staatsangehoerigkeit, account.staatsangehoerigkeit)
         account.translated_language = translated_languages.get(account.kommunikationssprache, account.kommunikationssprache)
         contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)

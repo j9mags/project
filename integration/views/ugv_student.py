@@ -66,10 +66,12 @@ class UgvStudentMixin(LoginRequiredMixin):
 
         contact.mobile_phone = account.phone
 
+        translated_sexes = dict(Choices.Biological_Sex)
         translated_nationalities = dict(Choices.Nationality)
         translated_languages = dict(Choices.Language)
         translated_countries = dict(Choices.Country)
 
+        account.translated_sex = translated_sexes.get(account.master_contact.biological_sex, account.master_contact.biological_sex)
         account.translated_nationality = translated_nationalities.get(account.citizenship, account.citizenship)
         account.translated_language = translated_languages.get(account.kommunikationssprache, account.kommunikationssprache)
         contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)
