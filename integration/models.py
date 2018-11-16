@@ -411,7 +411,7 @@ class Account(models.Model, PerishableTokenMixin):
     kommunikationssprache = models.CharField(custom=True, max_length=255, verbose_name=_('Communication Language'),
                                              choices=Choices.Language, null=True)
     unimailadresse = models.EmailField(custom=True, verbose_name=_('University Email Address'), blank=True, null=True)
-
+    active_payment_helper = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
     zahlungskontakt_ref = models.ForeignKey('Contact', models.DO_NOTHING, custom=True,
                                             related_name='account_zahlungskontaktref_set', blank=True, null=True)
     student_contact = models.ForeignKey('Contact', models.DO_NOTHING, custom=True,
@@ -518,6 +518,10 @@ class Account(models.Model, PerishableTokenMixin):
         return None
 
     @property
+    def has_active_payment(self):
+        return self.active_payment_helper or self.payment_contact.zahlungskontakt_auto
+
+    @property
     def active_contract(self):
         if self.is_student:
             return self.contract_account_set.filter(record_type__developer_name='Sofortzahler').first()
@@ -576,6 +580,7 @@ class Contact(models.Model, PerishableTokenMixin):
 
     title = models.CharField(max_length=128, blank=True, null=True, verbose_name=_('title'))
     email = models.EmailField(verbose_name=_('Private email address'))
+    phone = models.CharField(max_length=40, verbose_name='Phone', blank=True, null=True)
     mobile_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Mobile phone'))
     home_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Home phone'))
     other_phone = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('Other phone'))
@@ -644,7 +649,7 @@ class Contact(models.Model, PerishableTokenMixin):
 
     @property
     def bank_account(self):
-        if not self._is_staff:
+        if not self.account.is_person_account and not self._is_staff:
             rc = self.customerbankaccount_set.filter(enabled=True)
             if rc.exists():
                 return rc.first()

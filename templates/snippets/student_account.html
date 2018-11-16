@@ -66,11 +66,7 @@
         {% include 'snippets/field-text.html' with label=_('Birth city') value=account.geburtsort %}
       </div>
       <div class="mdl-cell">
-        {% if account.is_ugv_student %}
-        {% include 'snippets/field-text.html' with label=_('Gender') value=account.master_contact.biological_sex %}
-        {% else %}
-        {% include 'snippets/field-text.html' with label=_('Gender') value=account.geschlecht %}
-        {% endif %}
+        {% include 'snippets/field-text.html' with label=_('Gender') value=account.translated_sex %}
       </div>
       <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('Nationality') value=account.translated_nationality %}

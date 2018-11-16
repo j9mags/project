@@ -25,7 +25,7 @@
            {% endif %}
            />
     <label class="mdl-textfield__label" 
-           for="{{ field.id_for_label }}">{{ field.label }}
+           for="{{ field.id_for_label }}">{% firstof label field.label %}
         {% if field.field.required %}
         <span class="mdl-color-text--red">*</span>
         {% endif %}

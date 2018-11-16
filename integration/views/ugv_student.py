@@ -64,12 +64,12 @@ class UgvStudentMixin(LoginRequiredMixin):
         invoices = contract.all_invoices if contract is not None else None
         uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
 
-        contact.mobile_phone = account.phone
-
+        translated_sexes = dict(Choices.Biological_Sex)
         translated_nationalities = dict(Choices.Nationality)
         translated_languages = dict(Choices.Language)
         translated_countries = dict(Choices.Country)
 
+        account.translated_sex = translated_sexes.get(account.master_contact.biological_sex, account.master_contact.biological_sex)
         account.translated_nationality = translated_nationalities.get(account.citizenship, account.citizenship)
         account.translated_language = translated_languages.get(account.kommunikationssprache, account.kommunikationssprache)
         contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)
@@ -335,11 +335,6 @@ class Onboarding(UgvStudentMixin, View):
             data = form.cleaned_data
 
             contact.email = data.get('private_email')
-
-            if account.is_ugv:
-                account.phone = data.get('mobile_phone')
-            else:
-                contact.mobile_phone = data.get('mobile_phone')
 
             contact.home_phone = data.get('home_phone')
             contact.mailing_street = data.get('mailing_street')

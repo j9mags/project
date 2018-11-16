@@ -111,7 +111,7 @@ class StudentContractForm(forms.Form):
 class StudentContactForm(forms.ModelForm):
     class Meta:
         model = Contact
-        fields = ['email', 'mobile_phone', 'other_phone', 'mailing_street',
+        fields = ['email', 'mobile_phone', 'phone', 'mailing_street',
                   'mailing_city', 'mailing_postal_code', 'mailing_country']
 
     def __init__(self, *args, **kwargs):
