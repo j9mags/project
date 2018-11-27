@@ -19,7 +19,7 @@
     </div>
     <div class="mdl-cell">
       {% if account.is_ugv_student %}
-      {% include 'snippets/field-text.html' with label=_('Matriculation number') value=account.person_email %}
+      {% include 'snippets/field-text.html' with label=_('Email') value=account.person_email %}
       {% else %}
       {% include 'snippets/field-text.html' with label=_('Email') value=account.unimailadresse %}
       {% endif %}
