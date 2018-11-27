@@ -627,6 +627,19 @@ class StudentReview(StaffMixin, DetailView):
 
         account = context.get('account')
 
+        translated_sexes = dict(Choices.Biological_Sex)
+        translated_nationalities = dict(Choices.Nationality)
+        translated_languages = dict(Choices.Language)
+
+        account.translated_language = translated_languages.get(account.kommunikationssprache, account.kommunikationssprache)
+
+        if account.is_student:
+            account.translated_sex = account.geschlecht
+            account.translated_nationality = translated_nationalities.get(account.staatsangehoerigkeit, account.staatsangehoerigkeit)
+        elif account.is_ugv:
+            account.translated_sex = translated_sexes.get(account.master_contact.biological_sex, account.master_contact.biological_sex)
+            account.translated_nationality = translated_nationalities.get(account.citizenship, account.citizenship)
+
         if self.contact.account.pk != account.hochschule_ref.pk:
             raise ObjectDoesNotExist()
 
