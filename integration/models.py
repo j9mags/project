@@ -562,6 +562,11 @@ class Account(models.Model, PerishableTokenMixin):
             return self.person_contact if self.is_person_account else self.student_contact
         return None
 
+    def get_repayer_contact(self):
+        if self.is_repayer:
+            return self.person_contact
+        return None
+
     def get_all_invoices(self, order='-invoice_date'):
         # if self.is_student:
         return Invoice.objects.filter(contract__account__pk=self.pk).order_by(order)
