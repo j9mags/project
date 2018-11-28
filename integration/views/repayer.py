@@ -292,7 +292,7 @@ class Onboarding(RepayerMixin, View):
             return redirect(self.account.get_repayer_contact().sepamandate_url_auto)
 
 
-class Dashboard(StudentMixin, TemplateView):
+class Dashboard(RepayerMixin, TemplateView):
     template_name = 'repayer/dashboard.html'
     title = 'Dashboard'
 
