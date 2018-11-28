@@ -1,13 +1,13 @@
 from __future__ import unicode_literals
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from datetime import date, timedelta
+# from datetime import date, timedelta
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
-from django.db import connections, models as django_models
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
+# from django.db import connections, models as django_models
+# from django.contrib.contenttypes.fields import GenericForeignKey
+# from django.contrib.contenttypes.models import ContentType
 
 from . import managers
 
@@ -383,7 +383,14 @@ class Account(models.Model, PerishableTokenMixin):
                                        sf_read_only=models.READ_ONLY, blank=True, null=True)
     is_person_account = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
     person_email = models.EmailField(verbose_name='Email', blank=True, null=True)
+    person_mobile_phone = models.CharField(max_length=40, verbose_name='Mobile Phone', blank=True, null=True)
     phone = models.CharField(max_length=40, verbose_name='Phone', blank=True, null=True)
+
+    person_mailing_street = models.TextField(blank=True, null=True, verbose_name=_('Street and House number'))
+    person_mailing_city = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('City'))
+    person_mailing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
+    person_mailing_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'), blank=True,
+                                              null=True)
 
     abwicklungsgebuhr_pro_einzug_pro_student = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                                    verbose_name=_(
@@ -457,6 +464,7 @@ class Account(models.Model, PerishableTokenMixin):
     universities = managers.UniversityManager()
     students = managers.StudentManager()
     ugv_students = managers.UGVStudentManager()
+    repayers = managers.RepayerManager()
 
     class Meta(models.Model.Meta):
         db_table = 'Account'
@@ -486,6 +494,10 @@ class Account(models.Model, PerishableTokenMixin):
     @property
     def is_ugv(self):
         return self.record_type.developer_name == 'UGVStudents'
+
+    @property
+    def is_repayer(self):
+        return self.record_type.developer_name == 'Ruckzahler'
 
     @property
     def is_eg_customer(self):
@@ -543,11 +555,18 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def review_completed(self):
+        if self.is_repayer:
+            return self.initial_review_completed
         return self.initial_review_completed or self.master_contact.zahlungskontakt_auto
 
     def get_student_contact(self):
         if self.is_student or self.is_ugv_student:
             return self.person_contact if self.is_person_account else self.student_contact
+        return None
+
+    def get_repayer_contact(self):
+        if self.is_repayer:
+            return self.person_contact
         return None
 
     def get_all_invoices(self, order='-invoice_date'):
