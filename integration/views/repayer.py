@@ -129,10 +129,7 @@ class Onboarding(RepayerMixin, View):
 
         if not self.account.kommunikationssprache:
             step = 'lang'
-        elif not self.account.student_approved:
-            if step not in self.steps[:1]:
-                step = 'review'
-        elif not self.account.geburtsort:
+        else:
             if step not in self.steps[:2]:
                 step = 'data'
 
