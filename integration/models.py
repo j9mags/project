@@ -555,6 +555,8 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def review_completed(self):
+        if self.is_repayer:
+            return self.initial_review_completed
         return self.initial_review_completed or self.master_contact.zahlungskontakt_auto
 
     def get_student_contact(self):
