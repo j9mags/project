@@ -302,6 +302,11 @@ class Dashboard(RepayerMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if not self.account.review_completed:
-            return redirect('integration:onboarding')
+            step = 'sepa'
+            if not self.account.kommunikationssprache:
+                step = 'lang'
+            elif not self.account.person_mobile_phone:
+                step = 'data'
+            return redirect('integration:onboarding', step=step)
 
         return super(Dashboard, self).get(request, *args, **kwargs)
