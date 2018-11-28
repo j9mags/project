@@ -1,28 +1,32 @@
 from django.conf.urls import url
 
 from .views import dispatch_by_user, download_attachment
-from .views import staff, student, ugv_student
+from .views import staff, student, ugv_student, repayer
 
 urlpatterns = [
     url(r'^onboarding/(?P<step>{})/$'.format('|'.join(['({})'.format(x) for x in student.Onboarding.steps])),
         dispatch_by_user(
             student.Onboarding.as_view(),
             ugv_student.Onboarding.as_view(),
+            repayer.Onboarding.as_view(),
             None
         ), name='onboarding'),
     url(r'^onboarding/$', dispatch_by_user(
         student.Onboarding.as_view(),
         ugv_student.Onboarding.as_view(),
+        repayer.Onboarding.as_view(),
         None
     ), name='onboarding'),
     url(r'^contact/(?P<pk>(.+)|(new))/$', dispatch_by_user(
         student.ContactDetails.as_view(),
         ugv_student.ContactDetails.as_view(),
+        None,
         None
     ), name='contact'),
     url(r'^payment/$', dispatch_by_user(
         student.PaymentDetails.as_view(),
         ugv_student.PaymentDetails.as_view(),
+        None,
         None
     ), name='payment'),
 
@@ -48,18 +52,21 @@ urlpatterns = [
         dispatch_by_user(
             student.SetLanguage.as_view(),
             ugv_student.SetLanguage.as_view(),
+            repayer.SetLanguage.as_view(),
             staff.SetLanguage.as_view()),
         name='language'),
     url(r'^language/(?P<language>.+)/$',
         dispatch_by_user(
             student.SetLanguage.as_view(),
             ugv_student.SetLanguage.as_view(),
+            repayer.SetLanguage.as_view(),
             staff.SetLanguage.as_view()),
         name='setlanguage'),
     url(r'^$',
         dispatch_by_user(
             student.Dashboard.as_view(),
             ugv_student.Dashboard.as_view(),
+            repayer.Dashboard.as_view(),
             staff.DashboardHome.as_view()),
         name='dashboard'),
 ]

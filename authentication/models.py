@@ -18,8 +18,7 @@ from uuid import uuid4
 from authtools.models import AbstractEmailUser
 from pandas.io import json
 
-from integration.models import RecordType, Account, Contact, Contract, DegreeCourse, DegreeCourseFees, Lead, \
-    Application, Choices
+from integration.models import RecordType, Account, Contact, Contract, Lead, Application
 
 
 class User(AbstractEmailUser):
@@ -39,6 +38,10 @@ class User(AbstractEmailUser):
             person_email=self.email))).exists()
 
     @property
+    def is_repayer(self):
+        return Account.repayers.filter(person_email=self.email).exists()
+
+    @property
     def is_unistaff(self):
         return Contact.university_staff.filter(email=self.email).exists()
 
@@ -55,6 +58,8 @@ class User(AbstractEmailUser):
             rc = Account.ugv_students.get(Q(unimailadresse=self.email) | (
                     Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
                 person_email=self.email)))
+        elif self.is_repayer:
+            rc = Account.repayers.get(person_email=self.email)
         return rc
 
     def create_token(self, token=None, hours=96):
