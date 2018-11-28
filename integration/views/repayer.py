@@ -290,3 +290,22 @@ class Onboarding(RepayerMixin, View):
             return redirect('integration:onboarding', step='sepa')
         elif step == 'sepa':
             return redirect(self.account.get_repayer_contact().sepamandate_url_auto)
+
+
+class Dashboard(StudentMixin, TemplateView):
+    template_name = 'repayer/dashboard.html'
+    title = 'Dashboard'
+
+    def get_context_data(self, **kwargs):
+        context = super(Dashboard, self).get_context_data(**kwargs)
+        self.account = self.get_queryset()
+
+        context['account'] = self.account
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        if not self.account.review_completed:
+            return redirect('integration:onboarding')
+
+        return super(Dashboard, self).get(request, *args, **kwargs)

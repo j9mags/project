@@ -66,7 +66,7 @@ urlpatterns = [
         dispatch_by_user(
             student.Dashboard.as_view(),
             ugv_student.Dashboard.as_view(),
-            None,
+            repayer.Dashboard.as_view(),
             staff.DashboardHome.as_view()),
         name='dashboard'),
 ]
