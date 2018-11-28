@@ -7,12 +7,12 @@ from django.core.paginator import Paginator, EmptyPage
 from django.views.generic.base import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from ..forms import *
-from ..models import Attachment, Contact, RecordType
+from ..models import Contact, RecordType  # Attachment,
 
 _logger = logging.getLogger(__name__)
 

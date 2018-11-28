@@ -1,18 +1,20 @@
 from django.conf.urls import url
 
 from .views import dispatch_by_user, download_attachment
-from .views import staff, student, ugv_student
+from .views import staff, student, ugv_student, repayer
 
 urlpatterns = [
     url(r'^onboarding/(?P<step>{})/$'.format('|'.join(['({})'.format(x) for x in student.Onboarding.steps])),
         dispatch_by_user(
             student.Onboarding.as_view(),
             ugv_student.Onboarding.as_view(),
+            repayer.Onboarding.as_view(),
             None
         ), name='onboarding'),
     url(r'^onboarding/$', dispatch_by_user(
         student.Onboarding.as_view(),
         ugv_student.Onboarding.as_view(),
+        repayer.Onboarding.as_view(),
         None
     ), name='onboarding'),
     url(r'^contact/(?P<pk>(.+)|(new))/$', dispatch_by_user(

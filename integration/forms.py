@@ -95,6 +95,21 @@ class StudentOnboardingForm(forms.Form):
         self.fields['mailing_country'].widget.choices[0] = ("", "")
 
 
+class RepayerOnboardingForm(forms.Form):
+    private_email = forms.EmailField(label=_('Private email address'))
+    mobile_phone = forms.CharField(max_length=40, label=_('Mobile phone'))
+    home_phone = forms.CharField(max_length=40, required=False, label=_('Home phone'))
+
+    mailing_street = forms.CharField(max_length=40, label=_('Street and House number'), help_text=_('Address'))
+    mailing_city = forms.CharField(max_length=255, label=_('City'))
+    mailing_zip = forms.CharField(max_length=20, label=_('Postal code'))
+    mailing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['mailing_country'].widget.choices[0] = ("", "")
+
+
 class StudentAccountForm(forms.Form):
     status = forms.ChoiceField(choices=Choices.AccountStatus)
 
