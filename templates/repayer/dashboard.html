@@ -6,4 +6,59 @@
 {% block title %}{% trans 'My CHANCEN Account' %}{% endblock %}
 
 {% block content %}
+  {% if not account.sepalastschriftmandat_erteilt_auto %}
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+      <div class="mdl-snackbar__text">
+          {% trans 'You have not authorised us to debit an account for your tuition fees. Without permission from the account holder we cannot debit your tuition fees from an account and you are not able to start your studies.' %}
+      </div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+  {% endif %}
+
+  <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+    <div class="mdl-tabs__tab-bar">
+        <a id="account-tab" href="#account-panel" class="mdl-tabs__tab">{% trans 'Account' %}</a>
+    </div>
+
+    <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %}" id="account-panel">
+        <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+            <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
+        </div>
+        <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+            <div class="mdl-card__supporting-text mdl-grid">
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Name') value=account.name %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Phone') value=account.phone %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Email') value=account.person_email %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Language') value=account.kommunikationssprache %}
+                </div>
+                <div class="mdl-cell mdl-cell--12-col">
+                  <span class="mdl-typography--title">{% trans 'Address' %}</span>
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.person_mailing_street %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Postal code') value=account.person_mailing_postal_code %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('City') value=account.person_mailing_city %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Country') value=account.person_mailing_country %}
+                </div>
+            </div>
+        </div>
+  </div>
+</div>
+
 {% endblock %}
+
+
