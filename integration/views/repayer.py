@@ -129,9 +129,8 @@ class Onboarding(RepayerMixin, View):
 
         if not self.account.kommunikationssprache:
             step = 'lang'
-        else:
-            if step not in self.steps[:2]:
-                step = 'data'
+        elif not self.account.person_mobile_phone:
+            step = 'data'
 
         context = {'step': step, 'sf_account': self.account, 'sf_contact': self.account.master_contact,
                    'sf_contract': self.account.active_contract, 'ignore_drawer': True,
