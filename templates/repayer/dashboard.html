@@ -17,13 +17,13 @@
 
   <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
     <div class="mdl-tabs__tab-bar">
-        <a id="account-tab" href="#account-panel" class="mdl-tabs__tab">{% trans 'Account' %}</a>
+        <a id="account-tab" href="#account-panel" class="mdl-tabs__tab is-active">{% trans 'Account' %}</a>
     </div>
 
     <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %}" id="account-panel">
         <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--12-col">
-            <h5 class="mdl-typography--headline">{% trans 'Matriculation data' %}</h5>
+            <h5 class="mdl-typography--headline">{% trans 'My data' %}</h5>
         </div>
         <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
             <div class="mdl-card__supporting-text mdl-grid">
@@ -32,6 +32,9 @@
                 </div>
                 <div class="mdl-cell">
                   {% include 'snippets/field-text.html' with label=_('Phone') value=account.phone %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Phone') value=account.person_mobile_phone %}
                 </div>
                 <div class="mdl-cell">
                   {% include 'snippets/field-text.html' with label=_('Email') value=account.person_email %}
