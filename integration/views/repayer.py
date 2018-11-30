@@ -297,6 +297,9 @@ class Dashboard(RepayerMixin, TemplateView):
         self.account = self.get_queryset()
 
         context['account'] = self.account
+        context['master_contact'] = self.account.master_contact
+        context['ignore_drawer'] = True
+
         return context
 
     def get(self, request, *args, **kwargs):

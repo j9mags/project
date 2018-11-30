@@ -560,7 +560,7 @@ class Account(models.Model, PerishableTokenMixin):
         return self.initial_review_completed or self.master_contact.zahlungskontakt_auto
 
     def get_student_contact(self):
-        if self.is_student or self.is_ugv_student:
+        if self.is_student or self.is_ugv_student or self.is_repayer:
             return self.person_contact if self.is_person_account else self.student_contact
         return None
 
@@ -669,6 +669,10 @@ class Contact(models.Model, PerishableTokenMixin):
     @property
     def bank_account(self):
         if not self.account.is_person_account and not self._is_staff:
+            rc = self.customerbankaccount_set.filter(enabled=True)
+            if rc.exists():
+                return rc.first()
+        elif self.account.is_person_account and self.account.is_repayer:
             rc = self.customerbankaccount_set.filter(enabled=True)
             if rc.exists():
                 return rc.first()
