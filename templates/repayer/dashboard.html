@@ -64,7 +64,6 @@
         <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
           <div class="mdl-card__supporting-text mdl-grid">
               {% if not account.sepalastschriftmandat_erteilt_auto %}
-              <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
                 <div class="mdl-cell mdl-cell--12-col">
                   <p class="mdl-typography--body-2">
                     {% trans 'Authorize us to collect the study fees by direct debit from your account.' %}</p>
@@ -80,9 +79,31 @@
                 <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center csp--word-wrap">
                   <p class="mdl-typography--title mdl-typography--font-light mdl-color-text--accent">{{ master_contact.sepamandate_url_auto }}</p>
                 </div>
-              </div>
               {% else %}
-                {% include 'snippets/repayer_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" %}
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Bank Name') value=master_contact.bank_account.bank_name %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Country Code') value=master_contact.bank_account.country_code %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Account Number(last 2 digits)') value=master_contact.bank_account.account_number %}
+                </div>
+                <div class="mdl-cell mdl-cell--12-col">
+                  <span class="mdl-typography--title">{% trans 'Billing address' %}</span>
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.person_mailing_street %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Postal code') value=account.person_mailing_postal_code %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('City') value=account.person_mailing_city %}
+                </div>
+                <div class="mdl-cell">
+                  {% include 'snippets/field-text.html' with label=_('Country') value=account.person_mailing_country %}
+                </div>
               {% endif %}
             </div>
           </div>
