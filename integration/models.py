@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
-# from django.db import connections, models as django_models
+from django.db import connections  # , models as django_models
 # from django.contrib.contenttypes.fields import GenericForeignKey
 # from django.contrib.contenttypes.models import ContentType
 
