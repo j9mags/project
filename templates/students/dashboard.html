@@ -77,8 +77,8 @@
       {% if invoices %}
       {% include "snippets/student_invoices.html" %}
       {% else %}
-      <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col mdl-grid">
-        <h3 class="mdl-typography--headline">{% trans 'No invoices found' %}</h3>
+      <div class="mdl-cell mdl-cell--12-col">
+        <h5 class="mdl-typography--headline">{% trans 'No invoices found' %}</h5>
       </div>
       {% endif %}
     </div>

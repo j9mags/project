@@ -7,13 +7,13 @@
 {% endif %}
 <div class="mdl-address mdl-grid {{ class }}">
     <div class="mdl-cell mdl-cell--8-col">
-        {% include 'snippets/input.html' with field=street type='text' %}
+        {% include 'snippets/input.html' with field=street type='text' label=street.label %}
     </div>
     <div class="mdl-cell mdl-cell--4-col">
-        {% include 'snippets/input.html' with field=zip type='text' %}
+        {% include 'snippets/input.html' with field=zip type='text' label=zip.label %}
     </div>
     <div class="mdl-cell mdl-cell--6-col">
-        {% include 'snippets/input.html' with field=city type='text' %}
+        {% include 'snippets/input.html' with field=city type='text' label=city.label %}
     </div>
     <div class="mdl-cell mdl-cell--6-col">
         {% include 'snippets/select.html' with field=country label=_('Country') %}
