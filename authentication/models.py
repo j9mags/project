@@ -321,8 +321,9 @@ class CsvUpload(models.Model):
             lead.email = row.get('private E-Mail-Adresse').lower() if row.get('private E-Mail-Adresse') is not None else None
             lead.university_status = row.get('Hochschulstatus')
             lead.status = 'Applicant'
-            lead.risiko_nicht_bei_chancen = boolean_answer.get(row.get('Risiko nicht bei CHANCEN eG'), False)
-            lead.link_zu_weiteren_dokumenten = row.get('Link zu weiteren Dokumenten')
+
+            lead.risk_not_with_chancen = boolean_answer.get(row.get('Risiko nicht bei CHANCEN eG'), False)
+            lead.link_to_further_documents = row.get('Link zu weiteren Dokumenten')
 
             lead.confirmed_by_university = True
             lead.uploaded_via_portal_trig = True

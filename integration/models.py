@@ -311,11 +311,12 @@ class Lead(models.Model):
                                      null=True)  # Field renamed because of name conflict.
     postal_city = models.CharField(custom=True, max_length=255, blank=True, null=True)
     postal_country = models.CharField(custom=True, max_length=255, choices=Choices.Country, blank=True, null=True)
-    link_zu_weiteren_dokumenten = models.URLField(custom=True, verbose_name='Link zu weiteren Dokumenten', blank=True,
-                                                  null=True)
-    risiko_nicht_bei_chancen = models.BooleanField(custom=True, db_column='RisikoNichtBeiCHANCENeG__c',
-                                                   verbose_name='Risiko nicht bei CHANCEN eG',
-                                                   default=models.DEFAULTED_ON_CREATE)
+
+    link_to_further_documents = models.URLField(custom=True, verbose_name=_('Link to further Documents'), blank=True,
+                                                null=True)
+    risk_not_with_chancen = models.BooleanField(custom=True, db_column='RiskNotWithCHANCENeG__c',
+                                                verbose_name=_('Risk not with CHANCEN eG'),
+                                                default=models.DEFAULTED_ON_CREATE)
 
     objects = managers.DefaultManager()
     ugv_students = managers.UGVLeadManager()
@@ -388,9 +389,10 @@ class Account(models.Model, PerishableTokenMixin):
 
     person_mailing_street = models.TextField(blank=True, null=True, verbose_name=_('Street and House number'))
     person_mailing_city = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('City'))
-    person_mailing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
-    person_mailing_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'), blank=True,
-                                              null=True)
+    person_mailing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True,
+                                                  null=True)
+    person_mailing_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'),
+                                              blank=True, null=True)
 
     abwicklungsgebuhr_pro_einzug_pro_student = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                                    verbose_name=_(
@@ -498,6 +500,10 @@ class Account(models.Model, PerishableTokenMixin):
     @property
     def is_repayer(self):
         return self.record_type.developer_name == 'Ruckzahler'
+
+    @property
+    def is_repayer_or_ugv(self):
+        return self.record_type.developer_name in ('Ruckzahler', 'UGVStudents')
 
     @property
     def is_eg_customer(self):
@@ -672,7 +678,7 @@ class Contact(models.Model, PerishableTokenMixin):
             rc = self.customerbankaccount_set.filter(enabled=True)
             if rc.exists():
                 return rc.first()
-        elif self.account.is_person_account and self.account.is_repayer:
+        elif self.account.is_person_account and self.account.is_repayer_or_ugv:
             rc = self.customerbankaccount_set.filter(enabled=True)
             if rc.exists():
                 return rc.first()
