@@ -23,9 +23,10 @@
   <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
     <div class="mdl-tabs__tab-bar">
         <a id="account-tab" href="#account-panel" class="mdl-tabs__tab">{% trans 'Account' %}</a>
-        <a id="invoices-tab" href="#invoices-panel" class="mdl-tabs__tab">{% trans 'Invoices' %}</a>
-        {% if False and account.is_ugv_student %}
-          <a id="uploader-tab" href="#uploader-panel" class="mdl-tabs__tab">{% trans 'Upload files' %}</a>
+        {% if not accout.is_ugv_student %}
+          <a id="invoices-tab" href="#invoices-panel" class="mdl-tabs__tab">{% trans 'Invoices' %}</a>
+        {% else %}
+          <!-- a id="uploader-tab" href="#uploader-panel" class="mdl-tabs__tab">{% trans 'Upload files' %}</a -->
         {% endif %}
     </div>
 
