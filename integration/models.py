@@ -1103,7 +1103,7 @@ class Attachment(models.Model):
 class Case(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
     case_number = models.CharField(max_length=30, sf_read_only=models.READ_ONLY)
-    contact = models.ForeignKey('Contact', models.DO_NOTHING, blank=True, null=True)
+    # contact = models.ForeignKey('Contact', models.DO_NOTHING, blank=True, null=True)
     account = models.ForeignKey(Account, models.DO_NOTHING, blank=True, null=True)
     parent = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
     supplied_name = models.CharField(max_length=80, verbose_name='Name', blank=True, null=True)
@@ -1121,12 +1121,12 @@ class Case(models.Model):
     is_closed = models.BooleanField(verbose_name='Closed', sf_read_only=models.READ_ONLY, default=False)
     closed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     is_escalated = models.BooleanField(verbose_name='Escalated', default=models.DEFAULTED_ON_CREATE)
-    owner = models.ForeignKey('Group', models.DO_NOTHING)  # Reference to tables [Group, User]
+    # owner = models.ForeignKey('Group', models.DO_NOTHING)  # Reference to tables [Group, User]
     is_closed_on_create = models.BooleanField(verbose_name='Closed When Created', sf_read_only=models.NOT_CREATEABLE, default=False)
     created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
-    created_by = models.ForeignKey('User', models.DO_NOTHING, related_name='case_createdby_set', sf_read_only=models.READ_ONLY)
-    last_modified_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
-    last_modified_by = models.ForeignKey('User', models.DO_NOTHING, related_name='case_lastmodifiedby_set', sf_read_only=models.READ_ONLY)
+    # created_by = models.ForeignKey('User', models.DO_NOTHING, related_name='case_createdby_set', sf_read_only=models.READ_ONLY)
+    # last_modified_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
+    # last_modified_by = models.ForeignKey('User', models.DO_NOTHING, related_name='case_lastmodifiedby_set', sf_read_only=models.READ_ONLY)
     system_modstamp = models.DateTimeField(sf_read_only=models.READ_ONLY)
     # contact_phone = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
     # contact_mobile = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
