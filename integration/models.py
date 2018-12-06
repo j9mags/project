@@ -235,6 +235,11 @@ class Choices:
     CustomerType = [('CS', 'CS'), ('CeG', 'CeG'), ('CS+CeG', 'CS+CeG')]
     ContractPeriod = [('Semester', _('Semester')), ('All Upfront', _('All Upfront')),
                       ('One year Upfront', _('One year Upfront'))]
+    CaseType = [('Problem', 'Problem'), ('Feature Request', 'Funktionsanforderung'), ('Question', 'Frage'),
+                ('Income Changed', _('Income Changed')), ('Personal Situation Changed', _('Personal Situation Changed')),
+                ('Provisional Exemption', _('Provisional Exemption'))]
+    CaseApproval = [('Pending', _('Pending')), ('Approved', _('Approved')), ('Not Approved', _('Not Approved'))]
+
 
 
 class RecordType(models.Model):
@@ -1093,3 +1098,47 @@ class Attachment(models.Model):
         blob = handle_api_exceptions(url, session.get)
 
         return blob
+
+
+class Case(models.Model):
+    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    case_number = models.CharField(max_length=30, sf_read_only=models.READ_ONLY)
+    contact = models.ForeignKey('Contact', models.DO_NOTHING, blank=True, null=True)
+    account = models.ForeignKey(Account, models.DO_NOTHING, blank=True, null=True)
+    parent = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
+    supplied_name = models.CharField(max_length=80, verbose_name='Name', blank=True, null=True)
+    supplied_email = models.EmailField(verbose_name='Email Address', blank=True, null=True)
+    supplied_phone = models.CharField(max_length=40, verbose_name='Phone', blank=True, null=True)
+    supplied_company = models.CharField(max_length=80, verbose_name='Company', blank=True, null=True)
+    type = models.CharField(max_length=40, verbose_name='Case Type', choices=Choices.CaseType, blank=True, null=True)
+    record_type = models.ForeignKey('RecordType', models.DO_NOTHING, blank=True, null=True)
+    # status = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=[('On Hold', 'In Warteschleife'), ('Escalated', 'Eskaliert'), ('Closed', 'Geschlossen'), ('New', 'Neu')], blank=True, null=True)
+    # reason = models.CharField(max_length=40, verbose_name='Case Reason', choices=[("User didn't attend training", 'Benutzer hat nicht an Schulung teilgenommen'), ('Complex functionality', 'Komplexe Funktion'), ('Existing problem', 'Bestehendes Problem'), ('Instructions not clear', 'Anweisungen unklar'), ('New problem', 'Neues Problem')], blank=True, null=True)
+    origin = models.CharField(max_length=40, verbose_name='Case Origin', choices=[('Email', 'E-Mail'), ('Phone', 'Telefon'), ('Web', 'Web')], blank=True, null=True)
+    subject = models.CharField(max_length=255, blank=True, null=True)
+    priority = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=[('High', 'Hoch'), ('Medium', 'Mittel'), ('Low', 'Niedrig')], blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    is_closed = models.BooleanField(verbose_name='Closed', sf_read_only=models.READ_ONLY, default=False)
+    closed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    is_escalated = models.BooleanField(verbose_name='Escalated', default=models.DEFAULTED_ON_CREATE)
+    owner = models.ForeignKey('Group', models.DO_NOTHING)  # Reference to tables [Group, User]
+    is_closed_on_create = models.BooleanField(verbose_name='Closed When Created', sf_read_only=models.NOT_CREATEABLE, default=False)
+    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
+    created_by = models.ForeignKey('User', models.DO_NOTHING, related_name='case_createdby_set', sf_read_only=models.READ_ONLY)
+    last_modified_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
+    last_modified_by = models.ForeignKey('User', models.DO_NOTHING, related_name='case_lastmodifiedby_set', sf_read_only=models.READ_ONLY)
+    system_modstamp = models.DateTimeField(sf_read_only=models.READ_ONLY)
+    # contact_phone = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    # contact_mobile = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    # contact_email = models.EmailField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    # contact_fax = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    last_viewed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    last_referenced_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    approval_status = models.CharField(custom=True, max_length=255, choices=Choices.CaseApproval, blank=True, null=True)
+    class Meta(models.Model.Meta):
+        db_table = 'Case'
+        verbose_name = 'Case'
+        verbose_name_plural = 'Cases'
+        # keyPrefix = '500'
+
+
