@@ -675,6 +675,7 @@ class StudentReview(StaffMixin, DetailView):
                 account = context.get('account')
                 account.status = ctr_form.cleaned_data.get('status')
                 account.save()
+                context.update(message=_('Student matriculation Status successfully updated.'))
         elif 'contract' in request.POST:
             if request.POST.get('discount_type') == Choices.DiscountType[1][0]:
                 dsc_form = context.get('dsc_form_str')
