@@ -11,7 +11,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 
 
-from ..forms import *
+from ..forms import RepayerCaseForm
 from ..models import Attachment
 
 import base64
@@ -285,3 +285,33 @@ class Dashboard(RepayerMixin, TemplateView):
             return redirect('integration:onboarding', step=step)
 
         return super(Dashboard, self).get(request, *args, **kwargs)
+
+
+class NewRequest(RepayerMixin, TemplateView):
+    template_name = 'repayer/dashboard.html'
+    title = 'New Request'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_repayer_context()
+        context.update(super(NewRequest, self).get_context_data(**kwargs))
+
+        if self.request.POST:
+            case = Case(account=self.account)
+            form = RepayerCaseForm(self.request.POST, self.request.FILES, instance=case)
+        else:
+            form = RepayerCaseForm(instance=contact)
+        context.update(contact=contact, form=form)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        form = context.get('form')
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('integration:dashboard')
+            except Exception as e:
+                form.add_error(None, str(e))
+        return render(request, self.template_name, context)

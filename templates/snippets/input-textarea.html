@@ -1,0 +1,14 @@
+{% load l10n %}
+
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label {% if field.errors %}is-invalid{% endif %}">
+    <textarea class="mdl-textfield__input" type="text" rows= "3" id="{{ field.id_for_label }}" ></textarea>
+    <label class="mdl-textfield__label" for="{{ field.id_for_label }}">{% firstof label field.label %}</label>
+
+    {% if field.help_text %}
+        <span class="mdl-textfield__help">{{ field.help_text }}</span>
+    {% endif %}
+
+    {% if field.errors %}
+        <span class="mdl-textfield__error">{{ field.errors | first | escape }}</span>
+    {% endif %}
+</div>
