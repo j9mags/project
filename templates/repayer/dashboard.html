@@ -114,12 +114,13 @@
     </div>
 
     <div class="mdl-tabs__panel" id="support-panel">
+      <div class="mdl-cell mdl-cell--12-col">
+        <h5 class="mdl-typography--headline">{% trans 'Open cases' %}</h5>
+        <a href="{% url 'integration:dashboard' %}" 
+           class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white">{% trans 'New' %}</a>
+      </div>
       {% for case in cases %}
         {% include 'snippets/case_card.html' %}
-      {% empty %}
-        <div class="mdl-cell mdl-cell--12-col">
-          <h5 class="mdl-typography--headline">{% trans 'No open cases' %}</h5>
-        </div>
       {% endfor %}
     </div>
   </div>
