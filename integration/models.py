@@ -1167,48 +1167,8 @@ class Case(models.Model):
         # keyPrefix = '500'
 
 
-class ContentWorkspace(models.Model):
-    name = models.CharField(max_length=255, sf_read_only=models.READ_ONLY)
-    description = models.TextField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    tag_model = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, default='U', choices=[('U', 'Unrestricted'), ('G', 'Guided'), ('R', 'Restricted')], blank=True, null=True)
-    default_record_type = models.ForeignKey(RecordType, models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    is_restrict_content_types = models.BooleanField(verbose_name='Restrict Record Types', sf_read_only=models.READ_ONLY, default=False)
-    is_restrict_linked_content_types = models.BooleanField(verbose_name='Restrict Linked Record Types', sf_read_only=models.READ_ONLY, default=False)
-    workspace_type = models.CharField(max_length=40, verbose_name='Library Type', sf_read_only=models.READ_ONLY, default='R', choices=[('R', 'Regular'), ('B', 'Asset System')], blank=True, null=True)
-    last_workspace_activity_date = models.DateTimeField(verbose_name='Last Activity', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    # root_content_folder = models.ForeignKey(ContentFolder, models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    namespace_prefix = models.CharField(max_length=15, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    developer_name = models.CharField(max_length=80, verbose_name='Unique Name', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    class Meta(models.Model.Meta):
-        db_table = 'ContentWorkspace'
-        verbose_name = 'Library'
-        verbose_name_plural = 'Libraries'
-        # keyPrefix = '058'
-
-
-class ContentDocument(models.Model):
-    parent = models.ForeignKey(ContentWorkspace, models.DO_NOTHING, sf_read_only=models.NOT_CREATEABLE, blank=True, null=True)  # Master Detail Relationship *
-
-    is_deleted = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
-    title = models.CharField(max_length=255, sf_read_only=models.NOT_CREATEABLE)
-    publish_status = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, default='U', choices=[('U', 'Upload Interrupted'), ('P', 'Public'), ('R', 'Private Library')])
-    latest_published_version = models.ForeignKey('ContentVersion', models.DO_NOTHING, related_name='contentdocument_latestpublishedversion_set', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    last_viewed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    last_referenced_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    description = models.TextField(sf_read_only=models.NOT_CREATEABLE, blank=True, null=True)
-    content_size = models.IntegerField(verbose_name='Size', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    file_type = models.CharField(max_length=20, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    file_extension = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    # content_asset = models.ForeignKey(ContentAsset, models.DO_NOTHING, related_name='contentdocument_contentasset_set', sf_read_only=models.NOT_CREATEABLE, blank=True, null=True)
-    class Meta(models.Model.Meta):
-        db_table = 'ContentDocument'
-        verbose_name = 'Content Document'
-        verbose_name_plural = 'Content Documents'
-        # keyPrefix = '069'
-
-
 class ContentVersion(models.Model):
-    content_document = models.ForeignKey(ContentDocument, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship *
+    # content_document = models.ForeignKey(ContentDocument, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship *
     content_url = models.URLField(verbose_name='Content URL', blank=True, null=True)
     version_number = models.CharField(max_length=20, sf_read_only=models.READ_ONLY, blank=True, null=True)
     title = models.CharField(max_length=255)
@@ -1247,35 +1207,6 @@ class ContentVersion(models.Model):
         # keyPrefix = '068'
 
 
-class CaseFeed(models.Model):
-    parent = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.READ_ONLY)  # Master Detail Relationship *
-    type = models.CharField(max_length=40, verbose_name='Feed Item Type', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    title = models.CharField(max_length=255, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    body = models.TextField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    link_url = models.URLField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    is_rich_text = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
-    related_record = models.ForeignKey(ContentVersion, models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    class Meta(models.Model.Meta):
-        db_table = 'CaseFeed'
-        verbose_name = 'Case Feed'
-        verbose_name_plural = 'Case Feed'
-        # keyPrefix = 'None'
-
-
-class FeedAttachment(models.Model):
-    feed_entity = models.ForeignKey(CaseFeed, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)
-    type = models.CharField(max_length=40, verbose_name='Feed Attachment Type', sf_read_only=models.NOT_UPDATEABLE, default="Content")
-    record = models.ForeignKey(ContentDocument, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
-    title = models.CharField(max_length=255, verbose_name='Feed Attachment Title', blank=True, null=True)
-    value = models.CharField(max_length=1000, verbose_name='Feed Attachment Value', blank=True, null=True)
-    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-    class Meta(models.Model.Meta):
-        db_table = 'FeedAttachment'
-        verbose_name = 'Feed Attachment'
-        verbose_name_plural = 'Feed Attachments'
-        # keyPrefix = '08M'
-
-
 class FeedItem(models.Model):
     parent = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)
     type = models.CharField(max_length=40, verbose_name='Feed Item Type', sf_read_only=models.NOT_UPDATEABLE, default="ContentPost" , blank=True, null=True)
@@ -1286,7 +1217,7 @@ class FeedItem(models.Model):
     body = models.TextField(blank=True, null=True)
     link_url = models.URLField(sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
     is_rich_text = models.BooleanField(default=models.DEFAULTED_ON_CREATE)
-    related_record = models.ForeignKey(ContentVersion, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)  # Reference to tables [ContentVersion, ProfileSkillUser, WorkThanks]
+    related_record = models.ForeignKey(ContentVersion, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
     has_content = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
     has_feed_entity = models.BooleanField(verbose_name='Has Feed Entity Attachment', sf_read_only=models.READ_ONLY, default=False)
     status = models.CharField(max_length=40, choices=[('Published', 'Published'), ('PendingReview', 'PendingReview'), ('Draft', 'Draft')], 

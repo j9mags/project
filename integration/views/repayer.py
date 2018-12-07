@@ -305,9 +305,14 @@ class NewRequest(RepayerMixin, TemplateView):
 
         form = context.get('form')
         if form.is_valid():
+            data = form.clean()
             try:
                 form.save()
-                return redirect('integration:dashboard')
             except Exception as e:
                 form.add_error(None, str(e))
+
+            case = form.instance
+            evidence = data.get('evidence')
+            raise Exception()
+            return redirect('integration:dashboard')
         return render(request, self.template_name, context)
