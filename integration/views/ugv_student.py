@@ -60,7 +60,7 @@ class UgvStudentMixin(LoginRequiredMixin):
 
         account = self.account
         contact = self.account.master_contact
-        contracts = self.account.account_contract_set.all()
+        contracts = self.account.contract_account_set.all()
         invoices = contract.all_invoices if contract is not None else None
         uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
 
