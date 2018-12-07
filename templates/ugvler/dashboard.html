@@ -45,11 +45,11 @@
     <div class="mdl-tabs__panel" id="contracts-panel">
       {% for contract in contracts %}
         {% include 'snippets/contract_card.html' %}
-      {% else %}
+      {% empty %}
       <div class="mdl-cell mdl-cell--12-col">
         <h5 class="mdl-typography--headline">{% trans 'No contracts found' %}</h5>
       </div>
-      {% endif %}
+      {% endfor %}
     </div>
   </div>
 {% endblock %}
