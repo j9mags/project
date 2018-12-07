@@ -11,7 +11,7 @@
              name="{{ field.html_name }}" 
              id="{{ field.id_for_label }}"
              {% if accept %}accept="{{ accept }}"{% endif %}
-             {% if multiple %}accept{% endif %}
+             {% if multiple %}multiple{% endif %}
              onchange="document.getElementById('{{pref}}{{ field.id_for_label }}--text').value=this.files[0].name;" />
   </label>
   {% if field.help_text %}
