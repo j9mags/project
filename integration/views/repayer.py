@@ -283,7 +283,7 @@ class Dashboard(RepayerMixin, TemplateView):
 
 
 class NewRequest(RepayerMixin, TemplateView):
-    template_name = 'repayer/dashboard.html'
+    template_name = 'repayer/request.html'
     title = 'New Request'
 
     def get_context_data(self, **kwargs):
