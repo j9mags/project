@@ -1236,7 +1236,7 @@ class ContentVersion(models.Model):
     text_preview = models.CharField(max_length=255, sf_read_only=models.READ_ONLY, blank=True, null=True)
     external_document_info1 = models.CharField(max_length=1000, blank=True, null=True)
     external_document_info2 = models.CharField(max_length=1000, blank=True, null=True)
-    external_data_source = models.ForeignKey('ExternalDataSource', models.DO_NOTHING, blank=True, null=True)
+    # external_data_source = models.ForeignKey('ExternalDataSource', models.DO_NOTHING, blank=True, null=True)
     checksum = models.CharField(max_length=50, sf_read_only=models.READ_ONLY, blank=True, null=True)
     is_major_version = models.BooleanField(verbose_name='Major Version', sf_read_only=models.NOT_UPDATEABLE, default=models.DEFAULTED_ON_CREATE)
     is_asset_enabled = models.BooleanField(verbose_name='Asset File Enabled', sf_read_only=models.NOT_UPDATEABLE, default=models.DEFAULTED_ON_CREATE)
