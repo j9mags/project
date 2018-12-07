@@ -11,7 +11,7 @@ from django.views.generic.base import View
 
 
 from ..forms import RepayerCaseForm
-from ..models import Attachment, Case
+from ..models import Attachment, Case, RecordType
 
 
 class RepayerMixin(LoginRequiredMixin):
