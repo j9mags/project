@@ -265,6 +265,11 @@ class Dashboard(RepayerMixin, TemplateView):
     template_name = 'repayer/dashboard.html'
     title = 'Dashboard'
 
+    def get_context_data(self, **kwargs):
+        context = self.get_repayer_context()
+        context.update(super(Dashboard, self).get_context_data(**kwargs))
+        return context
+
     def get(self, request, *args, **kwargs):
         self.get_context_data(**kwargs)
 
