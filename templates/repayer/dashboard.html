@@ -57,6 +57,9 @@
                   </div>
               </div>
           </div>
+          <div class="mdl-cell mdl-cell--12-col">
+            <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
+          </div>
           <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
             <div class="mdl-card__supporting-text mdl-grid">
                 {% if not account.sepalastschriftmandat_erteilt_auto %}
@@ -94,11 +97,9 @@
                     {% include 'snippets/field-text.html' with label=_('Country') value=account.person_mailing_country %}
                   </div>
                 {% endif %}
-              </div>
             </div>
           </div>
         </div>
-      </div>
     </div>
 
     <div class="mdl-tabs__panel" id="contracts-panel">
