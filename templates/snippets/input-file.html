@@ -12,7 +12,7 @@
              id="{{ field.id_for_label }}"
              {% if accept %}accept="{{ accept }}"{% endif %}
              {% if multiple %}multiple{% endif %}
-             onchange="document.getElementById('{{pref}}{{ field.id_for_label }}--text').value=this.files.map(e => e.name).join('; ');" />
+             onchange="document.getElementById('{{pref}}{{ field.id_for_label }}--text').value=Array.prototype.slice.call(this.files).map(e => e.name).join(', ');" />
   </label>
   {% if field.help_text %}
     <span class="mdl-textfield__help">{{ field.help_text }}</span>
