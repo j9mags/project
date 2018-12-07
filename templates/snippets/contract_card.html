@@ -55,7 +55,7 @@
 
   <div class="mdl-card__menu">
     {% if contract.attachment %}
-        <a href="{% url 'integration:download_attachment' pk=contract.attachment %}" title="{% trans 'Download' %}" 
+        <a href="{% url 'integration:download_attachment' pk=contract.attachment.id %}" title="{% trans 'Download' %}" 
            class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
           <i class="material-icons">file_download</i>
         </a>
