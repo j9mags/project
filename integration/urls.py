@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^invoices/$', staff.DashboardInvoices.as_view(), name='invoices'),
 
     url(r'^attachment/(?P<att_id>.+)/$', download_attachment, name='download_attachment'),
+
     url(r'^language/$',
         dispatch_by_user(
             student.SetLanguage.as_view(),
