@@ -290,7 +290,8 @@ class NewRequest(RepayerMixin, TemplateView):
         context = self.get_repayer_context()
         context.update(super(NewRequest, self).get_context_data(**kwargs))
 
-        case = Case(account=self.account)
+        case = Case(record_type=RecordType.objects.get(sobject_type='Case', developer_name='Ruckzahler'),
+                    account=self.account)
         if self.request.POST:
             form = RepayerCaseForm(self.request.POST, self.request.FILES, instance=case)
         else:

@@ -253,3 +253,7 @@ class RepayerCaseForm(forms.ModelForm):
     class Meta:
         model = Case
         fields = ['subject', 'description', 'type']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['type'].widget.choices[0] = ("", "")
