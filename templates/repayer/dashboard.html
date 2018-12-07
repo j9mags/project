@@ -19,6 +19,7 @@
     <div class="mdl-tabs__tab-bar">
         <a id="account-tab" href="#account-panel" class="mdl-tabs__tab is-active">{% trans 'Account' %}</a>
         <a id="contracts-tab" href="#contracts-panel" class="mdl-tabs__tab">{% trans 'Contracts' %}</a>
+        <a id="support-tab" href="#contracts-panel" class="mdl-tabs__tab">{% trans 'Support' %}</a>
     </div>
 
     <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %} is-active" id="account-panel">
@@ -65,7 +66,7 @@
                 {% if not account.sepalastschriftmandat_erteilt_auto %}
                   <div class="mdl-cell mdl-cell--12-col">
                     <p class="mdl-typography--body-2">
-                      {% trans 'Authorize us to collect the study fees by direct debit from your account.' %}</p>
+                      {% trans 'Authorize us to collect the monthly payments by direct debit from your account.' %}</p>
                   </div>
                   <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
                     <a href="{{ master_contact.sepamandate_url_auto}}"
@@ -104,14 +105,23 @@
 
     <div class="mdl-tabs__panel" id="contracts-panel">
       {% for contract in contracts %}
-        {% include 'snippets/contract_card.html' with class="mdl-cell csp--full-width" %}
+        {% include 'snippets/contract_card.html' %}
       {% empty %}
-      <div class="mdl-cell mdl-cell--12-col">
-        <h5 class="mdl-typography--headline">{% trans 'No contracts found' %}</h5>
-      </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <h5 class="mdl-typography--headline">{% trans 'No contracts found' %}</h5>
+        </div>
       {% endfor %}
     </div>
 
+    <div class="mdl-tabs__panel" id="contracts-panel">
+      {% for case in cases %}
+        {% include 'snippets/case_card.html' %}
+      {% empty %}
+        <div class="mdl-cell mdl-cell--12-col">
+          <h5 class="mdl-typography--headline">{% trans 'No open cases' %}</h5>
+        </div>
+      {% endfor %}
+    </div>
   </div>
 
 {% endblock %}

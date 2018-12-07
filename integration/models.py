@@ -590,6 +590,9 @@ class Account(models.Model, PerishableTokenMixin):
             return self.degreecourse_set.all()  # filter(start_of_studies__gte=min_date)
         return None
 
+    def get_open_cases(self):
+        return self.case_set.filter(is_closed=False)
+
 
 class Contact(models.Model, PerishableTokenMixin):
     record_type = models.ForeignKey(RecordType, models.DO_NOTHING, blank=True, null=True,
@@ -1125,7 +1128,7 @@ class Attachment(models.Model):
 
 class Case(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-    case_number = models.CharField(max_length=30, sf_read_only=models.READ_ONLY)
+    case_number = models.CharField(max_length=30, verbose_name=_('Case number'), sf_read_only=models.READ_ONLY)
     # contact = models.ForeignKey('Contact', models.DO_NOTHING, blank=True, null=True)
     account = models.ForeignKey(Account, models.DO_NOTHING, blank=True, null=True)
     parent = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)

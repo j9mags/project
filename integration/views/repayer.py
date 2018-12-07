@@ -58,10 +58,13 @@ class RepayerMixin(LoginRequiredMixin):
         self.account = self.get_queryset()
 
         contracts = self.account.contract_account_set.all()
+        cases = self.account.get_open_cases()
 
         context['account'] = self.account
         context['master_contact'] = self.account.master_contact
         context['contracts'] = contracts
+        context['cases'] = cases
+
         context['ignore_drawer'] = True
 
         return context
