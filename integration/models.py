@@ -1274,3 +1274,28 @@ class FeedAttachment(models.Model):
         verbose_name = 'Feed Attachment'
         verbose_name_plural = 'Feed Attachments'
         # keyPrefix = '08M'
+
+
+class FeedItem(models.Model):
+    parent = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)
+    type = models.CharField(max_length=40, verbose_name='Feed Item Type', sf_read_only=models.NOT_UPDATEABLE, default="ContentPost" , blank=True, null=True)
+    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    comment_count = models.IntegerField(sf_read_only=models.READ_ONLY)
+    like_count = models.IntegerField(sf_read_only=models.READ_ONLY)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    body = models.TextField(blank=True, null=True)
+    link_url = models.URLField(sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
+    is_rich_text = models.BooleanField(default=models.DEFAULTED_ON_CREATE)
+    related_record = models.ForeignKey(ContentVersion, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)  # Reference to tables [ContentVersion, ProfileSkillUser, WorkThanks]
+    has_content = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
+    has_feed_entity = models.BooleanField(verbose_name='Has Feed Entity Attachment', sf_read_only=models.READ_ONLY, default=False)
+    status = models.CharField(max_length=40, choices=[('Published', 'Published'), ('PendingReview', 'PendingReview'), ('Draft', 'Draft')], 
+                              default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
+    class Meta(models.Model.Meta):
+        db_table = 'FeedItem'
+        verbose_name = 'Feed Item'
+        verbose_name_plural = 'Feed Items'
+        # keyPrefix = '0D5'
+
+
+
