@@ -1001,6 +1001,13 @@ class Contract(models.Model):
     def ugv_semester_fee(self):
         return self.net_funding_amount / self.standard_period_of_study_ref
 
+    @property
+    def display_name(self):
+        rc = self.contract_number
+        if self.is_ruckzahler:
+            rc += " " + self.application_form_display_name
+        return rc
+
 
 class Rabatt(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)

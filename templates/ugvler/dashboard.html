@@ -44,7 +44,7 @@
 
     <div class="mdl-tabs__panel" id="contracts-panel">
       {% for contract in contracts %}
-        {% include 'snippets/contract_card.html' %}
+        {% include 'snippets/contract_card.html' with class="mdl-cell csp--full-width" %}
       {% empty %}
       <div class="mdl-cell mdl-cell--12-col">
         <h5 class="mdl-typography--headline">{% trans 'No contracts found' %}</h5>
