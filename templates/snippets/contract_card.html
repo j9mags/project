@@ -5,7 +5,6 @@
 </div>
 <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
   <div class="mdl-card__supporting-text mdl-grid">
-    <div class="mdl-typography--subhead">{% trans 'Contract data' %}</div>
       {% if contract.record_type.name == 'Rückzahler' %}
         <div class="mdl-cell">
             {% include 'snippets/field-text.html' with label=_('Valid from') value=contract.valid_from %}
