@@ -917,6 +917,8 @@ class Contract(models.Model):
     status = models.CharField(max_length=40, choices=Choices.ContractStatus, default=models.DEFAULTED_ON_CREATE,
                               verbose_name=_('Status'))
 
+    # Ruckzahler
+
     net_funding_amount = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                              verbose_name=_('Net funding amount'), blank=True, null=True)
     repayment_period = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
@@ -957,13 +959,24 @@ class Contract(models.Model):
     full_finanzing = models.BooleanField(custom=True, verbose_name=_('Full Finanzing'),
                                          default=models.DEFAULTED_ON_CREATE)
     counterpart = models.ForeignKey('self', models.DO_NOTHING, custom=True, blank=True, null=True)
-    credit_balances_account_number = models.CharField(custom=True, max_length=1300,
-                                                      verbose_name=_('Credit balances account number'),
-                                                      sf_read_only=models.READ_ONLY, blank=True, null=True)
     period = models.CharField(custom=True, max_length=255, choices=Choices.ContractPeriod, blank=True, null=True)
     factor = models.DecimalField(custom=True, max_digits=4, decimal_places=0, blank=True, null=True)
     notice_to_quit = models.DateField(custom=True, verbose_name=_('Notice to quit'), blank=True, null=True)
     emergence = models.DateField(custom=True, blank=True, null=True)
+
+    # Membership
+    membershipnumber = models.CharField(custom=True, max_length=30, verbose_name=_('Membership number'),
+                                        sf_read_only=models.READ_ONLY)
+    credit_balances_account_number = models.CharField(custom=True, max_length=1300,
+                                                      verbose_name=_('Credit balances account number'),
+                                                      sf_read_only=models.READ_ONLY, blank=True, null=True)
+    amount_of_cooperative_shares = models.DecimalField(custom=True, max_digits=10, decimal_places=0,
+                                                       verbose_name=_('Amount of cooperative shares'), blank=True,
+                                                       null=True)
+    entry_date = models.DateField(custom=True, verbose_name=_('Entry date'), blank=True, null=True)
+    nominal_value_cooperative_share = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                                          verbose_name=_('Nominal value of a cooperative share'),
+                                                          default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
 
     class Meta(models.Model.Meta):
         db_table = 'Contract'
@@ -1005,7 +1018,7 @@ class Contract(models.Model):
     def display_name(self):
         rc = self.contract_number
         if self.is_ruckzahler:
-            rc += " " + self.application_form_display_name
+            rc += " {} [{}]".format(self.studiengang_ref.name, self.application_form_display_name)
         return rc
 
 

@@ -5,7 +5,10 @@
 </div>
 <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
   <div class="mdl-card__supporting-text mdl-grid">
-      {% if contract.record_type.name == 'Rückzahler' %}
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('University') value=contract.university_ref.name type="text" %}
+      </div>
+      {% if contract.record_type.developer_name == 'Ruckzahler' %}
         <div class="mdl-cell">
             {% include 'snippets/field-text.html' with label=_('Valid from') value=contract.valid_from type="date" %}
         </div>
@@ -30,6 +33,23 @@
         <!-- div class="mdl-cell">
             {% include 'snippets/field-text.html' with label=_('') value=contract. type="" %}
         </div -->
+      {% elif contract.record_type.developer_name == 'Membership' %}
+        <div class="mdl-cell">
+            {% include 'snippets/field-text.html' with label=_('Entry date') value=contract.entry_date type="date" %}
+        </div>
+        <div class="mdl-cell">
+            {% include 'snippets/field-text.html' with label=_('Membership number') value=contract.membershipnumber type="text" %}
+        </div>
+        <div class="mdl-cell">
+            {% include 'snippets/field-text.html' with label=_('Credit balances account number') value=contract.credit_balances_account_number type="text" %}
+        </div>
+        <div class="mdl-cell">
+            {% include 'snippets/field-text.html' with label=_('Amount of cooperative shares') value=contract.amount_of_cooperative_shares type="int" %}
+        </div>
+        <div class="mdl-cell">
+            {% include 'snippets/field-text.html' with label=_('Nominal value of a cooperative share') value=contract.nominal_value_cooperative_share type="currency" %}
+        </div>
+      {% elif contract.record_type.developer_name == 'Transfer_Agreement' %}
       {% endif %}
   </div>
 </div>
