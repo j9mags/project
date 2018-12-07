@@ -19,7 +19,7 @@
     <div class="mdl-tabs__tab-bar">
         <a id="account-tab" href="#account-panel" class="mdl-tabs__tab is-active">{% trans 'Account' %}</a>
         <a id="contracts-tab" href="#contracts-panel" class="mdl-tabs__tab">{% trans 'Contracts' %}</a>
-        <a id="support-tab" href="#contracts-panel" class="mdl-tabs__tab">{% trans 'Support' %}</a>
+        <a id="support-tab" href="#support-panel" class="mdl-tabs__tab">{% trans 'Support' %}</a>
     </div>
 
     <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %} is-active" id="account-panel">
@@ -113,7 +113,7 @@
       {% endfor %}
     </div>
 
-    <div class="mdl-tabs__panel" id="contracts-panel">
+    <div class="mdl-tabs__panel" id="support-panel">
       {% for case in cases %}
         {% include 'snippets/case_card.html' %}
       {% empty %}
