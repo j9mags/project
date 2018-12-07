@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import *
-from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.translation import LANGUAGE_SESSION_KEY
@@ -13,10 +12,6 @@ from django.views.generic.base import View
 
 from ..forms import RepayerCaseForm
 from ..models import Attachment
-
-import base64
-
-_logger = logging.getLogger(__name__)
 
 
 class RepayerMixin(LoginRequiredMixin):
