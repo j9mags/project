@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<div class="mdl-card mdl-shadow--2dp mdl-cell">
+  <div class="mdl-card__title mdl-color--light-green-300">
+    <h2 class="mdl-card__title-text">{{ contract.application_form_display_name }}</h2>
+  </div>
+  <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+    <div class="mdl-typography--subhead">{% trans 'Contract data' %}</div>
+      {% if contract.record_type.name == 'Ruckzahler' %}
+        {% include 'snippets/field-text.html' with label=_('Valid from') value=contract.valid_from %}
+        {% include 'snippets/field-text.html' with label=_('Net funding amount') value=contract.net_funding_amount %}
+        {% include 'snippets/field-text.html' with label=_('Repayment period') value=contract.repayment_period %}
+        {% include 'snippets/field-text.html' with label=_('Relevant repayment period') value=contract.relevant_repayment_period %}
+        {% include 'snippets/field-text.html' with label=_('Maximum repayment') value=contract.maximum_repayment %}
+        {% include 'snippets/field-text.html' with label=_('Repayment amount') value=contract.repayment_amount %}
+        {% include 'snippets/field-text.html' with label=_('Minimal monthly instalments') value=contract.minimal_monthly_instalments %}
+        {% include 'snippets/field-text.html' with label=_('') value=contract. %}
+        {% include 'snippets/field-text.html' with label=_('') value=contract. %}
+        {% include 'snippets/field-text.html' with label=_('') value=contract. %}
+        {% include 'snippets/field-text.html' with label=_('') value=contract. %}
+      {% endif %}
+  </div>
+</div>

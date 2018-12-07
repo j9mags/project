@@ -241,7 +241,6 @@ class Choices:
     CaseApproval = [('Pending', _('Pending')), ('Approved', _('Approved')), ('Not Approved', _('Not Approved'))]
 
 
-
 class RecordType(models.Model):
     name = models.CharField(max_length=80)
     developer_name = models.CharField(max_length=80, verbose_name='Record Type Name')

@@ -1,0 +1,60 @@
+{% extends 'layout/dashboard.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'My CHANCEN Account' %}{% endblock %}
+
+{% block content %}
+
+  {% if not account.has_active_payment %}
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+      <div class="mdl-snackbar__text">
+          {% trans 'You have not authorized us to debit your account. Without permission from you we cannot debit the payments due which are essential part of your ISA (e.g. membership share or repayments).' %}
+      </div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+  {% endif %}
+
+  <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+    <div class="mdl-tabs__tab-bar">
+        <a id="account-tab" href="#account-panel" class="mdl-tabs__tab">{% trans 'Account' %}</a>
+        <a id="contracts-tab" href="#contracts-panel" class="mdl-tabs__tab">{% trans 'Contracts' %}</a>
+    </div>
+
+    <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %}" id="account-panel">
+      <div class="mdl-grid">
+        {% include "snippets/student_account.html" with class="mdl-cell csp--full-width" %}
+
+        <div class="mdl-cell mdl-cell--12-col">
+          <h5 class="mdl-typography--headline">{% trans 'Contact data' %}</h5>
+        </div>
+        {% if master_contact %}
+          {% include "snippets/student_contact.html" with contact=master_contact class="mdl-cell csp--full-width" %}
+        {% else %}
+          <h3 class="mdl-typography--headline">{% trans 'No contact information found' %}</h3>
+        {% endif %}
+
+        <div class="mdl-cell mdl-cell--12-col">
+          <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
+        </div>
+        {% include 'snippets/student_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" %}
+      </div>
+    </div>
+
+    <div class="mdl-tabs__panel" id="contracts-panel">
+      {% for contract in contracts %}
+        {% include 'snippets/contract_card.html' %}
+      {% else %}
+      <div class="mdl-cell mdl-cell--12-col">
+        <h5 class="mdl-typography--headline">{% trans 'No contracts found' %}</h5>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block extrajs %}
+  {{ block.super }}
+  <script src="{% static '/js/dashboard-student.js' %}"></script>
+{% endblock %}
