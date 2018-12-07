@@ -1128,7 +1128,7 @@ class Attachment(models.Model):
 class Case(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
     case_number = models.CharField(max_length=30, verbose_name=_('Case number'), sf_read_only=models.READ_ONLY)
-    # contact = models.ForeignKey('Contact', models.DO_NOTHING, blank=True, null=True)
+    contact = models.ForeignKey('Contact', models.DO_NOTHING, blank=True, null=True)
     account = models.ForeignKey(Account, models.DO_NOTHING, blank=True, null=True)
     parent = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
     supplied_name = models.CharField(max_length=80, verbose_name='Name', blank=True, null=True)

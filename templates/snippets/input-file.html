@@ -10,9 +10,8 @@
       <input type="file" 
              name="{{ field.html_name }}" 
              id="{{ field.id_for_label }}"
-             {% if accept %}
-             accept="{{ accept }}"
-             {% endif %}
+             {% if accept %}accept="{{ accept }}"{% endif %}
+             {% if multiple %}accept{% endif %}
              onchange="document.getElementById('{{pref}}{{ field.id_for_label }}--text').value=this.files[0].name;" />
   </label>
   {% if field.help_text %}
