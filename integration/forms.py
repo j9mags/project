@@ -261,5 +261,4 @@ class RepayerCaseForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(RepayerCaseForm, self).clean()
         evidence = cleaned_data.get('evidence')
-        raise Exception(evidence)
         return cleaned_data
