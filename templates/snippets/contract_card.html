@@ -7,29 +7,29 @@
   <div class="mdl-card__supporting-text mdl-grid">
       {% if contract.record_type.name == 'Rückzahler' %}
         <div class="mdl-cell">
-            {% include 'snippets/field-text.html' with label=_('Valid from') value=contract.valid_from %}
+            {% include 'snippets/field-text.html' with label=_('Valid from') value=contract.valid_from type="date" %}
         </div>
         <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Net funding amount') value=contract.net_funding_amount %}
+        {% include 'snippets/field-text.html' with label=_('Net funding amount') value=contract.net_funding_amount type="currency" %}
         </div>
         <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Repayment period') value=contract.repayment_period %}
+        {% include 'snippets/field-text.html' with label=_('Repayment period') value=contract.repayment_period type="int" %}
         </div>
         <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Relevant repayment period') value=contract.relevant_repayment_period %}
+        {% include 'snippets/field-text.html' with label=_('Relevant repayment period') value=contract.relevant_repayment_period type="int" %}
         </div>
         <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Maximum repayment') value=contract.maximum_repayment %}
+        {% include 'snippets/field-text.html' with label=_('Maximum repayment') value=contract.maximum_repayment type="currency" %}
         </div>
         <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Repayment amount') value=contract.repayment_amount %}
+        {% include 'snippets/field-text.html' with label=_('Repayment amount') value=contract.repayment_amount type="percent" %}
         </div>
         <div class="mdl-cell">
-        {% include 'snippets/field-text.html' with label=_('Minimal monthly instalments') value=contract.minimal_monthly_instalments %}
+        {% include 'snippets/field-text.html' with label=_('Minimal monthly instalments') value=contract.minimal_monthly_instalments type="currency" %}
         </div>
-        <div class="mdl-cell">
-            {% include 'snippets/field-text.html' with label=_('') value=contract. %}
-        </div>
+        <!-- div class="mdl-cell">
+            {% include 'snippets/field-text.html' with label=_('') value=contract. type="" %}
+        </div -->
       {% endif %}
   </div>
 </div>
