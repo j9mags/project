@@ -57,40 +57,13 @@ class RepayerMixin(LoginRequiredMixin):
         context = {}
         self.account = self.get_queryset()
 
-        account = self.account
-        # contact = self.account.master_contact
-        contract = self.account.active_contract
-        invoices = contract.all_invoices if contract is not None else None
-        uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
+        contracts = self.account.contract_account_set.all()
 
-        translated_sexes = dict(Choices.Biological_Sex)
-        translated_nationalities = dict(Choices.Nationality)
-        translated_languages = dict(Choices.Language)
-        translated_countries = dict(Choices.Country)
-
-        account.translated_sex = translated_sexes.get(account.master_contact.biological_sex, account.master_contact.biological_sex)
-        account.translated_nationality = translated_nationalities.get(account.citizenship, account.citizenship)
-        account.translated_language = translated_languages.get(account.kommunikationssprache, account.kommunikationssprache)
-        contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)
-
-        context['account'] = account
-        context['master_contact'] = contact
-        context['payment_contact'] = self.account.payment_contact
-        context['active_contract'] = contract
+        context['account'] = self.account
+        context['master_contact'] = self.account.master_contact
+        context['contracts'] = contracts
         context['ignore_drawer'] = True
 
-        p = int(self.request.GET.get('p', '1'))
-        s = int(self.request.GET.get('s', '10'))
-
-        if invoices:
-            paginator = Paginator(invoices, s)
-            try:
-                invoices = paginator.page(p)
-            except EmptyPage:
-                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
-
-        context['invoices'] = invoices
-        context['uploaded_files'] = uploaded_files
         return context
 
 
@@ -292,18 +265,9 @@ class Dashboard(RepayerMixin, TemplateView):
     template_name = 'repayer/dashboard.html'
     title = 'Dashboard'
 
-    def get_context_data(self, **kwargs):
-        context = super(Dashboard, self).get_context_data(**kwargs)
-        self.account = self.get_queryset()
-
-        context['account'] = self.account
-        context['master_contact'] = self.account.master_contact
-        context['ignore_drawer'] = True
-
-        return context
-
     def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
+        self.get_context_data(**kwargs)
+
         if not self.account.review_completed:
             step = 'sepa'
             if not self.account.kommunikationssprache:

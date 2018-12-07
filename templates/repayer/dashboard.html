@@ -18,7 +18,7 @@
   <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
     <div class="mdl-tabs__tab-bar">
         <a id="account-tab" href="#account-panel" class="mdl-tabs__tab is-active">{% trans 'Account' %}</a>
-        <a id="payment-tab" href="#payment-panel" class="mdl-tabs__tab">{% trans 'Payment data' %}</a>
+        <a id="contracts-tab" href="#contracts-panel" class="mdl-tabs__tab">{% trans 'Contracts' %}</a>
     </div>
 
     <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %} is-active" id="account-panel">
@@ -57,59 +57,59 @@
                   </div>
               </div>
           </div>
-        </div>
-    </div>
-    <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %}" id="payment-panel">
-      <div class="mdl-grid">
-        <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
-          <div class="mdl-card__supporting-text mdl-grid">
-              {% if not account.sepalastschriftmandat_erteilt_auto %}
-                <div class="mdl-cell mdl-cell--12-col">
-                  <p class="mdl-typography--body-2">
-                    {% trans 'Authorize us to collect the study fees by direct debit from your account.' %}</p>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
-                  <a href="{{ master_contact.sepamandate_url_auto}}"
-                     class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised mdl-color-text--white">{% trans 'Grant mandate' %}</a>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col">
-                  <p class="mdl-typography--body-2">
-                    {% trans 'If someone else is paying your tuition fees, please send them the following link and close this window.' %}</p>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center csp--word-wrap">
-                  <p class="mdl-typography--title mdl-typography--font-light mdl-color-text--accent">{{ master_contact.sepamandate_url_auto }}</p>
-                </div>
-              {% else %}
-                <div class="mdl-cell">
-                  {% include 'snippets/field-text.html' with label=_('Bank Name') value=master_contact.bank_account.bank_name %}
-                </div>
-                <div class="mdl-cell">
-                  {% include 'snippets/field-text.html' with label=_('Country Code') value=master_contact.bank_account.country_code %}
-                </div>
-                <div class="mdl-cell">
-                  {% include 'snippets/field-text.html' with label=_('Account Number(last 2 digits)') value=master_contact.bank_account.account_number %}
-                </div>
-                <div class="mdl-cell mdl-cell--12-col">
-                  <span class="mdl-typography--title">{% trans 'Billing address' %}</span>
-                </div>
-                <div class="mdl-cell">
-                  {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.person_mailing_street %}
-                </div>
-                <div class="mdl-cell">
-                  {% include 'snippets/field-text.html' with label=_('Postal code') value=account.person_mailing_postal_code %}
-                </div>
-                <div class="mdl-cell">
-                  {% include 'snippets/field-text.html' with label=_('City') value=account.person_mailing_city %}
-                </div>
-                <div class="mdl-cell">
-                  {% include 'snippets/field-text.html' with label=_('Country') value=account.person_mailing_country %}
-                </div>
-              {% endif %}
+          <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+            <div class="mdl-card__supporting-text mdl-grid">
+                {% if not account.sepalastschriftmandat_erteilt_auto %}
+                  <div class="mdl-cell mdl-cell--12-col">
+                    <p class="mdl-typography--body-2">
+                      {% trans 'Authorize us to collect the study fees by direct debit from your account.' %}</p>
+                  </div>
+                  <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+                    <a href="{{ master_contact.sepamandate_url_auto}}"
+                       class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised mdl-color-text--white">{% trans 'Grant mandate' %}</a>
+                  </div>
+                {% else %}
+                  <div class="mdl-cell">
+                    {% include 'snippets/field-text.html' with label=_('Bank Name') value=master_contact.bank_account.bank_name %}
+                  </div>
+                  <div class="mdl-cell">
+                    {% include 'snippets/field-text.html' with label=_('Country Code') value=master_contact.bank_account.country_code %}
+                  </div>
+                  <div class="mdl-cell">
+                    {% include 'snippets/field-text.html' with label=_('Account Number(last 2 digits)') value=master_contact.bank_account.account_number %}
+                  </div>
+                  <div class="mdl-cell mdl-cell--12-col">
+                    <span class="mdl-typography--title">{% trans 'Billing address' %}</span>
+                  </div>
+                  <div class="mdl-cell">
+                    {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.person_mailing_street %}
+                  </div>
+                  <div class="mdl-cell">
+                    {% include 'snippets/field-text.html' with label=_('Postal code') value=account.person_mailing_postal_code %}
+                  </div>
+                  <div class="mdl-cell">
+                    {% include 'snippets/field-text.html' with label=_('City') value=account.person_mailing_city %}
+                  </div>
+                  <div class="mdl-cell">
+                    {% include 'snippets/field-text.html' with label=_('Country') value=account.person_mailing_country %}
+                  </div>
+                {% endif %}
+              </div>
             </div>
           </div>
-        </div>
       </div>
     </div>
+
+    <div class="mdl-tabs__panel" id="contracts-panel">
+      {% for contract in contracts %}
+        {% include 'snippets/contract_card.html' with class="mdl-cell csp--full-width" %}
+      {% empty %}
+      <div class="mdl-cell mdl-cell--12-col">
+        <h5 class="mdl-typography--headline">{% trans 'No contracts found' %}</h5>
+      </div>
+      {% endfor %}
+    </div>
+
   </div>
 
 {% endblock %}
