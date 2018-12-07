@@ -61,8 +61,8 @@ class UgvStudentMixin(LoginRequiredMixin):
         account = self.account
         contact = self.account.master_contact
         contracts = self.account.contract_account_set.all()
-        invoices = contract.all_invoices if contract is not None else None
-        uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
+        # invoices = contract.all_invoices if contract is not None else None
+        # uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
 
         translated_sexes = dict(Choices.Biological_Sex)
         translated_nationalities = dict(Choices.Nationality)
@@ -82,18 +82,18 @@ class UgvStudentMixin(LoginRequiredMixin):
         context['contracts'] = contracts
         context['ignore_drawer'] = True
 
-        p = int(self.request.GET.get('p', '1'))
-        s = int(self.request.GET.get('s', '10'))
+        # p = int(self.request.GET.get('p', '1'))
+        # s = int(self.request.GET.get('s', '10'))
 
-        if invoices:
-            paginator = Paginator(invoices, s)
-            try:
-                invoices = paginator.page(p)
-            except EmptyPage:
-                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
+        # if invoices:
+        #     paginator = Paginator(invoices, s)
+        #     try:
+        #         invoices = paginator.page(p)
+        #     except EmptyPage:
+        #         invoices = paginator.page(paginator.num_pages if p > 1 else 0)
 
-        context['invoices'] = invoices
-        context['uploaded_files'] = uploaded_files
+        # context['invoices'] = invoices
+        # context['uploaded_files'] = uploaded_files
         return context
 
 
