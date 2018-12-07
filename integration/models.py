@@ -1167,51 +1167,16 @@ class Case(models.Model):
         # keyPrefix = '500'
 
 
-class CaseFeed(models.Model):
-    parent = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.READ_ONLY)  # Master Detail Relationship *
-    type = models.CharField(max_length=40, verbose_name='Feed Item Type', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    title = models.CharField(max_length=255, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    body = models.TextField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    link_url = models.URLField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    is_rich_text = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
-    related_record = models.ForeignKey('ContentVersion', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)  # Reference to tables [ContentVersion, WorkThanks]
-    inserted_by = models.ForeignKey('User', models.DO_NOTHING, related_name='casefeed_insertedby_set', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    class Meta(models.Model.Meta):
-        db_table = 'CaseFeed'
-        verbose_name = 'Case Feed'
-        verbose_name_plural = 'Case Feed'
-        # keyPrefix = 'None'
-
-
-class FeedAttachment(models.Model):
-    feed_entity = models.ForeignKey(CaseFeed, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)
-    type = models.CharField(max_length=40, verbose_name='Feed Attachment Type', sf_read_only=models.NOT_UPDATEABLE, default="Content")
-    record = models.ForeignKey(ContentDocument, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)  # Reference to tables [ContentDocument, ContentVersion, FeedItem]
-    title = models.CharField(max_length=255, verbose_name='Feed Attachment Title', blank=True, null=True)
-    value = models.CharField(max_length=1000, verbose_name='Feed Attachment Value', blank=True, null=True)
-    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
-    class Meta(models.Model.Meta):
-        db_table = 'FeedAttachment'
-        verbose_name = 'Feed Attachment'
-        verbose_name_plural = 'Feed Attachments'
-        # keyPrefix = '08M'
-
-
 class ContentWorkspace(models.Model):
     name = models.CharField(max_length=255, sf_read_only=models.READ_ONLY)
     description = models.TextField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     tag_model = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, default='U', choices=[('U', 'Unrestricted'), ('G', 'Guided'), ('R', 'Restricted')], blank=True, null=True)
-    created_by = models.ForeignKey('User', models.DO_NOTHING, related_name='contentworkspace_createdby_set', sf_read_only=models.READ_ONLY)
-    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
-    last_modified_by = models.ForeignKey('User', models.DO_NOTHING, related_name='contentworkspace_lastmodifiedby_set', sf_read_only=models.READ_ONLY)
-    system_modstamp = models.DateTimeField(sf_read_only=models.READ_ONLY)
-    last_modified_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
-    default_record_type = models.ForeignKey('RecordType', models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    default_record_type = models.ForeignKey(RecordType, models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
     is_restrict_content_types = models.BooleanField(verbose_name='Restrict Record Types', sf_read_only=models.READ_ONLY, default=False)
     is_restrict_linked_content_types = models.BooleanField(verbose_name='Restrict Linked Record Types', sf_read_only=models.READ_ONLY, default=False)
     workspace_type = models.CharField(max_length=40, verbose_name='Library Type', sf_read_only=models.READ_ONLY, default='R', choices=[('R', 'Regular'), ('B', 'Asset System')], blank=True, null=True)
     last_workspace_activity_date = models.DateTimeField(verbose_name='Last Activity', sf_read_only=models.READ_ONLY, blank=True, null=True)
-    root_content_folder = models.ForeignKey(ContentFolder, models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    # root_content_folder = models.ForeignKey(ContentFolder, models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
     namespace_prefix = models.CharField(max_length=15, sf_read_only=models.READ_ONLY, blank=True, null=True)
     developer_name = models.CharField(max_length=80, verbose_name='Unique Name', sf_read_only=models.READ_ONLY, blank=True, null=True)
     class Meta(models.Model.Meta):
@@ -1222,7 +1187,7 @@ class ContentWorkspace(models.Model):
 
 
 class ContentDocument(models.Model):
-    parent = models.ForeignKey('ContentWorkspace', models.DO_NOTHING, sf_read_only=models.NOT_CREATEABLE, blank=True, null=True)  # Master Detail Relationship *
+    parent = models.ForeignKey(ContentWorkspace, models.DO_NOTHING, sf_read_only=models.NOT_CREATEABLE, blank=True, null=True)  # Master Detail Relationship *
 
     is_deleted = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
     title = models.CharField(max_length=255, sf_read_only=models.NOT_CREATEABLE)
@@ -1252,16 +1217,11 @@ class ContentVersion(models.Model):
     path_on_client = models.CharField(max_length=500, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
     rating_count = models.IntegerField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     is_deleted = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
-    content_modified_date = models.DateTimeField(sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
-    content_modified_by = models.ForeignKey('User', models.DO_NOTHING, related_name='contentversion_contentmodifiedby_set', sf_read_only=models.READ_ONLY, blank=True, null=True)
     positive_rating_count = models.IntegerField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     negative_rating_count = models.IntegerField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     featured_content_boost = models.IntegerField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     featured_content_date = models.DateField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    owner = models.ForeignKey('User', models.DO_NOTHING, related_name='contentversion_owner_set')
-    created_by = models.ForeignKey('User', models.DO_NOTHING, related_name='contentversion_createdby_set', sf_read_only=models.READ_ONLY)
     created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
-    last_modified_by = models.ForeignKey('User', models.DO_NOTHING, related_name='contentversion_lastmodifiedby_set', sf_read_only=models.READ_ONLY)
     last_modified_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
     system_modstamp = models.DateTimeField(sf_read_only=models.READ_ONLY)
     tag_csv = models.TextField(verbose_name='Tags', blank=True, null=True)
@@ -1285,3 +1245,32 @@ class ContentVersion(models.Model):
         verbose_name = 'Content Version'
         verbose_name_plural = 'Content Versions'
         # keyPrefix = '068'
+
+
+class CaseFeed(models.Model):
+    parent = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.READ_ONLY)  # Master Detail Relationship *
+    type = models.CharField(max_length=40, verbose_name='Feed Item Type', sf_read_only=models.READ_ONLY, blank=True, null=True)
+    title = models.CharField(max_length=255, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    body = models.TextField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    link_url = models.URLField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    is_rich_text = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
+    related_record = models.ForeignKey(ContentVersion, models.DO_NOTHING, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    class Meta(models.Model.Meta):
+        db_table = 'CaseFeed'
+        verbose_name = 'Case Feed'
+        verbose_name_plural = 'Case Feed'
+        # keyPrefix = 'None'
+
+
+class FeedAttachment(models.Model):
+    feed_entity = models.ForeignKey(CaseFeed, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)
+    type = models.CharField(max_length=40, verbose_name='Feed Attachment Type', sf_read_only=models.NOT_UPDATEABLE, default="Content")
+    record = models.ForeignKey(ContentDocument, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
+    title = models.CharField(max_length=255, verbose_name='Feed Attachment Title', blank=True, null=True)
+    value = models.CharField(max_length=1000, verbose_name='Feed Attachment Value', blank=True, null=True)
+    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    class Meta(models.Model.Meta):
+        db_table = 'FeedAttachment'
+        verbose_name = 'Feed Attachment'
+        verbose_name_plural = 'Feed Attachments'
+        # keyPrefix = '08M'
