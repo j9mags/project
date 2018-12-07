@@ -1021,6 +1021,10 @@ class Contract(models.Model):
             rc += " {} [{}]".format(self.studiengang_ref.name, self.application_form_display_name)
         return rc
 
+    @property
+    def attachment(self):
+        return Attachment.objects.filter(parent_id=self.pk).last()
+
 
 class Rabatt(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
