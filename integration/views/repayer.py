@@ -10,8 +10,8 @@ from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 
 
-from ..forms import RepayerCaseForm
-from ..models import Attachment, Case, RecordType, ContentVersion, FeedItem
+from ..forms import RepayerOnboardingForm, RepayerCaseForm
+from ..models import Case, RecordType, ContentVersion, FeedItem
 
 import base64
 
