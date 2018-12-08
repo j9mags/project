@@ -11,7 +11,9 @@ from django.views.generic.base import View
 
 
 from ..forms import RepayerCaseForm
-from ..models import Attachment, Case, RecordType
+from ..models import Attachment, Case, RecordType, ContentVersion, FeedItem
+
+import base64
 
 
 class RepayerMixin(LoginRequiredMixin):
@@ -307,12 +309,19 @@ class NewRequest(RepayerMixin, TemplateView):
         if form.is_valid():
             data = form.clean()
             try:
-                form.save()
+                pass
+                # form.save()
             except Exception as e:
                 form.add_error(None, str(e))
 
             case = form.instance
-            evidence = data.get('evidence')
+            evidence = []
+            for f in self.request.FILES:
+                evidence.add(f)
+            # with open(evidence, 'rb') as content:
+            #     cv = ContentVersion(path_on_client="", version_data=base64.b64encode(content.read()), title="")
+            #     cv.save()
+
             raise Exception()
             return redirect('integration:dashboard')
         return render(request, self.template_name, context)
