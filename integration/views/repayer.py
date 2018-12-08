@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import *
-from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.translation import LANGUAGE_SESSION_KEY
@@ -11,12 +10,10 @@ from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 
 
-from ..forms import *
-from ..models import Attachment
+from ..forms import RepayerCaseForm
+from ..models import Attachment, Case, RecordType, ContentVersion, FeedItem
 
 import base64
-
-_logger = logging.getLogger(__name__)
 
 
 class RepayerMixin(LoginRequiredMixin):
@@ -57,40 +54,16 @@ class RepayerMixin(LoginRequiredMixin):
         context = {}
         self.account = self.get_queryset()
 
-        account = self.account
-        # contact = self.account.master_contact
-        contract = self.account.active_contract
-        invoices = contract.all_invoices if contract is not None else None
-        uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
+        contracts = self.account.contract_account_set.all()
+        cases = self.account.get_open_cases()
 
-        translated_sexes = dict(Choices.Biological_Sex)
-        translated_nationalities = dict(Choices.Nationality)
-        translated_languages = dict(Choices.Language)
-        translated_countries = dict(Choices.Country)
+        context['account'] = self.account
+        context['master_contact'] = self.account.master_contact
+        context['contracts'] = contracts
+        context['cases'] = cases
 
-        account.translated_sex = translated_sexes.get(account.master_contact.biological_sex, account.master_contact.biological_sex)
-        account.translated_nationality = translated_nationalities.get(account.citizenship, account.citizenship)
-        account.translated_language = translated_languages.get(account.kommunikationssprache, account.kommunikationssprache)
-        contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)
-
-        context['account'] = account
-        context['master_contact'] = contact
-        context['payment_contact'] = self.account.payment_contact
-        context['active_contract'] = contract
         context['ignore_drawer'] = True
 
-        p = int(self.request.GET.get('p', '1'))
-        s = int(self.request.GET.get('s', '10'))
-
-        if invoices:
-            paginator = Paginator(invoices, s)
-            try:
-                invoices = paginator.page(p)
-            except EmptyPage:
-                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
-
-        context['invoices'] = invoices
-        context['uploaded_files'] = uploaded_files
         return context
 
 
@@ -293,17 +266,13 @@ class Dashboard(RepayerMixin, TemplateView):
     title = 'Dashboard'
 
     def get_context_data(self, **kwargs):
-        context = super(Dashboard, self).get_context_data(**kwargs)
-        self.account = self.get_queryset()
-
-        context['account'] = self.account
-        context['master_contact'] = self.account.master_contact
-        context['ignore_drawer'] = True
-
+        context = self.get_repayer_context()
+        context.update(super(Dashboard, self).get_context_data(**kwargs))
         return context
 
     def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
+        self.get_context_data(**kwargs)
+
         if not self.account.review_completed:
             step = 'sepa'
             if not self.account.kommunikationssprache:
@@ -313,3 +282,58 @@ class Dashboard(RepayerMixin, TemplateView):
             return redirect('integration:onboarding', step=step)
 
         return super(Dashboard, self).get(request, *args, **kwargs)
+
+
+class NewRequest(RepayerMixin, TemplateView):
+    template_name = 'repayer/request.html'
+    title = 'New Request'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_repayer_context()
+        context.update(super(NewRequest, self).get_context_data(**kwargs))
+
+        case = Case(record_type=RecordType.objects.get(sobject_type='Case', developer_name='Ruckzahler'),
+                    account=self.account, contact=self.account.master_contact)
+        if self.request.POST:
+            form = RepayerCaseForm(self.request.POST, self.request.FILES, instance=case)
+        else:
+            form = RepayerCaseForm(instance=case)
+        context.update(case=case, form=form)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        form = context.get('form')
+        if form.is_valid():
+            try:
+                form.save()
+            except Exception as e:
+                form.add_error(None, str(e))
+                return render(request, self.template_name, context)
+
+            case = form.instance
+            cvv = []
+            for f in self.request.FILES.getlist('evidence'):
+                cv = ContentVersion(path_on_client=f.name, version_data=base64.b64encode(f.read()).decode('UTF-8'),
+                                    title=f.name)
+                try:
+                    cv.save()
+                except Exception as e:
+                    case.delete()
+                    form.add_error(None, str(e))
+                    return render(request, self.template_name, context)
+                cvv.append(cv)
+
+            for cv in cvv:
+                fi = FeedItem(parent=case, related_record=cv)
+                try:
+                    fi.save()
+                except Exception as e:
+                    case.delete()
+                    form.add_error(None, str(e))
+                    return render(request, self.template_name, context)
+
+            return redirect('integration:dashboard')
+        return render(request, self.template_name, context)

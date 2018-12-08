@@ -1,0 +1,22 @@
+{% load i18n %}
+
+<div class="mdl-card mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+  <div class="mdl-card__supporting-text mdl-grid">
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Case number') value=case.case_number type="text" %}
+      </div>
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Type') value=case.type type="text" %}
+      </div>
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Subject') value=case.subject type="text" %}
+      </div>
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Approval Status') value=case.approval_status type="text" %}
+      </div>
+      <div class="mdl-cell mdl-cell--12-col">
+          {% include 'snippets/field-textarea.html' with label=_('Description') value=case.description %}
+      </div>
+  </div>
+
+</div>

@@ -7,14 +7,10 @@
 
 {% block content %}
 
-  {% if account.is_student and not account.has_active_payment %}
+  {% if not account.has_active_payment %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
       <div class="mdl-snackbar__text">
-          {% if account.is_ugv_student %}
-          {% trans 'You have not authorized us to debit your account. Without permission from you we cannot debit the payments due which are essential part of your ISA (e.g. membership share or repayments).' %}
-          {% else %}
           {% trans 'You have not authorised us to debit an account for your tuition fees. Without permission from the account holder we cannot debit your tuition fees from an account and you are not able to start your studies.' %}
-          {% endif %}
       </div>
       <button class="mdl-snackbar__action" type="button"></button>
     </div>
@@ -24,9 +20,6 @@
     <div class="mdl-tabs__tab-bar">
         <a id="account-tab" href="#account-panel" class="mdl-tabs__tab">{% trans 'Account' %}</a>
         <a id="invoices-tab" href="#invoices-panel" class="mdl-tabs__tab">{% trans 'Invoices' %}</a>
-        {% if False and account.is_ugv_student %}
-          <a id="uploader-tab" href="#uploader-panel" class="mdl-tabs__tab">{% trans 'Upload files' %}</a>
-        {% endif %}
     </div>
 
     <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %}" id="account-panel">
@@ -45,7 +38,7 @@
         <div class="mdl-cell mdl-cell--12-col">
           <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
         </div>
-        {% if account.is_student and not payment_contact %}
+        {% if not payment_contact %}
         <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
           <div class="mdl-cell mdl-cell--12-col">
             <p class="mdl-typography--body-2">
@@ -63,7 +56,7 @@
             <p class="mdl-typography--title mdl-typography--font-light mdl-color-text--accent">{{ master_contact.sepamandate_url_auto }}</p>
           </div>
         </div>
-        {% elif payment_contact == master_contact or account.is_ugv_student %}
+        {% elif payment_contact == master_contact %}
           {% include 'snippets/student_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" %}
         {% else %}
           <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
@@ -83,9 +76,9 @@
       {% endif %}
     </div>
 
-    <div class="mdl-tabs__panel" id="uploader-panel">
+    <!-- div class="mdl-tabs__panel" id="uploader-panel">
       {% include 'snippets/student_upload_attachment.html' %}
-    </div>
+    </div -->
   </div>
 {% endblock %}
 

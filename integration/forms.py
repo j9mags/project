@@ -10,6 +10,7 @@ from authentication.models import CsvUpload
 from .models import Choices, Contact, Lead
 from .models import Account
 from .models import Rabatt
+from .models import Case
 
 _logger = logging.getLogger(__name__)
 
@@ -244,3 +245,15 @@ class UGVApplicationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['university_status'].widget.choices[0] = ("", "")
+
+
+class RepayerCaseForm(forms.ModelForm):
+    evidence = forms.FileField(label=_("Evidence"), widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
+    class Meta:
+        model = Case
+        fields = ['subject', 'description', 'type']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['type'].widget.choices[0] = ("", "")
