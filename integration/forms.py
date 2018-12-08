@@ -248,7 +248,7 @@ class UGVApplicationForm(forms.ModelForm):
 
 
 class RepayerCaseForm(forms.ModelForm):
-    evidence = forms.FileField(label=_("Evidence"))
+    evidence = forms.FileField(label=_("Evidence"), widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
         model = Case
@@ -257,6 +257,3 @@ class RepayerCaseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['type'].widget.choices[0] = ("", "")
-
-    def clean(self):
-        raise Exception()
