@@ -311,6 +311,7 @@ class NewRequest(RepayerMixin, TemplateView):
                 form.save()
             except Exception as e:
                 form.add_error(None, str(e))
+                return render(request, self.template_name, context)
 
             case = form.instance
             cvv = []
@@ -320,6 +321,7 @@ class NewRequest(RepayerMixin, TemplateView):
                     cv.save()
                 except Exception as e:
                     form.add_error(None, str(e))
+                    return render(request, self.template_name, context)
                 cvv.append(cv)
 
             for cv in cvv:
@@ -328,6 +330,7 @@ class NewRequest(RepayerMixin, TemplateView):
                     fi.save()
                 except Exception as e:
                     form.add_error(None, str(e))
+                    return render(request, self.template_name, context)
 
             return redirect('integration:dashboard')
         return render(request, self.template_name, context)
