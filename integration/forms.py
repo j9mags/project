@@ -257,3 +257,6 @@ class RepayerCaseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['type'].widget.choices[0] = ("", "")
+
+    def clean(self):
+        raise Exception()
