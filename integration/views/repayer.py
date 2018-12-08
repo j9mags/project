@@ -307,21 +307,27 @@ class NewRequest(RepayerMixin, TemplateView):
 
         form = context.get('form')
         if form.is_valid():
-            data = form.clean()
             try:
-                pass
-                # form.save()
+                form.save()
             except Exception as e:
                 form.add_error(None, str(e))
 
             case = form.instance
-            evidence = []
+            cvv = []
             for f in self.request.FILES.getlist('evidence'):
-                evidence.append(f)
-            # with open(evidence, 'rb') as content:
-            #     cv = ContentVersion(path_on_client="", version_data=base64.b64encode(content.read()), title="")
-            #     cv.save()
+                cv = ContentVersion(path_on_client=f.name, version_data=base64.b64encode(f.read()), title=f.name)
+                try:
+                    cv.save()
+                except Exception as e:
+                    form.add_error(None, str(e))
+                cvv.append(cv)
 
-            raise Exception()
+            for cv in cvv:
+                fi = FeedItem(parent=case, related_record=cv)
+                try:
+                    fi.save()
+                except Exception as e:
+                    form.add_error(None, str(e))
+
             return redirect('integration:dashboard')
         return render(request, self.template_name, context)
