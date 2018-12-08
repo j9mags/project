@@ -317,7 +317,7 @@ class NewRequest(RepayerMixin, TemplateView):
             case = form.instance
             evidence = []
             for f in self.request.FILES:
-                evidence.add(f)
+                evidence.append(f)
             # with open(evidence, 'rb') as content:
             #     cv = ContentVersion(path_on_client="", version_data=base64.b64encode(content.read()), title="")
             #     cv.save()
