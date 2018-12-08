@@ -321,6 +321,7 @@ class NewRequest(RepayerMixin, TemplateView):
                 try:
                     cv.save()
                 except Exception as e:
+                    case.delete()
                     form.add_error(None, str(e))
                     return render(request, self.template_name, context)
                 cvv.append(cv)
@@ -330,6 +331,7 @@ class NewRequest(RepayerMixin, TemplateView):
                 try:
                     fi.save()
                 except Exception as e:
+                    case.delete()
                     form.add_error(None, str(e))
                     return render(request, self.template_name, context)
 
