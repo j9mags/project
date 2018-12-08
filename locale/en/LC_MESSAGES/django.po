@@ -1,8 +1,9 @@
+#: templates/snippets/contract_card.html:34
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-17 10:25+0000\n"
+"POT-Creation-Date: 2018-12-08 01:59+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -39,7 +40,7 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: authentication/models.py:351
+#: authentication/models.py:358
 msgid "No valid contract found. Please check the spelling."
 msgstr ""
 
@@ -58,11 +59,11 @@ msgid ""
 "Portal."
 msgstr ""
 
-#: csp/settings.py:126
+#: csp/settings.py:128
 msgid "German"
 msgstr ""
 
-#: csp/settings.py:127 integration/models.py:207
+#: csp/settings.py:129 integration/models.py:207
 msgid "English"
 msgstr ""
 
@@ -70,131 +71,155 @@ msgstr ""
 msgid "Bank account"
 msgstr ""
 
-#: integration/admin.py:49 templates/snippets/student_payment.html:15
+#: integration/admin.py:49 templates/repayer/dashboard.html:86
+#: templates/snippets/repayer_payment.html:15
+#: templates/snippets/student_payment.html:15
 #: templates/students/payment.html:28
 msgid "Billing address"
 msgstr ""
 
-#: integration/forms.py:24
+#: integration/forms.py:25
 msgid "-- Keep current --"
 msgstr ""
 
-#: integration/forms.py:46
+#: integration/forms.py:47
 msgid "File content is not correct."
 msgstr ""
 
-#: integration/forms.py:51
+#: integration/forms.py:52
 msgid "There is a problem with the file."
 msgstr ""
 
-#: integration/forms.py:74
+#: integration/forms.py:75
 msgid "I accept that the data provided by the university is correct."
 msgstr ""
 
-#: integration/forms.py:78 integration/models.py:402
-#: templates/snippets/student_account.html:70
-#: templates/snippets/student_account.html:72
+#: integration/forms.py:79 integration/models.py:415
+#: templates/snippets/student_account.html:69
 #: templates/staff/dashboard_students.html:38
 msgid "Gender"
 msgstr ""
 
-#: integration/forms.py:79 integration/models.py:408
-#: templates/snippets/student_account.html:76
+#: integration/forms.py:80 integration/models.py:421
+#: templates/snippets/student_account.html:72
 msgid "Nationality"
 msgstr ""
 
-#: integration/forms.py:81 templates/snippets/student_account.html:66
+#: integration/forms.py:82 templates/snippets/student_account.html:66
 msgid "Birth city"
 msgstr ""
 
-#: integration/forms.py:82
+#: integration/forms.py:83
 msgid "Birth country"
 msgstr ""
 
-#: integration/forms.py:84 integration/forms.py:163 integration/models.py:577
+#: integration/forms.py:85 integration/forms.py:100 integration/forms.py:179
+#: integration/models.py:613 templates/snippets/student_contact.html:6
 #: templates/students/onboarding_review.html:35
 msgid "Private email address"
 msgstr ""
 
-#: integration/forms.py:85 integration/forms.py:164 integration/models.py:578
-#: templates/snippets/contact_card.html:10
+#: integration/forms.py:86 integration/forms.py:101 integration/forms.py:180
+#: integration/models.py:615 templates/snippets/contact_card.html:10
 #: templates/snippets/student_contact.html:9
 #: templates/staff/dashboard_students.html:37
 msgid "Mobile phone"
 msgstr ""
 
-#: integration/forms.py:86 integration/models.py:579
+#: integration/forms.py:87 integration/forms.py:102 integration/models.py:616
 msgid "Home phone"
 msgstr ""
 
-#: integration/forms.py:88 integration/forms.py:159 integration/models.py:368
-#: integration/models.py:582 templates/snippets/student_contact.html:18
+#: integration/forms.py:89 integration/forms.py:104 integration/forms.py:175
+#: integration/models.py:373 integration/models.py:393
+#: integration/models.py:619 templates/repayer/dashboard.html:48
+#: templates/repayer/dashboard.html:89
+#: templates/snippets/repayer_payment.html:18
+#: templates/snippets/student_contact.html:18
 #: templates/snippets/student_payment.html:18
 msgid "Street and House number"
 msgstr ""
 
-#: integration/forms.py:88 templates/snippets/student_account_create.html:50
+#: integration/forms.py:89 integration/forms.py:104
+#: templates/repayer/dashboard.html:45
+#: templates/repayer/onboarding_data.html:20
+#: templates/snippets/student_account_create.html:50
 #: templates/snippets/student_contact.html:15
 #: templates/students/contact.html:36
 #: templates/students/onboarding_data.html:39
 msgid "Address"
 msgstr ""
 
-#: integration/forms.py:89 integration/forms.py:160 integration/models.py:369
-#: integration/models.py:583 templates/snippets/student_contact.html:24
+#: integration/forms.py:90 integration/forms.py:105 integration/forms.py:176
+#: integration/models.py:374 integration/models.py:394
+#: integration/models.py:620 templates/repayer/dashboard.html:54
+#: templates/repayer/dashboard.html:95
+#: templates/snippets/repayer_payment.html:24
+#: templates/snippets/student_contact.html:24
 #: templates/snippets/student_payment.html:24
 msgid "City"
 msgstr ""
 
-#: integration/forms.py:90 templates/snippets/student_contact.html:21
+#: integration/forms.py:91 integration/forms.py:106
+#: templates/repayer/dashboard.html:51 templates/repayer/dashboard.html:92
+#: templates/snippets/repayer_payment.html:21
+#: templates/snippets/student_contact.html:21
 #: templates/snippets/student_payment.html:21
 msgid "Postal code"
 msgstr ""
 
-#: integration/forms.py:91 integration/forms.py:162 integration/models.py:371
-#: integration/models.py:585 templates/snippets/student_contact.html:27
+#: integration/forms.py:92 integration/forms.py:107 integration/forms.py:178
+#: integration/models.py:376 integration/models.py:397
+#: integration/models.py:622 templates/repayer/dashboard.html:57
+#: templates/repayer/dashboard.html:98
+#: templates/snippets/repayer_payment.html:27
+#: templates/snippets/student_contact.html:27
 #: templates/snippets/student_payment.html:27
 msgid "Country"
 msgstr ""
 
-#: integration/forms.py:137
+#: integration/forms.py:153
 msgid "I do want to revoke this mandate."
 msgstr ""
 
-#: integration/forms.py:153 integration/models.py:398
+#: integration/forms.py:169 integration/models.py:411
 msgid "Matriculation Number"
 msgstr ""
 
-#: integration/forms.py:154 integration/models.py:412
+#: integration/forms.py:170 integration/models.py:425
 msgid "University Email Address"
 msgstr ""
 
-#: integration/forms.py:156 integration/models.py:570
+#: integration/forms.py:172 integration/models.py:606
 #: templates/students/onboarding_review.html:11
 msgid "Last name"
 msgstr ""
 
-#: integration/forms.py:157 integration/models.py:571
+#: integration/forms.py:173 integration/models.py:607
 #: templates/students/onboarding_review.html:8
 msgid "First name"
 msgstr ""
 
-#: integration/forms.py:158 integration/models.py:405
+#: integration/forms.py:174 integration/models.py:418
 #: templates/students/onboarding_review.html:14
 msgid "Date of Birth"
 msgstr ""
 
-#: integration/forms.py:161 integration/models.py:272 integration/models.py:370
-#: integration/models.py:584
+#: integration/forms.py:177 integration/models.py:276 integration/models.py:375
+#: integration/models.py:395 integration/models.py:621
 msgid "Zip/Postal Code"
 msgstr ""
 
-#: integration/forms.py:180
+#: integration/forms.py:196
 msgid "Please consider the payment interval of the student."
 msgstr ""
 
-#: integration/forms.py:201 integration/forms.py:205
+#: integration/forms.py:217 integration/forms.py:221
 msgid "This field is required."
+msgstr ""
+
+#: integration/forms.py:251
+msgid "Evidence"
 msgstr ""
 
 #: integration/models.py:32
@@ -1813,296 +1838,325 @@ msgstr "Cypriot"
 msgid "Deutsch"
 msgstr "German"
 
-#: integration/models.py:208
+#: integration/models.py:209
 msgid "Mr."
 msgstr ""
 
-#: integration/models.py:208
+#: integration/models.py:209
 msgid "Ms."
 msgstr ""
 
-#: integration/models.py:208
+#: integration/models.py:209
 msgid "Mrs."
 msgstr ""
 
-#: integration/models.py:208
+#: integration/models.py:209
 msgid "Dr."
 msgstr ""
 
-#: integration/models.py:208
+#: integration/models.py:209
 msgid "Prof."
 msgstr ""
 
-#: integration/models.py:209
+#: integration/models.py:210
 msgid "January"
 msgstr ""
 
-#: integration/models.py:209
+#: integration/models.py:210
 msgid "February"
 msgstr ""
 
-#: integration/models.py:209
+#: integration/models.py:210
 msgid "March"
 msgstr ""
 
-#: integration/models.py:209
+#: integration/models.py:210
 msgid "April"
 msgstr ""
 
-#: integration/models.py:210
+#: integration/models.py:211
 msgid "May"
 msgstr ""
 
-#: integration/models.py:210
+#: integration/models.py:211
 msgid "June"
 msgstr ""
 
-#: integration/models.py:210
+#: integration/models.py:211
 msgid "July"
 msgstr ""
 
-#: integration/models.py:210
+#: integration/models.py:211
 msgid "August"
 msgstr ""
 
-#: integration/models.py:211
+#: integration/models.py:212
 msgid "September"
 msgstr ""
 
-#: integration/models.py:211
+#: integration/models.py:212
 msgid "October"
 msgstr ""
 
-#: integration/models.py:211
+#: integration/models.py:212
 msgid "November"
 msgstr ""
 
-#: integration/models.py:212
+#: integration/models.py:213
 msgid "December"
 msgstr ""
 
-#: integration/models.py:213
+#: integration/models.py:214
 msgid "Beginning of each Month"
 msgstr ""
 
-#: integration/models.py:214
+#: integration/models.py:215
 msgid "Beginning of each Semester"
 msgstr ""
 
-#: integration/models.py:215
+#: integration/models.py:216
 msgid "Suspend payments"
 msgstr ""
 
-#: integration/models.py:216
+#: integration/models.py:217
 msgid "Continue regular payments"
 msgstr ""
 
-#: integration/models.py:217
+#: integration/models.py:218
 msgid "Partial payments"
 msgstr ""
 
-#: integration/models.py:218
+#: integration/models.py:219
 msgid "Enrolled"
 msgstr ""
 
-#: integration/models.py:218
+#: integration/models.py:219
 msgid "Aborted"
 msgstr ""
 
-#: integration/models.py:218
+#: integration/models.py:219
 msgid "Semester Off"
 msgstr ""
 
-#: integration/models.py:219
+#: integration/models.py:220
 msgid "Semester abroad"
 msgstr ""
 
-#: integration/models.py:219
+#: integration/models.py:220
 msgid "Exmatriculated"
 msgstr ""
 
-#: integration/models.py:220 integration/models.py:226
+#: integration/models.py:221 integration/models.py:227
 msgid "Draft"
 msgstr ""
 
-#: integration/models.py:220
+#: integration/models.py:221
 msgid "Sent"
 msgstr ""
 
-#: integration/models.py:220
+#: integration/models.py:221
 msgid "Paid"
 msgstr ""
 
-#: integration/models.py:220
+#: integration/models.py:221
 msgid "Cancelled"
 msgstr ""
 
-#: integration/models.py:221
+#: integration/models.py:222
 msgid "Tuition Fee"
 msgstr ""
 
-#: integration/models.py:221 integration/models.py:434
-#: integration/models.py:437 integration/models.py:708
-#: integration/models.py:834
+#: integration/models.py:222 integration/models.py:447
+#: integration/models.py:450 integration/models.py:749
+#: integration/models.py:875
 msgid "Semester Fee"
 msgstr ""
 
-#: integration/models.py:222
+#: integration/models.py:223
 msgid "Semester Discount"
 msgstr ""
 
-#: integration/models.py:222
+#: integration/models.py:223
 msgid "Overdue Fee"
 msgstr ""
 
-#: integration/models.py:223 integration/models.py:706
-#: integration/models.py:829
+#: integration/models.py:224 integration/models.py:747
+#: integration/models.py:870
 msgid "Matriculation Fee"
 msgstr ""
 
-#: integration/models.py:223
+#: integration/models.py:224
 msgid "Dunning Fee"
 msgstr ""
 
-#: integration/models.py:224 integration/models.py:714
+#: integration/models.py:225 integration/models.py:755
 #: templates/snippets/course_fees.html:21
 msgid "Fee Semester abroad"
 msgstr ""
 
-#: integration/models.py:224 integration/models.py:716
+#: integration/models.py:225 integration/models.py:757
 #: templates/snippets/course_fees.html:24
 msgid "Fee Semester off"
 msgstr ""
 
-#: integration/models.py:225
+#: integration/models.py:226
 msgid "In Approval Process"
 msgstr ""
 
-#: integration/models.py:225
+#: integration/models.py:226
 msgid "Activated"
 msgstr ""
 
-#: integration/models.py:226
+#: integration/models.py:227
 msgid "Deactivated"
 msgstr ""
 
-#: integration/models.py:226 integration/models.py:981
+#: integration/models.py:227 integration/models.py:1046
 msgid "Active"
 msgstr ""
 
-#: integration/models.py:227
+#: integration/models.py:228
 msgid "Discount Tuition Fee"
 msgstr ""
 
-#: integration/models.py:228
+#: integration/models.py:229
 msgid "Discount Semester Fee"
 msgstr ""
 
-#: integration/models.py:229
+#: integration/models.py:230
 msgid "Prospect"
 msgstr ""
 
-#: integration/models.py:229
+#: integration/models.py:230
 msgid "Applicant"
 msgstr ""
 
-#: integration/models.py:229
+#: integration/models.py:230
 msgid "Nurturing"
 msgstr ""
 
-#: integration/models.py:230
+#: integration/models.py:231 integration/models.py:240
 msgid "Pending"
 msgstr ""
 
-#: integration/models.py:230
+#: integration/models.py:231
 msgid "Qualifiziert"
-msgstr ""
-
-#: integration/models.py:230
-msgid "Unqualifiziert"
-msgstr ""
+msgstr "Qualified"
 
 #: integration/models.py:231
+msgid "Unqualifiziert"
+msgstr "Unqualified"
+
+#: integration/models.py:232
 msgid "Not applied yet"
 msgstr ""
 
-#: integration/models.py:231
+#: integration/models.py:232
 msgid "Confirmed applicant"
 msgstr ""
 
-#: integration/models.py:232
+#: integration/models.py:233
 msgid "Rejected applicant"
 msgstr ""
 
-#: integration/models.py:232
+#: integration/models.py:233
 msgid "Accepted applicant"
 msgstr ""
 
-#: integration/models.py:233
+#: integration/models.py:234
 msgid "Already student"
 msgstr ""
 
-#: integration/models.py:235
+#: integration/models.py:236
 msgid "Semester"
 msgstr ""
 
-#: integration/models.py:235
+#: integration/models.py:236
 msgid "All Upfront"
 msgstr ""
 
-#: integration/models.py:236
+#: integration/models.py:237
 msgid "One year Upfront"
 msgstr ""
 
-#: integration/models.py:266 integration/models.py:574
+#: integration/models.py:238
+msgid "Income Changed"
+msgstr "Communicate change in income"
+
+#: integration/models.py:238
+msgid "Personal Situation Changed"
+msgstr "Communicate change of personal situation"
+
+#: integration/models.py:239
+msgid "Provisional Exemption"
+msgstr "Request temporary exemption from interim payments"
+
+#: integration/models.py:240
+msgid "Approved"
+msgstr ""
+
+#: integration/models.py:240
+msgid "Not Approved"
+msgstr ""
+
+#: integration/models.py:270 integration/models.py:610
 msgid "Full Name"
 msgstr ""
 
-#: integration/models.py:271
+#: integration/models.py:275
 msgid "State/Province"
 msgstr ""
 
-#: integration/models.py:273
+#: integration/models.py:277
 msgid "Citizenship"
 msgstr ""
 
-#: integration/models.py:279 templates/staff/ugvapplication_review.html:36
+#: integration/models.py:283 templates/staff/ugvapplication_review.html:36
 msgid "Date of birth"
 msgstr ""
 
-#: integration/models.py:280 integration/models.py:404
+#: integration/models.py:284 integration/models.py:417
 msgid "Place of Birth"
 msgstr ""
 
-#: integration/models.py:283
+#: integration/models.py:287
 msgid "No OECD Passport"
 msgstr ""
 
-#: integration/models.py:284 integration/models.py:410
+#: integration/models.py:288 integration/models.py:423
 msgid "Communication Language"
 msgstr ""
 
-#: integration/models.py:287
+#: integration/models.py:291
 msgid "Start semester"
 msgstr ""
 
-#: integration/models.py:342
+#: integration/models.py:318
+msgid "Link to further Documents"
+msgstr ""
+
+#: integration/models.py:321
+msgid "Risk not with CHANCEN eG"
+msgstr ""
+
+#: integration/models.py:347
 msgid "Start Semester"
 msgstr ""
 
-#: integration/models.py:343 templates/staff/ugvapplication_review.html:27
+#: integration/models.py:348 templates/staff/ugvapplication_review.html:27
 msgid "Start of Study"
 msgstr ""
 
-#: integration/models.py:374 integration/models.py:683
-#: integration/models.py:968 integration/models.py:992
+#: integration/models.py:379 integration/models.py:724
+#: integration/models.py:1033 integration/models.py:1057
+#: templates/repayer/dashboard.html:30
 #: templates/snippets/student_account.html:60
 #: templates/snippets/student_uploaded_files.html:8
 msgid "Name"
 msgstr ""
 
-#: integration/models.py:375 integration/models.py:879
-#: integration/models.py:1017 integration/views/staff.py:149
+#: integration/models.py:380 integration/models.py:920
+#: integration/models.py:1082 integration/views/staff.py:149
 #: integration/views/staff.py:161 integration/views/staff.py:216
 #: integration/views/staff.py:228 integration/views/staff.py:377
 #: integration/views/staff.py:392 integration/views/staff.py:434
@@ -2115,301 +2169,362 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: integration/models.py:377
+#: integration/models.py:382
 msgid "Customer type"
 msgstr ""
 
-#: integration/models.py:389
+#: integration/models.py:402
 msgid "Execution Fee / Direct Debit / Student"
 msgstr ""
 
-#: integration/models.py:397 integration/models.py:808
-#: integration/models.py:999 templates/snippets/student_account.html:15
+#: integration/models.py:410 integration/models.py:849
+#: integration/models.py:1064 templates/snippets/contract_card.html:9
+#: templates/snippets/student_account.html:15
 #: templates/snippets/student_account_create.html:12
 #: templates/staff/ugvapplication_review.html:21
 #: templates/students/onboarding_review.html:17
 msgid "University"
 msgstr ""
 
-#: integration/models.py:401
+#: integration/models.py:414
 msgid "Tuition Fee Total"
 msgstr ""
 
-#: integration/models.py:406
+#: integration/models.py:419
 msgid "Country of Birth"
 msgstr ""
 
-#: integration/models.py:436
+#: integration/models.py:449
 msgid "Modify this value to update all Courses."
 msgstr ""
 
-#: integration/models.py:440
+#: integration/models.py:453
 msgid "Payment options"
 msgstr ""
 
-#: integration/models.py:462 templates/students/dashboard.html:25
+#: integration/models.py:476 templates/repayer/dashboard.html:20
+#: templates/students/dashboard.html:21 templates/ugvler/dashboard.html:21
 msgid "Account"
 msgstr ""
 
-#: integration/models.py:463
+#: integration/models.py:477
 msgid "Accounts"
 msgstr ""
 
-#: integration/models.py:573
+#: integration/models.py:609
 msgid "Salutation"
 msgstr ""
 
-#: integration/models.py:576
+#: integration/models.py:612
 msgid "title"
 msgstr ""
 
-#: integration/models.py:580 templates/snippets/student_contact.html:12
+#: integration/models.py:617
 msgid "Other phone"
 msgstr ""
 
-#: integration/models.py:622 integration/models.py:1002
+#: integration/models.py:659 integration/models.py:1067
 msgid "Contact"
 msgstr ""
 
-#: integration/models.py:623
+#: integration/models.py:660
 msgid "Contacts"
 msgstr ""
 
-#: integration/models.py:664
+#: integration/models.py:705
 msgid "Account Holder Name"
 msgstr ""
 
-#: integration/models.py:665 templates/snippets/student_payment.html:12
+#: integration/models.py:706 templates/repayer/dashboard.html:83
+#: templates/snippets/repayer_payment.html:12
+#: templates/snippets/student_payment.html:12
 msgid "Account Number(last 2 digits)"
 msgstr ""
 
-#: integration/models.py:667 templates/snippets/student_payment.html:6
+#: integration/models.py:708 templates/repayer/dashboard.html:77
+#: templates/snippets/repayer_payment.html:6
+#: templates/snippets/student_payment.html:6
 msgid "Bank Name"
 msgstr ""
 
-#: integration/models.py:668 templates/snippets/student_payment.html:9
+#: integration/models.py:709 templates/repayer/dashboard.html:80
+#: templates/snippets/repayer_payment.html:9
+#: templates/snippets/student_payment.html:9
 msgid "Country Code"
 msgstr ""
 
-#: integration/models.py:669
+#: integration/models.py:710
 msgid "Enabled"
 msgstr ""
 
-#: integration/models.py:693 integration/models.py:824
+#: integration/models.py:734 integration/models.py:865
 msgid "Standard Study Period (No. of Semesters)"
 msgstr ""
 
-#: integration/models.py:702
+#: integration/models.py:743
 msgid "Starting Month of Studies"
 msgstr ""
 
-#: integration/models.py:709 integration/models.py:774
-#: integration/models.py:842
+#: integration/models.py:750 integration/models.py:815
+#: integration/models.py:883
 msgid "Cost per Month"
 msgstr ""
 
-#: integration/models.py:712 integration/models.py:780
-#: integration/models.py:845
+#: integration/models.py:753 integration/models.py:821
+#: integration/models.py:886
 msgid "Cost per Semester"
 msgstr ""
 
-#: integration/models.py:718 integration/models.py:818
+#: integration/models.py:759 integration/models.py:859
 msgid "Cost per Month>Standard Study Period"
 msgstr ""
 
-#: integration/models.py:722 integration/models.py:786
-#: integration/models.py:821
+#: integration/models.py:763 integration/models.py:827
+#: integration/models.py:862
 msgid "Tuition Fees Total"
 msgstr ""
 
-#: integration/models.py:725
+#: integration/models.py:766
 msgid "Number of Sofortzahler"
 msgstr ""
 
-#: integration/models.py:738 integration/models.py:811
-#: integration/models.py:1010 templates/snippets/student_account.html:35
+#: integration/models.py:779 integration/models.py:852
+#: integration/models.py:1075 templates/snippets/student_account.html:35
 #: templates/staff/ugvapplication_review.html:24
 msgid "Degree Course"
 msgstr ""
 
-#: integration/models.py:739
+#: integration/models.py:780
 msgid "Degree Courses"
 msgstr ""
 
-#: integration/models.py:773 integration/models.py:906
+#: integration/models.py:814 integration/models.py:949
+#: templates/snippets/contract_card.html:13
 #: templates/staff/course_review.html:56
 msgid "Valid from"
 msgstr ""
 
-#: integration/models.py:777
+#: integration/models.py:818
 msgid "Cost per Month > Standard Study Period"
 msgstr ""
 
-#: integration/models.py:806
+#: integration/models.py:847
 msgid "Number"
 msgstr ""
 
-#: integration/models.py:815
+#: integration/models.py:856
 msgid "Payment Interval"
 msgstr ""
 
-#: integration/models.py:826 integration/models.py:1012
+#: integration/models.py:867 integration/models.py:1077
 msgid "Payment Terms"
 msgstr ""
 
-#: integration/models.py:837
+#: integration/models.py:878
 msgid "Number of Rates Total"
 msgstr ""
 
-#: integration/models.py:839 integration/models.py:1004
+#: integration/models.py:880 integration/models.py:1069
 msgid "Student ID"
 msgstr ""
 
-#: integration/models.py:849
+#: integration/models.py:890
 msgid "Count of Invoices"
 msgstr ""
 
-#: integration/models.py:858 templates/staff/course_review.html:23
+#: integration/models.py:899 templates/staff/course_review.html:23
 #: templates/staff/dashboard_courses.html:37
 msgid "Start of Studies"
 msgstr ""
 
-#: integration/models.py:861
+#: integration/models.py:902
 msgid "Discount Helper"
 msgstr ""
 
-#: integration/models.py:863
+#: integration/models.py:904
 msgid "Active Discounts"
 msgstr ""
 
-#: integration/models.py:868
+#: integration/models.py:909
 msgid "Include In Invoice Creation Process"
 msgstr ""
 
-#: integration/models.py:871
+#: integration/models.py:912
 msgid "Number of Invoices"
 msgstr ""
 
-#: integration/models.py:875
+#: integration/models.py:916
 msgid "Special Fee"
 msgstr ""
 
-#: integration/models.py:882
+#: integration/models.py:925 templates/snippets/contract_card.html:16
 msgid "Net funding amount"
 msgstr ""
 
-#: integration/models.py:884 templates/staff/course_review.html:60
+#: integration/models.py:927 templates/snippets/contract_card.html:19
+#: templates/staff/course_review.html:60
 msgid "Repayment period"
 msgstr ""
 
-#: integration/models.py:887 templates/staff/course_review.html:59
+#: integration/models.py:930 templates/snippets/contract_card.html:22
+#: templates/staff/course_review.html:59
 msgid "Relevant repayment period"
 msgstr ""
 
-#: integration/models.py:890
+#: integration/models.py:933 templates/snippets/contract_card.html:25
 msgid "Maximum repayment"
 msgstr ""
 
-#: integration/models.py:893 templates/staff/course_review.html:57
+#: integration/models.py:936 templates/snippets/contract_card.html:28
+#: templates/staff/course_review.html:57
 msgid "Repayment amount"
 msgstr ""
 
-#: integration/models.py:895
+#: integration/models.py:938 templates/snippets/contract_card.html:31
 msgid "Minimal monthly instalments"
 msgstr ""
 
-#: integration/models.py:898
+#: integration/models.py:941
 msgid "Annual maximum repayment"
 msgstr ""
 
-#: integration/models.py:901
+#: integration/models.py:944
 msgid "Annual minimum limit"
 msgstr ""
 
-#: integration/models.py:904
+#: integration/models.py:947
 msgid "Annual minimal income indexed"
 msgstr ""
 
-#: integration/models.py:908
+#: integration/models.py:951
 msgid "Years of payment"
 msgstr ""
 
-#: integration/models.py:910
+#: integration/models.py:953
 msgid "Start of repayment"
 msgstr ""
 
-#: integration/models.py:916
+#: integration/models.py:959
 msgid "Minimal relevant income"
 msgstr ""
 
-#: integration/models.py:918
+#: integration/models.py:961
 msgid "Full Finanzing"
 msgstr ""
 
-#: integration/models.py:922
-msgid "Credit balances account number"
-msgstr ""
-
-#: integration/models.py:926
+#: integration/models.py:966
 msgid "Notice to quit"
 msgstr ""
 
-#: integration/models.py:931
-msgid "Contract"
+#: integration/models.py:970 templates/snippets/contract_card.html:41
+msgid "Membership number"
 msgstr ""
 
-#: integration/models.py:932
-msgid "Contracts"
+#: integration/models.py:973 templates/snippets/contract_card.html:44
+msgid "Credit balances account number"
 msgstr ""
 
-#: integration/models.py:972
-msgid "Discount Type"
+#: integration/models.py:976 templates/snippets/contract_card.html:47
+msgid "Amount of cooperative shares"
 msgstr ""
 
-#: integration/models.py:974
-msgid "Discount on Tuition Fee"
+#: integration/models.py:978 templates/snippets/contract_card.html:38
+msgid "Entry date"
 msgstr ""
 
-#: integration/models.py:976
-msgid "Discount on Semester Fee"
-msgstr ""
-
-#: integration/models.py:978
-msgid "Number of Applicable Months"
-msgstr ""
-
-#: integration/models.py:980
-msgid "Number of Utilizations"
+#: integration/models.py:980 templates/snippets/contract_card.html:50
+msgid "Nominal value of a cooperative share"
 msgstr ""
 
 #: integration/models.py:985
+msgid "Contract"
+msgstr ""
+
+#: integration/models.py:986 templates/repayer/dashboard.html:21
+#: templates/ugvler/dashboard.html:22
+msgid "Contracts"
+msgstr ""
+
+#: integration/models.py:1037
+msgid "Discount Type"
+msgstr ""
+
+#: integration/models.py:1039
+msgid "Discount on Tuition Fee"
+msgstr ""
+
+#: integration/models.py:1041
+msgid "Discount on Semester Fee"
+msgstr ""
+
+#: integration/models.py:1043
+msgid "Number of Applicable Months"
+msgstr ""
+
+#: integration/models.py:1045
+msgid "Number of Utilizations"
+msgstr ""
+
+#: integration/models.py:1050
 msgid "Discount"
 msgstr ""
 
-#: integration/models.py:986
+#: integration/models.py:1051
 msgid "Discounts"
 msgstr ""
 
-#: integration/models.py:1006 templates/snippets/student_invoices.html:9
+#: integration/models.py:1071 templates/snippets/student_invoices.html:9
 #: templates/staff/dashboard_invoices.html:37
 msgid "Period"
 msgstr ""
 
-#: integration/models.py:1007 templates/snippets/student_invoices.html:11
+#: integration/models.py:1072 templates/snippets/student_invoices.html:11
 msgid "Invoice Amount"
 msgstr ""
 
-#: integration/models.py:1014 templates/snippets/student_invoices.html:10
+#: integration/models.py:1079 templates/snippets/student_invoices.html:10
 msgid "Invoice Date"
 msgstr ""
 
-#: integration/models.py:1021
+#: integration/models.py:1086
 msgid "Invoice"
 msgstr ""
 
-#: integration/models.py:1022 templates/staff/dashboard.html:26
-#: templates/staff/dashboard_home.html:74 templates/students/dashboard.html:26
+#: integration/models.py:1087 templates/staff/dashboard.html:26
+#: templates/staff/dashboard_home.html:74 templates/students/dashboard.html:22
 msgid "Invoices"
+msgstr ""
+
+#: integration/models.py:1130 templates/snippets/case_card.html:6
+msgid "Case number"
+msgstr ""
+
+#: integration/views/repayer.py:119 integration/views/student.py:272
+msgid "Data input"
+msgstr ""
+
+#: integration/views/repayer.py:120 integration/views/student.py:273
+msgid "Please complete the missing information."
+msgstr ""
+
+#: integration/views/repayer.py:124 integration/views/student.py:269
+#: integration/views/student.py:277
+msgid "Continue"
+msgstr ""
+
+#: integration/views/repayer.py:127 integration/views/student.py:280
+#: integration/views/ugv_student.py:255
+msgid "SEPA Mandate"
+msgstr ""
+
+#: integration/views/repayer.py:128 integration/views/student.py:281
+msgid "We require authorisation to debit a bank account for your tuition fees."
+msgstr ""
+
+#: integration/views/repayer.py:132 integration/views/student.py:285
+#: integration/views/ugv_student.py:259 templates/repayer/dashboard.html:73
+#: templates/students/dashboard.html:49
+msgid "Grant mandate"
 msgstr ""
 
 #: integration/views/staff.py:154 integration/views/staff.py:168
@@ -2441,57 +2556,36 @@ msgid ""
 "data thoroughly."
 msgstr ""
 
-#: integration/views/staff.py:730
+#: integration/views/staff.py:678
+msgid "Student matriculation Status successfully updated."
+msgstr ""
+
+#: integration/views/staff.py:744
 msgid "UGV Application Status successfully updated."
 msgstr ""
 
-#: integration/views/staff.py:756
+#: integration/views/staff.py:770
 msgid ""
 "Students have been successfully updated. It may take a while to see the "
 "results."
 msgstr ""
 
-#: integration/views/student.py:259
+#: integration/views/student.py:262
 msgid "Data Review"
 msgstr ""
 
-#: integration/views/student.py:261
+#: integration/views/student.py:264
 msgid ""
 "Your university sent us important data for your profile. Please check it "
 "carefully. Should you find any discrepancies, please contact your university "
 "to correct this."
 msgstr ""
 
-#: integration/views/student.py:266 integration/views/student.py:274
-msgid "Continue"
-msgstr ""
-
-#: integration/views/student.py:269
-msgid "Data input"
-msgstr ""
-
-#: integration/views/student.py:270
-msgid "Please complete the missing information."
-msgstr ""
-
-#: integration/views/student.py:277 integration/views/ugv_student.py:238
-msgid "SEPA Mandate"
-msgstr ""
-
-#: integration/views/student.py:278
-msgid "We require authorisation to debit a bank account for your tuition fees."
-msgstr ""
-
-#: integration/views/student.py:282 integration/views/ugv_student.py:242
-#: templates/students/dashboard.html:56
-msgid "Grant mandate"
-msgstr ""
-
-#: integration/views/ugv_student.py:239
+#: integration/views/ugv_student.py:256
 msgid "We require authorisation to debit your bank account."
 msgstr ""
 
-#: integration/views/ugv_student.py:383
+#: integration/views/ugv_student.py:395
 msgid "Upload failed"
 msgstr ""
 
@@ -2617,13 +2711,113 @@ msgstr ""
 msgid "Set"
 msgstr ""
 
-#: templates/snippets/contact_card.html:8 templates/students/dashboard.html:37
+#: templates/repayer/dashboard.html:6 templates/students/dashboard.html:6
+#: templates/ugvler/dashboard.html:6
+msgid "My CHANCEN Account"
+msgstr ""
+
+#: templates/repayer/dashboard.html:12 templates/ugvler/dashboard.html:13
+msgid ""
+"You have not authorized us to debit your account. Without permission from "
+"you we cannot debit the payments due which are essential part of your ISA (e."
+"g. membership share or repayments)."
+msgstr ""
+
+#: templates/repayer/dashboard.html:22
+msgid "Support"
+msgstr ""
+
+#: templates/repayer/dashboard.html:33
+#: templates/snippets/student_contact.html:12
+#: templates/staff/dashboard_ugvapplications.html:36
+#: templates/staff/dashboard_ugvers.html:37
+#: templates/staff/ugvapplication_review.html:42
+#: templates/students/contact.html:33
+msgid "Phone"
+msgstr ""
+
+#: templates/repayer/dashboard.html:36
+msgid "Mobile Phone"
+msgstr ""
+
+#: templates/repayer/dashboard.html:39
+#: templates/snippets/student_account.html:22
+#: templates/snippets/student_account.html:24
+#: templates/staff/dashboard_ugvapplications.html:35
+#: templates/staff/dashboard_ugvers.html:36
+#: templates/staff/ugvapplication_review.html:39
+msgid "Email"
+msgstr ""
+
+#: templates/repayer/dashboard.html:42
+#: templates/snippets/student_account.html:75
+#: templates/staff/dashboard_students.html:39
+#: templates/staff/dashboard_ugvers.html:38
+msgid "Language"
+msgstr ""
+
+#: templates/repayer/dashboard.html:62 templates/students/dashboard.html:39
+#: templates/students/payment.html:6 templates/ugvler/dashboard.html:39
+msgid "Payment data"
+msgstr ""
+
+#: templates/repayer/dashboard.html:69
+msgid ""
+"Authorize us to collect the monthly payments by direct debit from your "
+"account."
+msgstr ""
+
+#: templates/repayer/dashboard.html:111 templates/ugvler/dashboard.html:50
+msgid "No contracts found"
+msgstr ""
+
+#: templates/repayer/dashboard.html:118
+msgid "Open cases"
+msgstr ""
+
+#: templates/repayer/dashboard.html:122
+msgid "New"
+msgstr ""
+
+#: templates/repayer/onboarding_data.html:5
+#: templates/snippets/contact_card.html:8 templates/students/dashboard.html:30
 #: templates/students/onboarding_data.html:23
+#: templates/ugvler/dashboard.html:30
 msgid "Contact data"
 msgstr ""
 
+#: templates/repayer/request.html:6
+msgid "New request"
+msgstr ""
+
+#: templates/repayer/request.html:41
+msgid "Submit"
+msgstr ""
+
+#: templates/repayer/request.html:43
+#: templates/snippets/student_discounts.html:26
+#: templates/snippets/student_discounts.html:50
+#: templates/staff/upload_review.html:67
+msgid "Discard"
+msgstr ""
+
+#: templates/snippets/case_card.html:9
+msgid "Type"
+msgstr ""
+
+#: templates/snippets/case_card.html:12
+msgid "Subject"
+msgstr ""
+
+#: templates/snippets/case_card.html:15
+msgid "Approval Status"
+msgstr ""
+
+#: templates/snippets/case_card.html:18
+msgid "Description"
+msgstr ""
+
 #: templates/snippets/contact_card.html:9
-#: templates/snippets/student_contact.html:6
 msgid "Personal email"
 msgstr ""
 
@@ -2643,9 +2837,20 @@ msgstr ""
 msgid "Set as Payment Contact"
 msgstr ""
 
+#: templates/snippets/contact_card.html:28
+#: templates/snippets/student_contact.html:32
+msgid "Edit"
+msgstr ""
+
+#: templates/snippets/contract_card.html:58
+#: templates/snippets/contract_card.html:63
+#: templates/staff/dashboard_invoices.html:48
+msgid "Download"
+msgstr ""
+
 #: templates/snippets/course_fees.html:5
 msgid "Valid from:"
-msgstr ""
+msgstr "Valid from"
 
 #: templates/snippets/course_fees.html:9
 #: templates/staff/dashboard_courses.html:34
@@ -2682,16 +2887,8 @@ msgid "Matriculation data"
 msgstr ""
 
 #: templates/snippets/student_account.html:18
-#: templates/snippets/student_account.html:22
 #: templates/students/onboarding_review.html:25
 msgid "Matriculation number"
-msgstr ""
-
-#: templates/snippets/student_account.html:24
-#: templates/staff/dashboard_ugvapplications.html:35
-#: templates/staff/dashboard_ugvers.html:36
-#: templates/staff/ugvapplication_review.html:39
-msgid "Email"
 msgstr ""
 
 #: templates/snippets/student_account.html:39
@@ -2713,12 +2910,6 @@ msgstr ""
 msgid "Birth day"
 msgstr ""
 
-#: templates/snippets/student_account.html:79
-#: templates/staff/dashboard_students.html:39
-#: templates/staff/dashboard_ugvers.html:38
-msgid "Language"
-msgstr ""
-
 #: templates/snippets/student_account_create.html:58
 msgid "Save"
 msgstr ""
@@ -2733,12 +2924,6 @@ msgstr ""
 
 #: templates/snippets/student_discounts.html:4
 msgid "Discount data"
-msgstr ""
-
-#: templates/snippets/student_discounts.html:26
-#: templates/snippets/student_discounts.html:50
-#: templates/staff/upload_review.html:67
-msgid "Discard"
 msgstr ""
 
 #: templates/snippets/student_upload_attachment.html:30
@@ -2854,7 +3039,7 @@ msgid "View invoices"
 msgstr ""
 
 #: templates/staff/dashboard_invoices.html:13
-#: templates/students/dashboard.html:81
+#: templates/students/dashboard.html:74
 msgid "No invoices found"
 msgstr ""
 
@@ -2875,10 +3060,6 @@ msgstr ""
 
 #: templates/staff/dashboard_invoices.html:38
 msgid "Total"
-msgstr ""
-
-#: templates/staff/dashboard_invoices.html:48
-msgid "Download"
 msgstr ""
 
 #: templates/staff/dashboard_students.html:12
@@ -2903,12 +3084,6 @@ msgstr ""
 
 #: templates/staff/dashboard_ugvapplications.html:12
 msgid "No applications found to match this criteria"
-msgstr ""
-
-#: templates/staff/dashboard_ugvapplications.html:36
-#: templates/staff/dashboard_ugvers.html:37
-#: templates/staff/ugvapplication_review.html:42
-msgid "Phone"
 msgstr ""
 
 #: templates/staff/dashboard_ugvapplications.html:44
@@ -2963,49 +3138,30 @@ msgstr ""
 msgid "New contact"
 msgstr ""
 
-#: templates/students/dashboard.html:6
-msgid "My CHANCEN Account"
-msgstr ""
-
-#: templates/students/dashboard.html:14
-msgid ""
-"You have not authorized us to debit your account. Without permission from "
-"you we cannot debit the payments due which are essential part of your ISA (e."
-"g. membership share or repayments)."
-msgstr ""
-
-#: templates/students/dashboard.html:16
+#: templates/students/dashboard.html:13
 msgid ""
 "You have not authorised us to debit an account for your tuition fees. "
 "Without permission from the account holder we cannot debit your tuition fees "
 "from an account and you are not able to start your studies."
 msgstr ""
 
-#: templates/students/dashboard.html:28
-msgid "Upload files"
-msgstr ""
-
-#: templates/students/dashboard.html:42
+#: templates/students/dashboard.html:35 templates/ugvler/dashboard.html:35
 msgid "No contact information found"
 msgstr ""
 
-#: templates/students/dashboard.html:46 templates/students/payment.html:6
-msgid "Payment data"
-msgstr ""
-
-#: templates/students/dashboard.html:52
+#: templates/students/dashboard.html:45
 msgid ""
 "Authorize us to collect the study fees by direct debit from your account."
 msgstr ""
 
-#: templates/students/dashboard.html:60
+#: templates/students/dashboard.html:53
 #: templates/students/onboarding_sepa.html:21
 msgid ""
 "If someone else is paying your tuition fees, please send them the following "
 "link and close this window."
 msgstr ""
 
-#: templates/students/dashboard.html:70
+#: templates/students/dashboard.html:63
 msgid "Someone else is paying for you"
 msgstr ""
 
