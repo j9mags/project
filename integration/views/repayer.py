@@ -316,7 +316,8 @@ class NewRequest(RepayerMixin, TemplateView):
             case = form.instance
             cvv = []
             for f in self.request.FILES.getlist('evidence'):
-                cv = ContentVersion(path_on_client=f.name, version_data=base64.b64encode(f.read()), title=f.name)
+                cv = ContentVersion(path_on_client=f.name, version_data=base64.b64encode(f.read()).decode('UTF-8'),
+                                    title=f.name)
                 try:
                     cv.save()
                 except Exception as e:
