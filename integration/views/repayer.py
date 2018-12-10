@@ -41,7 +41,6 @@ class RepayerMixin(LoginRequiredMixin):
                 lang = language_code if language_code is not None else get_language()
                 lang = lang if check_for_language(lang) else self.default_lang
             except Exception as e:
-                print(e)
                 lang = self.default_lang
 
             activate(lang)
