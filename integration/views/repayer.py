@@ -310,7 +310,7 @@ class NewRequest(RepayerMixin, TemplateView):
             try:
                 form.save()
             except SalesforceError as e:
-                data = e.json()[0]
+                data = e.response.json()[0]
                 form.add_error(data.get('fields')[0], (data.get('message')))
                 return render(request, self.template_name, context)
             except Exception as e:
