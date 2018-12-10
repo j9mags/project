@@ -9,6 +9,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 
+from saleforce.backend.driver import SalesforceError
 
 from ..forms import RepayerOnboardingForm, RepayerCaseForm
 from ..models import Case, RecordType, ContentVersion, FeedItem
@@ -308,8 +309,12 @@ class NewRequest(RepayerMixin, TemplateView):
         if form.is_valid():
             try:
                 form.save()
+            except SalesforceError as e:
+                data = e.json()[0]
+                form.add_error(data.get('fields')[0], (data.get('message')))
+                return render(request, self.template_name, context)
             except Exception as e:
-                form.add_error(None, str(e.message))
+                form.add_error(None, str(e))
                 return render(request, self.template_name, context)
 
             case = form.instance
