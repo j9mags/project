@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 
-from saleforce.backend.driver import SalesforceError
+from salesforce.backend.driver import SalesforceError
 
 from ..forms import RepayerOnboardingForm, RepayerCaseForm
 from ..models import Case, RecordType, ContentVersion, FeedItem
