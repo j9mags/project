@@ -292,7 +292,7 @@ class NewRequest(RepayerMixin, TemplateView):
         context = self.get_repayer_context()
         context.update(super(NewRequest, self).get_context_data(**kwargs))
 
-        pk = self.request.GET.get('pk')
+        pk = kwargs.get('pk')
         if (pk is not None):
             case = Case.objects.get(pk=pk)
         else:
@@ -302,7 +302,7 @@ class NewRequest(RepayerMixin, TemplateView):
         if self.request.POST:
             form = RepayerCaseForm(self.request.POST, self.request.FILES, instance=case)
         else:
-            form = RepayerCaseForm(instance=case, initial={'subject': case.subject, 'type':case.type, 'description': case.description})
+            form = RepayerCaseForm(instance=case, initial={'subject': case.subject or '', 'type':case.type or '', 'description': case.description or ''})
         context.update(case=case, form=form)
 
         return context
