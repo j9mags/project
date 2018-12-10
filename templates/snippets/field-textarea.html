@@ -1,7 +1,7 @@
 {% load csp %}
 
 <div class="mdl-textfield mdl-textfield--floating-label is-dirty">
-  <div class="mdl-typography--font-light">{{ value|default: '' }}</div>
+  <div class="mdl-typography--font-light">{{ value | default:"" }}</div>
   <label class="mdl-textfield__label">{{ label }}</label>
   {% if help_text %}
     <span class="mdl-textfield__help">{{ help_text }}</span>
