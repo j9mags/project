@@ -35,6 +35,4 @@ def download_attachment(request, *args, **kwargs):
     response = HttpResponse(rc, content_type=att.content_type)
     response['Content-Disposition'] = 'attachment; filename="{}"'.format(att.name)
 
-    raise exception
-    
     return response
