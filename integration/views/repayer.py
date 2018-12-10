@@ -312,8 +312,8 @@ class NewRequest(RepayerMixin, TemplateView):
             except SalesforceError as e:
                 data = e.response.json()[0]
                 field = data.get('fields')
-                field = field and field[0]
-                field = field.lower() if field in form.fields else None
+                field = field and field[0].lower()
+                field = field if field in form.fields else None
                 form.add_error(field, (data.get('message')))
                 return render(request, self.template_name, context)
             except Exception as e:
