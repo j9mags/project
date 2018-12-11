@@ -97,7 +97,7 @@ class StudentOnboardingForm(forms.Form):
 
 
 class RepayerOnboardingForm(forms.Form):
-    private_email = forms.EmailField(label=_('Private email address'))
+    # private_email = forms.EmailField(label=_('Private email address'))
     mobile_phone = forms.CharField(max_length=40, label=_('Mobile phone'))
     home_phone = forms.CharField(max_length=40, required=False, label=_('Home phone'))
 

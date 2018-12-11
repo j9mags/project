@@ -172,14 +172,14 @@ class Onboarding(RepayerMixin, View):
                 # 'last_name': contact.last_name,
                 # 'salutation': contact.salutation,
 
-                'private_email': account.person_email,
+                # 'private_email': account.person_email,
                 'mobile_phone': account.person_mobile_phone,
                 'home_phone': account.phone,
 
-                'shiping_street': account.shipping_street,
-                'shiping_city': account.shipping_city,
-                'shiping_zip': account.shipping_postal_code,
-                'shiping_country': account.shipping_country,
+                'shipping_street': account.shipping_street,
+                'shipping_city': account.shipping_city,
+                'shipping_zip': account.shipping_postal_code,
+                'shipping_country': account.shipping_country,
 
                 # 'gender': account.geschlecht,
                 'language': account.kommunikationssprache,
@@ -254,7 +254,7 @@ class Onboarding(RepayerMixin, View):
 
             data = form.cleaned_data
 
-            account.person_email = data.get('private_email')
+            # account.person_email = data.get('private_email')
             account.person_mobile_phone = data.get('mobile_phone')
             account.phone = data.get('home_phone')
 
