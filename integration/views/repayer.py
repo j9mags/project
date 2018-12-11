@@ -150,8 +150,8 @@ class Onboarding(RepayerMixin, View):
 
     def _get_data_context(self, context):
         account = context.get('sf_account')
-        contact = context.get('sf_contact')
-        contract = context.get('sf_contract')
+        # contact = context.get('sf_contact')
+        # contract = context.get('sf_contract')
 
         try:
             form = RepayerOnboardingForm(initial={
@@ -163,10 +163,10 @@ class Onboarding(RepayerMixin, View):
                 'mobile_phone': account.person_mobile_phone,
                 'home_phone': account.phone,
 
-                'mailing_street': account.person_mailing_street,
-                'mailing_city': account.person_mailing_city,
-                'mailing_zip': account.person_mailing_postal_code,
-                'mailing_country': account.person_mailing_country,
+                'shiping_street': account.shipping_street,
+                'shiping_city': account.shipping_city,
+                'shiping_zip': account.shipping_postal_code,
+                'shiping_country': account.shipping_country,
 
                 # 'gender': account.geschlecht,
                 'language': account.kommunikationssprache,
@@ -174,10 +174,10 @@ class Onboarding(RepayerMixin, View):
                 # 'birth_city': account.geburtsort,
                 # 'birth_country': account.geburtsland,
 
-                # 'billing_street': account.billing_street,
-                # 'billing_city': account.billing_city,
-                # 'billing_zip': account.billing_postal_code,
-                # 'billing_country': account.billing_country,
+                'billing_street': account.billing_street,
+                'billing_city': account.billing_city,
+                'billing_zip': account.billing_postal_code,
+                'billing_country': account.billing_country,
 
                 # 'billing_option': contract.payment_interval if contract else None
             })
@@ -242,14 +242,18 @@ class Onboarding(RepayerMixin, View):
             data = form.cleaned_data
 
             account.person_email = data.get('private_email')
-
             account.person_mobile_phone = data.get('mobile_phone')
-
             account.phone = data.get('home_phone')
-            account.person_mailing_street = data.get('mailing_street')
-            account.person_mailing_city = data.get('mailing_city')
-            account.person_mailing_postal_code = data.get('mailing_zip')
-            account.person_mailing_country = data.get('mailing_country')
+
+            account.shipping_street = data.get('shipping_street')
+            account.shipping_city = data.get('shipping_city')
+            account.shipping_postal_code = data.get('shipping_zip')
+            account.shipping_country = data.get('shipping_country')
+
+            account.billing_street = data.get('billing_street')
+            account.billing_city = data.get('billing_city')
+            account.billing_postal_code = data.get('billing_zip')
+            account.billing_country = data.get('billing_country')
 
             try:
                 account.save()

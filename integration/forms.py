@@ -101,10 +101,15 @@ class RepayerOnboardingForm(forms.Form):
     mobile_phone = forms.CharField(max_length=40, label=_('Mobile phone'))
     home_phone = forms.CharField(max_length=40, required=False, label=_('Home phone'))
 
-    mailing_street = forms.CharField(max_length=40, label=_('Street and House number'), help_text=_('Address'))
-    mailing_city = forms.CharField(max_length=255, label=_('City'))
-    mailing_zip = forms.CharField(max_length=20, label=_('Postal code'))
-    mailing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
+    shipping_street = forms.CharField(max_length=40, label=_('Street and House number'), help_text=_('Contact Address'))
+    shipping_city = forms.CharField(max_length=255, label=_('City'))
+    shipping_zip = forms.CharField(max_length=20, label=_('Postal code'))
+    shipping_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
+
+    billing_street = forms.CharField(max_length=40, label=_('Street and House number'), help_text=_('Billing Address'))
+    billing_city = forms.CharField(max_length=255, label=_('City'))
+    billing_zip = forms.CharField(max_length=20, label=_('Postal code'))
+    billing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
