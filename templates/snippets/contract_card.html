@@ -30,9 +30,6 @@
         <div class="mdl-cell">
         {% include 'snippets/field-text.html' with label=_('Minimal monthly instalments') value=contract.minimal_monthly_instalments type="currency" %}
         </div>
-        <!-- div class="mdl-cell">
-            {% include 'snippets/field-text.html' with label=_('') value=contract. type="" %}
-        </div -->
       {% elif contract.record_type.developer_name == 'Membership' %}
         <div class="mdl-cell">
             {% include 'snippets/field-text.html' with label=_('Entry date') value=contract.entry_date type="date" %}

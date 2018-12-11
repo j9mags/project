@@ -235,8 +235,9 @@ class Choices:
     CustomerType = [('CS', 'CS'), ('CeG', 'CeG'), ('CS+CeG', 'CS+CeG')]
     ContractPeriod = [('Semester', _('Semester')), ('All Upfront', _('All Upfront')),
                       ('One year Upfront', _('One year Upfront'))]
-    CaseType = [('Income Changed', _('Income Changed')), ('Personal Situation Changed', _('Personal Situation Changed')),
-                ('Provisional Exemption', _('Provisional Exemption'))]
+    CaseType = [('Income Changed', _('Communicate change in income')),
+                ('Personal Situation Changed', _('Communicate change of personal situation')),
+                ('Provisional Exemption', _('Request temporary exemption from interim payments'))]
     CaseApproval = [('Pending', _('Pending')), ('Approved', _('Approved')), ('Not Approved', _('Not Approved'))]
 
 
