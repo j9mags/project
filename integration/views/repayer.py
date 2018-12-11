@@ -11,7 +11,7 @@ from django.views.generic.base import View
 
 from salesforce.backend.driver import SalesforceError
 
-from ..forms import RepayerOnboardingForm, RepayerCaseForm
+from ..forms import RepayerOnboardingForm, RepayerCaseForm, LanguageSelectForm
 from ..models import Case, RecordType, ContentVersion, FeedItem
 
 import base64
