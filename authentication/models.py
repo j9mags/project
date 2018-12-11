@@ -78,7 +78,7 @@ class PerishableToken(models.Model):
     expires_at = models.DateTimeField()
 
     def is_expired(self):
-        return self.expires_at < timezone.now()
+        return self.expires_at and (self.expires_at < timezone.now())
 
 
 class CsvUpload(models.Model):
