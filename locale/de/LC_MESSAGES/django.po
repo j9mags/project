@@ -2806,6 +2806,7 @@ msgid "Payment data"
 msgstr "Zahlungsdaten"
 
 #: templates/repayer/dashboard.html:69
+msgid ""
 "Authorize us to collect the monthly payments by direct debit from your "
 "account."
 msgstr ""
