@@ -92,7 +92,7 @@
           type: 'date',
           init: moment(),
           past: moment(),
-          future: moment(),
+          future: moment().add(5, 'years'),
           trigger: start_date
         });
         start_date.addEventListener('focus', function() {
@@ -113,7 +113,7 @@
           type: 'date',
           init: moment(),
           past: moment(),
-          future: moment(),
+          future: moment().add(5, 'years'),
           trigger: end_date
         });
         end_date.addEventListener('focus', function() {
