@@ -154,6 +154,19 @@ class Onboarding(RepayerMixin, View):
         # contract = context.get('sf_contract')
 
         try:
+            if not (account.shipping_street or account.shipping_city or
+                    account.shipping_postal_code or account.shipping_country):
+                account.shipping_street = account.billing_street
+                account.shipping_city = account.billing_city
+                account.shipping_postal_code = account.billing_postal_code
+                account.shipping_country = account.billing_country
+            elif not (account.billing_street or account.billing_city or
+                      account.billing_postal_code or account.billing_country):
+                account.billing_street = account.shiping_street
+                account.billing_city = account.shipping_city
+                account.billing_postal_code = account.shipping_postal_code
+                account.billing_country = account.shipping_country
+
             form = RepayerOnboardingForm(initial={
                 # 'first_name': contact.first_name,
                 # 'last_name': contact.last_name,
