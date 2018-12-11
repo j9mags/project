@@ -307,6 +307,7 @@ class CsvUpload(models.Model):
             lead.postal_code = row.get('PLZ')
             lead.city = row.get('Stadt')
             lead.country_0 = row.get('Land')
+            lead.country = row.get('Land')
             lead.date_of_birth = row.get('Geburtsdatum')
             lead.place_of_birth = row.get('Geburtsort')
             lead.citizenship_new = row.get('Staatsbürgerschaft')

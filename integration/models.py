@@ -275,6 +275,10 @@ class Lead(models.Model):
     city = models.CharField(max_length=40, blank=True, null=True)
     state = models.CharField(max_length=80, verbose_name=_('State/Province'), blank=True, null=True)
     postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
+    country = models.CharField(max_length=80, blank=True, null=True)
+    country_0 = models.CharField(db_column='Country__c', custom=True, max_length=255, choices=Choices.Country,
+                                 blank=True, null=True)
+
     citizenship_new = models.CharField(custom=True, max_length=255, verbose_name=_('Citizenship'),
                                        choices=Choices.Nationality, blank=True, null=True)
 
