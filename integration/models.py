@@ -17,7 +17,7 @@ class PerishableTokenMixin:
         if not self.cspassword_token:
             return True
         if not self.cspassword_time:
-            return False
+            return True
         if self.cspassword_time < timezone.now():
             return True
 
@@ -235,8 +235,9 @@ class Choices:
     CustomerType = [('CS', 'CS'), ('CeG', 'CeG'), ('CS+CeG', 'CS+CeG')]
     ContractPeriod = [('Semester', _('Semester')), ('All Upfront', _('All Upfront')),
                       ('One year Upfront', _('One year Upfront'))]
-    CaseType = [('Income Changed', _('Income Changed')), ('Personal Situation Changed', _('Personal Situation Changed')),
-                ('Provisional Exemption', _('Provisional Exemption'))]
+    CaseType = [('Income Changed', _('Communicate change in income')),
+                ('Personal Situation Changed', _('Communicate change of personal situation')),
+                ('Provisional Exemption', _('Request temporary exemption from interim payments'))]
     CaseApproval = [('Pending', _('Pending')), ('Approved', _('Approved')), ('Not Approved', _('Not Approved'))]
 
 
@@ -274,6 +275,10 @@ class Lead(models.Model):
     city = models.CharField(max_length=40, blank=True, null=True)
     state = models.CharField(max_length=80, verbose_name=_('State/Province'), blank=True, null=True)
     postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
+    country = models.CharField(max_length=80, blank=True, null=True)
+    country_0 = models.CharField(db_column='Country__c', custom=True, max_length=255, choices=Choices.Country,
+                                 blank=True, null=True)
+
     citizenship_new = models.CharField(custom=True, max_length=255, verbose_name=_('Citizenship'),
                                        choices=Choices.Nationality, blank=True, null=True)
 
@@ -591,6 +596,9 @@ class Account(models.Model, PerishableTokenMixin):
 
     def get_open_cases(self):
         return self.case_set.filter(is_closed=False)
+
+    def get_closed_cases(self):
+        return self.case_set.filter(is_closed=True)
 
 
 class Contact(models.Model, PerishableTokenMixin):
@@ -1160,6 +1168,12 @@ class Case(models.Model):
     last_viewed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     last_referenced_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     approval_status = models.CharField(custom=True, max_length=255, choices=Choices.CaseApproval, blank=True, null=True)
+
+    effective_start_trig = models.DateField(custom=True, verbose_name=_('Effective Start'), blank=False, null=True)
+    effective_end = models.DateField(custom=True, verbose_name=_('Effective End'), blank=True, null=True)
+    relevant_income_trig = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Relevant Income'), 
+        help_text=_('Required when the Type is change of income.'), blank=True, null=True)
+
     class Meta(models.Model.Meta):
         db_table = 'Case'
         verbose_name = 'Case'
@@ -1206,6 +1220,10 @@ class ContentVersion(models.Model):
         verbose_name_plural = 'Content Versions'
         # keyPrefix = '068'
 
+    @property
+    def meta(self):
+        return self._meta
+
 
 class FeedItem(models.Model):
     parent = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)
@@ -1227,6 +1245,3 @@ class FeedItem(models.Model):
         verbose_name = 'Feed Item'
         verbose_name_plural = 'Feed Items'
         # keyPrefix = '0D5'
-
-
-

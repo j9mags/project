@@ -46,7 +46,9 @@ urlpatterns = [
     url(r'^application/(?P<pk>.+)/$', staff.UGVApplicationReview.as_view(), name='application_review'),
     url(r'^applications/$', staff.DashboardUGVApplications.as_view(), name='applications'),
     url(r'^invoices/$', staff.DashboardInvoices.as_view(), name='invoices'),
+
     url(r'^request/new/$', repayer.NewRequest.as_view(), name='new_request'),
+    url(r'^request/(?P<pk>.+)/$', repayer.NewRequest.as_view(), name='request_edit'),
 
     url(r'^attachment/(?P<att_id>.+)/$', download_attachment, name='download_attachment'),
 

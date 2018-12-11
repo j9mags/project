@@ -78,7 +78,7 @@ class PerishableToken(models.Model):
     expires_at = models.DateTimeField()
 
     def is_expired(self):
-        return self.expires_at < timezone.now()
+        return self.expires_at and (self.expires_at < timezone.now())
 
 
 class CsvUpload(models.Model):
@@ -307,6 +307,7 @@ class CsvUpload(models.Model):
             lead.postal_code = row.get('PLZ')
             lead.city = row.get('Stadt')
             lead.country_0 = row.get('Land')
+            lead.country = row.get('Land')
             lead.date_of_birth = row.get('Geburtsdatum')
             lead.place_of_birth = row.get('Geburtsort')
             lead.citizenship_new = row.get('Staatsbürgerschaft')

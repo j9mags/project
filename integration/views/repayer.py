@@ -9,6 +9,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 
+from salesforce.backend.driver import SalesforceError
 
 from ..forms import RepayerOnboardingForm, RepayerCaseForm
 from ..models import Case, RecordType, ContentVersion, FeedItem
@@ -41,7 +42,6 @@ class RepayerMixin(LoginRequiredMixin):
                 lang = language_code if language_code is not None else get_language()
                 lang = lang if check_for_language(lang) else self.default_lang
             except Exception as e:
-                print(e)
                 lang = self.default_lang
 
             activate(lang)
@@ -56,11 +56,13 @@ class RepayerMixin(LoginRequiredMixin):
 
         contracts = self.account.contract_account_set.all()
         cases = self.account.get_open_cases()
+        closed_cases = self.account.get_closed_cases()
 
         context['account'] = self.account
         context['master_contact'] = self.account.master_contact
         context['contracts'] = contracts
         context['cases'] = cases
+        context['closed_cases'] = closed_cases
 
         context['ignore_drawer'] = True
 
@@ -292,12 +294,18 @@ class NewRequest(RepayerMixin, TemplateView):
         context = self.get_repayer_context()
         context.update(super(NewRequest, self).get_context_data(**kwargs))
 
-        case = Case(record_type=RecordType.objects.get(sobject_type='Case', developer_name='Ruckzahler'),
-                    account=self.account, contact=self.account.master_contact)
+        pk = kwargs.get('pk')
+        if (pk is not None):
+            case = Case.objects.get(pk=pk)
+        else:
+            case = Case(record_type=RecordType.objects.get(sobject_type='Case', developer_name='Ruckzahler'),
+                        account=self.account, contact=self.account.master_contact)
+
         if self.request.POST:
             form = RepayerCaseForm(self.request.POST, self.request.FILES, instance=case)
         else:
-            form = RepayerCaseForm(instance=case)
+            initial = {'subject': case.subject or '', 'type': case.type or '', 'description': case.description or ''}
+            form = RepayerCaseForm(instance=case, initial=initial)
         context.update(case=case, form=form)
 
         return context
@@ -309,6 +317,13 @@ class NewRequest(RepayerMixin, TemplateView):
         if form.is_valid():
             try:
                 form.save()
+            except SalesforceError as e:
+                data = e.response.json()[0]
+                field = data.get('fields')
+                field = field and field[0].lower()
+                field = field if field in form.fields else None
+                form.add_error(field, (data.get('message')))
+                return render(request, self.template_name, context)
             except Exception as e:
                 form.add_error(None, str(e))
                 return render(request, self.template_name, context)
@@ -322,7 +337,7 @@ class NewRequest(RepayerMixin, TemplateView):
                     cv.save()
                 except Exception as e:
                     case.delete()
-                    form.add_error(None, str(e))
+                    form.add_error(None, str(e.message))
                     return render(request, self.template_name, context)
                 cvv.append(cv)
 
@@ -332,7 +347,7 @@ class NewRequest(RepayerMixin, TemplateView):
                     fi.save()
                 except Exception as e:
                     case.delete()
-                    form.add_error(None, str(e))
+                    form.add_error(None, str(e.message))
                     return render(request, self.template_name, context)
 
             return redirect('integration:dashboard')

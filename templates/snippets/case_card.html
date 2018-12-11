@@ -12,11 +12,31 @@
           {% include 'snippets/field-text.html' with label=_('Subject') value=case.subject type="text" %}
       </div>
       <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Effective Start') value=case.effective_start_trig type="date" %}
+      </div>
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Effective End') value=case.effective_end type="date" %}
+      </div>
+      {% if case.type == 'Income Changed' %}
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Relevant Income') value=case.relevant_income_trig type="currency" %}
+      </div>
+      {% endif %}
+      <div class="mdl-cell">
           {% include 'snippets/field-text.html' with label=_('Approval Status') value=case.approval_status type="text" %}
       </div>
       <div class="mdl-cell mdl-cell--12-col">
           {% include 'snippets/field-textarea.html' with label=_('Description') value=case.description %}
       </div>
   </div>
+
+  {% if not case.is_closed %}
+  <div class="mdl-card__menu">
+    <a href="{% url 'integration:request_edit' pk=case.pk %}" title="{% trans 'Edit' %}" 
+       class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+      <i class="material-icons">edit</i>
+    </a>
+  </div>
+  {% endif %}
 
 </div>
