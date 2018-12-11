@@ -36,6 +36,22 @@
                 {% include 'snippets/input-file.html' with field=form.evidence multiple="multiple" %}
             </div>
         </div>
+
+        {% if case.pk %}
+            <div class="mdl-card__supporting-text mdl-grid">
+                {% for fi in case.casefeed_set.all %}
+                    {% if fi.parent_record._meta.object_name == "ContentVersion" %}
+                        <span class="mdl-chip mdl-chip--contact mdl-chip--deletable">
+                            <span class="mdl-chip__contact mdl-color--accent mdl-color-text--white">
+                                <i class="material-icons">cloud_done</i>
+                            </span>
+                            <span class="mdl-chip__text">{{ fi.parent_record.title }}</span>
+                        </span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
             <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
                    value="{% trans 'Submit' %}">
@@ -44,6 +60,7 @@
         </div>
     </form>
 </div>
+
 {% endblock %}
 
 {% block extrajs %}

@@ -302,7 +302,8 @@ class NewRequest(RepayerMixin, TemplateView):
         if self.request.POST:
             form = RepayerCaseForm(self.request.POST, self.request.FILES, instance=case)
         else:
-            form = RepayerCaseForm(instance=case, initial={'subject': case.subject or '', 'type':case.type or '', 'description': case.description or ''})
+            initial = {'subject': case.subject or '', 'type': case.type or '', 'description': case.description or ''}
+            form = RepayerCaseForm(instance=case, initial=initial)
         context.update(case=case, form=form)
 
         return context
