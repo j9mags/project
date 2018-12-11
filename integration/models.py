@@ -1206,6 +1206,10 @@ class ContentVersion(models.Model):
         verbose_name_plural = 'Content Versions'
         # keyPrefix = '068'
 
+    @property
+    def meta(self):
+        return self._meta
+
 
 class FeedItem(models.Model):
     parent = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)
@@ -1227,6 +1231,3 @@ class FeedItem(models.Model):
         verbose_name = 'Feed Item'
         verbose_name_plural = 'Feed Items'
         # keyPrefix = '0D5'
-
-
-
