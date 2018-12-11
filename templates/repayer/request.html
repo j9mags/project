@@ -41,12 +41,14 @@
             <div class="mdl-card__supporting-text mdl-grid">
                 {% for fi in case.feeditem_set.all %}
                     {% if fi.related_record.meta.object_name == "ContentVersion" %}
+                    <div>
                         <span class="mdl-chip mdl-chip--contact mdl-chip--deletable">
                             <span class="mdl-chip__contact mdl-color--accent mdl-color-text--white">
                                 <i class="material-icons">cloud_done</i>
                             </span>
                             <span class="mdl-chip__text">{{ fi.related_record.title }}</span>
                         </span>
+                    </div>
                     {% endif %}
                 {% endfor %}
             </div>
