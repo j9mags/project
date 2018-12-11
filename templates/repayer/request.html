@@ -57,9 +57,9 @@
             <div class="mdl-cell mdl-cell--12-col">
                 <span id="income" class="chancen--hide">
                     Als Nachweise sind die folgenden Dokumente hilfreich:<br>
-                    -Einkommenssteuerbescheid<br>
-                    -Bei einer nicht selbständigen Tätigkeit wären das ein vollständiger Arbeitsvertrag und eine aktuelle Lohnabrechnung.<br>
-                    -Bei einer ausschließlich selbstständigen Tätigkeit sind eine behördliche Bestätigung deiner freiberuflichen oder gewerblichen Tätigkeit sowie eine Umsatzplanung hilfreich.<br>
+                    <ul><li>Einkommenssteuerbescheid</li>
+                    <li>Bei einer nicht selbständigen Tätigkeit wären das ein vollständiger Arbeitsvertrag und eine aktuelle Lohnabrechnung.</li>
+                    <li>Bei einer ausschließlich selbstständigen Tätigkeit sind eine behördliche Bestätigung deiner freiberuflichen oder gewerblichen Tätigkeit sowie eine Umsatzplanung hilfreich.</li></ul>
                 </span>
                 <span id="person" class="chancen--hide">
                     Hilfreiche Dokumente sind hier eine Meldebescheinigung oder eine Urkunde, aus welcher der alte und neue Name oder deine alte und neue Nationalität / sexuelle Identität hervorgehen (z.B. eine Eheurkunde oder ein alter und neuer Pass). 
@@ -67,11 +67,11 @@
                 <span id="exemption" class="chancen--hide">
                     Als Nachweise brauchen wir hierfür neben den extra aufgeführten Dokumenten idealerweise eine Bescheinigung über die Aus/Weiterbildung (z.B. Immatrikulationsbescheinigung oder zumindest Informationen zum angestrebten Programm wie Umfang, Dauer, Beginn, Bezeichnung, Vollzeit/Teilzeit) oder über die Einkommenssituation (vgl. 1 oder Kündigungsschreiben oder Nachweis vom Arbeitsamt oder Nachweis über Mutterschutz/ Elternzeit) von dir und gegebenenfalls die deines*r Partners*in, wenn du eine Erhöhung des Mindesteinkommens nach § 12 (1) geltend machen willst.<br>
                     Dein maßgebliches Mindesteinkommen liegt zunächst bei 21.000 € pro Jahr (entspricht etwa 28.000 € / brutto, wenn du angestellt bist) und kann sich durch die folgenden Gründe erhöhen (eine Verringerung ist nicht möglich):<br>
-                    -Leben in einer eingetragen Lebenspartnerschaft oder Heirat (+2.400 € / Jahr - Einkommen des*r Partners*in) -> offizielle Bestätigung/ Urkunde + Nachweis über das Einkommen deines*r Partners*in<br>
-                    -Kinder (+ (2.400 € / Jahr) * Anzahl Kinder) - Einkommen des Partners) ) -> Geburtsurkunde, Sorgerechtserklärung + Nachweis über das Einkommen deines*r Partners*in<br>
-                    -Beginn deiner BAföG-Rückzahlungen (+1.260 €/Jahr) -> BAföG Dokument mit Zahlungsaufforderung<br>
-                    -Verpflichtung, monatliche Unterhaltszahlungen von über 200 € je Person (Partner*in/Kind) zu leisten -> Nachweise über rechtliche Verpflichtung (z.B. Gerichtsurteil) und tatsächliche Zahlung der Beträge (z.B. Kontoauszüge)<br>
-                    -eine dauerhafte gesundheitliche Beeinträchtigung (Behinderung gemäß § 12 (4))<br>
+                    <ul><li>Leben in einer eingetragen Lebenspartnerschaft oder Heirat (+2.400 € / Jahr - Einkommen des*r Partners*in) -> offizielle Bestätigung/ Urkunde + Nachweis über das Einkommen deines*r Partners*in</li>
+                    <li>Kinder (+ (2.400 € / Jahr) * Anzahl Kinder) - Einkommen des Partners) ) -> Geburtsurkunde, Sorgerechtserklärung + Nachweis über das Einkommen deines*r Partners*in</li>
+                    <li>Beginn deiner BAföG-Rückzahlungen (+1.260 €/Jahr) -> BAföG Dokument mit Zahlungsaufforderung</li>
+                    <li>Verpflichtung, monatliche Unterhaltszahlungen von über 200 € je Person (Partner*in/Kind) zu leisten -> Nachweise über rechtliche Verpflichtung (z.B. Gerichtsurteil) und tatsächliche Zahlung der Beträge (z.B. Kontoauszüge)</li>
+                    <li>eine dauerhafte gesundheitliche Beeinträchtigung (Behinderung gemäß § 12 (4))</li></ul>
                     Falls du dich aus anderen Gründen für das Jahr 2019 von den Rückzahlungen befreien lassen willst (du also mehr als dein individuelles  Mindesteinkommen verdienst, aktuell aber trotzdem keine Abschlagszahlungen leisten kannst), kannst du hier einen Härtefallantrag gemäß § 19 stellen. Bitte beschreibe deine Situation und lade zum Beleg möglichst aussagekräftige Dokumente hoch. Generell zählen hierzu Kosten, die dein zur Verfügung stehendes Einkommen stark mindern, ohne von dir verursacht worden zu sein (beispielsweise Pflegekosten für Familienangehörige).
                 </span>
             </div>
@@ -161,20 +161,24 @@
         const income = document.querySelector('#income');
         const person = document.querySelector('#person');
         const exemption = document.querySelector('#exemption');
-        request_type.addEventListener('change', function() {
+        function processHelp(value) {
             relevant_income_cell.classList.add('chancen--hide');
             income.classList.add('chancen--hide');
             exemption.classList.add('chancen--hide');
             person.classList.add('chancen--hide');
-            if (this.value == "Income changed") {
+            if (value == "Income changed") {
                 relevant_income_cell.classList.remove('chancen--hide');
                 income.classList.remove('chancen--hide')
-            } else if (this.value == "Personal Situation Changed") {
+            } else if (value == "Personal Situation Changed") {
                 person.classList.remove('chancen--hide');
-            } else if (this.value == "Provisional Exemption") {
+            } else if (value == "Provisional Exemption") {
                 exemption.classList.remove('chancen--hide')
             }
+        }
+        request_type.addEventListener('change', function() {
+            processHelp(this.value);
         });
+        processHelp(request_type.value);
       }();
     </script>
 
