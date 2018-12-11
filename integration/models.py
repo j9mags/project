@@ -1160,6 +1160,12 @@ class Case(models.Model):
     last_viewed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     last_referenced_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     approval_status = models.CharField(custom=True, max_length=255, choices=Choices.CaseApproval, blank=True, null=True)
+
+    effective_start_trig = models.DateField(custom=True, verbose_name=_('Effective Start'), blank=True, null=True)
+    effective_end = models.DateField(custom=True, verbose_name=_('Effective End'), blank=True, null=True)
+    relevant_income_trig = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Relevant Income'), 
+        help_text=_('Required when the Type is change of income.'), blank=True, null=True)
+
     class Meta(models.Model.Meta):
         db_table = 'Case'
         verbose_name = 'Case'

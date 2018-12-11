@@ -252,7 +252,7 @@ class RepayerCaseForm(forms.ModelForm):
 
     class Meta:
         model = Case
-        fields = ['subject', 'description', 'type']
+        fields = ['subject', 'description', 'type', 'effective_start_trig', 'effective_end', 'relevant_income_trig']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

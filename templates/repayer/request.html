@@ -29,6 +29,17 @@
             <div class="mdl-cell mdl-cell--6-col">
                 {% include 'snippets/input.html' with field=form.subject type='text' %}
             </div>
+
+            <div class="mdl-cell mdl-cell--4-col">
+                {% include 'snippets/input.html' with field=form.effective_start_trig type='date'%}
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                {% include 'snippets/input.html' with field=form.effective_end type='date' %}
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                {% include 'snippets/input.html' with field=form.relevant_income_trig type='number' %}
+            </div>
+            
             <div class="mdl-cell mdl-cell--12-col">
                 {% include 'snippets/input-textarea.html' with field=form.description %}
             </div>
