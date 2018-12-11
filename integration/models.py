@@ -17,7 +17,7 @@ class PerishableTokenMixin:
         if not self.cspassword_token:
             return True
         if not self.cspassword_time:
-            return False
+            return True
         if self.cspassword_time < timezone.now():
             return True
 
