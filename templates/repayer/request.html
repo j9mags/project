@@ -37,7 +37,7 @@
             <div class="mdl-cell mdl-cell--4-col">
                 {% include 'snippets/input.html' with field=form.effective_end type='date' %}
             </div>
-            <div class="mdl-cell mdl-cell--4-col">
+            <div class="mdl-cell mdl-cell--4-col chancen--hide">
                 {% include 'snippets/input.html' with field=form.relevant_income_trig type='number' %}
             </div>
             
@@ -101,7 +101,6 @@
         start_date.addEventListener('onOk', function(d) {
           this.value = dialogStart.time.format("YYYY-MM-DD");
           this.parentNode.classList.add('is-dirty');
-          end_date.past = this.value;
         });
         start_date.addEventListener('onCancel', function(d) {
           if (! this.value)
@@ -122,13 +121,16 @@
         end_date.addEventListener('onOk', function(d) {
           this.value = dialogEnd.time.format("YYYY-MM-DD");
           this.parentNode.classList.add('is-dirty');
-          start_date.future = this.value;
         });
         end_date.addEventListener('onCancel', function(d) {
           if (! this.value)
             this.parentNode.classList.remove('is-dirty');
         });
 
+        const request_type = document.querySelector('#id_type');
+        request_type.addEventListener('change', function() {
+            console.log(this.value);
+        });
       }();
     </script>
 

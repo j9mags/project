@@ -522,3 +522,7 @@ td.csp-table--action {
 .stepper-length-1 > .mdl-step__label-indicator {
     display: none;
 }
+
+.chancen--hide {
+    display: none!important;
+}
