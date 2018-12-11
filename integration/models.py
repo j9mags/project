@@ -593,6 +593,9 @@ class Account(models.Model, PerishableTokenMixin):
     def get_open_cases(self):
         return self.case_set.filter(is_closed=False)
 
+    def get_closed_cases(self):
+        return self.case_set.filter(is_closed=True)
+
 
 class Contact(models.Model, PerishableTokenMixin):
     record_type = models.ForeignKey(RecordType, models.DO_NOTHING, blank=True, null=True,

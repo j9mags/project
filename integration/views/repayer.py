@@ -56,11 +56,13 @@ class RepayerMixin(LoginRequiredMixin):
 
         contracts = self.account.contract_account_set.all()
         cases = self.account.get_open_cases()
+        closed_cases = self.account.get_closed_cases()
 
         context['account'] = self.account
         context['master_contact'] = self.account.master_contact
         context['contracts'] = contracts
         context['cases'] = cases
+        context['closed_cases'] = closed_cases
 
         context['ignore_drawer'] = True
 
