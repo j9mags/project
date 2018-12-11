@@ -932,10 +932,8 @@ msgid "Südsudan"
 msgstr ""
 
 #: integration/models.py:92
-#, fuzzy
-#| msgid "Course name"
 msgid "Suriname"
-msgstr "Name des Studiengang"
+msgstr ""
 
 #: integration/models.py:92
 msgid "Swasiland"
@@ -2511,28 +2509,24 @@ msgid "Invoices"
 msgstr "Rechnungen"
 
 #: integration/models.py:1131 templates/snippets/case_card.html:6
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Case number"
-msgstr "Rechnungsnummer"
+msgstr "Fallnummer"
 
 #: integration/models.py:1165
 msgid "Effective Start"
-msgstr ""
+msgstr "Effektiver Start"
 
 #: integration/models.py:1166
 msgid "Effective End"
-msgstr ""
+msgstr "Effektives Ende"
 
 #: integration/models.py:1167
-#, fuzzy
-#| msgid "Minimal relevant income"
 msgid "Relevant Income"
-msgstr "Minimales relevantes Einkommen"
+msgstr "Relevantes Einkommen"
 
 #: integration/models.py:1168
 msgid "Required when the Type is change of income."
-msgstr ""
+msgstr "Erforderlich, wenn die Art der Einkommensänderung ist."
 
 #: integration/views/repayer.py:119 integration/views/student.py:272
 msgid "Data input"
@@ -2580,10 +2574,8 @@ msgstr "Semesterbeitrag erfolgreich aktualisiert."
 
 #: integration/views/staff.py:373
 #: templates/staff/dashboard_ugvapplications.html:40
-#, fuzzy
-#| msgid "University"
 msgid "University-Status"
-msgstr "Hochschule"
+msgstr "Hochschulstatus"
 
 #: integration/views/staff.py:491
 msgid "There seem to be missing values, please review the data thoroughly."
@@ -2814,15 +2806,11 @@ msgid "Payment data"
 msgstr "Zahlungsdaten"
 
 #: templates/repayer/dashboard.html:69
-#, fuzzy
-#| msgid ""
-#| "Authorize us to collect the study fees by direct debit from your account."
-msgid ""
 "Authorize us to collect the monthly payments by direct debit from your "
 "account."
 msgstr ""
-"Autorisiere uns, die Studiengebühren mittels Lastschrift von Deinem Konto "
-"einzuziehen."
+"Ermächtigen Sie uns, die monatlichen Zahlungen per Lastschrift von Ihrem "
+"Konto einzuziehen."
 
 #: templates/repayer/dashboard.html:111 templates/ugvler/dashboard.html:50
 msgid "No contracts found"
@@ -2830,7 +2818,7 @@ msgstr "Keine Verträge gefunden"
 
 #: templates/repayer/dashboard.html:118
 msgid "Open cases"
-msgstr ""
+msgstr "Offene Fälle"
 
 #: templates/repayer/dashboard.html:122
 msgid "New"
@@ -2844,8 +2832,6 @@ msgid "Contact data"
 msgstr "Kontaktdaten"
 
 #: templates/repayer/request.html:6
-#, fuzzy
-#| msgid "New student"
 msgid "New request"
 msgstr "Studierende ansehen"
 

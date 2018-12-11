@@ -248,7 +248,8 @@ class UGVApplicationForm(forms.ModelForm):
 
 
 class RepayerCaseForm(forms.ModelForm):
-    evidence = forms.FileField(label=_("Evidence"), widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    evidence = forms.FileField(label=_("Evidence"), widget=forms.ClearableFileInput(attrs={'multiple': True}),
+                               blank=True)
 
     class Meta:
         model = Case
@@ -257,3 +258,11 @@ class RepayerCaseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['type'].widget.choices[0] = ("", "")
+
+    def clean(self):
+        cleaned_data = super(RepayerCaseForm, self).clean()
+        if cleaned_data.get('type') == "Income Changed":
+            if not cleaned_data.get('relevant_income_trig'):
+                self.add_error('relevant_income_trig', _('Required when the Type is change of income.'))
+
+        return cleaned_data
