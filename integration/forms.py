@@ -249,7 +249,7 @@ class UGVApplicationForm(forms.ModelForm):
 
 class RepayerCaseForm(forms.ModelForm):
     evidence = forms.FileField(label=_("Evidence"), widget=forms.ClearableFileInput(attrs={'multiple': True}),
-                               blank=True)
+                               required=False)
 
     class Meta:
         model = Case
