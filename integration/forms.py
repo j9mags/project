@@ -113,7 +113,8 @@ class RepayerOnboardingForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['mailing_country'].widget.choices[0] = ("", "")
+        self.fields['shipping_country'].widget.choices[0] = ("", "")
+        self.fields['billing_country'].widget.choices[0] = ("", "")
 
 
 class StudentAccountForm(forms.Form):
