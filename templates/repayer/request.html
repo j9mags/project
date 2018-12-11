@@ -7,7 +7,8 @@
 
 {% block extrahead %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
+    <link rel="stylesheet" href="{% static '/css/mdl-selectfield.min.css' %}" />
+    <link rel="stylesheet" href="{% static '/css/mdDateTimePicker.min.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -78,5 +79,57 @@
 
 {% block extrajs %}
 {{ block.super }}
-<script src="{% static '/js/mdl-selectfield.min.js' %}"></script>
+    <script src="{% static '/js/mdl-selectfield.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rome/2.1.22/rome.js"></script>
+    <script src="{% static '/js/mdDateTimePicker.min.js' %}"></script>
+
+    <script defer>
+      !function() {
+        "use strict";
+        const start_date = document.querySelector('#id_effective_start_trig');
+        var dialogStart = new mdDateTimePicker.default({
+          type: 'date',
+          init: moment(),
+          past: moment(),
+          future: moment(),
+          trigger: start_date
+        });
+        start_date.addEventListener('focus', function() {
+          dialogStart.toggle();
+        });
+        start_date.addEventListener('onOk', function(d) {
+          this.value = dialogStart.time.format("YYYY-MM-DD");
+          this.parentNode.classList.add('is-dirty');
+          end_date.past = this.value;
+        });
+        start_date.addEventListener('onCancel', function(d) {
+          if (! this.value)
+            this.parentNode.classList.remove('is-dirty');
+        });
+
+        const end_date = document.querySelector('#id_effective_end');
+        var dialogEnd = new mdDateTimePicker.default({
+          type: 'date',
+          init: moment(),
+          past: moment(),
+          future: moment(),
+          trigger: end_date
+        });
+        end_date.addEventListener('focus', function() {
+          dialogEnd.toggle();
+        });
+        end_date.addEventListener('onOk', function(d) {
+          this.value = dialogEnd.time.format("YYYY-MM-DD");
+          this.parentNode.classList.add('is-dirty');
+          start_date.future = this.value;
+        });
+        end_date.addEventListener('onCancel', function(d) {
+          if (! this.value)
+            this.parentNode.classList.remove('is-dirty');
+        });
+
+      }();
+    </script>
+
 {% endblock %}
