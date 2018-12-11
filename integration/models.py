@@ -381,6 +381,12 @@ class Account(models.Model, PerishableTokenMixin):
     billing_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'), blank=True,
                                        null=True)
 
+    shipping_street = models.TextField(blank=True, null=True, verbose_name=_('Street and House number'))
+    shipping_city = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('City'))
+    shipping_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
+    shipping_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'), blank=True,
+                                        null=True)
+
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     status = models.CharField(custom=True, max_length=255, choices=Choices.AccountStatus, verbose_name=_('Status'),
                               blank=True, null=True)
