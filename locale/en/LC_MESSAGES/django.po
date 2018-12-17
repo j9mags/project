@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-11 23:16+0000\n"
+"POT-Creation-Date: 2018-12-17 14:53+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -56,6 +56,12 @@ msgid ""
 "We couldn't find a user with that email. Please contact info@chancen-eg.de "
 "if you are sure that you used this email address to sign up for the CHANCEN "
 "Portal."
+msgstr ""
+
+#: authentication/views.py:29
+msgid ""
+"This url is no longer valid. Please contact info@chancen-eg.de for further "
+"information."
 msgstr ""
 
 #: csp/settings.py:128

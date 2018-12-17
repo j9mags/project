@@ -16,7 +16,10 @@ from datetime import timedelta
 from uuid import uuid4
 
 from authtools.models import AbstractEmailUser
-from pandas.io import json
+try:
+    from pandas.io import json
+except:
+    pass
 
 from integration.models import RecordType, Account, Contact, Contract, Lead, Application
 
