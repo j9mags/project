@@ -75,6 +75,8 @@ msgid ""
 "This url is no longer valid. Please contact info@chancen-eg.de for further "
 "information."
 msgstr ""
+"Diese URL ist nicht mehr gültig. Für weitere Informationen wenden Sie sich bitte "
+"an info@chancen-eg.de."
 
 #: csp/settings.py:128
 msgid "German"

@@ -53,10 +53,10 @@ def get_token_or_raise(tk):
         pt = rc and rc[0]
 
     if not pt:
-        raise False  # Http404()
+        return False  # raise Http404()
 
     if pt.is_token_expired():
-        raise False  # PermissionDenied()
+        return False  # raise PermissionDenied()
 
     return pt
 
