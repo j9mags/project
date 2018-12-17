@@ -36,6 +36,9 @@
        class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
       <i class="material-icons">edit</i>
     </a>
+    {% if case.status = 'Clarification Needed' %}
+      <i class="material-icons">notification_important</i>
+    {% endif %}
   {% elif not case.is_closed %}
     <i class="material-icons">lock</i>
   {% endif %}
