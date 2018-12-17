@@ -64,6 +64,13 @@ class RepayerMixin(LoginRequiredMixin):
         context['cases'] = cases
         context['closed_cases'] = closed_cases
 
+        clarification_needed = False
+        for case in cases:
+            if case.status == 'Clarification Needed':
+                clarification_needed = True
+                break
+        context['clarification_needed'] = clarification_needed
+
         context['ignore_drawer'] = True
 
         return context
@@ -314,6 +321,8 @@ class NewRequest(RepayerMixin, TemplateView):
         pk = kwargs.get('pk')
         if (pk is not None):
             case = Case.objects.get(pk=pk)
+            if case.is_locked:
+                return reverse('integration:dashboard')
         else:
             case = Case(record_type=RecordType.objects.get(sobject_type='Case', developer_name='Ruckzahler'),
                         account=self.account, contact=self.account.master_contact)
@@ -321,14 +330,32 @@ class NewRequest(RepayerMixin, TemplateView):
         if self.request.POST:
             form = RepayerCaseForm(self.request.POST, self.request.FILES, instance=case)
         else:
-            initial = {'subject': case.subject or '', 'type': case.type or '', 'description': case.description or ''}
+            initial = {
+                'subject': case.subject or '',
+                'type': case.type or '',
+                'effective_start_trig': case.effective_start_trig or '',
+                'effective_end': case.effective_end or '',
+                'relevant_income_trig': case.relevant_income_trig or '',
+                'description': case.description or '',
+            }
             form = RepayerCaseForm(instance=case, initial=initial)
         context.update(case=case, form=form)
 
         return context
 
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        if context == reverse('integration:dashboard'):
+            return redirect(context)
+
+        return render(request, self.template_name, context)
+
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
+
+        if context == reverse('integration:dashboard'):
+            return redirect(context)
 
         form = context.get('form')
         if form.is_valid():

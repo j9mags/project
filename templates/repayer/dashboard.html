@@ -6,10 +6,14 @@
 {% block title %}{% trans 'My CHANCEN Account' %}{% endblock %}
 
 {% block content %}
-  {% if not account.sepalastschriftmandat_erteilt_auto %}
+  {% if clarification_needed or not account.sepalastschriftmandat_erteilt_auto %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
       <div class="mdl-snackbar__text">
+        {% if not account.sepalastschriftmandat_erteilt_auto %}
           {% trans 'You have not authorized us to debit your account. Without permission from you we cannot debit the payments due which are essential part of your ISA (e.g. membership share or repayments).' %}
+        {% elif clarification_needed %}
+          {% trans 'One or more cases requires your attention.' %}
+        {% endif %}
       </div>
       <button class="mdl-snackbar__action" type="button"></button>
     </div>
