@@ -30,13 +30,18 @@
       </div>
   </div>
 
-  {% if not case.is_closed %}
   <div class="mdl-card__menu">
+  {% if not case.is_locked %}
     <a href="{% url 'integration:request_edit' pk=case.pk %}" title="{% trans 'Edit' %}" 
        class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
       <i class="material-icons">edit</i>
     </a>
-  </div>
+    {% if case.status == 'Clarification Needed' %}
+      <i class="material-icons">notification_important</i>
+    {% endif %}
+  {% elif not case.is_closed %}
+    <i class="material-icons">lock</i>
   {% endif %}
+  </div>
 
 </div>
