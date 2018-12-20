@@ -1,13 +1,10 @@
 from __future__ import unicode_literals
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-# from datetime import date, timedelta
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
-from django.db import connections  # , models as django_models
-# from django.contrib.contenttypes.fields import GenericForeignKey
-# from django.contrib.contenttypes.models import ContentType
+from django.db import connections
 
 from . import managers
 
@@ -241,6 +238,7 @@ class Choices:
     CaseApproval = [('Pending', _('Pending')), ('Approved', _('Approved')), ('Not Approved', _('Not Approved'))]
     CaseStatus = [('New', _('New')), ('In Review', _('In Review')), ('Clarification Needed', _('Clarification Needed')),
                   ('Decision Reached', _('Decision Reached')), ('Closed', _('Closed'))]
+    ClarifyingQuestions = [('Question 1', 'Question 1'), ('Question 2', 'Question 2'), ('Question 3', 'Question 3')]
 
 
 class RecordType(models.Model):
@@ -1146,42 +1144,27 @@ class Case(models.Model):
     case_number = models.CharField(max_length=30, verbose_name=_('Case number'), sf_read_only=models.READ_ONLY)
     contact = models.ForeignKey('Contact', models.DO_NOTHING, blank=True, null=True)
     account = models.ForeignKey(Account, models.DO_NOTHING, blank=True, null=True)
-    parent = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
-    # supplied_name = models.CharField(max_length=80, verbose_name='Name', blank=True, null=True)
-    # supplied_email = models.EmailField(verbose_name='Email Address', blank=True, null=True)
-    # supplied_phone = models.CharField(max_length=40, verbose_name='Phone', blank=True, null=True)
-    # supplied_company = models.CharField(max_length=80, verbose_name='Company', blank=True, null=True)
     type = models.CharField(max_length=40, verbose_name='Case Type', choices=Choices.CaseType, blank=False, null=True)
     record_type = models.ForeignKey('RecordType', models.DO_NOTHING, blank=True, null=True)
     status = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=Choices.CaseStatus,
                               blank=True, null=True)
-    # reason = models.CharField(max_length=40, verbose_name='Case Reason', choices=[("User didn't attend training", 'Benutzer hat nicht an Schulung teilgenommen'), ('Complex functionality', 'Komplexe Funktion'), ('Existing problem', 'Bestehendes Problem'), ('Instructions not clear', 'Anweisungen unklar'), ('New problem', 'Neues Problem')], blank=True, null=True)
-    # origin = models.CharField(max_length=40, verbose_name='Case Origin', choices=[('Email', 'E-Mail'), ('Phone', 'Telefon'), ('Web', 'Web')], blank=True, null=True)
     subject = models.CharField(max_length=255, blank=False, null=True)
-    # priority = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=[('High', 'Hoch'), ('Medium', 'Mittel'), ('Low', 'Niedrig')], blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     is_closed = models.BooleanField(verbose_name='Closed', sf_read_only=models.READ_ONLY, default=False)
     closed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     is_escalated = models.BooleanField(verbose_name='Escalated', default=models.DEFAULTED_ON_CREATE)
-    # owner = models.ForeignKey('Group', models.DO_NOTHING)  # Reference to tables [Group, User]
-    # is_closed_on_create = models.BooleanField(verbose_name='Closed When Created', sf_read_only=models.NOT_CREATEABLE, default=False)
     created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
-    # created_by = models.ForeignKey('User', models.DO_NOTHING, related_name='case_createdby_set', sf_read_only=models.READ_ONLY)
-    # last_modified_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
-    # last_modified_by = models.ForeignKey('User', models.DO_NOTHING, related_name='case_lastmodifiedby_set', sf_read_only=models.READ_ONLY)
-    # system_modstamp = models.DateTimeField(sf_read_only=models.READ_ONLY)
-    # contact_phone = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    # contact_mobile = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    # contact_email = models.EmailField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    # contact_fax = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
-    # last_viewed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
-    # last_referenced_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     approval_status = models.CharField(custom=True, max_length=255, choices=Choices.CaseApproval, blank=True, null=True)
 
     effective_start_trig = models.DateField(custom=True, verbose_name=_('Effective Start'), blank=False, null=True)
     effective_end = models.DateField(custom=True, verbose_name=_('Effective End'), blank=True, null=True)
-    relevant_income_trig = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Relevant Income'), 
-        help_text=_('Required when the Type is change of income.'), blank=True, null=True)
+    relevant_income_trig = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                               verbose_name=_('Relevant Income'), blank=True, null=True,
+                                               help_text=_('Required when the Type is change of income.'))
+
+    clarification_questions = models.CharField(custom=True, max_length=4099, choices=Choices.ClarifyingQuestions,
+                                               blank=True, null=True)
+    clarification_question = models.TextField(custom=True, blank=True, null=True)
 
     class Meta(models.Model.Meta):
         db_table = 'Case'
@@ -1193,9 +1176,20 @@ class Case(models.Model):
     def is_locked(self):
         return self.status in ('In Review', 'Decision Reached', 'Closed')
 
+    @property
+    def all_questions(self):
+        rc = []
+
+        if self.clarification_questions:
+            rc.extend([x for x in self.clarification_questions.split(";")])
+
+        if self.clarification_question:
+            rc.append(self.clarification_question)
+
+        return rc
+
 
 class ContentVersion(models.Model):
-    # content_document = models.ForeignKey(ContentDocument, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)  # Master Detail Relationship *
     content_url = models.URLField(verbose_name='Content URL', blank=True, null=True)
     version_number = models.CharField(max_length=20, sf_read_only=models.READ_ONLY, blank=True, null=True)
     title = models.CharField(max_length=255)

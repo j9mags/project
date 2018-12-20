@@ -37,7 +37,12 @@
       <i class="material-icons">edit</i>
     </a>
     {% if case.status == 'Clarification Needed' %}
-      <i class="material-icons">notification_important</i>
+      <i id="c{{ case.case_number }}" class="material-icons">notification_important</i>
+      <div class="mdl-tooltip" for="c{{ case.case_number }}">
+        <ul>{% for q in case.all_questions%}
+          <li>{{ q }}</li>
+        {% endfor %}</ul>
+      </div>
     {% endif %}
   {% elif not case.is_closed %}
     <i class="material-icons">lock</i>
