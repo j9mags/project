@@ -19,16 +19,16 @@
     </div>
     <div class="mdl-cell">
       {% if account.is_ugv_student %}
-      {% include 'snippets/field-text.html' with label=_('Matriculation number') value=account.person_email %}
+        {% include 'snippets/field-text.html' with label=_('Email') value=account.person_email %}
       {% else %}
-      {% include 'snippets/field-text.html' with label=_('Email') value=account.unimailadresse %}
+        {% include 'snippets/field-text.html' with label=_('Email') value=account.unimailadresse %}
       {% endif %}
     </div>
     <div class="mdl-cell">
       {% if form and form_class != 'UploadForm' %}
-      {% include 'snippets/select.html' with field=form.status %}
+        {% include 'snippets/select.html' with field=form.status %}
       {% else %}
-      {% include 'snippets/field-text.html' with label=_('Status') value=account.status %}
+        {% include 'snippets/field-text.html' with label=_('Status') value=account.status %}
       {% endif %}
     </div>
     <div class="mdl-cell">

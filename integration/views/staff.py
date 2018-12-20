@@ -83,7 +83,7 @@ class DashboardHome(StaffMixin, TemplateView):
         if self.contact.account.is_eg_customer:
             applications = Lead.ugv_students.filter(active_application__hochschule_ref=self.contact.account)
             ugvers = Account.ugv_students.filter(hochschule_ref=self.contact.account,
-                                             record_type__developer_name='UGVStudents')
+                                                 record_type__developer_name='UGVStudents')
             invoices = self.contact.account.get_all_invoices()
             context.update(applications=applications, ugvers=ugvers, invoices=invoices)
 
@@ -630,26 +630,43 @@ class StudentReview(StaffMixin, DetailView):
         if self.contact.account.pk != account.hochschule_ref.pk:
             raise ObjectDoesNotExist()
 
-        payload = self.request.POST if 'status' in self.request.POST else {'status': account.status}
-        context.update(acc_form=StudentAccountForm(payload))
-        contract = account.active_contract
-        if contract:
-            context.update(contract=contract)
-            payload = self.request.POST if 'contract' in self.request.POST else None
-            if payload:
-                if payload.get('discount_type') == Choices.DiscountType[1][0]:
-                    dsc_form_str = DiscountForm(payload, instance=contract.semester_discount)
-                    dsc_form_ttn = DiscountForm(instance=contract.tuition_discount)
-                elif payload.get('discount_type') == Choices.DiscountType[0][0]:
-                    dsc_form_str = DiscountForm(instance=contract.semester_discount)
-                    dsc_form_ttn = DiscountForm(payload, instance=contract.tuition_discount)
+        translated_sexes = dict(Choices.Biological_Sex)
+        translated_nationalities = dict(Choices.Nationality)
+        translated_languages = dict(Choices.Language)
+
+        account.translated_language = translated_languages.get(account.kommunikationssprache,
+                                                               account.kommunikationssprache)
+
+        if account.is_student:
+            account.translated_sex = account.geschlecht
+            account.translated_nationality = translated_nationalities.get(account.staatsangehoerigkeit,
+                                                                          account.staatsangehoerigkeit)
+            contract = account.active_contract
+            if contract:
+                context.update(contract=contract)
+                payload = self.request.POST if 'contract' in self.request.POST else None
+                if payload:
+                    if payload.get('discount_type') == Choices.DiscountType[1][0]:
+                        dsc_form_str = DiscountForm(payload, instance=contract.semester_discount)
+                        dsc_form_ttn = DiscountForm(instance=contract.tuition_discount)
+                    elif payload.get('discount_type') == Choices.DiscountType[0][0]:
+                        dsc_form_str = DiscountForm(instance=contract.semester_discount)
+                        dsc_form_ttn = DiscountForm(payload, instance=contract.tuition_discount)
+                    else:
+                        dsc_form_str = DiscountForm(instance=contract.semester_discount)
+                        dsc_form_ttn = DiscountForm(instance=contract.tuition_discount)
                 else:
                     dsc_form_str = DiscountForm(instance=contract.semester_discount)
                     dsc_form_ttn = DiscountForm(instance=contract.tuition_discount)
-            else:
-                dsc_form_str = DiscountForm(instance=contract.semester_discount)
-                dsc_form_ttn = DiscountForm(instance=contract.tuition_discount)
-            context.update(dsc_form_str=dsc_form_str, dsc_form_ttn=dsc_form_ttn)
+                context.update(dsc_form_str=dsc_form_str, dsc_form_ttn=dsc_form_ttn)
+        elif account.is_ugv:
+            account.translated_sex = translated_sexes.get(account.master_contact.biological_sex,
+                                                          account.master_contact.biological_sex)
+            account.translated_nationality = translated_nationalities.get(account.citizenship,
+                                                                          account.citizenship)
+
+        payload = self.request.POST if 'status' in self.request.POST else {'status': account.status}
+        context.update(acc_form=StudentAccountForm(payload))
         return context
 
     def post(self, request, *args, **kwargs):
@@ -662,6 +679,7 @@ class StudentReview(StaffMixin, DetailView):
                 account = context.get('account')
                 account.status = ctr_form.cleaned_data.get('status')
                 account.save()
+                context.update(message=_('Student matriculation Status successfully updated.'))
         elif 'contract' in request.POST:
             if request.POST.get('discount_type') == Choices.DiscountType[1][0]:
                 dsc_form = context.get('dsc_form_str')

@@ -26,6 +26,7 @@ class UserLogin(LoginView):
                 'pw-ch--failed': _("Something went wrong with your request."),
                 'pw-ch--missing': _("We couldn't find a user with that email. Please contact info@chancen-eg.de if you "
                                     "are sure that you used this email address to sign up for the CHANCEN Portal."),
+                'expired': _("This url is no longer valid. Please contact info@chancen-eg.de for further information."),
             }.get(code, None)
             if msg:
                 flip = 'show-left'
@@ -45,14 +46,17 @@ def get_token_or_raise(tk):
         rc = Account.ugv_students.filter(cspassword_token=tk)
         pt = rc and rc[0]
     if not pt:
+        rc = Account.repayers.filter(cspassword_token=tk)
+        pt = rc and rc[0]
+    if not pt:
         rc = Contact.university_staff.filter(cspassword_token=tk)
         pt = rc and rc[0]
 
     if not pt:
-        raise Http404()
+        return False  # raise Http404()
 
     if pt.is_token_expired():
-        raise PermissionDenied()
+        return False  # raise PermissionDenied()
 
     return pt
 
@@ -69,6 +73,9 @@ class PasswordSet(View):
             raise SuspiciousOperation()
 
         pt = get_token_or_raise(tk)
+        if not pt:
+            return redirect(reverse('authentication:login') + '?msg=expired')
+
         form = SetPasswordForm(initial={'token': pt.cspassword_token})
         context = {'form': form}
 

@@ -10,6 +10,7 @@ from authentication.models import CsvUpload
 from .models import Choices, Contact, Lead
 from .models import Account
 from .models import Rabatt
+from .models import Case
 
 _logger = logging.getLogger(__name__)
 
@@ -93,6 +94,27 @@ class StudentOnboardingForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['mailing_country'].widget.choices[0] = ("", "")
+
+
+class RepayerOnboardingForm(forms.Form):
+    # private_email = forms.EmailField(label=_('Private email address'))
+    mobile_phone = forms.CharField(max_length=40, label=_('Mobile phone'))
+    home_phone = forms.CharField(max_length=40, required=False, label=_('Home phone'))
+
+    shipping_street = forms.CharField(max_length=40, label=_('Street and House number'), help_text=_('Contact Address'))
+    shipping_city = forms.CharField(max_length=255, label=_('City'))
+    shipping_zip = forms.CharField(max_length=20, label=_('Postal code'))
+    shipping_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
+
+    billing_street = forms.CharField(max_length=40, label=_('Street and House number'), help_text=_('Billing Address'))
+    billing_city = forms.CharField(max_length=255, label=_('City'))
+    billing_zip = forms.CharField(max_length=20, label=_('Postal code'))
+    billing_country = forms.ChoiceField(choices=CountryChoices, label=_('Country'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['shipping_country'].widget.choices[0] = ("", "")
+        self.fields['billing_country'].widget.choices[0] = ("", "")
 
 
 class StudentAccountForm(forms.Form):
@@ -229,3 +251,24 @@ class UGVApplicationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['university_status'].widget.choices[0] = ("", "")
+
+
+class RepayerCaseForm(forms.ModelForm):
+    evidence = forms.FileField(label=_("Evidence"), widget=forms.ClearableFileInput(attrs={'multiple': True}),
+                               required=False)
+
+    class Meta:
+        model = Case
+        fields = ['subject', 'description', 'type', 'effective_start_trig', 'effective_end', 'relevant_income_trig']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['type'].widget.choices[0] = ("", "")
+
+    def clean(self):
+        cleaned_data = super(RepayerCaseForm, self).clean()
+        if cleaned_data.get('type') == "Income Changed":
+            if not cleaned_data.get('relevant_income_trig'):
+                self.add_error('relevant_income_trig', _('Required when the Type is change of income.'))
+
+        return cleaned_data

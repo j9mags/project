@@ -1,0 +1,27 @@
+{% load i18n %}
+
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+        <h4 class="mdl-typography--headline mdl-underlined mdl-underlined--1">{% trans 'Contact data' %}</h4>
+    </div>
+
+    <!-- div class="mdl-cell">
+        {% include 'snippets/input.html' with field=form.private_email type='email' %}
+    </div -->
+
+    <div class="mdl-cell">
+        {% include 'snippets/input.html' with field=form.mobile_phone type='phone' %}
+    </div>
+    <div class="mdl-cell">
+        {% include 'snippets/input.html' with field=form.home_phone type='phone' %}
+    </div>
+
+    <div class="mdl-cell--8-col">
+        {% include 'snippets/address.html' with label=_('Contact Address') street=form.shipping_street zip=form.shipping_zip city=form.shipping_city country=form.shipping_country %}
+    </div>
+
+    <div class="mdl-cell--8-col">
+        {% include 'snippets/address.html' with label=_('Billing Address') street=form.billing_street zip=form.billing_zip city=form.billing_city country=form.billing_country %}
+    </div>
+
+</div>

@@ -25,6 +25,12 @@ class UGVStudentManager(DefaultManager):
                                                                  & Q(has_sofortzahler_contract_auto=False))
 
 
+class RepayerManager(DefaultManager):
+
+    def get_queryset(self):
+        return super(RepayerManager, self).get_queryset().filter(record_type__developer_name='Ruckzahler')
+
+
 class UGVLeadManager(DefaultManager):
 
     def get_queryset(self):

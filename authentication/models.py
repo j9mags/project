@@ -16,10 +16,12 @@ from datetime import timedelta
 from uuid import uuid4
 
 from authtools.models import AbstractEmailUser
-from pandas.io import json
+try:
+    from pandas.io import json
+except:
+    pass
 
-from integration.models import RecordType, Account, Contact, Contract, DegreeCourse, DegreeCourseFees, Lead, \
-    Application, Choices
+from integration.models import RecordType, Account, Contact, Contract, Lead, Application
 
 
 class User(AbstractEmailUser):
@@ -39,6 +41,10 @@ class User(AbstractEmailUser):
             person_email=self.email))).exists()
 
     @property
+    def is_repayer(self):
+        return Account.repayers.filter(person_email=self.email).exists()
+
+    @property
     def is_unistaff(self):
         return Contact.university_staff.filter(email=self.email).exists()
 
@@ -55,6 +61,8 @@ class User(AbstractEmailUser):
             rc = Account.ugv_students.get(Q(unimailadresse=self.email) | (
                     Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
                 person_email=self.email)))
+        elif self.is_repayer:
+            rc = Account.repayers.get(person_email=self.email)
         return rc
 
     def create_token(self, token=None, hours=96):
@@ -73,7 +81,7 @@ class PerishableToken(models.Model):
     expires_at = models.DateTimeField()
 
     def is_expired(self):
-        return self.expires_at < timezone.now()
+        return self.expires_at and (self.expires_at < timezone.now())
 
 
 class CsvUpload(models.Model):
@@ -302,6 +310,7 @@ class CsvUpload(models.Model):
             lead.postal_code = row.get('PLZ')
             lead.city = row.get('Stadt')
             lead.country_0 = row.get('Land')
+            lead.country = row.get('Land')
             lead.date_of_birth = row.get('Geburtsdatum')
             lead.place_of_birth = row.get('Geburtsort')
             lead.citizenship_new = row.get('Staatsbürgerschaft')
@@ -316,8 +325,9 @@ class CsvUpload(models.Model):
             lead.email = row.get('private E-Mail-Adresse').lower() if row.get('private E-Mail-Adresse') is not None else None
             lead.university_status = row.get('Hochschulstatus')
             lead.status = 'Applicant'
-            lead.risiko_nicht_bei_chancen = boolean_answer.get(row.get('Risiko nicht bei CHANCEN eG'), False)
-            lead.link_zu_weiteren_dokumenten = row.get('Link zu weiteren Dokumenten')
+
+            lead.risk_not_with_chancen = boolean_answer.get(row.get('Risiko nicht bei CHANCEN eG'), False)
+            lead.link_to_further_documents = row.get('Link zu weiteren Dokumenten')
 
             lead.confirmed_by_university = True
             lead.uploaded_via_portal_trig = True

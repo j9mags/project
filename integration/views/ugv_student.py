@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import *
-from django.core.files.uploadedfile import SimpleUploadedFile
+# from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic.base import TemplateView
 from django.views.generic.base import View
 
-from integration.views.student import ContactDetails
+# from integration.views.student import ContactDetails
 from ..forms import *
 from ..models import Contact, RecordType, Attachment
 
@@ -60,38 +60,40 @@ class UgvStudentMixin(LoginRequiredMixin):
 
         account = self.account
         contact = self.account.master_contact
-        contract = self.account.active_contract
-        invoices = contract.all_invoices if contract is not None else None
-        uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
+        contracts = self.account.contract_account_set.all()
+        # invoices = contract.all_invoices if contract is not None else None
+        # uploaded_files = Attachment.objects.filter(parent_id=self.account.pk)
 
         translated_sexes = dict(Choices.Biological_Sex)
         translated_nationalities = dict(Choices.Nationality)
         translated_languages = dict(Choices.Language)
         translated_countries = dict(Choices.Country)
 
-        account.translated_sex = translated_sexes.get(account.master_contact.biological_sex, account.master_contact.biological_sex)
+        account.translated_sex = translated_sexes.get(account.master_contact.biological_sex,
+                                                      account.master_contact.biological_sex)
         account.translated_nationality = translated_nationalities.get(account.citizenship, account.citizenship)
-        account.translated_language = translated_languages.get(account.kommunikationssprache, account.kommunikationssprache)
+        account.translated_language = translated_languages.get(account.kommunikationssprache,
+                                                               account.kommunikationssprache)
         contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)
 
         context['account'] = account
         context['master_contact'] = contact
         context['payment_contact'] = self.account.payment_contact
-        context['active_contract'] = contract
+        context['contracts'] = contracts
         context['ignore_drawer'] = True
 
-        p = int(self.request.GET.get('p', '1'))
-        s = int(self.request.GET.get('s', '10'))
+        # p = int(self.request.GET.get('p', '1'))
+        # s = int(self.request.GET.get('s', '10'))
 
-        if invoices:
-            paginator = Paginator(invoices, s)
-            try:
-                invoices = paginator.page(p)
-            except EmptyPage:
-                invoices = paginator.page(paginator.num_pages if p > 1 else 0)
+        # if invoices:
+        #     paginator = Paginator(invoices, s)
+        #     try:
+        #         invoices = paginator.page(p)
+        #     except EmptyPage:
+        #         invoices = paginator.page(paginator.num_pages if p > 1 else 0)
 
-        context['invoices'] = invoices
-        context['uploaded_files'] = uploaded_files
+        # context['invoices'] = invoices
+        # context['uploaded_files'] = uploaded_files
         return context
 
 
@@ -118,7 +120,7 @@ class SetLanguage(UgvStudentMixin, View):
 
 
 class Dashboard(UgvStudentMixin, TemplateView):
-    template_name = 'students/dashboard.html'
+    template_name = 'ugvler/dashboard.html'
     title = 'Student dashboard'
 
     def get_context_data(self, **kwargs):
@@ -127,7 +129,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
+        self.get_context_data(**kwargs)
         if not self.account.review_completed:
             step = 'sepa'
             return redirect('integration:onboarding', step=step)

@@ -1,0 +1,56 @@
+{% load i18n %}
+
+<div class="mdl-card mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+  <div class="mdl-card__supporting-text mdl-grid">
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Case number') value=case.case_number type="text" %}
+      </div>
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Type') value=case.type type="text" %}
+      </div>
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Subject') value=case.subject type="text" %}
+      </div>
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Effective Start') value=case.effective_start_trig type="date" %}
+      </div>
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Effective End') value=case.effective_end type="date" %}
+      </div>
+      {% if case.type == 'Income Changed' %}
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Relevant Income') value=case.relevant_income_trig type="currency" %}
+      </div>
+      {% endif %}
+      <div class="mdl-cell">
+          {% include 'snippets/field-text.html' with label=_('Approval Status') value=case.approval_status type="text" %}
+      </div>
+      <div class="mdl-cell mdl-cell--12-col">
+          {% include 'snippets/field-textarea.html' with label=_('Description') value=case.description %}
+      </div>
+  </div>
+
+  <div class="mdl-card__menu">
+  {% if not case.is_locked %}
+    {% if case.status == 'Clarification Needed' %}
+      <a href="{% url 'integration:request_edit' pk=case.pk %}" title="{% trans 'Edit' %}" 
+         class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+        <i id="c{{ case.case_number }}" class="material-icons mdl-color-text--accent">notification_important</i>
+      </a>
+      <!-- div class="mdl-tooltip mdl-tooltip--left" for="c{{ case.case_number }}">
+        <ul>{% for q in case.all_questions%}
+          <li>{{ q }}</li>
+        {% endfor %}</ul>
+      </div -->
+    {% else %}
+    <a href="{% url 'integration:request_edit' pk=case.pk %}" title="{% trans 'Edit' %}" 
+       class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+      <i class="material-icons">edit</i>
+    </a>
+    {% endif %}
+  {% elif not case.is_closed %}
+    <i class="material-icons">lock</i>
+  {% endif %}
+  </div>
+
+</div>

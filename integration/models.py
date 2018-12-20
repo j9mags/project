@@ -1,13 +1,10 @@
 from __future__ import unicode_literals
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from datetime import date, timedelta
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
-from django.db import connections, models as django_models
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
+from django.db import connections
 
 from . import managers
 
@@ -17,7 +14,7 @@ class PerishableTokenMixin:
         if not self.cspassword_token:
             return True
         if not self.cspassword_time:
-            return False
+            return True
         if self.cspassword_time < timezone.now():
             return True
 
@@ -235,6 +232,13 @@ class Choices:
     CustomerType = [('CS', 'CS'), ('CeG', 'CeG'), ('CS+CeG', 'CS+CeG')]
     ContractPeriod = [('Semester', _('Semester')), ('All Upfront', _('All Upfront')),
                       ('One year Upfront', _('One year Upfront'))]
+    CaseType = [('Income Changed', _('Communicate change in income')),
+                ('Personal Situation Changed', _('Communicate change of personal situation')),
+                ('Provisional Exemption', _('Request temporary exemption from interim payments'))]
+    CaseApproval = [('Pending', _('Pending')), ('Approved', _('Approved')), ('Not Approved', _('Not Approved'))]
+    CaseStatus = [('New', _('New')), ('In Review', _('In Review')), ('Clarification Needed', _('Clarification Needed')),
+                  ('Decision Reached', _('Decision Reached')), ('Closed', _('Closed'))]
+    ClarifyingQuestions = [('Question 1', 'Question 1'), ('Question 2', 'Question 2'), ('Question 3', 'Question 3')]
 
 
 class RecordType(models.Model):
@@ -271,6 +275,10 @@ class Lead(models.Model):
     city = models.CharField(max_length=40, blank=True, null=True)
     state = models.CharField(max_length=80, verbose_name=_('State/Province'), blank=True, null=True)
     postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
+    country = models.CharField(max_length=80, blank=True, null=True)
+    country_0 = models.CharField(db_column='Country__c', custom=True, max_length=255, choices=Choices.Country,
+                                 blank=True, null=True)
+
     citizenship_new = models.CharField(custom=True, max_length=255, verbose_name=_('Citizenship'),
                                        choices=Choices.Nationality, blank=True, null=True)
 
@@ -311,11 +319,12 @@ class Lead(models.Model):
                                      null=True)  # Field renamed because of name conflict.
     postal_city = models.CharField(custom=True, max_length=255, blank=True, null=True)
     postal_country = models.CharField(custom=True, max_length=255, choices=Choices.Country, blank=True, null=True)
-    link_zu_weiteren_dokumenten = models.URLField(custom=True, verbose_name='Link zu weiteren Dokumenten', blank=True,
-                                                  null=True)
-    risiko_nicht_bei_chancen = models.BooleanField(custom=True, db_column='RisikoNichtBeiCHANCENeG__c',
-                                                   verbose_name='Risiko nicht bei CHANCEN eG',
-                                                   default=models.DEFAULTED_ON_CREATE)
+
+    link_to_further_documents = models.URLField(custom=True, verbose_name=_('Link to further Documents'), blank=True,
+                                                null=True)
+    risk_not_with_chancen = models.BooleanField(custom=True, db_column='RiskNotWithCHANCENeG__c',
+                                                verbose_name=_('Risk not with CHANCEN eG'),
+                                                default=models.DEFAULTED_ON_CREATE)
 
     objects = managers.DefaultManager()
     ugv_students = managers.UGVLeadManager()
@@ -372,6 +381,12 @@ class Account(models.Model, PerishableTokenMixin):
     billing_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'), blank=True,
                                        null=True)
 
+    shipping_street = models.TextField(blank=True, null=True, verbose_name=_('Street and House number'))
+    shipping_city = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('City'))
+    shipping_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True, null=True)
+    shipping_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'), blank=True,
+                                        null=True)
+
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     status = models.CharField(custom=True, max_length=255, choices=Choices.AccountStatus, verbose_name=_('Status'),
                               blank=True, null=True)
@@ -383,7 +398,15 @@ class Account(models.Model, PerishableTokenMixin):
                                        sf_read_only=models.READ_ONLY, blank=True, null=True)
     is_person_account = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
     person_email = models.EmailField(verbose_name='Email', blank=True, null=True)
+    person_mobile_phone = models.CharField(max_length=40, verbose_name='Mobile Phone', blank=True, null=True)
     phone = models.CharField(max_length=40, verbose_name='Phone', blank=True, null=True)
+
+    person_mailing_street = models.TextField(blank=True, null=True, verbose_name=_('Street and House number'))
+    person_mailing_city = models.CharField(max_length=40, blank=True, null=True, verbose_name=_('City'))
+    person_mailing_postal_code = models.CharField(max_length=20, verbose_name=_('Zip/Postal Code'), blank=True,
+                                                  null=True)
+    person_mailing_country = models.CharField(max_length=80, choices=Choices.Country, verbose_name=_('Country'),
+                                              blank=True, null=True)
 
     abwicklungsgebuhr_pro_einzug_pro_student = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                                                    verbose_name=_(
@@ -457,6 +480,7 @@ class Account(models.Model, PerishableTokenMixin):
     universities = managers.UniversityManager()
     students = managers.StudentManager()
     ugv_students = managers.UGVStudentManager()
+    repayers = managers.RepayerManager()
 
     class Meta(models.Model.Meta):
         db_table = 'Account'
@@ -486,6 +510,14 @@ class Account(models.Model, PerishableTokenMixin):
     @property
     def is_ugv(self):
         return self.record_type.developer_name == 'UGVStudents'
+
+    @property
+    def is_repayer(self):
+        return self.record_type.developer_name == 'Ruckzahler'
+
+    @property
+    def is_repayer_or_ugv(self):
+        return self.record_type.developer_name in ('Ruckzahler', 'UGVStudents')
 
     @property
     def is_eg_customer(self):
@@ -543,11 +575,18 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def review_completed(self):
+        if self.is_repayer:
+            return self.initial_review_completed
         return self.initial_review_completed or self.master_contact.zahlungskontakt_auto
 
     def get_student_contact(self):
-        if self.is_student or self.is_ugv_student:
+        if self.is_student or self.is_ugv_student or self.is_repayer:
             return self.person_contact if self.is_person_account else self.student_contact
+        return None
+
+    def get_repayer_contact(self):
+        if self.is_repayer:
+            return self.person_contact
         return None
 
     def get_all_invoices(self, order='-invoice_date'):
@@ -560,6 +599,12 @@ class Account(models.Model, PerishableTokenMixin):
             # min_date = date.today() - timedelta(31)
             return self.degreecourse_set.all()  # filter(start_of_studies__gte=min_date)
         return None
+
+    def get_open_cases(self):
+        return self.case_set.filter(is_closed=False)
+
+    def get_closed_cases(self):
+        return self.case_set.filter(is_closed=True)
 
 
 class Contact(models.Model, PerishableTokenMixin):
@@ -650,6 +695,10 @@ class Contact(models.Model, PerishableTokenMixin):
     @property
     def bank_account(self):
         if not self.account.is_person_account and not self._is_staff:
+            rc = self.customerbankaccount_set.filter(enabled=True)
+            if rc.exists():
+                return rc.first()
+        elif self.account.is_person_account and self.account.is_repayer_or_ugv:
             rc = self.customerbankaccount_set.filter(enabled=True)
             if rc.exists():
                 return rc.first()
@@ -884,6 +933,8 @@ class Contract(models.Model):
     status = models.CharField(max_length=40, choices=Choices.ContractStatus, default=models.DEFAULTED_ON_CREATE,
                               verbose_name=_('Status'))
 
+    # Ruckzahler
+
     net_funding_amount = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
                                              verbose_name=_('Net funding amount'), blank=True, null=True)
     repayment_period = models.DecimalField(custom=True, max_digits=18, decimal_places=0,
@@ -924,13 +975,24 @@ class Contract(models.Model):
     full_finanzing = models.BooleanField(custom=True, verbose_name=_('Full Finanzing'),
                                          default=models.DEFAULTED_ON_CREATE)
     counterpart = models.ForeignKey('self', models.DO_NOTHING, custom=True, blank=True, null=True)
-    credit_balances_account_number = models.CharField(custom=True, max_length=1300,
-                                                      verbose_name=_('Credit balances account number'),
-                                                      sf_read_only=models.READ_ONLY, blank=True, null=True)
     period = models.CharField(custom=True, max_length=255, choices=Choices.ContractPeriod, blank=True, null=True)
     factor = models.DecimalField(custom=True, max_digits=4, decimal_places=0, blank=True, null=True)
     notice_to_quit = models.DateField(custom=True, verbose_name=_('Notice to quit'), blank=True, null=True)
     emergence = models.DateField(custom=True, blank=True, null=True)
+
+    # Membership
+    membershipnumber = models.CharField(custom=True, max_length=30, verbose_name=_('Membership number'),
+                                        sf_read_only=models.READ_ONLY)
+    credit_balances_account_number = models.CharField(custom=True, max_length=1300,
+                                                      verbose_name=_('Credit balances account number'),
+                                                      sf_read_only=models.READ_ONLY, blank=True, null=True)
+    amount_of_cooperative_shares = models.DecimalField(custom=True, max_digits=10, decimal_places=0,
+                                                       verbose_name=_('Amount of cooperative shares'), blank=True,
+                                                       null=True)
+    entry_date = models.DateField(custom=True, verbose_name=_('Entry date'), blank=True, null=True)
+    nominal_value_cooperative_share = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                                          verbose_name=_('Nominal value of a cooperative share'),
+                                                          default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
 
     class Meta(models.Model.Meta):
         db_table = 'Contract'
@@ -967,6 +1029,17 @@ class Contract(models.Model):
     @property
     def ugv_semester_fee(self):
         return self.net_funding_amount / self.standard_period_of_study_ref
+
+    @property
+    def display_name(self):
+        rc = self.contract_number
+        if self.is_ruckzahler:
+            rc += " {} [{}]".format(self.studiengang_ref.name, self.application_form_display_name)
+        return rc
+
+    @property
+    def attachment(self):
+        return Attachment.objects.filter(parent_id=self.pk).last()
 
 
 class Rabatt(models.Model):
@@ -1064,3 +1137,118 @@ class Attachment(models.Model):
         blob = handle_api_exceptions(url, session.get)
 
         return blob
+
+
+class Case(models.Model):
+    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    case_number = models.CharField(max_length=30, verbose_name=_('Case number'), sf_read_only=models.READ_ONLY)
+    contact = models.ForeignKey('Contact', models.DO_NOTHING, blank=True, null=True)
+    account = models.ForeignKey(Account, models.DO_NOTHING, blank=True, null=True)
+    type = models.CharField(max_length=40, verbose_name='Case Type', choices=Choices.CaseType, blank=False, null=True)
+    record_type = models.ForeignKey('RecordType', models.DO_NOTHING, blank=True, null=True)
+    status = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=Choices.CaseStatus,
+                              blank=True, null=True)
+    subject = models.CharField(max_length=255, blank=False, null=True)
+    description = models.TextField(blank=True, null=True)
+    is_closed = models.BooleanField(verbose_name='Closed', sf_read_only=models.READ_ONLY, default=False)
+    closed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    is_escalated = models.BooleanField(verbose_name='Escalated', default=models.DEFAULTED_ON_CREATE)
+    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
+    approval_status = models.CharField(custom=True, max_length=255, choices=Choices.CaseApproval, blank=True, null=True)
+
+    effective_start_trig = models.DateField(custom=True, verbose_name=_('Effective Start'), blank=False, null=True)
+    effective_end = models.DateField(custom=True, verbose_name=_('Effective End'), blank=True, null=True)
+    relevant_income_trig = models.DecimalField(custom=True, max_digits=18, decimal_places=2,
+                                               verbose_name=_('Relevant Income'), blank=True, null=True,
+                                               help_text=_('Required when the Type is change of income.'))
+
+    clarification_questions = models.CharField(custom=True, max_length=4099, choices=Choices.ClarifyingQuestions,
+                                               blank=True, null=True)
+    clarification_question = models.TextField(custom=True, blank=True, null=True)
+
+    class Meta(models.Model.Meta):
+        db_table = 'Case'
+        verbose_name = 'Case'
+        verbose_name_plural = 'Cases'
+        # keyPrefix = '500'
+
+    @property
+    def is_locked(self):
+        return self.status in ('In Review', 'Decision Reached', 'Closed')
+
+    @property
+    def all_questions(self):
+        rc = []
+
+        if self.clarification_questions:
+            rc.extend([x for x in self.clarification_questions.split(";")])
+
+        if self.clarification_question:
+            rc.append(self.clarification_question)
+
+        return rc
+
+
+class ContentVersion(models.Model):
+    content_url = models.URLField(verbose_name='Content URL', blank=True, null=True)
+    version_number = models.CharField(max_length=20, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    sharing_option = models.CharField(max_length=40, verbose_name='Prevent others from sharing and unsharing', default=models.DEFAULTED_ON_CREATE, choices=[('A', 'Freeze Sharing Off'), ('R', 'Freeze Sharing On')])
+    path_on_client = models.CharField(max_length=500, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
+    rating_count = models.IntegerField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    is_deleted = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
+    positive_rating_count = models.IntegerField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    negative_rating_count = models.IntegerField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    featured_content_boost = models.IntegerField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    featured_content_date = models.DateField(sf_read_only=models.READ_ONLY, blank=True, null=True)
+    created_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
+    last_modified_date = models.DateTimeField(sf_read_only=models.READ_ONLY)
+    system_modstamp = models.DateTimeField(sf_read_only=models.READ_ONLY)
+    tag_csv = models.TextField(verbose_name='Tags', blank=True, null=True)
+    file_type = models.CharField(max_length=20, sf_read_only=models.READ_ONLY)
+    publish_status = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, default='U', choices=[('U', 'Upload Interrupted'), ('P', 'Public'), ('R', 'Private Library')])
+    version_data = models.TextField(blank=True, null=True)
+    content_size = models.IntegerField(verbose_name='Size', sf_read_only=models.READ_ONLY, blank=True, null=True)
+    file_extension = models.CharField(max_length=40, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    first_publish_location = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)  # Reference to tables [Account, AmazonS3Parameters__c, ApplicationUpload__c, Application__c, Asset, CalendlyWebhook__c, Campaign, Case, ChancenError__c, CollaborationGroup, Contact, ContentWorkspace, Contract, CustomerBankAccount__c, Dashboard, DashboardComponent, DegreeCourseFees__c, DegreeCourse__c, EmailMessage, EmailTemplate, ErrorLoggerEmails__c, Event, Forecast_Item__c, Forecast__c, GoCardlessAPI__c, GoCardlessEvent__c, IndexationTreshold__c, InflationValues__c, InfoRequest__c, Interview__c, InvoiceLineItem__c, Invoice__c, Lead, Log__c, Mandate__c, Opportunity, Order, OrderItem, Organization, OutgoingEmail, PandaDocParameters__c, Payment__c, Product2, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, QandA__c, Rabatt__c, RepaymentYear__c, Report, RequestItems__c, Site, SocialPost, Solution, SystemSettings__c, Task, Topic, UGVSampleCalculation__c, User, WorkBadgeDefinition, dlrs__DeclarativeLookupRollupSummaries__c, dlrs__LookupChildAReallyReallyReallyBigBigName__c, dlrs__LookupChild__c, dlrs__LookupParent__c, dlrs__LookupRollupCalculateJob__c, dlrs__LookupRollupSummaryLog__c, dlrs__LookupRollupSummaryScheduleItems__c, dlrs__LookupRollupSummary__c, reCAPTCHAParameters__c]
+    origin = models.CharField(max_length=40, verbose_name='Content Origin', sf_read_only=models.NOT_UPDATEABLE, default=models.DEFAULTED_ON_CREATE, choices=[('C', 'Content'), ('H', 'Chatter')])
+    content_location = models.CharField(max_length=40, sf_read_only=models.NOT_UPDATEABLE, default=models.DEFAULTED_ON_CREATE, choices=[('S', 'Salesforce'), ('E', 'External'), ('L', 'Social Customer Service')])
+    text_preview = models.CharField(max_length=255, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    external_document_info1 = models.CharField(max_length=1000, blank=True, null=True)
+    external_document_info2 = models.CharField(max_length=1000, blank=True, null=True)
+    # external_data_source = models.ForeignKey('ExternalDataSource', models.DO_NOTHING, blank=True, null=True)
+    checksum = models.CharField(max_length=50, sf_read_only=models.READ_ONLY, blank=True, null=True)
+    is_major_version = models.BooleanField(verbose_name='Major Version', sf_read_only=models.NOT_UPDATEABLE, default=models.DEFAULTED_ON_CREATE)
+    is_asset_enabled = models.BooleanField(verbose_name='Asset File Enabled', sf_read_only=models.NOT_UPDATEABLE, default=models.DEFAULTED_ON_CREATE)
+    class Meta(models.Model.Meta):
+        db_table = 'ContentVersion'
+        verbose_name = 'Content Version'
+        verbose_name_plural = 'Content Versions'
+        # keyPrefix = '068'
+
+    @property
+    def meta(self):
+        return self._meta
+
+
+class FeedItem(models.Model):
+    parent = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)
+    type = models.CharField(max_length=40, verbose_name='Feed Item Type', sf_read_only=models.NOT_UPDATEABLE, default="ContentPost" , blank=True, null=True)
+    is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
+    comment_count = models.IntegerField(sf_read_only=models.READ_ONLY)
+    like_count = models.IntegerField(sf_read_only=models.READ_ONLY)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    body = models.TextField(blank=True, null=True)
+    link_url = models.URLField(sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
+    is_rich_text = models.BooleanField(default=models.DEFAULTED_ON_CREATE)
+    related_record = models.ForeignKey(ContentVersion, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE, blank=True, null=True)
+    has_content = models.BooleanField(sf_read_only=models.READ_ONLY, default=False)
+    has_feed_entity = models.BooleanField(verbose_name='Has Feed Entity Attachment', sf_read_only=models.READ_ONLY, default=False)
+    status = models.CharField(max_length=40, choices=[('Published', 'Published'), ('PendingReview', 'PendingReview'), ('Draft', 'Draft')], 
+                              default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
+    class Meta(models.Model.Meta):
+        db_table = 'FeedItem'
+        verbose_name = 'Feed Item'
+        verbose_name_plural = 'Feed Items'
+        # keyPrefix = '0D5'
