@@ -29,6 +29,16 @@
 <div class="mdl-card mdl-shadow--6dp mdl-cell--12-col">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {% if case.all_questions %}
+        <div class="mdl-card__supporting-text mdl-grid">
+            {% for question in case.all_questions %}
+                <span class="mdl-chip">
+                    <span class="mdl-chip__contact mdl-color--primary mdl-color-text--white">Q</span>
+                    <span class="mdl-chip__text">{{ question }}</span>
+                </span>
+            {% endfor %}
+        </div>
+        {% endif %}
         <div class="mdl-card__supporting-text mdl-grid">
             <div class="mdl-cell mdl-cell--6-col">
                 {% include 'snippets/select.html' with field=form.type type='email'%}

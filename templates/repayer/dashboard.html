@@ -23,7 +23,9 @@
     <div class="mdl-tabs__tab-bar">
         <a id="account-tab" href="#account-panel" class="mdl-tabs__tab is-active">{% trans 'Account' %}</a>
         <a id="contracts-tab" href="#contracts-panel" class="mdl-tabs__tab">{% trans 'Contracts' %}</a>
-        <a id="support-tab" href="#support-panel" class="mdl-tabs__tab">{% trans 'Support' %}</a>
+        <a id="support-tab" href="#support-panel" class="mdl-tabs__tab">{% trans 'Support' %}
+          {% if clarification_needed %}<i class="material-icons">notification_important</i>{% endif %}
+        </a>
     </div>
 
     <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %} is-active" id="account-panel">
