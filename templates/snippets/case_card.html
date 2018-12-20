@@ -32,12 +32,21 @@
 
   <div class="mdl-card__menu">
   {% if not case.is_locked %}
+    {% if case.status == 'Clarification Needed' %}
+      <a href="{% url 'integration:request_edit' pk=case.pk %}" title="{% trans 'Edit' %}" 
+         class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+        <i id="c{{ case.case_number }}" class="material-icons mdl-color-text--accent">notification_important</i>
+      </a>
+      <!-- div class="mdl-tooltip mdl-tooltip--left" for="c{{ case.case_number }}">
+        <ul>{% for q in case.all_questions%}
+          <li>{{ q }}</li>
+        {% endfor %}</ul>
+      </div -->
+    {% else %}
     <a href="{% url 'integration:request_edit' pk=case.pk %}" title="{% trans 'Edit' %}" 
        class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
       <i class="material-icons">edit</i>
     </a>
-    {% if case.status == 'Clarification Needed' %}
-      <i class="material-icons">notification_important</i>
     {% endif %}
   {% elif not case.is_closed %}
     <i class="material-icons">lock</i>

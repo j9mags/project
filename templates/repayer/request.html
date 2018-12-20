@@ -29,6 +29,20 @@
 <div class="mdl-card mdl-shadow--6dp mdl-cell--12-col">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {% if case.all_questions %}
+        <div class="mdl-card__supporting-text mdl-grid">
+            <ul class="mdl-list">
+            {% for question in case.all_questions %}
+            <li class="mdl-list__item mdl-list__item--three-line" style="height:unset">
+                <span class="mdl-list__item-primary-content" style="height:unset">
+                    <i class="material-icons mdl-list__item-avatar mdl-color--accent">error_outline</i>
+                    <span class="mdl-list__item-text-body" style="height:unset">{{ question }}</span>
+                </span>
+            </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
         <div class="mdl-card__supporting-text mdl-grid">
             <div class="mdl-cell mdl-cell--6-col">
                 {% include 'snippets/select.html' with field=form.type type='email'%}
