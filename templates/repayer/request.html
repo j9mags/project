@@ -31,12 +31,16 @@
         {% csrf_token %}
         {% if case.all_questions %}
         <div class="mdl-card__supporting-text mdl-grid">
+            <ul class="mdl-list">
             {% for question in case.all_questions %}
-                <span class="mdl-chip mdl-chip--contact mdl-cell mdl-cell--12-col">
-                    <span class="mdl-chip__contact mdl-color--primary mdl-color-text--white">Q</span>
-                    <span class="mdl-chip__text">{{ question }}</span>
+            <li class="mdl-list__item mdl-list__item--three-line">
+                <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-avatar">error_outline</i>
+                    <span class="mdl-list__item-text-body">{{ question }}</span>
                 </span>
+            </li>
             {% endfor %}
+            </ul>
         </div>
         {% endif %}
         <div class="mdl-card__supporting-text mdl-grid">
