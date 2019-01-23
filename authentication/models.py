@@ -280,7 +280,7 @@ class CsvUpload(models.Model):
             raise exceptions.ObjectDoesNotExist()
         languages = {'Deutsch': 'German', 'Englisch': 'English'}
         sex = {'weiblich': 'Female', 'männlich': 'Male', 'geschlechtsneutral': 'Third gender'}
-        boolean_answer = {'Ja': True, 'Nein': False}
+        boolean_answer = {'Ja': True, 'Yes': True}
 
         university = self.user.srecord.account
         courses = {}

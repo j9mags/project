@@ -1,6 +1,6 @@
 from django.core.exceptions import *
 from django.views import View
-from django.http.response import Http404
+#  from django.http.response import Http404
 from django.shortcuts import render, reverse, redirect
 from django.utils.translation import ugettext_lazy as _
 
@@ -85,7 +85,6 @@ class PasswordSet(View):
         context = {}
 
         form = SetPasswordForm(request.POST)
-
         if form.is_valid():
             pt = get_token_or_raise(form.cleaned_data.get('token'))
             UserModel = get_user_model()
@@ -95,8 +94,14 @@ class PasswordSet(View):
             else:
                 user = UserModel(email=pt.user_email, is_active=True)
                 pt.recordcreated = True
+
+            if not form.validate_password(user):
+                context.update(form=form)
+                return render(request, self.template_form, context)
+
             user.set_password(form.cleaned_data.get('password1'))
             user.save()
+
             pt.cspassword_token = None
             pt.cspassword_time = None
             pt.save(update_fields=['cspassword_token', 'cspassword_time', 'recordcreated'])
