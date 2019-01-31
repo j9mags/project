@@ -1,32 +1,33 @@
 {% load i18n %}
 
-<div class="mdl-card mdl-card-account mdl-shadow--6dp {{ class }}">
-  <div class="mdl-card__supporting-text mdl-grid">
-    <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Bank Name') value=ba.bank_name %}
-    </div>
-    <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Country Code') value=ba.country_code %}
-    </div>
-    <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Account Number(last 2 digits)') value=ba.account_number %}
-    </div>
-    <div class="mdl-cell mdl-cell--12-col">
-      <span class="mdl-typography--title">{% trans 'Billing address' %}</span>
-    </div>
-    <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.billing_street %}
-    </div>
-    <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Postal code') value=account.billing_postal_code %}
-    </div>
-    <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('City') value=account.billing_city %}
-    </div>
-    <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Country') value=account.billing_country %}
-    </div>
-  </div>
-
+<div class="mdl-cell">
+  {% include 'snippets/field-text.html' with label=_('Bank Name') value=master_contact.bank_account.bank_name %}
+</div>
+<div class="mdl-cell">
+  {% include 'snippets/field-text.html' with label=_('Country Code') value=master_contact.bank_account.country_code %}
+</div>
+<div class="mdl-cell">
+  {% include 'snippets/field-text.html' with label=_('Account Number(last 2 digits)') value=master_contact.bank_account.account_number %}
+</div>
+<div class="mdl-cell mdl-cell--12-col">
+  <span class="mdl-typography--title">{% trans 'Billing address' %}</span>
+</div>
+<div class="mdl-cell">
+  {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.billing_street %}
+</div>
+<div class="mdl-cell">
+  {% include 'snippets/field-text.html' with label=_('Postal code') value=account.billing_postal_code %}
+</div>
+<div class="mdl-cell">
+  {% include 'snippets/field-text.html' with label=_('City') value=account.billing_city %}
+</div>
+<div class="mdl-cell">
+  {% include 'snippets/field-text.html' with label=_('Country') value=account.billing_country %}
 </div>
 
+<div class="mdl-card__menu">
+  <a href="{% url 'integration:payment' %}"
+     class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+    <i class="material-icons">edit</i>
+  </a>
+</div>

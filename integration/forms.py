@@ -1,9 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 
-import pandas
-from numpy import nan
-from pandas.io import json
+try:
+    import pandas
+    from numpy import nan
+    from pandas.io import json
+except:
+    pass
+
 import logging
 
 from authentication.models import CsvUpload
@@ -141,7 +145,7 @@ class StudentContactForm(forms.ModelForm):
         self.fields['mailing_country'].widget.choices[0] = ("", "")
 
 
-class StudentPaymentForm(forms.ModelForm):
+class PaymentForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['billing_street', 'billing_city', 'billing_postal_code', 'billing_country']
@@ -151,7 +155,7 @@ class StudentPaymentForm(forms.ModelForm):
         self.fields['billing_country'].widget.choices[0] = ("", "")
 
 
-class StudentRevokeMandateForm(forms.ModelForm):
+class RevokeMandateForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ['cancel_bank_account']

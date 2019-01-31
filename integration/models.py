@@ -225,10 +225,11 @@ class Choices:
     DiscountType = [('Discount Tuition Fee', _('Discount Tuition Fee')),
                     ('Discount Semester Fee', _('Discount Semester Fee'))]
     LeadStatus = [('Prospect', _('Prospect')), ('Applicant', _('Applicant')), ('Nurturing', _('Nurturing')),
-                  ('Pending', _('Pending')), ('Qualified', _('Qualifiziert')), ('Unqualified', _('Unqualifiziert'))]
+                  ('Pending', _('Pending')), ('Qualified', _('Qualifiziert')), ('Unqualified', _('Unqualifiziert')),
+                  ('ISA Application Withdrawal', _('ISA Application Withdrawal'))]
     UGVStatus = [('Not applied yet', _('Not applied yet')), ('Confirmed applicant', _('Confirmed applicant')),
                  ('Rejected applicant', _('Rejected applicant')), ('Accepted applicant', _('Accepted applicant')),
-                 ('Already student', _('Already student'))]
+                 ('Already student', _('Already student')), ('Application Withdrawal', _('Application Withdrawal'))]
     CustomerType = [('CS', 'CS'), ('CeG', 'CeG'), ('CS+CeG', 'CS+CeG')]
     ContractPeriod = [('Semester', _('Semester')), ('All Upfront', _('All Upfront')),
                       ('One year Upfront', _('One year Upfront'))]

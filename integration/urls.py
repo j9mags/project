@@ -10,7 +10,7 @@ urlpatterns = [
             ugv_student.Onboarding.as_view(),
             repayer.Onboarding.as_view(),
             None
-        ), name='onboarding'),
+    ), name='onboarding'),
     url(r'^onboarding/$', dispatch_by_user(
         student.Onboarding.as_view(),
         ugv_student.Onboarding.as_view(),
@@ -20,13 +20,13 @@ urlpatterns = [
     url(r'^contact/(?P<pk>(.+)|(new))/$', dispatch_by_user(
         student.ContactDetails.as_view(),
         ugv_student.ContactDetails.as_view(),
-        None,
+        None,  # repayer.ContactDetails.as_view(),
         None
     ), name='contact'),
     url(r'^payment/$', dispatch_by_user(
         student.PaymentDetails.as_view(),
         ugv_student.PaymentDetails.as_view(),
-        None,
+        repayer.PaymentDetails.as_view(),
         None
     ), name='payment'),
 

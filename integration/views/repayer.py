@@ -11,8 +11,8 @@ from django.views.generic.base import View
 
 from salesforce.backend.driver import SalesforceError
 
-from ..forms import RepayerOnboardingForm, RepayerCaseForm, LanguageSelectForm
-from ..models import Case, RecordType, ContentVersion, FeedItem
+from ..forms import *
+from ..models import Case, RecordType, ContentVersion, FeedItem, Contact
 
 import base64
 
@@ -308,6 +308,58 @@ class Dashboard(RepayerMixin, TemplateView):
             return redirect('integration:onboarding', step=step)
 
         return super(Dashboard, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        form = RevokeMandateForm(request.POST, instance=context['master_contact'])
+
+        if form.is_valid():
+            form.save()
+        else:
+            context.update(display_dlg=True)
+        return render(request, self.template_name, context=context)
+
+
+class PaymentDetails(RepayerMixin, TemplateView):
+    model = Contact
+    template_name = 'repayer/payment.html'
+
+    def get_context_data(self, **kwargs):
+        context = self.get_repayer_context()
+        context.update(super(PaymentDetails, self).get_context_data(**kwargs))
+        context['ignore_drawer'] = True
+
+        payment_contact = context['master_contact']
+
+        context['rvk_form'] = RevokeMandateForm(instance=payment_contact)
+
+        if self.request.POST:
+            form = PaymentForm(self.request.POST, instance=self.account)
+        else:
+            form = PaymentForm(instance=self.account)
+        context.update(account=self.account, form=form)
+
+        if payment_contact:
+            context.update(open_payments=payment_contact.mandate_open_payments or 0)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        if 'cancel_bank_account' in request.POST:
+            context.update(display_dlg=True)
+            form = context.get('rvk_form')
+        else:
+            form = context.get('form')
+
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('integration:dashboard')
+            except Exception as e:
+                form.add_error(None, str(e))
+
+        return render(request, self.template_name, context)
 
 
 class NewRequest(RepayerMixin, TemplateView):
