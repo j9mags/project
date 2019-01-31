@@ -2,9 +2,11 @@
 
 <div class="mdl-card mdl-card-account mdl-shadow--6dp {{ class }}">
   <div class="mdl-card__supporting-text mdl-grid">
+    {% if not account.is_ugv %}
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Private email address') value=contact.email %}
     </div>
+    {% endif %}
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Mobile phone') value=contact.mobile_phone %}
     </div>

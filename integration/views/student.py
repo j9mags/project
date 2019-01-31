@@ -116,7 +116,7 @@ class Dashboard(StudentMixin, TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
+        self.get_context_data(**kwargs)
         if not self.account.review_completed:
             step = 'sepa'
             if not self.account.kommunikationssprache:
@@ -131,7 +131,7 @@ class Dashboard(StudentMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        form = StudentRevokeMandateForm(request.POST, instance=context['master_contact'])
+        form = RevokeMandateForm(request.POST, instance=context['master_contact'])
 
         if form.is_valid():
             form.save()
@@ -197,12 +197,12 @@ class PaymentDetails(StudentMixin, TemplateView):
         payment_contact = self.account.payment_contact
 
         if master_contact == payment_contact:
-            context['rvk_form'] = StudentRevokeMandateForm(instance=payment_contact)
+            context['rvk_form'] = RevokeMandateForm(instance=payment_contact)
 
         if self.request.POST:
-            form = StudentPaymentForm(self.request.POST, instance=self.account)
+            form = PaymentForm(self.request.POST, instance=self.account)
         else:
-            form = StudentPaymentForm(instance=self.account)
+            form = PaymentForm(instance=self.account)
         context.update(account=self.account, form=form)
 
         if payment_contact:

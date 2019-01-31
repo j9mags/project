@@ -138,7 +138,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        form = StudentRevokeMandateForm(request.POST, instance=context['master_contact'])
+        form = RevokeMandateForm(request.POST, instance=context['master_contact'])
 
         if form.is_valid():
             form.save()
@@ -173,7 +173,7 @@ class ContactDetails(UgvStudentMixin, TemplateView):
             form = StudentContactForm(self.request.POST, instance=contact)
         else:
             form = StudentContactForm(instance=contact)
-        context.update(contact=contact, form=form)
+        context.update(contact=contact, form=form, account=self.account)
 
         return context
 
@@ -204,12 +204,12 @@ class PaymentDetails(UgvStudentMixin, TemplateView):
         payment_contact = self.account.payment_contact
 
         if payment_contact == master_contact or self.account.is_ugv_student:
-            context['rvk_form'] = StudentRevokeMandateForm(instance=payment_contact)
+            context['rvk_form'] = RevokeMandateForm(instance=payment_contact)
 
         if self.request.POST:
-            form = StudentPaymentForm(self.request.POST, instance=self.account)
+            form = PaymentForm(self.request.POST, instance=self.account)
         else:
-            form = StudentPaymentForm(instance=self.account)
+            form = PaymentForm(instance=self.account)
         context.update(account=self.account, form=form)
 
         if payment_contact:
@@ -395,4 +395,3 @@ class UploadFile(UgvStudentMixin, View):
             message=_('Upload failed')
         )
         return render(request, self.template_name, context)
-
