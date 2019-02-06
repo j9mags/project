@@ -97,7 +97,13 @@ class Choices:
                ('Venezuela', _('Venezuela')), ('Vereinigte Arabische Emirate', _('Vereinigte Arabische Emirate')),
                ('Vereinigte Staaten', _('Vereinigte Staaten')), ('Vereinigtes Königreich', _('Vereinigtes Königreich')),
                ('Vietnam', _('Vietnam')), ('Weißrussland', _('Weißrussland')), ('Westsahara', _('Westsahara')),
-               ('Zentralafrikanische Republik', _('Zentralafrikanische Republik')), ('Zypern', _('Zypern'))]
+               ('Zentralafrikanische Republik', _('Zentralafrikanische Republik')), ('Zypern', _('Zypern')),
+
+               ('Grönland', _('Grönland')), ('Macua', _('Macua')), ('St. Helena', _('St. Helena')),
+               ('Turks- und Caicosinseln', _('Turks- und Caicosinseln')), ('Gibralta', _('Gibralta')),
+               ('Jersey', _('Jersey')), ('Guernsey', _('Guernsey')), ('Faröer', _('Faröer')),
+               ('Hongkong', _('Hongkong')), ('Bermuda', _('Bermuda')), ('(Französisch-) Guayana', _('(Französisch-) Guayana')),
+               ('Britische Jungferninseln', _('Britische Jungferninseln')), ('Gebiet Taiwan', _('Gebiet Taiwan'))]
     Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('non-binary'))]
     Biological_Sex = [('Female', _('female')), ('Male', _('male')), ('Third gender', _('non-binary'))]
     Nationality = [('afghanisch', _('afghanisch')), ('ägyptisch', _('ägyptisch')), ('albanisch', _('albanisch')),
@@ -200,7 +206,14 @@ class Choices:
                    ('amerikanisch', _('amerikanisch')), ('britisch', _('britisch')),
                    ('vietnamesisch', _('vietnamesisch')),
                    ('weißrussisch', _('weißrussisch')), ('zentralafrikanisch', _('zentralafrikanisch')),
-                   ('zyprisch', _('zyprisch'))]
+                   ('zyprisch', _('zyprisch')),
+                   ('grönländisch', _('grönländisch')), ('macuanisch', _('macuanisch')),
+                   ('von St. Helena', _('von St. Helena')),
+                   ('von Turks- und Caicosinseln', _('von Turks- und Caicosinseln')), ('gibraltisch', _('gibraltisch')),
+                   ('von Jersey', _('von Jersey')), ('guernseyer', _('guernseyer')), ('faröisch', _('faröisch')),
+                   ('honkonger', _('honkonger')), ('bermudisch', _('bermudisch')),
+                   ('von den britischen Jungferninseln', _('von den britischen Jungferninseln')),
+                   ('taiwanesisch', _('taiwanesisch')), ('(französisch-) guayanisch', _('(französisch-) guayanisch'))]
     Language = [('German', _('Deutsch')), ('English', _('English'))]
     LanguageCode = [('German', 'DE'), ('English', 'EN')]
     Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
