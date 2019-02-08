@@ -10,12 +10,20 @@ from . import managers
 
 
 class PerishableTokenMixin:
+    @property
+    def cs_token(self):
+        return self.cspassword_token_pc if self.is_person_account else self.cspassword_token
+
     def is_token_expired(self):
-        if not self.cspassword_token:
+        token = self.cs_token
+        if not token:
             return True
-        if not self.cspassword_time:
+
+        time = self.cspassword_time_pc if self.is_person_account else self.cspassword_time
+        if not time:
             return True
-        if self.cspassword_time < timezone.now():
+
+        if time < timezone.now():
             return True
 
         return False
@@ -97,7 +105,13 @@ class Choices:
                ('Venezuela', _('Venezuela')), ('Vereinigte Arabische Emirate', _('Vereinigte Arabische Emirate')),
                ('Vereinigte Staaten', _('Vereinigte Staaten')), ('Vereinigtes Königreich', _('Vereinigtes Königreich')),
                ('Vietnam', _('Vietnam')), ('Weißrussland', _('Weißrussland')), ('Westsahara', _('Westsahara')),
-               ('Zentralafrikanische Republik', _('Zentralafrikanische Republik')), ('Zypern', _('Zypern'))]
+               ('Zentralafrikanische Republik', _('Zentralafrikanische Republik')), ('Zypern', _('Zypern')),
+
+               ('Grönland', _('Grönland')), ('Macua', _('Macua')), ('St. Helena', _('St. Helena')),
+               ('Turks- und Caicosinseln', _('Turks- und Caicosinseln')), ('Gibralta', _('Gibralta')),
+               ('Jersey', _('Jersey')), ('Guernsey', _('Guernsey')), ('Faröer', _('Faröer')),
+               ('Hongkong', _('Hongkong')), ('Bermuda', _('Bermuda')), ('(Französisch-) Guayana', _('(Französisch-) Guayana')),
+               ('Britische Jungferninseln', _('Britische Jungferninseln')), ('Gebiet Taiwan', _('Gebiet Taiwan'))]
     Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('non-binary'))]
     Biological_Sex = [('Female', _('female')), ('Male', _('male')), ('Third gender', _('non-binary'))]
     Nationality = [('afghanisch', _('afghanisch')), ('ägyptisch', _('ägyptisch')), ('albanisch', _('albanisch')),
@@ -200,7 +214,14 @@ class Choices:
                    ('amerikanisch', _('amerikanisch')), ('britisch', _('britisch')),
                    ('vietnamesisch', _('vietnamesisch')),
                    ('weißrussisch', _('weißrussisch')), ('zentralafrikanisch', _('zentralafrikanisch')),
-                   ('zyprisch', _('zyprisch'))]
+                   ('zyprisch', _('zyprisch')),
+                   ('grönländisch', _('grönländisch')), ('macuanisch', _('macuanisch')),
+                   ('von St. Helena', _('von St. Helena')),
+                   ('von Turks- und Caicosinseln', _('von Turks- und Caicosinseln')), ('gibraltisch', _('gibraltisch')),
+                   ('von Jersey', _('von Jersey')), ('guernseyer', _('guernseyer')), ('faröisch', _('faröisch')),
+                   ('honkonger', _('honkonger')), ('bermudisch', _('bermudisch')),
+                   ('von den britischen Jungferninseln', _('von den britischen Jungferninseln')),
+                   ('taiwanesisch', _('taiwanesisch')), ('(französisch-) guayanisch', _('(französisch-) guayanisch'))]
     Language = [('German', _('Deutsch')), ('English', _('English'))]
     LanguageCode = [('German', 'DE'), ('English', 'EN')]
     Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
@@ -454,6 +475,11 @@ class Account(models.Model, PerishableTokenMixin):
                                            blank=True, null=True)
     password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
+    cspassword_time_pc = models.DateTimeField(db_column='CSPasswordTime__pc', verbose_name='CS Password Time',
+                                              blank=True, null=True)
+    cspassword_token_pc = models.CharField(db_column='CSPasswordToken__pc', max_length=100,
+                                           verbose_name='CS Password Token', blank=True, null=True)
+
     initial_review_completed_auto = models.BooleanField(custom=True, verbose_name='Initial review completed',
                                                         sf_read_only=models.READ_ONLY)
     semester_fee_new = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
@@ -501,8 +527,9 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def is_student(self):
-        return self.record_type.developer_name == 'Sofortzahler' or \
-               (self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto)
+        return self.record_type.developer_name == 'Sofortzahler' or (
+            self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto
+        )
 
     @property
     def is_ugv_student(self):

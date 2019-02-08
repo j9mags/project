@@ -36,6 +36,6 @@
     {% endif %}
 
     {% if field.errors %}
-        <span class="mdl-textfield__error">{{ field.errors | first | escape }}</span>
+        <span class="mdl-textfield__error">{% if multiple_errors %}{{ field.errors | unordered_list }}{% else %}{{ field.errors | first | escape }}{% endif %}</span>
     {% endif %}
 </div>
