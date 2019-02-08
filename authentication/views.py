@@ -43,10 +43,10 @@ def get_token_or_raise(tk):
     rc = Account.students.filter(cspassword_token=tk)
     pt = rc and rc[0]
     if not pt:
-        rc = Account.ugv_students.filter(cspassword_token=tk)
+        rc = Account.ugv_students.filter(cspassword_token_pc=tk)
         pt = rc and rc[0]
     if not pt:
-        rc = Account.repayers.filter(cspassword_token=tk)
+        rc = Account.repayers.filter(cspassword_token_pc=tk)
         pt = rc and rc[0]
     if not pt:
         rc = Contact.university_staff.filter(cspassword_token=tk)
@@ -76,7 +76,7 @@ class PasswordSet(View):
         if not pt:
             return redirect(reverse('authentication:login') + '?msg=expired')
 
-        form = SetPasswordForm(initial={'token': pt.cspassword_token})
+        form = SetPasswordForm(initial={'token': pt.cs_token})
         context = {'form': form}
 
         return render(request, self.template_form, context)
@@ -86,7 +86,8 @@ class PasswordSet(View):
 
         form = SetPasswordForm(request.POST)
         if form.is_valid():
-            pt = get_token_or_raise(form.cleaned_data.get('token'))
+            tk = form.cleaned_data.get('token')
+            pt = get_token_or_raise(tk)
             UserModel = get_user_model()
             query = UserModel.objects.filter(email=pt.user_email)
             if query.exists():

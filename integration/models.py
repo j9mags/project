@@ -10,12 +10,20 @@ from . import managers
 
 
 class PerishableTokenMixin:
+    @property
+    def cs_token(self):
+        return self.cspassword_token_pc if self.is_person_account else self.cspassword_token
+
     def is_token_expired(self):
-        if not self.cspassword_token:
+        token = self.cs_token
+        if not token:
             return True
-        if not self.cspassword_time:
+
+        time = self.cspassword_time_pc if self.is_person_account else self.cspassword_time
+        if not time:
             return True
-        if self.cspassword_time < timezone.now():
+
+        if time < timezone.now():
             return True
 
         return False
@@ -467,6 +475,11 @@ class Account(models.Model, PerishableTokenMixin):
                                            blank=True, null=True)
     password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
+    cspassword_time_pc = models.DateTimeField(db_column='CSPasswordTime__pc', verbose_name='CS Password Time',
+                                              blank=True, null=True)
+    cspassword_token_pc = models.CharField(db_column='CSPasswordToken__pc', max_length=100,
+                                           verbose_name='CS Password Token', blank=True, null=True)
+
     initial_review_completed_auto = models.BooleanField(custom=True, verbose_name='Initial review completed',
                                                         sf_read_only=models.READ_ONLY)
     semester_fee_new = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
@@ -514,8 +527,9 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def is_student(self):
-        return self.record_type.developer_name == 'Sofortzahler' or \
-               (self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto)
+        return self.record_type.developer_name == 'Sofortzahler' or (
+            self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto
+        )
 
     @property
     def is_ugv_student(self):

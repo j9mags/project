@@ -10,36 +10,40 @@ class PasswordValidator:
         self.special = special
 
     def validate(self, password, user=None):
+        errors = []
         if not any(c.islower() for c in password):
-            raise ValidationError(
+            errors.append(ValidationError(
                 _('This password must contain at least one lowercase letter.'),
                 code='lowercase_missing'
-            )
+            ))
 
         if len(password) < self.min_length:
-            raise ValidationError(
+            errors.append(ValidationError(
                 _("This password must contain at least %(min_length)d characters."),
                 code='password_too_short',
                 params={'min_length': self.min_length},
-            )
+            ))
 
         if self.alfa_numeric and not any(c.isdigit() for c in password):
-            raise ValidationError(
+            errors.append(ValidationError(
                 _('This password must contain at least one number.'),
                 code='number_missing'
-            )
+            ))
 
         if self.capitals and not any(c.isupper() for c in password):
-            raise ValidationError(
+            errors.append(ValidationError(
                 _('This password must contain at least one capital letter.'),
                 code='capital_missing'
-            )
+            ))
 
         if self.special and not any(not c.isalnum() for c in password):
-            raise ValidationError(
+            errors.append(ValidationError(
                 _('This password must contain at least one special character.'),
                 code='special_missing'
-            )
+            ))
+
+        if errors:
+            raise ValidationError(errors)
 
     def get_help_text(self):
         return _(
