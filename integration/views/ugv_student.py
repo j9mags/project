@@ -149,7 +149,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
 class ContactDetails(UgvStudentMixin, TemplateView):
     model = Contact
-    template_name = 'students/contact.html'
+    template_name = 'ugvler/contact.html'
 
     def get_context_data(self, **kwargs):
         pk = kwargs.get('pk')
@@ -160,20 +160,21 @@ class ContactDetails(UgvStudentMixin, TemplateView):
 
         self.account = self.get_queryset()
 
-        if pk != 'new':
-            contact = self.account.contact_set.filter(pk=pk)
-            if not contact.exists():
-                raise ObjectDoesNotExist()
+        # if pk != 'new':
+        #     contact = self.account.contact_set.filter(pk=pk)
+        #     if not contact.exists():
+        #         raise ObjectDoesNotExist()
 
-            contact = contact.first()
-        else:
-            contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
-                              account=self.account)
+        #     contact = contact.first()
+        # else:
+        #     contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
+        #                       account=self.account)
+        
         if self.request.POST:
-            form = StudentContactForm(self.request.POST, instance=contact)
+            form = PersonContactForm(self.request.POST, instance=self.account)
         else:
-            form = StudentContactForm(instance=contact)
-        context.update(contact=contact, form=form, account=self.account)
+            form = PersonContactForm(instance=self.account)
+        context.update(form=form, account=self.account)
 
         return context
 

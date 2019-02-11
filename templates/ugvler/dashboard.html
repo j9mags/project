@@ -30,7 +30,7 @@
           <h5 class="mdl-typography--headline">{% trans 'Contact data' %}</h5>
         </div>
         {% if master_contact %}
-          {% include "snippets/student_contact.html" with contact=master_contact class="mdl-cell csp--full-width" %}
+          {% include "snippets/person_contact.html" with class="mdl-cell csp--full-width" %}
         {% else %}
           <h3 class="mdl-typography--headline">{% trans 'No contact information found' %}</h3>
         {% endif %}
