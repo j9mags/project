@@ -145,6 +145,17 @@ class StudentContactForm(forms.ModelForm):
         self.fields['mailing_country'].widget.choices[0] = ("", "")
 
 
+class PersonContactForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['person_mobile_phone', 'phone', 'person_mailing_street',
+                  'person_mailing_city', 'person_mailing_postal_code', 'person_mailing_country']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['person_mailing_country'].widget.choices[0] = ("", "")
+
+
 class PaymentForm(forms.ModelForm):
     class Meta:
         model = Account
