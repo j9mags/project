@@ -32,6 +32,20 @@ class PerishableTokenMixin:
         self.password_change_requested = True
         self.save()
 
+    def clear_token(self):
+        self.cspassword_time = None
+        self.cspassword_token = None
+
+        if self.is_person_account:
+            self.cspassword_time_pc = None
+            self.cspassword_token_pc = None
+
+    @property
+    def update_fields(self):
+        rc = ['cspassword_token', 'cspassword_time', 'recordcreated']
+        if self.is_person_account:
+            rc.extend(['cspassword_token_pc', 'cspassword_time_pc'])
+
 
 class Choices:
     Country = [('Abchasien', _('Abchasien')), ('Afghanistan', _('Afghanistan')), ('Ägypten', _('Ägypten')),
@@ -734,7 +748,8 @@ class Contact(models.Model, PerishableTokenMixin):
     @property
     def address_html(self):
         return '{self.mailing_street}<br>{self.mailing_city}, {self.mailing_postal_code}<br>{self.mailing_country}'.format(
-            self=self)
+            self=self
+        )
 
 
 class CustomerBankAccount(models.Model):
