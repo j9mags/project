@@ -103,9 +103,8 @@ class PasswordSet(View):
             user.set_password(form.cleaned_data.get('password1'))
             user.save()
 
-            pt.cspassword_token = None
-            pt.cspassword_time = None
-            pt.save(update_fields=['cspassword_token', 'cspassword_time', 'recordcreated'])
+            pt.clear_token()
+            pt.save(update_fields=pt.update_fields)
 
             return render(request, self.template_done, context)
 
