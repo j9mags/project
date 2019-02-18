@@ -169,7 +169,7 @@ class ContactDetails(UgvStudentMixin, TemplateView):
         # else:
         #     contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
         #                       account=self.account)
-        
+
         if self.request.POST:
             form = PersonContactForm(self.request.POST, instance=self.account)
         else:
@@ -193,7 +193,7 @@ class ContactDetails(UgvStudentMixin, TemplateView):
 
 class PaymentDetails(UgvStudentMixin, TemplateView):
     model = Contact
-    template_name = 'students/payment.html'
+    template_name = 'repayer/payment.html'
 
     def get_context_data(self, **kwargs):
         context = super(PaymentDetails, self).get_context_data(**kwargs)

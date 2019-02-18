@@ -531,8 +531,12 @@ class Account(models.Model, PerishableTokenMixin):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         update_fields = update_fields or [x.attname for x in self._meta.fields if not x.primary_key]
-        if self.is_person_account and ('name' in update_fields):
-            update_fields.remove('name')
+
+        if self.is_person_account:
+            to_skip = ['name', 'cspassword_token_pc', 'cspassword_time_pc']
+            for field_name in to_skip:
+                update_fields.remove(field_name)
+
         return super(Account, self).save(force_insert=force_insert, force_update=force_update, using=using,
                                          update_fields=update_fields)
 
@@ -750,6 +754,10 @@ class Contact(models.Model, PerishableTokenMixin):
         return '{self.mailing_street}<br>{self.mailing_city}, {self.mailing_postal_code}<br>{self.mailing_country}'.format(
             self=self
         )
+
+    @property
+    def is_person_account(self):
+        return False
 
 
 class CustomerBankAccount(models.Model):
