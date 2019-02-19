@@ -13,6 +13,20 @@ class UniversityManager(DefaultManager):
 
 class StudentManager(DefaultManager):
 
+    BANNED_FIELDS = ['cspassword_token_pc', 'cspassword_time_pc', 'cancel_bank_account_pc']
+
+    def bulk_create(self, objs, batch_size=None):
+        fields = []
+        orig = self.model._meta.fields
+        for f in self.model._meta.fields:
+            if f.name not in StudentManager.BANNED_FIELDS:
+                fields.append(f)
+
+        rc = super(StudentManager, self).bulk_create(objs, batch_size)
+
+        self.model._meta.fields = orig
+        return rc
+
     def get_queryset(self):
         return super(StudentManager, self).get_queryset().filter(
             Q(record_type__developer_name='Sofortzahler') | (
