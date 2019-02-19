@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-06 12:49+0000\n"
+"POT-Creation-Date: 2019-02-18 15:04+0000\n"
 "PO-Revision-Date: 2018-09-17 12:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -52,28 +52,28 @@ msgstr "E-Mail-Adresse"
 msgid "No valid contract found. Please check the spelling."
 msgstr "Kein gültiger Vertrag gefunden. Bitte überprüfen Sie die Schreibweise"
 
-#: authentication/validators.py:15
+#: authentication/validators.py:16
 msgid "This password must contain at least one lowercase letter."
 msgstr "Dieses Passwort muss mindestens einen Kleinbuchstaben enthalten."
 
-#: authentication/validators.py:21
+#: authentication/validators.py:22
 #, python-format
 msgid "This password must contain at least %(min_length)d characters."
 msgstr "Dieses Passwort muss mindestens %(min_length)d Zeichen enthalten."
 
-#: authentication/validators.py:28
+#: authentication/validators.py:29
 msgid "This password must contain at least one number."
 msgstr "Dieses Passwort muss mindestens eine Nummer enthalten."
 
-#: authentication/validators.py:34
+#: authentication/validators.py:35
 msgid "This password must contain at least one capital letter."
 msgstr "Dieses Passwort muss mindestens einen Großbuchstaben enthalten."
 
-#: authentication/validators.py:40
+#: authentication/validators.py:41
 msgid "This password must contain at least one special character."
 msgstr "Dieses Passwort muss mindestens ein Sonderzeichen enthalten."
 
-#: authentication/validators.py:46
+#: authentication/validators.py:50
 #, python-format
 msgid ""
 "Your password must contain at least %(min_length)d characters, combine "
@@ -112,7 +112,7 @@ msgstr ""
 msgid "German"
 msgstr "Deutsch"
 
-#: csp/settings.py:126 integration/models.py:217
+#: csp/settings.py:126 integration/models.py:239
 msgid "English"
 msgstr "Englisch"
 
@@ -145,13 +145,13 @@ msgstr ""
 "Ich bestätige, dass die von meiner Hochschule bereitgestellten Daten korrekt "
 "sind."
 
-#: integration/forms.py:83 integration/models.py:440
+#: integration/forms.py:83 integration/models.py:462
 #: templates/snippets/student_account.html:73
 #: templates/staff/dashboard_students.html:38
 msgid "Gender"
 msgstr "Geschlecht"
 
-#: integration/forms.py:84 integration/models.py:446
+#: integration/forms.py:84 integration/models.py:468
 #: templates/snippets/student_account.html:76
 msgid "Nationality"
 msgstr "Staatsangehörigkeit"
@@ -164,44 +164,48 @@ msgstr "Geburtsort"
 msgid "Birth country"
 msgstr "Geburtsland"
 
-#: integration/forms.py:89 integration/forms.py:189 integration/models.py:641
+#: integration/forms.py:89 integration/forms.py:209 integration/models.py:675
 #: templates/snippets/student_contact.html:7
 #: templates/students/onboarding_review.html:35
 msgid "Private email address"
 msgstr "Persönliche E-Mail-Adresse"
 
-#: integration/forms.py:90 integration/forms.py:105 integration/forms.py:190
-#: integration/models.py:643 templates/snippets/contact_card.html:10
+#: integration/forms.py:90 integration/forms.py:105 integration/forms.py:210
+#: integration/models.py:677 templates/snippets/contact_card.html:10
+#: templates/snippets/person_contact.html:6
 #: templates/snippets/student_contact.html:11
 #: templates/staff/dashboard_students.html:37
 msgid "Mobile phone"
 msgstr "Handynummer"
 
-#: integration/forms.py:91 integration/forms.py:106 integration/models.py:644
+#: integration/forms.py:91 integration/forms.py:106 integration/models.py:678
 msgid "Home phone"
 msgstr "Telefonnummer"
 
 #: integration/forms.py:93 integration/forms.py:108 integration/forms.py:113
-#: integration/forms.py:185 integration/models.py:392 integration/models.py:398
-#: integration/models.py:418 integration/models.py:647
+#: integration/forms.py:205 integration/models.py:414 integration/models.py:420
+#: integration/models.py:440 integration/models.py:681
 #: templates/repayer/dashboard.html:54
+#: templates/snippets/person_contact.html:15
 #: templates/snippets/repayer_payment.html:16
 #: templates/snippets/student_contact.html:20
 #: templates/snippets/student_payment.html:18
 msgid "Street and House number"
 msgstr "Straße und Hausnummer"
 
-#: integration/forms.py:93 templates/snippets/student_account_create.html:50
+#: integration/forms.py:93 templates/snippets/person_contact.html:12
+#: templates/snippets/student_account_create.html:50
 #: templates/snippets/student_contact.html:17
 #: templates/students/contact.html:38
-#: templates/students/onboarding_data.html:39
+#: templates/students/onboarding_data.html:39 templates/ugvler/contact.html:33
 msgid "Address"
 msgstr "Adresse"
 
 #: integration/forms.py:94 integration/forms.py:109 integration/forms.py:114
-#: integration/forms.py:186 integration/models.py:393 integration/models.py:399
-#: integration/models.py:419 integration/models.py:648
+#: integration/forms.py:206 integration/models.py:415 integration/models.py:421
+#: integration/models.py:441 integration/models.py:682
 #: templates/repayer/dashboard.html:60
+#: templates/snippets/person_contact.html:21
 #: templates/snippets/repayer_payment.html:22
 #: templates/snippets/student_contact.html:26
 #: templates/snippets/student_payment.html:24
@@ -210,6 +214,7 @@ msgstr "Stadt"
 
 #: integration/forms.py:95 integration/forms.py:110 integration/forms.py:115
 #: templates/repayer/dashboard.html:57
+#: templates/snippets/person_contact.html:18
 #: templates/snippets/repayer_payment.html:19
 #: templates/snippets/student_contact.html:23
 #: templates/snippets/student_payment.html:21
@@ -217,9 +222,10 @@ msgid "Postal code"
 msgstr "PLZ"
 
 #: integration/forms.py:96 integration/forms.py:111 integration/forms.py:116
-#: integration/forms.py:188 integration/models.py:395 integration/models.py:401
-#: integration/models.py:422 integration/models.py:650
+#: integration/forms.py:208 integration/models.py:417 integration/models.py:423
+#: integration/models.py:444 integration/models.py:684
 #: templates/repayer/dashboard.html:63
+#: templates/snippets/person_contact.html:24
 #: templates/snippets/repayer_payment.html:25
 #: templates/snippets/student_contact.html:29
 #: templates/snippets/student_payment.html:27
@@ -235,2122 +241,2122 @@ msgstr "Kontaktadresse"
 msgid "Billing Address"
 msgstr "Rechnungsadresse"
 
-#: integration/forms.py:163
+#: integration/forms.py:174 integration/forms.py:183
 msgid "I do want to revoke this mandate."
 msgstr "Ich möchte dieses Mandat widerrufen."
 
-#: integration/forms.py:179 integration/models.py:436
+#: integration/forms.py:199 integration/models.py:458
 msgid "Matriculation Number"
 msgstr "Immatrikulationsnummer"
 
-#: integration/forms.py:180 integration/models.py:450
+#: integration/forms.py:200 integration/models.py:472
 msgid "University Email Address"
 msgstr "Universitäre E-Mail-Adresse"
 
-#: integration/forms.py:182 integration/models.py:634
+#: integration/forms.py:202 integration/models.py:668
 #: templates/students/onboarding_review.html:11
 msgid "Last name"
 msgstr "Nachname"
 
-#: integration/forms.py:183 integration/models.py:635
+#: integration/forms.py:203 integration/models.py:669
 #: templates/students/onboarding_review.html:8
 msgid "First name"
 msgstr "Vorname"
 
-#: integration/forms.py:184 integration/models.py:443
+#: integration/forms.py:204 integration/models.py:465
 #: templates/students/onboarding_review.html:14
 msgid "Date of Birth"
 msgstr "Geburtsdatum"
 
-#: integration/forms.py:187 integration/models.py:291 integration/models.py:394
-#: integration/models.py:400 integration/models.py:420
-#: integration/models.py:649
+#: integration/forms.py:207 integration/models.py:313 integration/models.py:416
+#: integration/models.py:422 integration/models.py:442
+#: integration/models.py:683
 msgid "Zip/Postal Code"
 msgstr "PLZ"
 
-#: integration/forms.py:206
+#: integration/forms.py:226
 msgid "Please consider the payment interval of the student."
 msgstr "Bitte bedenken Sie das Zahlungsintervall der/des Studierenden."
 
-#: integration/forms.py:227 integration/forms.py:231
+#: integration/forms.py:247 integration/forms.py:251
 msgid "This field is required."
 msgstr "Dieses Feld ist zwingend erforderlich."
 
-#: integration/forms.py:261
+#: integration/forms.py:281
 msgid "Evidence"
 msgstr "Beweise"
 
-#: integration/forms.py:276 integration/models.py:1177
+#: integration/forms.py:296 integration/models.py:1216
 msgid "Required when the Type is change of income."
 msgstr "Erforderlich, wenn die Art der Einkommensänderung ist."
 
-#: integration/models.py:29
+#: integration/models.py:51
 msgid "Abchasien"
 msgstr ""
 
-#: integration/models.py:29
+#: integration/models.py:51
 msgid "Afghanistan"
 msgstr ""
 
-#: integration/models.py:29
+#: integration/models.py:51
 msgid "Ägypten"
 msgstr ""
 
-#: integration/models.py:30
+#: integration/models.py:52
 msgid "Albanien"
 msgstr ""
 
-#: integration/models.py:30
+#: integration/models.py:52
 msgid "Algerien"
 msgstr ""
 
-#: integration/models.py:30
+#: integration/models.py:52
 msgid "Andorra"
 msgstr ""
 
-#: integration/models.py:31
+#: integration/models.py:53
 msgid "Angola"
 msgstr ""
 
-#: integration/models.py:31
+#: integration/models.py:53
 msgid "Antigua und Barbuda"
 msgstr ""
 
-#: integration/models.py:32
+#: integration/models.py:54
 msgid "Äquatorialguinea"
 msgstr ""
 
-#: integration/models.py:32
+#: integration/models.py:54
 msgid "Argentinien"
 msgstr ""
 
-#: integration/models.py:33
+#: integration/models.py:55
 msgid "Armenien"
 msgstr ""
 
-#: integration/models.py:33
+#: integration/models.py:55
 msgid "Aserbaidschan"
 msgstr ""
 
-#: integration/models.py:33
+#: integration/models.py:55
 msgid "Äthiopien"
 msgstr ""
 
-#: integration/models.py:34
+#: integration/models.py:56
 msgid "Australien"
 msgstr ""
 
-#: integration/models.py:34
+#: integration/models.py:56
 msgid "Bahamas"
 msgstr ""
 
-#: integration/models.py:34
+#: integration/models.py:56
 msgid "Bahrain"
 msgstr ""
 
-#: integration/models.py:35
+#: integration/models.py:57
 msgid "Bangladesch"
 msgstr ""
 
-#: integration/models.py:35
+#: integration/models.py:57
 msgid "Barbados"
 msgstr ""
 
-#: integration/models.py:35
+#: integration/models.py:57
 msgid "Belgien"
 msgstr ""
 
-#: integration/models.py:36
+#: integration/models.py:58
 msgid "Belize"
 msgstr ""
 
-#: integration/models.py:36
+#: integration/models.py:58
 msgid "Benin"
 msgstr ""
 
-#: integration/models.py:36
+#: integration/models.py:58
 msgid "Bergkarabach"
 msgstr ""
 
-#: integration/models.py:37
+#: integration/models.py:59
 msgid "Bhutan"
 msgstr ""
 
-#: integration/models.py:37
+#: integration/models.py:59
 msgid "Bolivien"
 msgstr ""
 
-#: integration/models.py:38
+#: integration/models.py:60
 msgid "Bosnien und Herzegowina"
 msgstr ""
 
-#: integration/models.py:38
+#: integration/models.py:60
 msgid "Botswana"
 msgstr ""
 
-#: integration/models.py:39
+#: integration/models.py:61
 msgid "Brasilien"
 msgstr ""
 
-#: integration/models.py:39
+#: integration/models.py:61
 msgid "Brunei"
 msgstr ""
 
-#: integration/models.py:39
+#: integration/models.py:61
 msgid "Bulgarien"
 msgstr ""
 
-#: integration/models.py:40
+#: integration/models.py:62
 msgid "Burkina Faso"
 msgstr ""
 
-#: integration/models.py:40
+#: integration/models.py:62
 msgid "Burundi"
 msgstr ""
 
-#: integration/models.py:40
+#: integration/models.py:62
 msgid "Chile"
 msgstr ""
 
-#: integration/models.py:41
+#: integration/models.py:63
 msgid "Republik China"
 msgstr ""
 
-#: integration/models.py:41
+#: integration/models.py:63
 msgid "Volksrepublik China"
 msgstr ""
 
-#: integration/models.py:42
+#: integration/models.py:64
 msgid "Cookinseln"
 msgstr ""
 
-#: integration/models.py:42
+#: integration/models.py:64
 msgid "Costa Rica"
 msgstr ""
 
-#: integration/models.py:42
+#: integration/models.py:64
 msgid "Dänemark"
 msgstr ""
 
-#: integration/models.py:43
+#: integration/models.py:65
 msgid "Deutschland"
 msgstr ""
 
-#: integration/models.py:43
+#: integration/models.py:65
 msgid "Dominica"
 msgstr ""
 
-#: integration/models.py:44
+#: integration/models.py:66
 msgid "Dominikanische Republik"
 msgstr ""
 
-#: integration/models.py:44
+#: integration/models.py:66
 msgid "Dschibuti"
 msgstr ""
 
-#: integration/models.py:45
+#: integration/models.py:67
 msgid "Ecuador"
 msgstr ""
 
-#: integration/models.py:45
+#: integration/models.py:67
 msgid "El Salvador"
 msgstr ""
 
-#: integration/models.py:45
+#: integration/models.py:67
 msgid "Elfenbeinküste"
 msgstr ""
 
-#: integration/models.py:46
+#: integration/models.py:68
 msgid "Eritrea"
 msgstr ""
 
-#: integration/models.py:46
+#: integration/models.py:68
 msgid "Estland"
 msgstr ""
 
-#: integration/models.py:46
+#: integration/models.py:68
 msgid "Fidschi"
 msgstr ""
 
-#: integration/models.py:47
+#: integration/models.py:69
 msgid "Finnland"
 msgstr ""
 
-#: integration/models.py:47
+#: integration/models.py:69
 msgid "Frankreich"
 msgstr ""
 
-#: integration/models.py:47
+#: integration/models.py:69
 msgid "Gabun"
 msgstr ""
 
-#: integration/models.py:48
+#: integration/models.py:70
 msgid "Gambia"
 msgstr ""
 
-#: integration/models.py:48
+#: integration/models.py:70
 msgid "Georgien"
 msgstr ""
 
-#: integration/models.py:48
+#: integration/models.py:70
 msgid "Ghana"
 msgstr ""
 
-#: integration/models.py:48
+#: integration/models.py:70
 msgid "Grenada"
 msgstr ""
 
-#: integration/models.py:49
+#: integration/models.py:71
 msgid "Griechenland"
 msgstr ""
 
-#: integration/models.py:49
+#: integration/models.py:71
 msgid "Guatemala"
 msgstr ""
 
-#: integration/models.py:49
+#: integration/models.py:71
 msgid "Guinea"
 msgstr ""
 
-#: integration/models.py:50
+#: integration/models.py:72
 msgid "Guinea-Bissau"
 msgstr ""
 
-#: integration/models.py:50
+#: integration/models.py:72
 msgid "Guyana"
 msgstr ""
 
-#: integration/models.py:50
+#: integration/models.py:72
 msgid "Haiti"
 msgstr ""
 
-#: integration/models.py:51
+#: integration/models.py:73
 msgid "Honduras"
 msgstr ""
 
-#: integration/models.py:51
+#: integration/models.py:73
 msgid "Indien"
 msgstr ""
 
-#: integration/models.py:51
+#: integration/models.py:73
 msgid "Indonesien"
 msgstr ""
 
-#: integration/models.py:52
+#: integration/models.py:74
 msgid "Irak"
 msgstr ""
 
-#: integration/models.py:52
+#: integration/models.py:74
 msgid "Iran"
 msgstr ""
 
-#: integration/models.py:52
+#: integration/models.py:74
 msgid "Irland"
 msgstr ""
 
-#: integration/models.py:52
+#: integration/models.py:74
 msgid "Island"
 msgstr ""
 
-#: integration/models.py:53
+#: integration/models.py:75
 msgid "Israel"
 msgstr ""
 
-#: integration/models.py:53
+#: integration/models.py:75
 msgid "Italien"
 msgstr ""
 
-#: integration/models.py:53
+#: integration/models.py:75
 msgid "Jamaika"
 msgstr ""
 
-#: integration/models.py:53
+#: integration/models.py:75
 msgid "Japan"
 msgstr ""
 
-#: integration/models.py:54
+#: integration/models.py:76
 msgid "Jemen"
 msgstr ""
 
-#: integration/models.py:54
+#: integration/models.py:76
 msgid "Jordanien"
 msgstr ""
 
-#: integration/models.py:54
+#: integration/models.py:76
 msgid "Kambodscha"
 msgstr ""
 
-#: integration/models.py:55
+#: integration/models.py:77
 msgid "Kamerun"
 msgstr ""
 
-#: integration/models.py:55
+#: integration/models.py:77
 msgid "Kanada"
 msgstr ""
 
-#: integration/models.py:55
+#: integration/models.py:77
 msgid "Kap Verde"
 msgstr ""
 
-#: integration/models.py:56
+#: integration/models.py:78
 msgid "Kasachstan"
 msgstr ""
 
-#: integration/models.py:56
+#: integration/models.py:78
 msgid "Katar"
 msgstr ""
 
-#: integration/models.py:56
+#: integration/models.py:78
 msgid "Kenia"
 msgstr ""
 
-#: integration/models.py:57
+#: integration/models.py:79
 msgid "Kirgisistan"
 msgstr ""
 
-#: integration/models.py:57
+#: integration/models.py:79
 msgid "Kiribati"
 msgstr ""
 
-#: integration/models.py:57
+#: integration/models.py:79
 msgid "Kolumbien"
 msgstr ""
 
-#: integration/models.py:58
+#: integration/models.py:80
 msgid "Komoren"
 msgstr ""
 
-#: integration/models.py:58
+#: integration/models.py:80
 msgid "Kongo, Demokratische Republik"
 msgstr ""
 
-#: integration/models.py:59
+#: integration/models.py:81
 msgid "Kongo, Republik"
 msgstr ""
 
-#: integration/models.py:59
+#: integration/models.py:81
 msgid "Korea, Nord"
 msgstr ""
 
-#: integration/models.py:60
+#: integration/models.py:82
 msgid "Korea, Süd"
 msgstr ""
 
-#: integration/models.py:60
+#: integration/models.py:82
 msgid "Kosovo"
 msgstr ""
 
-#: integration/models.py:60
+#: integration/models.py:82
 msgid "Kroatien"
 msgstr ""
 
-#: integration/models.py:61
+#: integration/models.py:83
 msgid "Kuba"
 msgstr ""
 
-#: integration/models.py:61
+#: integration/models.py:83
 msgid "Kuwait"
 msgstr ""
 
-#: integration/models.py:61
+#: integration/models.py:83
 msgid "Laos"
 msgstr ""
 
-#: integration/models.py:61
+#: integration/models.py:83
 msgid "Lesotho"
 msgstr ""
 
-#: integration/models.py:62
+#: integration/models.py:84
 msgid "Lettland"
 msgstr ""
 
-#: integration/models.py:62
+#: integration/models.py:84
 msgid "Libanon"
 msgstr ""
 
-#: integration/models.py:62
+#: integration/models.py:84
 msgid "Liberia"
 msgstr ""
 
-#: integration/models.py:63
+#: integration/models.py:85
 msgid "Libyen"
 msgstr ""
 
-#: integration/models.py:63
+#: integration/models.py:85
 msgid "Liechtenstein"
 msgstr ""
 
-#: integration/models.py:63
+#: integration/models.py:85
 msgid "Litauen"
 msgstr ""
 
-#: integration/models.py:64
+#: integration/models.py:86
 msgid "Luxemburg"
 msgstr ""
 
-#: integration/models.py:64
+#: integration/models.py:86
 msgid "Madagaskar"
 msgstr ""
 
-#: integration/models.py:64
+#: integration/models.py:86
 msgid "Malawi"
 msgstr ""
 
-#: integration/models.py:65
+#: integration/models.py:87
 msgid "Malaysia"
 msgstr ""
 
-#: integration/models.py:65
+#: integration/models.py:87
 msgid "Malediven"
 msgstr ""
 
-#: integration/models.py:65
+#: integration/models.py:87
 msgid "Mali"
 msgstr ""
 
-#: integration/models.py:65
+#: integration/models.py:87
 msgid "Malta"
 msgstr ""
 
-#: integration/models.py:66
+#: integration/models.py:88
 msgid "Marokko"
 msgstr ""
 
-#: integration/models.py:66
+#: integration/models.py:88
 msgid "Marshallinseln"
 msgstr ""
 
-#: integration/models.py:66
+#: integration/models.py:88
 msgid "Mauretanien"
 msgstr ""
 
-#: integration/models.py:67
+#: integration/models.py:89
 msgid "Mauritius"
 msgstr ""
 
-#: integration/models.py:67
+#: integration/models.py:89
 msgid "Mazedonien"
 msgstr ""
 
-#: integration/models.py:67
+#: integration/models.py:89
 msgid "Mexiko"
 msgstr ""
 
-#: integration/models.py:68
+#: integration/models.py:90
 msgid "Mikronesien"
 msgstr ""
 
-#: integration/models.py:68
+#: integration/models.py:90
 msgid "Moldawien"
 msgstr ""
 
-#: integration/models.py:68
+#: integration/models.py:90
 msgid "Monaco"
 msgstr ""
 
-#: integration/models.py:69
+#: integration/models.py:91
 msgid "Mongolei"
 msgstr ""
 
-#: integration/models.py:69
+#: integration/models.py:91
 msgid "Montenegro"
 msgstr ""
 
-#: integration/models.py:69
+#: integration/models.py:91
 msgid "Mosambik"
 msgstr ""
 
-#: integration/models.py:70
+#: integration/models.py:92
 msgid "Myanmar"
 msgstr ""
 
-#: integration/models.py:70
+#: integration/models.py:92
 msgid "Namibia"
 msgstr ""
 
-#: integration/models.py:70
+#: integration/models.py:92
 msgid "Nauru"
 msgstr ""
 
-#: integration/models.py:70
+#: integration/models.py:92
 msgid "Nepal"
 msgstr ""
 
-#: integration/models.py:71
+#: integration/models.py:93
 msgid "Neuseeland"
 msgstr ""
 
-#: integration/models.py:71
+#: integration/models.py:93
 msgid "Nicaragua"
 msgstr ""
 
-#: integration/models.py:71
+#: integration/models.py:93
 msgid "Niederlande"
 msgstr ""
 
-#: integration/models.py:72
+#: integration/models.py:94
 msgid "Niger"
 msgstr ""
 
-#: integration/models.py:72
+#: integration/models.py:94
 msgid "Nigeria"
 msgstr ""
 
-#: integration/models.py:72
+#: integration/models.py:94
 msgid "Niue"
 msgstr ""
 
-#: integration/models.py:72
+#: integration/models.py:94
 msgid "Nordzypern"
 msgstr ""
 
-#: integration/models.py:73
+#: integration/models.py:95
 msgid "Norwegen"
 msgstr ""
 
-#: integration/models.py:73
+#: integration/models.py:95
 msgid "Oman"
 msgstr ""
 
-#: integration/models.py:73
+#: integration/models.py:95
 msgid "Österreich"
 msgstr ""
 
-#: integration/models.py:74
+#: integration/models.py:96
 msgid "Osttimor / Timor-Leste"
 msgstr ""
 
-#: integration/models.py:74
+#: integration/models.py:96
 msgid "Pakistan"
 msgstr ""
 
-#: integration/models.py:75
+#: integration/models.py:97
 msgid "Palästina"
 msgstr ""
 
-#: integration/models.py:75
+#: integration/models.py:97
 msgid "Palau"
 msgstr ""
 
-#: integration/models.py:75
+#: integration/models.py:97
 msgid "Panama"
 msgstr ""
 
-#: integration/models.py:76
+#: integration/models.py:98
 msgid "Papua-Neuguinea"
 msgstr ""
 
-#: integration/models.py:76
+#: integration/models.py:98
 msgid "Paraguay"
 msgstr ""
 
-#: integration/models.py:76
+#: integration/models.py:98
 msgid "Peru"
 msgstr ""
 
-#: integration/models.py:77
+#: integration/models.py:99
 msgid "Philippinen"
 msgstr ""
 
-#: integration/models.py:77
+#: integration/models.py:99
 msgid "Polen"
 msgstr ""
 
-#: integration/models.py:77
+#: integration/models.py:99
 msgid "Portugal"
 msgstr ""
 
-#: integration/models.py:78
+#: integration/models.py:100
 msgid "Ruanda"
 msgstr ""
 
-#: integration/models.py:78
+#: integration/models.py:100
 msgid "Rumänien"
 msgstr ""
 
-#: integration/models.py:78
+#: integration/models.py:100
 msgid "Russland"
 msgstr ""
 
-#: integration/models.py:79
+#: integration/models.py:101
 msgid "Salomonen"
 msgstr ""
 
-#: integration/models.py:79
+#: integration/models.py:101
 msgid "Sambia"
 msgstr ""
 
-#: integration/models.py:79
+#: integration/models.py:101
 msgid "Samoa"
 msgstr ""
 
-#: integration/models.py:80
+#: integration/models.py:102
 msgid "San Marino"
 msgstr ""
 
-#: integration/models.py:80
+#: integration/models.py:102
 msgid "São Tomé und Príncipe"
 msgstr ""
 
-#: integration/models.py:81
+#: integration/models.py:103
 msgid "Saudi-Arabien"
 msgstr ""
 
-#: integration/models.py:81
+#: integration/models.py:103
 msgid "Schweden"
 msgstr ""
 
-#: integration/models.py:81
+#: integration/models.py:103
 msgid "Schweiz"
 msgstr ""
 
-#: integration/models.py:82
+#: integration/models.py:104
 msgid "Senegal"
 msgstr ""
 
-#: integration/models.py:82
+#: integration/models.py:104
 msgid "Serbien"
 msgstr ""
 
-#: integration/models.py:82
+#: integration/models.py:104
 msgid "Seychellen"
 msgstr ""
 
-#: integration/models.py:83
+#: integration/models.py:105
 msgid "Sierra Leone"
 msgstr ""
 
-#: integration/models.py:83
+#: integration/models.py:105
 msgid "Simbabwe"
 msgstr ""
 
-#: integration/models.py:83
+#: integration/models.py:105
 msgid "Singapur"
 msgstr ""
 
-#: integration/models.py:84
+#: integration/models.py:106
 msgid "Slowakei"
 msgstr ""
 
-#: integration/models.py:84
+#: integration/models.py:106
 msgid "Slowenien"
 msgstr ""
 
-#: integration/models.py:84
+#: integration/models.py:106
 msgid "Somalia"
 msgstr ""
 
-#: integration/models.py:85
+#: integration/models.py:107
 msgid "Somaliland"
 msgstr ""
 
-#: integration/models.py:85
+#: integration/models.py:107
 msgid "Spanien"
 msgstr ""
 
-#: integration/models.py:85
+#: integration/models.py:107
 msgid "Sri Lanka"
 msgstr ""
 
-#: integration/models.py:86
+#: integration/models.py:108
 msgid "St. Kitts und Nevis"
 msgstr ""
 
-#: integration/models.py:86
+#: integration/models.py:108
 msgid "St. Lucia"
 msgstr ""
 
-#: integration/models.py:87
+#: integration/models.py:109
 msgid "St. Vincent und die Grenadinen"
 msgstr ""
 
-#: integration/models.py:87
+#: integration/models.py:109
 msgid "Südafrika"
 msgstr ""
 
-#: integration/models.py:88
+#: integration/models.py:110
 msgid "Sudan"
 msgstr ""
 
-#: integration/models.py:88
+#: integration/models.py:110
 msgid "Südossetien"
 msgstr ""
 
-#: integration/models.py:88
+#: integration/models.py:110
 msgid "Südsudan"
 msgstr ""
 
-#: integration/models.py:89
+#: integration/models.py:111
 msgid "Suriname"
 msgstr ""
 
-#: integration/models.py:89
+#: integration/models.py:111
 msgid "Swasiland"
 msgstr ""
 
-#: integration/models.py:89
+#: integration/models.py:111
 msgid "Syrien"
 msgstr ""
 
-#: integration/models.py:90
+#: integration/models.py:112
 msgid "Tadschikistan"
 msgstr ""
 
-#: integration/models.py:90
+#: integration/models.py:112
 msgid "Tansania"
 msgstr ""
 
-#: integration/models.py:90
+#: integration/models.py:112
 msgid "Thailand"
 msgstr ""
 
-#: integration/models.py:91
+#: integration/models.py:113
 msgid "Togo"
 msgstr ""
 
-#: integration/models.py:91
+#: integration/models.py:113
 msgid "Tonga"
 msgstr ""
 
-#: integration/models.py:91
+#: integration/models.py:113
 msgid "Transnistrien"
 msgstr ""
 
-#: integration/models.py:92
+#: integration/models.py:114
 msgid "Trinidad und Tobago"
 msgstr ""
 
-#: integration/models.py:92
+#: integration/models.py:114
 msgid "Tschad"
 msgstr ""
 
-#: integration/models.py:93
+#: integration/models.py:115
 msgid "Tschechien"
 msgstr ""
 
-#: integration/models.py:93
+#: integration/models.py:115
 msgid "Tunesien"
 msgstr ""
 
-#: integration/models.py:93
+#: integration/models.py:115
 msgid "Türkei"
 msgstr ""
 
-#: integration/models.py:94
+#: integration/models.py:116
 msgid "Turkmenistan"
 msgstr ""
 
-#: integration/models.py:94
+#: integration/models.py:116
 msgid "Tuvalu"
 msgstr ""
 
-#: integration/models.py:94
+#: integration/models.py:116
 msgid "Uganda"
 msgstr ""
 
-#: integration/models.py:95
+#: integration/models.py:117
 msgid "Ukraine"
 msgstr ""
 
-#: integration/models.py:95
+#: integration/models.py:117
 msgid "Ungarn"
 msgstr ""
 
-#: integration/models.py:95
+#: integration/models.py:117
 msgid "Uruguay"
 msgstr ""
 
-#: integration/models.py:96
+#: integration/models.py:118
 msgid "Usbekistan"
 msgstr ""
 
-#: integration/models.py:96
+#: integration/models.py:118
 msgid "Vanuatu"
 msgstr ""
 
-#: integration/models.py:96
+#: integration/models.py:118
 msgid "Vatikanstadt"
 msgstr ""
 
-#: integration/models.py:97
+#: integration/models.py:119
 msgid "Venezuela"
 msgstr ""
 
-#: integration/models.py:97
+#: integration/models.py:119
 msgid "Vereinigte Arabische Emirate"
 msgstr ""
 
-#: integration/models.py:98
+#: integration/models.py:120
 msgid "Vereinigte Staaten"
 msgstr ""
 
-#: integration/models.py:98
+#: integration/models.py:120
 msgid "Vereinigtes Königreich"
 msgstr ""
 
-#: integration/models.py:99
+#: integration/models.py:121
 msgid "Vietnam"
 msgstr ""
 
-#: integration/models.py:99
+#: integration/models.py:121
 msgid "Weißrussland"
 msgstr ""
 
-#: integration/models.py:99
+#: integration/models.py:121
 msgid "Westsahara"
 msgstr ""
 
-#: integration/models.py:100
+#: integration/models.py:122
 msgid "Zentralafrikanische Republik"
 msgstr ""
 
-#: integration/models.py:100
+#: integration/models.py:122
 msgid "Zypern"
 msgstr ""
 
-#: integration/models.py:102
+#: integration/models.py:124
 msgid "Grönland"
 msgstr ""
 
-#: integration/models.py:102
+#: integration/models.py:124
 msgid "Macua"
 msgstr ""
 
-#: integration/models.py:102
+#: integration/models.py:124
 msgid "St. Helena"
 msgstr ""
 
-#: integration/models.py:103
+#: integration/models.py:125
 msgid "Turks- und Caicosinseln"
 msgstr ""
 
-#: integration/models.py:103
+#: integration/models.py:125
 msgid "Gibralta"
 msgstr ""
 
-#: integration/models.py:104
+#: integration/models.py:126
 msgid "Jersey"
 msgstr ""
 
-#: integration/models.py:104
+#: integration/models.py:126
 msgid "Guernsey"
 msgstr ""
 
-#: integration/models.py:104
+#: integration/models.py:126
 msgid "Faröer"
 msgstr ""
 
-#: integration/models.py:105
+#: integration/models.py:127
 msgid "Hongkong"
 msgstr ""
 
-#: integration/models.py:105
+#: integration/models.py:127
 msgid "Bermuda"
 msgstr ""
 
-#: integration/models.py:105
+#: integration/models.py:127
 msgid "(Französisch-) Guayana"
 msgstr ""
 
-#: integration/models.py:106
+#: integration/models.py:128
 msgid "Britische Jungferninseln"
 msgstr ""
 
-#: integration/models.py:106
+#: integration/models.py:128
 msgid "Gebiet Taiwan"
 msgstr ""
 
-#: integration/models.py:107 integration/models.py:108
+#: integration/models.py:129 integration/models.py:130
 msgid "female"
 msgstr "weiblich"
 
-#: integration/models.py:107 integration/models.py:108
+#: integration/models.py:129 integration/models.py:130
 msgid "male"
 msgstr "männlich"
 
-#: integration/models.py:107 integration/models.py:108
+#: integration/models.py:129 integration/models.py:130
 msgid "non-binary"
 msgstr "non-binary"
 
-#: integration/models.py:109
+#: integration/models.py:131
 msgid "afghanisch"
 msgstr ""
 
-#: integration/models.py:109
+#: integration/models.py:131
 msgid "ägyptisch"
 msgstr ""
 
-#: integration/models.py:109
+#: integration/models.py:131
 msgid "albanisch"
 msgstr ""
 
-#: integration/models.py:110
+#: integration/models.py:132
 msgid "algerisch"
 msgstr ""
 
-#: integration/models.py:110
+#: integration/models.py:132
 msgid "andorranisch"
 msgstr ""
 
-#: integration/models.py:111
+#: integration/models.py:133
 msgid "angolanisch"
 msgstr ""
 
-#: integration/models.py:112
+#: integration/models.py:134
 msgid "antiguanisch"
 msgstr ""
 
-#: integration/models.py:112
+#: integration/models.py:134
 msgid "äquatorialguineisch"
 msgstr ""
 
-#: integration/models.py:113
+#: integration/models.py:135
 msgid "argentinisch"
 msgstr ""
 
-#: integration/models.py:113
+#: integration/models.py:135
 msgid "armenisch"
 msgstr ""
 
-#: integration/models.py:114
+#: integration/models.py:136
 msgid "aserbaidschanisch"
 msgstr ""
 
-#: integration/models.py:114
+#: integration/models.py:136
 msgid "äthiopisch"
 msgstr ""
 
-#: integration/models.py:115
+#: integration/models.py:137
 msgid "australisch"
 msgstr ""
 
-#: integration/models.py:115
+#: integration/models.py:137
 msgid "bahamaisch"
 msgstr ""
 
-#: integration/models.py:116
+#: integration/models.py:138
 msgid "bahrainisch"
 msgstr ""
 
-#: integration/models.py:117
+#: integration/models.py:139
 msgid "bangladeschisch"
 msgstr ""
 
-#: integration/models.py:117
+#: integration/models.py:139
 msgid "barbadisch"
 msgstr ""
 
-#: integration/models.py:118
+#: integration/models.py:140
 msgid "belgisch"
 msgstr ""
 
-#: integration/models.py:119
+#: integration/models.py:141
 msgid "belizisch"
 msgstr ""
 
-#: integration/models.py:119
+#: integration/models.py:141
 msgid "beninisch"
 msgstr ""
 
-#: integration/models.py:119
+#: integration/models.py:141
 msgid "bhutanisch"
 msgstr ""
 
-#: integration/models.py:120
+#: integration/models.py:142
 msgid "bolivianisch"
 msgstr ""
 
-#: integration/models.py:120
+#: integration/models.py:142
 msgid "bosnisch-herzegowinisch"
 msgstr ""
 
-#: integration/models.py:121
+#: integration/models.py:143
 msgid "botsuanisch"
 msgstr ""
 
-#: integration/models.py:121
+#: integration/models.py:143
 msgid "brasilianisch"
 msgstr ""
 
-#: integration/models.py:122
+#: integration/models.py:144
 msgid "bruneiisch"
 msgstr ""
 
-#: integration/models.py:123
+#: integration/models.py:145
 msgid "bulgarisch"
 msgstr ""
 
-#: integration/models.py:123
+#: integration/models.py:145
 msgid "burkinisch"
 msgstr ""
 
-#: integration/models.py:123
+#: integration/models.py:145
 msgid "burundisch"
 msgstr ""
 
-#: integration/models.py:124
+#: integration/models.py:146
 msgid "cabo-verdisch"
 msgstr ""
 
-#: integration/models.py:124
+#: integration/models.py:146
 msgid "chilenisch"
 msgstr ""
 
-#: integration/models.py:125
+#: integration/models.py:147
 msgid "chinesisch"
 msgstr ""
 
-#: integration/models.py:126
+#: integration/models.py:148
 msgid "costa-ricanisch"
 msgstr ""
 
-#: integration/models.py:126
+#: integration/models.py:148
 msgid "ivorisch"
 msgstr ""
 
-#: integration/models.py:126
+#: integration/models.py:148
 msgid "dänisch"
 msgstr ""
 
-#: integration/models.py:127
+#: integration/models.py:149
 msgid "deutsch"
 msgstr ""
 
-#: integration/models.py:127
+#: integration/models.py:149
 msgid "dominikanisch"
 msgstr ""
 
-#: integration/models.py:128
+#: integration/models.py:150
 msgid "dschibutisch"
 msgstr ""
 
-#: integration/models.py:129
+#: integration/models.py:151
 msgid "ecuadorianisch"
 msgstr ""
 
-#: integration/models.py:129
+#: integration/models.py:151
 msgid "salvadorianisch"
 msgstr ""
 
-#: integration/models.py:130
+#: integration/models.py:152
 msgid "eritreisch"
 msgstr ""
 
-#: integration/models.py:130
+#: integration/models.py:152
 msgid "estnisch"
 msgstr ""
 
-#: integration/models.py:130
+#: integration/models.py:152
 msgid "fidschianisch"
 msgstr ""
 
-#: integration/models.py:131
+#: integration/models.py:153
 msgid "finnisch"
 msgstr ""
 
-#: integration/models.py:131
+#: integration/models.py:153
 msgid "französisch"
 msgstr ""
 
-#: integration/models.py:131
+#: integration/models.py:153
 msgid "gabunisch"
 msgstr ""
 
-#: integration/models.py:132
+#: integration/models.py:154
 msgid "gambisch"
 msgstr ""
 
-#: integration/models.py:132
+#: integration/models.py:154
 msgid "georgisch"
 msgstr ""
 
-#: integration/models.py:132
+#: integration/models.py:154
 msgid "ghanaisch"
 msgstr ""
 
-#: integration/models.py:133
+#: integration/models.py:155
 msgid "grenadisch"
 msgstr ""
 
-#: integration/models.py:133
+#: integration/models.py:155
 msgid "griechisch"
 msgstr ""
 
-#: integration/models.py:134
+#: integration/models.py:156
 msgid "guatemaltekisch"
 msgstr ""
 
-#: integration/models.py:135
+#: integration/models.py:157
 msgid "guineisch"
 msgstr ""
 
-#: integration/models.py:135
+#: integration/models.py:157
 msgid "guinea-bissauisch"
 msgstr ""
 
-#: integration/models.py:136
+#: integration/models.py:158
 msgid "guyanisch"
 msgstr ""
 
-#: integration/models.py:137
+#: integration/models.py:159
 msgid "haitianisch"
 msgstr ""
 
-#: integration/models.py:137
+#: integration/models.py:159
 msgid "honduranisch"
 msgstr ""
 
-#: integration/models.py:137
+#: integration/models.py:159
 msgid "indisch"
 msgstr ""
 
-#: integration/models.py:138
+#: integration/models.py:160
 msgid "indonesisch"
 msgstr ""
 
-#: integration/models.py:138
+#: integration/models.py:160
 msgid "irakisch"
 msgstr ""
 
-#: integration/models.py:138
+#: integration/models.py:160
 msgid "iranisch"
 msgstr ""
 
-#: integration/models.py:139
+#: integration/models.py:161
 msgid "irisch"
 msgstr ""
 
-#: integration/models.py:139
+#: integration/models.py:161
 msgid "isländisch"
 msgstr ""
 
-#: integration/models.py:139
+#: integration/models.py:161
 msgid "israelisch"
 msgstr ""
 
-#: integration/models.py:140
+#: integration/models.py:162
 msgid "italienisch"
 msgstr ""
 
-#: integration/models.py:140
+#: integration/models.py:162
 msgid "jamaikanisch"
 msgstr ""
 
-#: integration/models.py:141
+#: integration/models.py:163
 msgid "japanisch"
 msgstr ""
 
-#: integration/models.py:142
+#: integration/models.py:164
 msgid "jemenitisch"
 msgstr ""
 
-#: integration/models.py:142
+#: integration/models.py:164
 msgid "jordanisch"
 msgstr ""
 
-#: integration/models.py:143
+#: integration/models.py:165
 msgid "kambodschanisch"
 msgstr ""
 
-#: integration/models.py:144
+#: integration/models.py:166
 msgid "kamerunisch"
 msgstr ""
 
-#: integration/models.py:144
+#: integration/models.py:166
 msgid "kanadisch"
 msgstr ""
 
-#: integration/models.py:144
+#: integration/models.py:166
 msgid "kasachisch"
 msgstr ""
 
-#: integration/models.py:145
+#: integration/models.py:167
 msgid "katarisch"
 msgstr ""
 
-#: integration/models.py:145
+#: integration/models.py:167
 msgid "kenianisch"
 msgstr ""
 
-#: integration/models.py:145
+#: integration/models.py:167
 msgid "kirgisisch"
 msgstr ""
 
-#: integration/models.py:146
+#: integration/models.py:168
 msgid "kiribatisch"
 msgstr ""
 
-#: integration/models.py:146
+#: integration/models.py:168
 msgid "kolumbianisch"
 msgstr ""
 
-#: integration/models.py:147
+#: integration/models.py:169
 msgid "komorisch"
 msgstr ""
 
-#: integration/models.py:148
+#: integration/models.py:170
 msgid "kongolesisch"
 msgstr ""
 
-#: integration/models.py:149
+#: integration/models.py:171
 msgid "der Demokratischen Republik Kongo"
 msgstr ""
 
-#: integration/models.py:150
+#: integration/models.py:172
 msgid "der Demokratischen Volksrepublik Korea"
 msgstr ""
 
-#: integration/models.py:151
+#: integration/models.py:173
 msgid "der Republik Korea"
 msgstr ""
 
-#: integration/models.py:151
+#: integration/models.py:173
 msgid "kosovarisch"
 msgstr ""
 
-#: integration/models.py:152
+#: integration/models.py:174
 msgid "kroatisch"
 msgstr ""
 
-#: integration/models.py:152
+#: integration/models.py:174
 msgid "kubanisch"
 msgstr ""
 
-#: integration/models.py:152
+#: integration/models.py:174
 msgid "kuwaitisch"
 msgstr ""
 
-#: integration/models.py:153
+#: integration/models.py:175
 msgid "laotisch"
 msgstr ""
 
-#: integration/models.py:153
+#: integration/models.py:175
 msgid "lesothisch"
 msgstr ""
 
-#: integration/models.py:153
+#: integration/models.py:175
 msgid "lettisch"
 msgstr ""
 
-#: integration/models.py:154
+#: integration/models.py:176
 msgid "libanesisch"
 msgstr ""
 
-#: integration/models.py:154
+#: integration/models.py:176
 msgid "liberianisch"
 msgstr ""
 
-#: integration/models.py:154
+#: integration/models.py:176
 msgid "libysch"
 msgstr ""
 
-#: integration/models.py:155
+#: integration/models.py:177
 msgid "liechtensteinisch"
 msgstr ""
 
-#: integration/models.py:155
+#: integration/models.py:177
 msgid "litauisch"
 msgstr ""
 
-#: integration/models.py:156
+#: integration/models.py:178
 msgid "luxemburgisch"
 msgstr ""
 
-#: integration/models.py:156
+#: integration/models.py:178
 msgid "madagassisch"
 msgstr ""
 
-#: integration/models.py:157
+#: integration/models.py:179
 msgid "malawisch"
 msgstr ""
 
-#: integration/models.py:158
+#: integration/models.py:180
 msgid "malaysisch"
 msgstr ""
 
-#: integration/models.py:158
+#: integration/models.py:180
 msgid "maledivisch"
 msgstr ""
 
-#: integration/models.py:158
+#: integration/models.py:180
 msgid "malisch"
 msgstr ""
 
-#: integration/models.py:159
+#: integration/models.py:181
 msgid "maltesisch"
 msgstr ""
 
-#: integration/models.py:159
+#: integration/models.py:181
 msgid "marokkanisch"
 msgstr ""
 
-#: integration/models.py:160
+#: integration/models.py:182
 msgid "marshallisch"
 msgstr ""
 
-#: integration/models.py:161
+#: integration/models.py:183
 msgid "mauretanisch"
 msgstr ""
 
-#: integration/models.py:161
+#: integration/models.py:183
 msgid "mauritisch"
 msgstr ""
 
-#: integration/models.py:162
+#: integration/models.py:184
 msgid "mazedonisch"
 msgstr ""
 
-#: integration/models.py:163
+#: integration/models.py:185
 msgid "mexikanisch"
 msgstr ""
 
-#: integration/models.py:163
+#: integration/models.py:185
 msgid "mikronesisch"
 msgstr ""
 
-#: integration/models.py:164
+#: integration/models.py:186
 msgid "moldauisch"
 msgstr ""
 
-#: integration/models.py:165
+#: integration/models.py:187
 msgid "monegassisch"
 msgstr ""
 
-#: integration/models.py:165
+#: integration/models.py:187
 msgid "mongolisch"
 msgstr ""
 
-#: integration/models.py:166
+#: integration/models.py:188
 msgid "montenegrinisch"
 msgstr ""
 
-#: integration/models.py:166
+#: integration/models.py:188
 msgid "mosambikanisch"
 msgstr ""
 
-#: integration/models.py:167
+#: integration/models.py:189
 msgid "myanmarisch"
 msgstr ""
 
-#: integration/models.py:167
+#: integration/models.py:189
 msgid "namibisch"
 msgstr ""
 
-#: integration/models.py:167
+#: integration/models.py:189
 msgid "nauruisch"
 msgstr ""
 
-#: integration/models.py:168
+#: integration/models.py:190
 msgid "nepalesisch"
 msgstr ""
 
-#: integration/models.py:168
+#: integration/models.py:190
 msgid "neuseeländisch"
 msgstr ""
 
-#: integration/models.py:169
+#: integration/models.py:191
 msgid "nicaraguanisch"
 msgstr ""
 
-#: integration/models.py:169
+#: integration/models.py:191
 msgid "niederländisch"
 msgstr ""
 
-#: integration/models.py:170
+#: integration/models.py:192
 msgid "nigrisch"
 msgstr ""
 
-#: integration/models.py:171
+#: integration/models.py:193
 msgid "nigerianisch"
 msgstr ""
 
-#: integration/models.py:171
+#: integration/models.py:193
 msgid "norwegisch"
 msgstr ""
 
-#: integration/models.py:171
+#: integration/models.py:193
 msgid "omanisch"
 msgstr ""
 
-#: integration/models.py:172
+#: integration/models.py:194
 msgid "österreichisch"
 msgstr ""
 
-#: integration/models.py:172
+#: integration/models.py:194
 msgid "pakistanisch"
 msgstr ""
 
-#: integration/models.py:173
+#: integration/models.py:195
 msgid "palauisch"
 msgstr ""
 
-#: integration/models.py:174
+#: integration/models.py:196
 msgid "panamaisch"
 msgstr ""
 
-#: integration/models.py:174
+#: integration/models.py:196
 msgid "papua-neuguineisch"
 msgstr ""
 
-#: integration/models.py:175
+#: integration/models.py:197
 msgid "paraguayisch"
 msgstr ""
 
-#: integration/models.py:175
+#: integration/models.py:197
 msgid "peruanisch"
 msgstr ""
 
-#: integration/models.py:176
+#: integration/models.py:198
 msgid "philippinisch"
 msgstr ""
 
-#: integration/models.py:177
+#: integration/models.py:199
 msgid "polnisch"
 msgstr ""
 
-#: integration/models.py:177
+#: integration/models.py:199
 msgid "portugiesisch"
 msgstr ""
 
-#: integration/models.py:177
+#: integration/models.py:199
 msgid "ruandisch"
 msgstr ""
 
-#: integration/models.py:178
+#: integration/models.py:200
 msgid "rumänisch"
 msgstr ""
 
-#: integration/models.py:178
+#: integration/models.py:200
 msgid "russisch"
 msgstr ""
 
-#: integration/models.py:178
+#: integration/models.py:200
 msgid "salomonisch"
 msgstr ""
 
-#: integration/models.py:179
+#: integration/models.py:201
 msgid "sambisch"
 msgstr ""
 
-#: integration/models.py:179
+#: integration/models.py:201
 msgid "samoanisch"
 msgstr ""
 
-#: integration/models.py:180
+#: integration/models.py:202
 msgid "san-marinesisch"
 msgstr ""
 
-#: integration/models.py:181
+#: integration/models.py:203
 msgid "são-toméisch"
 msgstr ""
 
-#: integration/models.py:181
+#: integration/models.py:203
 msgid "saudi-arabisch"
 msgstr ""
 
-#: integration/models.py:182
+#: integration/models.py:204
 msgid "schwedisch"
 msgstr ""
 
-#: integration/models.py:183
+#: integration/models.py:205
 msgid "schweizerisch"
 msgstr ""
 
-#: integration/models.py:183
+#: integration/models.py:205
 msgid "senegalesisch"
 msgstr ""
 
-#: integration/models.py:184
+#: integration/models.py:206
 msgid "serbisch"
 msgstr ""
 
-#: integration/models.py:185
+#: integration/models.py:207
 msgid "seychellisch"
 msgstr ""
 
-#: integration/models.py:185
+#: integration/models.py:207
 msgid "sierra-leonisch"
 msgstr ""
 
-#: integration/models.py:186
+#: integration/models.py:208
 msgid "simbabwisch"
 msgstr ""
 
-#: integration/models.py:186
+#: integration/models.py:208
 msgid "singapurisch"
 msgstr ""
 
-#: integration/models.py:187
+#: integration/models.py:209
 msgid "slowakisch"
 msgstr ""
 
-#: integration/models.py:188
+#: integration/models.py:210
 msgid "slowenisch"
 msgstr ""
 
-#: integration/models.py:188
+#: integration/models.py:210
 msgid "somalisch"
 msgstr ""
 
-#: integration/models.py:188
+#: integration/models.py:210
 msgid "spanisch"
 msgstr ""
 
-#: integration/models.py:189
+#: integration/models.py:211
 msgid "sri-lankisch"
 msgstr ""
 
-#: integration/models.py:189
+#: integration/models.py:211
 msgid "von St. Kitts und Nevis"
 msgstr ""
 
-#: integration/models.py:190
+#: integration/models.py:212
 msgid "lucianisch"
 msgstr ""
 
-#: integration/models.py:190
+#: integration/models.py:212
 msgid "vincentisch"
 msgstr ""
 
-#: integration/models.py:191
+#: integration/models.py:213
 msgid "südafrikanisch"
 msgstr ""
 
-#: integration/models.py:192
+#: integration/models.py:214
 msgid "sudanesisch"
 msgstr ""
 
-#: integration/models.py:192
+#: integration/models.py:214
 msgid "südsudanesisch"
 msgstr ""
 
-#: integration/models.py:193
+#: integration/models.py:215
 msgid "surinamisch"
 msgstr ""
 
-#: integration/models.py:194
+#: integration/models.py:216
 msgid "swasiländisch"
 msgstr ""
 
-#: integration/models.py:194
+#: integration/models.py:216
 msgid "syrisch"
 msgstr ""
 
-#: integration/models.py:195
+#: integration/models.py:217
 msgid "tadschikisch"
 msgstr ""
 
-#: integration/models.py:196
+#: integration/models.py:218
 msgid "tansanisch"
 msgstr ""
 
-#: integration/models.py:196
+#: integration/models.py:218
 msgid "thailändisch"
 msgstr ""
 
-#: integration/models.py:197
+#: integration/models.py:219
 msgid "von Timor-Leste"
 msgstr ""
 
-#: integration/models.py:197
+#: integration/models.py:219
 msgid "togoisch"
 msgstr ""
 
-#: integration/models.py:198
+#: integration/models.py:220
 msgid "tongaisch"
 msgstr ""
 
-#: integration/models.py:199
+#: integration/models.py:221
 msgid "von Trinidad und Tobago"
 msgstr ""
 
-#: integration/models.py:199
+#: integration/models.py:221
 msgid "tschadisch"
 msgstr ""
 
-#: integration/models.py:200
+#: integration/models.py:222
 msgid "tschechisch"
 msgstr ""
 
-#: integration/models.py:200
+#: integration/models.py:222
 msgid "tunesisch"
 msgstr ""
 
-#: integration/models.py:200
+#: integration/models.py:222
 msgid "türkisch"
 msgstr ""
 
-#: integration/models.py:201
+#: integration/models.py:223
 msgid "turkmenisch"
 msgstr ""
 
-#: integration/models.py:201
+#: integration/models.py:223
 msgid "tuvaluisch"
 msgstr ""
 
-#: integration/models.py:201
+#: integration/models.py:223
 msgid "ugandisch"
 msgstr ""
 
-#: integration/models.py:202
+#: integration/models.py:224
 msgid "ukrainisch"
 msgstr ""
 
-#: integration/models.py:202
+#: integration/models.py:224
 msgid "ungarisch"
 msgstr ""
 
-#: integration/models.py:202
+#: integration/models.py:224
 msgid "uruguayisch"
 msgstr ""
 
-#: integration/models.py:203
+#: integration/models.py:225
 msgid "usbekisch"
 msgstr ""
 
-#: integration/models.py:203
+#: integration/models.py:225
 msgid "vanuatuisch"
 msgstr ""
 
-#: integration/models.py:203
+#: integration/models.py:225
 msgid "vatikanisch"
 msgstr ""
 
-#: integration/models.py:204
+#: integration/models.py:226
 msgid "venezolanisch"
 msgstr ""
 
-#: integration/models.py:205
+#: integration/models.py:227
 msgid "der Vereinigten Arabischen Emirate"
 msgstr ""
 
-#: integration/models.py:206
+#: integration/models.py:228
 msgid "amerikanisch"
 msgstr ""
 
-#: integration/models.py:206
+#: integration/models.py:228
 msgid "britisch"
 msgstr ""
 
-#: integration/models.py:207
+#: integration/models.py:229
 msgid "vietnamesisch"
 msgstr ""
 
-#: integration/models.py:208
+#: integration/models.py:230
 msgid "weißrussisch"
 msgstr ""
 
-#: integration/models.py:208
+#: integration/models.py:230
 msgid "zentralafrikanisch"
 msgstr ""
 
-#: integration/models.py:209
+#: integration/models.py:231
 msgid "zyprisch"
 msgstr ""
 
-#: integration/models.py:210
+#: integration/models.py:232
 msgid "grönländisch"
 msgstr ""
 
-#: integration/models.py:210
+#: integration/models.py:232
 msgid "macuanisch"
 msgstr ""
 
-#: integration/models.py:211
+#: integration/models.py:233
 msgid "von St. Helena"
 msgstr ""
 
-#: integration/models.py:212
+#: integration/models.py:234
 msgid "von Turks- und Caicosinseln"
 msgstr ""
 
-#: integration/models.py:212
+#: integration/models.py:234
 msgid "gibraltisch"
 msgstr ""
 
-#: integration/models.py:213
+#: integration/models.py:235
 msgid "von Jersey"
 msgstr ""
 
-#: integration/models.py:213
+#: integration/models.py:235
 msgid "guernseyer"
 msgstr ""
 
-#: integration/models.py:213
+#: integration/models.py:235
 msgid "faröisch"
 msgstr ""
 
-#: integration/models.py:214
+#: integration/models.py:236
 msgid "honkonger"
 msgstr ""
 
-#: integration/models.py:214
+#: integration/models.py:236
 msgid "bermudisch"
 msgstr ""
 
-#: integration/models.py:215
+#: integration/models.py:237
 msgid "von den britischen Jungferninseln"
 msgstr ""
 
-#: integration/models.py:216
+#: integration/models.py:238
 msgid "taiwanesisch"
 msgstr ""
 
-#: integration/models.py:216
+#: integration/models.py:238
 msgid "(französisch-) guayanisch"
 msgstr ""
 
-#: integration/models.py:217
+#: integration/models.py:239
 msgid "Deutsch"
 msgstr ""
 
-#: integration/models.py:219
+#: integration/models.py:241
 msgid "Mr."
 msgstr "Herr"
 
-#: integration/models.py:219
+#: integration/models.py:241
 msgid "Ms."
 msgstr "Frau"
 
-#: integration/models.py:219
+#: integration/models.py:241
 msgid "Mrs."
 msgstr "Frau"
 
-#: integration/models.py:219
+#: integration/models.py:241
 msgid "Dr."
 msgstr "Dr."
 
-#: integration/models.py:219
+#: integration/models.py:241
 msgid "Prof."
 msgstr ""
 
-#: integration/models.py:220
+#: integration/models.py:242
 msgid "January"
 msgstr "Januar"
 
-#: integration/models.py:220
+#: integration/models.py:242
 msgid "February"
 msgstr "Februar"
 
-#: integration/models.py:220
+#: integration/models.py:242
 msgid "March"
 msgstr "März"
 
-#: integration/models.py:220
+#: integration/models.py:242
 msgid "April"
 msgstr ""
 
-#: integration/models.py:221
+#: integration/models.py:243
 msgid "May"
 msgstr "Mai"
 
-#: integration/models.py:221
+#: integration/models.py:243
 msgid "June"
 msgstr "Juni"
 
-#: integration/models.py:221
+#: integration/models.py:243
 msgid "July"
 msgstr "Juli"
 
-#: integration/models.py:221
+#: integration/models.py:243
 msgid "August"
 msgstr ""
 
-#: integration/models.py:222
+#: integration/models.py:244
 msgid "September"
 msgstr ""
 
-#: integration/models.py:222
+#: integration/models.py:244
 msgid "October"
 msgstr "Oktober"
 
-#: integration/models.py:222
+#: integration/models.py:244
 msgid "November"
 msgstr ""
 
-#: integration/models.py:223
+#: integration/models.py:245
 msgid "December"
 msgstr "Dezember"
 
-#: integration/models.py:224
+#: integration/models.py:246
 msgid "Beginning of each Month"
 msgstr "Zu Monatsbeginn"
 
-#: integration/models.py:225
+#: integration/models.py:247
 msgid "Beginning of each Semester"
 msgstr "Zu Semesterbeginn"
 
-#: integration/models.py:226
+#: integration/models.py:248
 msgid "Suspend payments"
 msgstr "Zahlungen aussetzen"
 
-#: integration/models.py:227
+#: integration/models.py:249
 msgid "Continue regular payments"
 msgstr "Reguläre Zahlungen wieder aufnehmen"
 
-#: integration/models.py:228
+#: integration/models.py:250
 msgid "Partial payments"
 msgstr "Teilweise Zahlungen"
 
-#: integration/models.py:229
+#: integration/models.py:251
 msgid "Enrolled"
 msgstr "Eingeschrieben"
 
-#: integration/models.py:229
+#: integration/models.py:251
 msgid "Aborted"
 msgstr "Abgebrochen"
 
-#: integration/models.py:229
+#: integration/models.py:251
 msgid "Semester Off"
 msgstr "Urlaubssemester"
 
-#: integration/models.py:230
+#: integration/models.py:252
 msgid "Semester abroad"
 msgstr "Auslandssemester"
 
-#: integration/models.py:230
+#: integration/models.py:252
 msgid "Exmatriculated"
 msgstr "Exmatrikuliert nach Studienabschluss"
 
-#: integration/models.py:231 integration/models.py:237
+#: integration/models.py:253 integration/models.py:259
 msgid "Draft"
 msgstr "Entwurf"
 
-#: integration/models.py:231
+#: integration/models.py:253
 msgid "Sent"
 msgstr "Gesendet"
 
-#: integration/models.py:231
+#: integration/models.py:253
 msgid "Paid"
 msgstr "Bezahlt"
 
-#: integration/models.py:231
+#: integration/models.py:253
 msgid "Cancelled"
 msgstr "Abgebrochen"
 
-#: integration/models.py:232
+#: integration/models.py:254
 msgid "Tuition Fee"
 msgstr "Studiengebühr"
 
-#: integration/models.py:232 integration/models.py:472
-#: integration/models.py:475 integration/models.py:777
-#: integration/models.py:903
+#: integration/models.py:254 integration/models.py:501
+#: integration/models.py:504 integration/models.py:816
+#: integration/models.py:942
 msgid "Semester Fee"
 msgstr "Semesterbeitrag"
 
-#: integration/models.py:233
+#: integration/models.py:255
 msgid "Semester Discount"
 msgstr "Rabatt auf Semesterbeitrag"
 
-#: integration/models.py:233
+#: integration/models.py:255
 msgid "Overdue Fee"
 msgstr "Mahngebühr"
 
-#: integration/models.py:234 integration/models.py:775
-#: integration/models.py:898
+#: integration/models.py:256 integration/models.py:814
+#: integration/models.py:937
 msgid "Matriculation Fee"
 msgstr "Immatrikulationsgebühr"
 
-#: integration/models.py:234
+#: integration/models.py:256
 msgid "Dunning Fee"
 msgstr "Mahngebühr"
 
-#: integration/models.py:235 integration/models.py:783
+#: integration/models.py:257 integration/models.py:822
 #: templates/snippets/course_fees.html:21
 msgid "Fee Semester abroad"
 msgstr "Auslandssemestergebühr"
 
-#: integration/models.py:235 integration/models.py:785
+#: integration/models.py:257 integration/models.py:824
 #: templates/snippets/course_fees.html:24
 msgid "Fee Semester off"
 msgstr "Urlaubssemestergebühr"
 
-#: integration/models.py:236
+#: integration/models.py:258
 msgid "In Approval Process"
 msgstr "Genehmigungsverfahren läuft"
 
-#: integration/models.py:236
+#: integration/models.py:258
 msgid "Activated"
 msgstr "Aktiviert"
 
-#: integration/models.py:237
+#: integration/models.py:259
 msgid "Deactivated"
 msgstr "Deaktiviert"
 
-#: integration/models.py:237 integration/models.py:1074
+#: integration/models.py:259 integration/models.py:1113
 msgid "Active"
 msgstr "Aktiv"
 
-#: integration/models.py:238
+#: integration/models.py:260
 msgid "Discount Tuition Fee"
 msgstr "Rabatt auf die Studiengebühr"
 
-#: integration/models.py:239
+#: integration/models.py:261
 msgid "Discount Semester Fee"
 msgstr "Rabatt auf den Semesterbeitrag"
 
-#: integration/models.py:240
+#: integration/models.py:262
 msgid "Prospect"
 msgstr "Prospekt"
 
-#: integration/models.py:240
+#: integration/models.py:262
 msgid "Applicant"
 msgstr "Bewerbung eingegangen"
 
-#: integration/models.py:240
+#: integration/models.py:262
 msgid "Nurturing"
 msgstr "Pflegend"
 
-#: integration/models.py:241 integration/models.py:252
+#: integration/models.py:263 integration/models.py:274
 msgid "Pending"
 msgstr "In Bearbeitung"
 
-#: integration/models.py:241
+#: integration/models.py:263
 msgid "Qualifiziert"
 msgstr "Finanzierung zugesagt"
 
-#: integration/models.py:241
+#: integration/models.py:263
 msgid "Unqualifiziert"
 msgstr "Finanzierung abgesagt"
 
-#: integration/models.py:242
+#: integration/models.py:264
 msgid "ISA Application Withdrawal"
 msgstr "UGV Bewerbung zurückgezogen"
 
-#: integration/models.py:243
+#: integration/models.py:265
 msgid "Not applied yet"
 msgstr "Bewerbung liegt nicht vor"
 
-#: integration/models.py:243
+#: integration/models.py:265
 msgid "Confirmed applicant"
 msgstr "Bewerbung liegt vor"
 
-#: integration/models.py:244
+#: integration/models.py:266
 msgid "Rejected applicant"
 msgstr "Bewerbung abgelehnt"
 
-#: integration/models.py:244
+#: integration/models.py:266
 msgid "Accepted applicant"
 msgstr "Bewerbung angenommen"
 
-#: integration/models.py:245
+#: integration/models.py:267
 msgid "Already student"
 msgstr "Bereits Studierender"
 
-#: integration/models.py:245
+#: integration/models.py:267
 msgid "Application Withdrawal"
 msgstr "Bewerbung zurückgezogen"
 
-#: integration/models.py:247
+#: integration/models.py:269
 msgid "Semester"
 msgstr "Urlaubssemester"
 
-#: integration/models.py:247
+#: integration/models.py:269
 msgid "All Upfront"
 msgstr ""
 
-#: integration/models.py:248
+#: integration/models.py:270
 msgid "One year Upfront"
 msgstr ""
 
-#: integration/models.py:249 templates/repayer/request.html:24
+#: integration/models.py:271 templates/repayer/request.html:24
 msgid "Communicate change in income"
 msgstr "Einkommensveränderung mitteilen"
 
-#: integration/models.py:250 templates/repayer/request.html:25
+#: integration/models.py:272 templates/repayer/request.html:25
 msgid "Communicate change of personal situation"
 msgstr "Veränderung persönlicher Situation mitteilen"
 
-#: integration/models.py:251 templates/repayer/request.html:26
+#: integration/models.py:273 templates/repayer/request.html:26
 msgid "Request temporary exemption from interim payments"
 msgstr "Vorläufige Befreiung von Abschlagszahlungen beantragen"
 
-#: integration/models.py:252
+#: integration/models.py:274
 msgid "Approved"
 msgstr "Genehmigt"
 
-#: integration/models.py:252
+#: integration/models.py:274
 msgid "Not Approved"
 msgstr "Nicht Genehmigt"
 
-#: integration/models.py:253 templates/repayer/dashboard.html:104
+#: integration/models.py:275 templates/repayer/dashboard.html:104
 msgid "New"
 msgstr "Neu"
 
-#: integration/models.py:253
+#: integration/models.py:275
 msgid "In Review"
 msgstr "Im Review"
 
-#: integration/models.py:253
+#: integration/models.py:275
 msgid "Clarification Needed"
 msgstr "Klärungsbedarf"
 
-#: integration/models.py:254
+#: integration/models.py:276
 msgid "Decision Reached"
 msgstr "Entscheidung getroffen"
 
-#: integration/models.py:254
+#: integration/models.py:276
 msgid "Closed"
 msgstr "Geschlossen"
 
-#: integration/models.py:285 integration/models.py:638
+#: integration/models.py:307 integration/models.py:672
 msgid "Full Name"
 msgstr "Vor- und Nachname"
 
-#: integration/models.py:290
+#: integration/models.py:312
 msgid "State/Province"
 msgstr "Bundesland/Provinz"
 
-#: integration/models.py:296
+#: integration/models.py:318
 msgid "Citizenship"
 msgstr "Staatsbürgerschaft"
 
-#: integration/models.py:302 templates/staff/ugvapplication_review.html:36
+#: integration/models.py:324 templates/staff/ugvapplication_review.html:36
 msgid "Date of birth"
 msgstr "Geburtsdatum"
 
-#: integration/models.py:303 integration/models.py:442
+#: integration/models.py:325 integration/models.py:464
 msgid "Place of Birth"
 msgstr "Geburtsort"
 
-#: integration/models.py:306
+#: integration/models.py:328
 msgid "No OECD Passport"
 msgstr "Kein OECD-Reisepass"
 
-#: integration/models.py:307 integration/models.py:448
+#: integration/models.py:329 integration/models.py:470
 msgid "Communication Language"
 msgstr "Kommunikationssprache"
 
-#: integration/models.py:310
+#: integration/models.py:332
 msgid "Start semester"
 msgstr "Start Semester"
 
-#: integration/models.py:337
+#: integration/models.py:359
 msgid "Link to further Documents"
 msgstr "Link zu weiteren Dokumenten"
 
-#: integration/models.py:340
+#: integration/models.py:362
 msgid "Risk not with CHANCEN eG"
 msgstr "Risiko nicht bei CHANCEN eG"
 
-#: integration/models.py:366
+#: integration/models.py:388
 msgid "Start Semester"
 msgstr "Start Semester"
 
-#: integration/models.py:367 templates/staff/ugvapplication_review.html:27
+#: integration/models.py:389 templates/staff/ugvapplication_review.html:27
 msgid "Start of Study"
 msgstr "Beginn des Studiums"
 
-#: integration/models.py:404 integration/models.py:752
-#: integration/models.py:1061 integration/models.py:1085
+#: integration/models.py:426 integration/models.py:791
+#: integration/models.py:1100 integration/models.py:1124
 #: templates/repayer/dashboard.html:36
 #: templates/snippets/student_account.html:64
 #: templates/snippets/student_uploaded_files.html:8
 msgid "Name"
 msgstr ""
 
-#: integration/models.py:405 integration/models.py:948
-#: integration/models.py:1110 integration/views/staff.py:149
+#: integration/models.py:427 integration/models.py:987
+#: integration/models.py:1149 integration/views/staff.py:149
 #: integration/views/staff.py:161 integration/views/staff.py:216
 #: integration/views/staff.py:228 integration/views/staff.py:380
 #: integration/views/staff.py:395 integration/views/staff.py:437
@@ -2363,16 +2369,16 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: integration/models.py:407
+#: integration/models.py:429
 msgid "Customer type"
 msgstr "Kundentyp"
 
-#: integration/models.py:427
+#: integration/models.py:449
 msgid "Execution Fee / Direct Debit / Student"
 msgstr "Abwicklungsgebühr / Lastschrift / Student"
 
-#: integration/models.py:435 integration/models.py:877
-#: integration/models.py:1092 templates/snippets/contract_card.html:9
+#: integration/models.py:457 integration/models.py:916
+#: integration/models.py:1131 templates/snippets/contract_card.html:9
 #: templates/snippets/student_account.html:15
 #: templates/snippets/student_account_create.html:12
 #: templates/staff/ugvapplication_review.html:21
@@ -2380,325 +2386,325 @@ msgstr "Abwicklungsgebühr / Lastschrift / Student"
 msgid "University"
 msgstr "Hochschule"
 
-#: integration/models.py:439
+#: integration/models.py:461
 msgid "Tuition Fee Total"
 msgstr "Studiengebühren gesamt"
 
-#: integration/models.py:444
+#: integration/models.py:466
 msgid "Country of Birth"
 msgstr "Geburtsland"
 
-#: integration/models.py:474
+#: integration/models.py:503
 msgid "Modify this value to update all Courses."
 msgstr "Ändern Sie diesen Wert, um alle Kurse zu aktualisieren."
 
-#: integration/models.py:478
+#: integration/models.py:507
 msgid "Payment options"
 msgstr "Zahlungsoptionen"
 
-#: integration/models.py:501 templates/students/dashboard.html:21
+#: integration/models.py:530 templates/students/dashboard.html:21
 #: templates/ugvler/dashboard.html:21
 msgid "Account"
 msgstr "Konto"
 
-#: integration/models.py:502
+#: integration/models.py:531
 msgid "Accounts"
 msgstr "Konten"
 
-#: integration/models.py:637
+#: integration/models.py:671
 msgid "Salutation"
 msgstr "Anrede"
 
-#: integration/models.py:640
+#: integration/models.py:674
 msgid "title"
 msgstr "Titel"
 
-#: integration/models.py:645
+#: integration/models.py:679
 msgid "Other phone"
 msgstr "Andere Telefonnummern"
 
-#: integration/models.py:687 integration/models.py:1095
+#: integration/models.py:721 integration/models.py:1134
 msgid "Contact"
 msgstr "Kontakt"
 
-#: integration/models.py:688
+#: integration/models.py:722
 msgid "Contacts"
 msgstr "Kontakte"
 
-#: integration/models.py:733
+#: integration/models.py:772
 msgid "Account Holder Name"
 msgstr "Kontoinhaber Name"
 
-#: integration/models.py:734 templates/snippets/repayer_payment.html:10
+#: integration/models.py:773 templates/snippets/repayer_payment.html:10
 #: templates/snippets/student_payment.html:12
 msgid "Account Number(last 2 digits)"
 msgstr "Kontonummer (letzte 2 Ziffern)"
 
-#: integration/models.py:736 templates/snippets/repayer_payment.html:4
+#: integration/models.py:775 templates/snippets/repayer_payment.html:4
 #: templates/snippets/student_payment.html:6
 msgid "Bank Name"
 msgstr ""
 
-#: integration/models.py:737 templates/snippets/repayer_payment.html:7
+#: integration/models.py:776 templates/snippets/repayer_payment.html:7
 #: templates/snippets/student_payment.html:9
 msgid "Country Code"
 msgstr "Landesvorwahl"
 
-#: integration/models.py:738
+#: integration/models.py:777
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: integration/models.py:762 integration/models.py:893
+#: integration/models.py:801 integration/models.py:932
 msgid "Standard Study Period (No. of Semesters)"
 msgstr "Regelstudienzeit"
 
-#: integration/models.py:771
+#: integration/models.py:810
 msgid "Starting Month of Studies"
 msgstr "Start Monat des Studiengangs"
 
-#: integration/models.py:778 integration/models.py:843
-#: integration/models.py:911
+#: integration/models.py:817 integration/models.py:882
+#: integration/models.py:950
 msgid "Cost per Month"
 msgstr "Kosten pro Monat"
 
-#: integration/models.py:781 integration/models.py:849
-#: integration/models.py:914
+#: integration/models.py:820 integration/models.py:888
+#: integration/models.py:953
 msgid "Cost per Semester"
 msgstr "Kosten pro Semester"
 
-#: integration/models.py:787 integration/models.py:887
+#: integration/models.py:826 integration/models.py:926
 msgid "Cost per Month>Standard Study Period"
 msgstr "Kosten pro Monat über der Regelstudienzeit"
 
-#: integration/models.py:791 integration/models.py:855
-#: integration/models.py:890
+#: integration/models.py:830 integration/models.py:894
+#: integration/models.py:929
 msgid "Tuition Fees Total"
 msgstr "Studiengebühren gesamt"
 
-#: integration/models.py:794
+#: integration/models.py:833
 msgid "Number of Sofortzahler"
 msgstr "Anzahl der Sofortzahler"
 
-#: integration/models.py:807 integration/models.py:880
-#: integration/models.py:1103 templates/snippets/student_account.html:39
+#: integration/models.py:846 integration/models.py:919
+#: integration/models.py:1142 templates/snippets/student_account.html:39
 #: templates/staff/ugvapplication_review.html:24
 msgid "Degree Course"
 msgstr "Studiengang"
 
-#: integration/models.py:808
+#: integration/models.py:847
 msgid "Degree Courses"
 msgstr "Studiengänge"
 
-#: integration/models.py:842 integration/models.py:977
+#: integration/models.py:881 integration/models.py:1016
 #: templates/snippets/contract_card.html:13
 #: templates/staff/course_review.html:56
 msgid "Valid from"
 msgstr "Gültig ab"
 
-#: integration/models.py:846
+#: integration/models.py:885
 msgid "Cost per Month > Standard Study Period"
 msgstr "Kosten pro Monat über der Regelstudienzeit"
 
-#: integration/models.py:875
+#: integration/models.py:914
 msgid "Number"
 msgstr "NUmmer"
 
-#: integration/models.py:884
+#: integration/models.py:923
 msgid "Payment Interval"
 msgstr "Zahlungsinterval"
 
-#: integration/models.py:895 integration/models.py:1105
+#: integration/models.py:934 integration/models.py:1144
 msgid "Payment Terms"
 msgstr "Zahlungsbedingungen"
 
-#: integration/models.py:906
+#: integration/models.py:945
 msgid "Number of Rates Total"
 msgstr "Raten gesamt"
 
-#: integration/models.py:908 integration/models.py:1097
+#: integration/models.py:947 integration/models.py:1136
 msgid "Student ID"
 msgstr ""
 
-#: integration/models.py:918
+#: integration/models.py:957
 msgid "Count of Invoices"
 msgstr "Anzahl der Rechnungen"
 
-#: integration/models.py:927 templates/staff/course_review.html:23
+#: integration/models.py:966 templates/staff/course_review.html:23
 #: templates/staff/dashboard_courses.html:37
 msgid "Start of Studies"
 msgstr "Studienbeginn"
 
-#: integration/models.py:930
+#: integration/models.py:969
 msgid "Discount Helper"
 msgstr ""
 
-#: integration/models.py:932
+#: integration/models.py:971
 msgid "Active Discounts"
 msgstr "Aktive Rabatte"
 
-#: integration/models.py:937
+#: integration/models.py:976
 msgid "Include In Invoice Creation Process"
 msgstr ""
 
-#: integration/models.py:940
+#: integration/models.py:979
 msgid "Number of Invoices"
 msgstr ""
 
-#: integration/models.py:944
+#: integration/models.py:983
 msgid "Special Fee"
 msgstr ""
 
-#: integration/models.py:953 templates/snippets/contract_card.html:16
+#: integration/models.py:992 templates/snippets/contract_card.html:16
 msgid "Net funding amount"
 msgstr "Nettofinanzierungsbetrag"
 
-#: integration/models.py:955 templates/snippets/contract_card.html:19
+#: integration/models.py:994 templates/snippets/contract_card.html:19
 #: templates/staff/course_review.html:60
 msgid "Repayment period"
 msgstr "Rückzahlungszeitraum"
 
-#: integration/models.py:958 templates/snippets/contract_card.html:22
+#: integration/models.py:997 templates/snippets/contract_card.html:22
 #: templates/staff/course_review.html:59
 msgid "Relevant repayment period"
 msgstr "Rückzahlungsjahre"
 
-#: integration/models.py:961 templates/snippets/contract_card.html:25
+#: integration/models.py:1000 templates/snippets/contract_card.html:25
 msgid "Maximum repayment"
 msgstr "Maximale Rückzahlung"
 
-#: integration/models.py:964 templates/snippets/contract_card.html:28
+#: integration/models.py:1003 templates/snippets/contract_card.html:28
 #: templates/staff/course_review.html:57
 msgid "Repayment amount"
 msgstr "Zurück zu zahlender Einkommensanteil"
 
-#: integration/models.py:966 templates/snippets/contract_card.html:31
+#: integration/models.py:1005 templates/snippets/contract_card.html:31
 msgid "Minimal monthly instalments"
 msgstr "Minimale monatliche Ratenzahlungen"
 
-#: integration/models.py:969
+#: integration/models.py:1008
 msgid "Annual maximum repayment"
 msgstr "Jährliche maximale Rückzahlung"
 
-#: integration/models.py:972
+#: integration/models.py:1011
 msgid "Annual minimum limit"
 msgstr "Jährliche Mindestgrenze"
 
-#: integration/models.py:975
+#: integration/models.py:1014
 msgid "Annual minimal income indexed"
 msgstr ""
 
-#: integration/models.py:979
+#: integration/models.py:1018
 msgid "Years of payment"
 msgstr "Zahlungsjahre"
 
-#: integration/models.py:981
+#: integration/models.py:1020
 msgid "Start of repayment"
 msgstr "Start der Rückzahlung"
 
-#: integration/models.py:987
+#: integration/models.py:1026
 msgid "Minimal relevant income"
 msgstr "Minimales relevantes Einkommen"
 
-#: integration/models.py:989
+#: integration/models.py:1028
 msgid "Full Finanzing"
 msgstr ""
 
-#: integration/models.py:994
+#: integration/models.py:1033
 msgid "Notice to quit"
 msgstr "Hinweis zum Beenden"
 
-#: integration/models.py:998 templates/snippets/contract_card.html:38
+#: integration/models.py:1037 templates/snippets/contract_card.html:38
 msgid "Membership number"
 msgstr "Mitgliedsnummer"
 
-#: integration/models.py:1001 templates/snippets/contract_card.html:41
+#: integration/models.py:1040 templates/snippets/contract_card.html:41
 msgid "Credit balances account number"
 msgstr "Guthaben Konto-Nummer"
 
-#: integration/models.py:1004 templates/snippets/contract_card.html:44
+#: integration/models.py:1043 templates/snippets/contract_card.html:44
 msgid "Amount of cooperative shares"
 msgstr "Anzahl der Genossenschaftsanteile"
 
-#: integration/models.py:1006 templates/snippets/contract_card.html:35
+#: integration/models.py:1045 templates/snippets/contract_card.html:35
 msgid "Entry date"
 msgstr "Eintrittsdatum"
 
-#: integration/models.py:1008 templates/snippets/contract_card.html:47
+#: integration/models.py:1047 templates/snippets/contract_card.html:47
 msgid "Nominal value of a cooperative share"
 msgstr "Nennwert eines Genossenschaftsanteils"
 
-#: integration/models.py:1013
+#: integration/models.py:1052
 msgid "Contract"
 msgstr "Vertrag"
 
-#: integration/models.py:1014 templates/repayer/dashboard.html:25
+#: integration/models.py:1053 templates/repayer/dashboard.html:25
 #: templates/ugvler/dashboard.html:22
 msgid "Contracts"
 msgstr "Verträge"
 
-#: integration/models.py:1065
+#: integration/models.py:1104
 msgid "Discount Type"
 msgstr "Rabatt Typ"
 
-#: integration/models.py:1067
+#: integration/models.py:1106
 msgid "Discount on Tuition Fee"
 msgstr "Rabatt auf Studiengebühr"
 
-#: integration/models.py:1069
+#: integration/models.py:1108
 msgid "Discount on Semester Fee"
 msgstr "Rabatt auf Semesterbeitrag"
 
-#: integration/models.py:1071
+#: integration/models.py:1110
 msgid "Number of Applicable Months"
 msgstr "Anzahl der Rabatte"
 
-#: integration/models.py:1073
+#: integration/models.py:1112
 msgid "Number of Utilizations"
 msgstr "Summe der Gewährungen des Rabattes"
 
-#: integration/models.py:1078
+#: integration/models.py:1117
 msgid "Discount"
 msgstr "Rabatt"
 
-#: integration/models.py:1079
+#: integration/models.py:1118
 msgid "Discounts"
 msgstr "Rabatte"
 
-#: integration/models.py:1099 templates/snippets/student_invoices.html:9
+#: integration/models.py:1138 templates/snippets/student_invoices.html:9
 #: templates/staff/dashboard_invoices.html:37
 msgid "Period"
 msgstr "Zeitraum"
 
-#: integration/models.py:1100 templates/snippets/student_invoices.html:11
+#: integration/models.py:1139 templates/snippets/student_invoices.html:11
 msgid "Invoice Amount"
 msgstr "Rechnungsbetrag"
 
-#: integration/models.py:1107 templates/snippets/student_invoices.html:10
+#: integration/models.py:1146 templates/snippets/student_invoices.html:10
 msgid "Invoice Date"
 msgstr "Rechnungsdatum"
 
-#: integration/models.py:1114
+#: integration/models.py:1153
 msgid "Invoice"
 msgstr "Rechnung"
 
-#: integration/models.py:1115 templates/staff/dashboard.html:26
+#: integration/models.py:1154 templates/staff/dashboard.html:26
 #: templates/staff/dashboard_home.html:74 templates/students/dashboard.html:22
 msgid "Invoices"
 msgstr "Rechnungen"
 
-#: integration/models.py:1158 templates/snippets/case_card.html:6
+#: integration/models.py:1197 templates/snippets/case_card.html:6
 msgid "Case number"
 msgstr "Fallnummer"
 
-#: integration/models.py:1173 templates/snippets/case_card.html:15
+#: integration/models.py:1212 templates/snippets/case_card.html:15
 msgid "Effective Start"
 msgstr "Effektiver Start"
 
-#: integration/models.py:1174 templates/snippets/case_card.html:18
+#: integration/models.py:1213 templates/snippets/case_card.html:18
 msgid "Effective End"
 msgstr "Effektives Ende"
 
-#: integration/models.py:1176 templates/snippets/case_card.html:22
+#: integration/models.py:1215 templates/snippets/case_card.html:22
 msgid "Relevant Income"
 msgstr "Relevantes Einkommen"
 
@@ -2716,7 +2722,7 @@ msgid "Continue"
 msgstr "Fortsetzen"
 
 #: integration/views/repayer.py:136 integration/views/student.py:280
-#: integration/views/ugv_student.py:255
+#: integration/views/ugv_student.py:256
 msgid "SEPA Mandate"
 msgstr "SEPA-Lastschriftmandat"
 
@@ -2727,7 +2733,7 @@ msgstr ""
 "Lastschriftmandat."
 
 #: integration/views/repayer.py:141 integration/views/student.py:285
-#: integration/views/ugv_student.py:259 templates/repayer/dashboard.html:79
+#: integration/views/ugv_student.py:260 templates/repayer/dashboard.html:79
 #: templates/students/dashboard.html:49
 msgid "Grant mandate"
 msgstr "Mandat vergeben"
@@ -2794,13 +2800,13 @@ msgstr ""
 "aufmerksam, ob die Daten korrekt sind. Sollte dies nicht der Fall sein, nimm "
 "bitte Kontakt mit deiner Hochschule auf."
 
-#: integration/views/ugv_student.py:256
+#: integration/views/ugv_student.py:257
 msgid "We require authorisation to debit your bank account."
 msgstr ""
 "Damit wir die fälligen Beträge einziehen können, benötigen wir ein SEPA-"
 "Lastschriftmandat."
 
-#: integration/views/ugv_student.py:395
+#: integration/views/ugv_student.py:396
 msgid "Upload failed"
 msgstr "Der Upload ist fehlgeschlagen"
 
@@ -2827,7 +2833,7 @@ msgstr "Die Änderungen gelten für die ausgewählten Studierenden"
 #: templates/snippets/student_discounts.html:23
 #: templates/snippets/student_discounts.html:47
 #: templates/staff/upload_review.html:59 templates/students/contact.html:43
-#: templates/students/payment.html:33
+#: templates/students/payment.html:33 templates/ugvler/contact.html:38
 msgid "Confirm"
 msgstr "Bestätigen"
 
@@ -2954,12 +2960,12 @@ msgstr "Deine Daten"
 msgid "Requests and Repayment"
 msgstr "Anträge und Rückzahlung"
 
-#: templates/repayer/dashboard.html:39
+#: templates/repayer/dashboard.html:39 templates/snippets/person_contact.html:9
 #: templates/snippets/student_contact.html:14
 #: templates/staff/dashboard_ugvapplications.html:36
 #: templates/staff/dashboard_ugvers.html:37
 #: templates/staff/ugvapplication_review.html:42
-#: templates/students/contact.html:35
+#: templates/students/contact.html:35 templates/ugvler/contact.html:30
 msgid "Phone"
 msgstr "Telefon"
 
@@ -3018,7 +3024,7 @@ msgstr "Kontaktdaten"
 
 #: templates/repayer/payment.html:35 templates/snippets/stepper.html:23
 #: templates/staff/upload_review.html:63 templates/students/contact.html:45
-#: templates/students/payment.html:35
+#: templates/students/payment.html:35 templates/ugvler/contact.html:40
 msgid "Back"
 msgstr "Zurück"
 
@@ -3067,6 +3073,7 @@ msgstr "Beschreibung"
 
 #: templates/snippets/case_card.html:36 templates/snippets/case_card.html:46
 #: templates/snippets/contact_card.html:28
+#: templates/snippets/person_contact.html:29
 #: templates/snippets/student_contact.html:34
 msgid "Edit"
 msgstr "Bearbeiten"

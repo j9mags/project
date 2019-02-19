@@ -138,7 +138,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        form = RevokeMandateForm(request.POST, instance=context['master_contact'])
+        form = RuckRevokeMandateForm(request.POST, instance=self.account)
 
         if form.is_valid():
             form.save()
@@ -205,7 +205,7 @@ class PaymentDetails(UgvStudentMixin, TemplateView):
         payment_contact = self.account.payment_contact
 
         if payment_contact == master_contact or self.account.is_ugv_student:
-            context['rvk_form'] = RevokeMandateForm(instance=payment_contact)
+            context['rvk_form'] = RuckRevokeMandateForm(instance=self.account)
 
         if self.request.POST:
             form = PaymentForm(self.request.POST, instance=self.account)

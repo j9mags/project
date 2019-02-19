@@ -7,7 +7,11 @@
         {% csrf_token %}
 
         <div class="mdl-dialog__content">
-            {% include 'snippets/input-check.html' with field=form.cancel_bank_account %}
+            {% if account.is_person_account %}
+                {% include 'snippets/input-check.html' with field=form.cancel_bank_account_pc %}
+            {% else %}
+                {% include 'snippets/input-check.html' with field=form.cancel_bank_account %}
+            {% endif %}
         </div>
         <div class="mdl-dialog__actions">
             <input type="submit" value="{% trans 'Confirm' %}"

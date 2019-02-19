@@ -493,6 +493,8 @@ class Account(models.Model, PerishableTokenMixin):
                                               blank=True, null=True)
     cspassword_token_pc = models.CharField(db_column='CSPasswordToken__pc', max_length=100,
                                            verbose_name='CS Password Token', blank=True, null=True)
+    cancel_bank_account_pc = models.BooleanField(db_column='CancelBankAccount__pc', verbose_name='Cancel Bank Account',
+                                                 default=models.DEFAULTED_ON_CREATE)
 
     initial_review_completed_auto = models.BooleanField(custom=True, verbose_name='Initial review completed',
                                                         sf_read_only=models.READ_ONLY)
@@ -532,10 +534,14 @@ class Account(models.Model, PerishableTokenMixin):
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         update_fields = update_fields or [x.attname for x in self._meta.fields if not x.primary_key]
 
+        to_skip = []
         if self.is_person_account:
-            to_skip = ['name', 'cspassword_token_pc', 'cspassword_time_pc']
-            for field_name in to_skip:
-                update_fields.remove(field_name)
+            to_skip.extend(['name'])
+        else:
+            to_skip.extend(['cspassword_token_pc', 'cspassword_time_pc', 'cancel_bank_account_pc'])
+
+        for field_name in to_skip:
+            update_fields.remove(field_name)
 
         return super(Account, self).save(force_insert=force_insert, force_update=force_update, using=using,
                                          update_fields=update_fields)
