@@ -490,10 +490,9 @@ class Account(models.Model, PerishableTokenMixin):
     password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
     cspassword_time_pc = models.DateTimeField(db_column='CSPasswordTime__pc', verbose_name='CS Password Time',
-                                              default=models.DEFAULTED_ON_CREATE, blank=True, null=True)
+                                              default=None, blank=True, null=True)
     cspassword_token_pc = models.CharField(db_column='CSPasswordToken__pc', max_length=100,
-                                           default=models.DEFAULTED_ON_CREATE, verbose_name='CS Password Token',
-                                           blank=True, null=True)
+                                           default='', verbose_name='CS Password Token', blank=True, null=True)
     cancel_bank_account_pc = models.BooleanField(db_column='CancelBankAccount__pc', verbose_name='Cancel Bank Account',
                                                  default=models.DEFAULTED_ON_CREATE)
 
