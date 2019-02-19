@@ -240,7 +240,7 @@ class CsvUpload(models.Model):
             )
             contracts.update({acc.immatrikulationsnummer: ctr})
 
-        Account.objects.bulk_create(accs)
+        Account.students.bulk_create(accs)
 
         ctc_to_insert = []
         ctr_to_insert = []

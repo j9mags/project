@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import connections
-from django.db.models.options import make_immutable_fields_list
 from django.utils import timezone
-from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from salesforce import models
