@@ -1,10 +1,13 @@
 from __future__ import unicode_literals
+
+from django.db import connections
+from django.db.models.options import make_immutable_fields_list
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
-from django.db import connections
 
 from . import managers
 
@@ -120,7 +123,6 @@ class Choices:
                ('Vereinigte Staaten', _('Vereinigte Staaten')), ('Vereinigtes Königreich', _('Vereinigtes Königreich')),
                ('Vietnam', _('Vietnam')), ('Weißrussland', _('Weißrussland')), ('Westsahara', _('Westsahara')),
                ('Zentralafrikanische Republik', _('Zentralafrikanische Republik')), ('Zypern', _('Zypern')),
-
                ('Grönland', _('Grönland')), ('Macua', _('Macua')), ('St. Helena', _('St. Helena')),
                ('Turks- und Caicosinseln', _('Turks- und Caicosinseln')), ('Gibralta', _('Gibralta')),
                ('Jersey', _('Jersey')), ('Guernsey', _('Guernsey')), ('Faröer', _('Faröer')),
