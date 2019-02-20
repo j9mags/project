@@ -13,8 +13,6 @@ class UniversityManager(DefaultManager):
 
 class StudentManager(DefaultManager):
 
-    BANNED_FIELDS = ['cspassword_token_pc', 'cspassword_time_pc', 'cancel_bank_account_pc']
-
     def get_queryset(self):
         return super(StudentManager, self).get_queryset().filter(
             Q(record_type__developer_name='Sofortzahler') | (

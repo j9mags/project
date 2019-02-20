@@ -13,14 +13,16 @@ from . import managers
 class PerishableTokenMixin:
     @property
     def cs_token(self):
-        return self.cspassword_token_pc if self.is_person_account else self.cspassword_token
+        # return self.cspassword_token_pc if self.is_person_account else self.cspassword_token
+        return self.cspassword_token
 
     def is_token_expired(self):
         token = self.cs_token
         if not token:
             return True
 
-        time = self.cspassword_time_pc if self.is_person_account else self.cspassword_time
+        # time = self.cspassword_time_pc if self.is_person_account else self.cspassword_time
+        time = self.cspassword_time
         if not time:
             return True
 
@@ -37,15 +39,15 @@ class PerishableTokenMixin:
         self.cspassword_time = None
         self.cspassword_token = None
 
-        if self.is_person_account:
-            self.cspassword_time_pc = None
-            self.cspassword_token_pc = None
+        # if self.is_person_account:
+        #     self.cspassword_time_pc = None
+        #     self.cspassword_token_pc = None
 
     @property
     def update_fields(self):
         rc = ['cspassword_token', 'cspassword_time', 'recordcreated']
-        if self.is_person_account:
-            rc.extend(['cspassword_token_pc', 'cspassword_time_pc'])
+        # if self.is_person_account:
+        #     rc.extend(['cspassword_token_pc', 'cspassword_time_pc'])
 
 
 class Choices:
@@ -489,10 +491,10 @@ class Account(models.Model, PerishableTokenMixin):
                                            blank=True, null=True)
     password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
-    cspassword_time_pc = models.DateTimeField(db_column='CSPasswordTime__pc', verbose_name='CS Password Time',
-                                              default=None, blank=True, null=True)
-    cspassword_token_pc = models.CharField(db_column='CSPasswordToken__pc', max_length=100,
-                                           default='', verbose_name='CS Password Token', blank=True, null=True)
+    # cspassword_time_pc = models.DateTimeField(db_column='CSPasswordTime__pc', verbose_name='CS Password Time',
+    #                                           default=None, blank=True, null=True)
+    # cspassword_token_pc = models.CharField(db_column='CSPasswordToken__pc', max_length=100,
+    #                                        default='', verbose_name='CS Password Token', blank=True, null=True)
     cancel_bank_account_pc = models.BooleanField(db_column='CancelBankAccount__pc', verbose_name='Cancel Bank Account',
                                                  default=models.DEFAULTED_ON_CREATE)
 
@@ -537,8 +539,8 @@ class Account(models.Model, PerishableTokenMixin):
         to_skip = []
         if self.is_person_account:
             to_skip.extend(['name'])
-        else:
-            to_skip.extend(['cspassword_token_pc', 'cspassword_time_pc', 'cancel_bank_account_pc'])
+        # else:
+        #     to_skip.extend(['cspassword_token_pc', 'cspassword_time_pc', 'cancel_bank_account_pc'])
 
         for field_name in to_skip:
             update_fields.remove(field_name)
