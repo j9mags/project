@@ -281,7 +281,7 @@ class Onboarding(UgvStudentMixin, View):
         context = self.get_context_data(**kwargs)
         account = context.get('sf_account')
 
-        if account.review_completed:
+        if account.student_approved:
             return redirect('integration:dashboard')
 
         return render(request, self.template, context)
