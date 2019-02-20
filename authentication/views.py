@@ -46,7 +46,7 @@ def get_token_or_raise(tk):
         rc = Account.ugv_students.filter(cspassword_token=tk)
         pt = rc and rc[0]
     if not pt:
-        rc = Account.repayers.filter(csspassword_token=tk)
+        rc = Account.repayers.filter(cspassword_token=tk)
         pt = rc and rc[0]
     if not pt:
         rc = Contact.university_staff.filter(cspassword_token=tk)
