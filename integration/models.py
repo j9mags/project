@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
+
+from django.db import connections
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
-from django.db import connections
 
 from . import managers
 
@@ -12,14 +13,16 @@ from . import managers
 class PerishableTokenMixin:
     @property
     def cs_token(self):
-        return self.cspassword_token_pc if self.is_person_account else self.cspassword_token
+        # return self.cspassword_token_pc if self.is_person_account else self.cspassword_token
+        return self.cspassword_token
 
     def is_token_expired(self):
         token = self.cs_token
         if not token:
             return True
 
-        time = self.cspassword_time_pc if self.is_person_account else self.cspassword_time
+        # time = self.cspassword_time_pc if self.is_person_account else self.cspassword_time
+        time = self.cspassword_time
         if not time:
             return True
 
@@ -36,15 +39,15 @@ class PerishableTokenMixin:
         self.cspassword_time = None
         self.cspassword_token = None
 
-        if self.is_person_account:
-            self.cspassword_time_pc = None
-            self.cspassword_token_pc = None
+        # if self.is_person_account:
+        #     self.cspassword_time_pc = None
+        #     self.cspassword_token_pc = None
 
     @property
     def update_fields(self):
         rc = ['cspassword_token', 'cspassword_time', 'recordcreated']
-        if self.is_person_account:
-            rc.extend(['cspassword_token_pc', 'cspassword_time_pc'])
+        # if self.is_person_account:
+        #     rc.extend(['cspassword_token_pc', 'cspassword_time_pc'])
 
 
 class Choices:
@@ -120,7 +123,6 @@ class Choices:
                ('Vereinigte Staaten', _('Vereinigte Staaten')), ('Vereinigtes Königreich', _('Vereinigtes Königreich')),
                ('Vietnam', _('Vietnam')), ('Weißrussland', _('Weißrussland')), ('Westsahara', _('Westsahara')),
                ('Zentralafrikanische Republik', _('Zentralafrikanische Republik')), ('Zypern', _('Zypern')),
-
                ('Grönland', _('Grönland')), ('Macua', _('Macua')), ('St. Helena', _('St. Helena')),
                ('Turks- und Caicosinseln', _('Turks- und Caicosinseln')), ('Gibralta', _('Gibralta')),
                ('Jersey', _('Jersey')), ('Guernsey', _('Guernsey')), ('Faröer', _('Faröer')),
@@ -489,10 +491,12 @@ class Account(models.Model, PerishableTokenMixin):
                                            blank=True, null=True)
     password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
-    cspassword_time_pc = models.DateTimeField(db_column='CSPasswordTime__pc', verbose_name='CS Password Time',
-                                              blank=True, null=True)
-    cspassword_token_pc = models.CharField(db_column='CSPasswordToken__pc', max_length=100,
-                                           verbose_name='CS Password Token', blank=True, null=True)
+    # cspassword_time_pc = models.DateTimeField(db_column='CSPasswordTime__pc', verbose_name='CS Password Time',
+    #                                           default=None, blank=True, null=True)
+    # cspassword_token_pc = models.CharField(db_column='CSPasswordToken__pc', max_length=100,
+    #                                        default='', verbose_name='CS Password Token', blank=True, null=True)
+    cancel_bank_account_pc = models.BooleanField(db_column='CancelBankAccount__pc', verbose_name='Cancel Bank Account',
+                                                 default=models.DEFAULTED_ON_CREATE)
 
     initial_review_completed_auto = models.BooleanField(custom=True, verbose_name='Initial review completed',
                                                         sf_read_only=models.READ_ONLY)
@@ -531,8 +535,16 @@ class Account(models.Model, PerishableTokenMixin):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         update_fields = update_fields or [x.attname for x in self._meta.fields if not x.primary_key]
-        if self.is_person_account and ('name' in update_fields):
-            update_fields.remove('name')
+
+        to_skip = []
+        if self.is_person_account:
+            to_skip.extend(['name'])
+        else:
+            to_skip.extend(['cancel_bank_account_pc'])
+
+        for field_name in to_skip:
+            update_fields.remove(field_name)
+
         return super(Account, self).save(force_insert=force_insert, force_update=force_update, using=using,
                                          update_fields=update_fields)
 
@@ -750,6 +762,10 @@ class Contact(models.Model, PerishableTokenMixin):
         return '{self.mailing_street}<br>{self.mailing_city}, {self.mailing_postal_code}<br>{self.mailing_country}'.format(
             self=self
         )
+
+    @property
+    def is_person_account(self):
+        return False
 
 
 class CustomerBankAccount(models.Model):

@@ -12,16 +12,16 @@
       <span class="mdl-typography--title">{% trans 'Address' %}</span>
     </div>
     <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.person_mailing_street %}
+      {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.shipping_street %}
     </div>
     <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Postal code') value=account.person_mailing_postal_code %}
+      {% include 'snippets/field-text.html' with label=_('Postal code') value=account.shipping_postal_code %}
     </div>
     <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('City') value=account.person_mailing_city %}
+      {% include 'snippets/field-text.html' with label=_('City') value=account.shipping_city %}
     </div>
     <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Country') value=account.person_mailing_country %}
+      {% include 'snippets/field-text.html' with label=_('Country') value=account.shipping_country %}
     </div>
   </div>
 

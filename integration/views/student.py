@@ -131,7 +131,7 @@ class Dashboard(StudentMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        form = RevokeMandateForm(request.POST, instance=context['master_contact'])
+        form = SofortRevokeMandateForm(request.POST, instance=context['master_contact'])
 
         if form.is_valid():
             form.save()
@@ -197,7 +197,7 @@ class PaymentDetails(StudentMixin, TemplateView):
         payment_contact = self.account.payment_contact
 
         if master_contact == payment_contact:
-            context['rvk_form'] = RevokeMandateForm(instance=payment_contact)
+            context['rvk_form'] = SofortRevokeMandateForm(instance=payment_contact)
 
         if self.request.POST:
             form = PaymentForm(self.request.POST, instance=self.account)

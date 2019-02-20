@@ -30,7 +30,7 @@
                 {% include 'snippets/input.html' with label=_('Phone') field=form.phone type='phone' %}
             </div>
             <div class="mdl-cell--8-col">
-                {% include 'snippets/address.html' with label=_('Address') street=form.person_mailing_street zip=form.person_mailing_postal_code city=form.person_mailing_city country=form.person_mailing_country %}
+                {% include 'snippets/address.html' with label=_('Address') street=form.shipping_street zip=form.shipping_postal_code city=form.shipping_city country=form.shipping_country %}
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">

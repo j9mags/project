@@ -275,6 +275,8 @@ class Onboarding(RepayerMixin, View):
             account.billing_postal_code = data.get('billing_zip')
             account.billing_country = data.get('billing_country')
 
+            account.initial_review_completed = True
+
             try:
                 account.save()
             except Exception as e:
@@ -311,7 +313,7 @@ class Dashboard(RepayerMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        form = RevokeMandateForm(request.POST, instance=context['master_contact'])
+        form = RuckRevokeMandateForm(request.POST, instance=self.account)
 
         if form.is_valid():
             form.save()
@@ -331,7 +333,7 @@ class PaymentDetails(RepayerMixin, TemplateView):
 
         payment_contact = context['master_contact']
 
-        context['rvk_form'] = RevokeMandateForm(instance=payment_contact)
+        context['rvk_form'] = RuckRevokeMandateForm(instance=self.account)
 
         if self.request.POST:
             form = PaymentForm(self.request.POST, instance=self.account)

@@ -148,12 +148,12 @@ class StudentContactForm(forms.ModelForm):
 class PersonContactForm(forms.ModelForm):
     class Meta:
         model = Account
-        fields = ['person_mobile_phone', 'phone', 'person_mailing_street',
-                  'person_mailing_city', 'person_mailing_postal_code', 'person_mailing_country']
+        fields = ['person_mobile_phone', 'phone', 'shipping_street',
+                  'shipping_city', 'shipping_postal_code', 'shipping_country']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['person_mailing_country'].widget.choices[0] = ("", "")
+        self.fields['shipping_country'].widget.choices[0] = ("", "")
 
 
 class PaymentForm(forms.ModelForm):
@@ -166,12 +166,21 @@ class PaymentForm(forms.ModelForm):
         self.fields['billing_country'].widget.choices[0] = ("", "")
 
 
-class RevokeMandateForm(forms.ModelForm):
+class SofortRevokeMandateForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ['cancel_bank_account']
         labels = {
             'cancel_bank_account': _('I do want to revoke this mandate.')
+        }
+
+
+class RuckRevokeMandateForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['cancel_bank_account_pc']
+        labels = {
+            'cancel_bank_account_pc': _('I do want to revoke this mandate.')
         }
 
 

@@ -130,7 +130,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         self.get_context_data(**kwargs)
-        if not self.account.review_completed:
+        if not self.account.student_approved:
             step = 'sepa'
             return redirect('integration:onboarding', step=step)
 
@@ -138,7 +138,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        form = RevokeMandateForm(request.POST, instance=context['master_contact'])
+        form = RuckRevokeMandateForm(request.POST, instance=self.account)
 
         if form.is_valid():
             form.save()
@@ -169,7 +169,7 @@ class ContactDetails(UgvStudentMixin, TemplateView):
         # else:
         #     contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
         #                       account=self.account)
-        
+
         if self.request.POST:
             form = PersonContactForm(self.request.POST, instance=self.account)
         else:
@@ -193,7 +193,7 @@ class ContactDetails(UgvStudentMixin, TemplateView):
 
 class PaymentDetails(UgvStudentMixin, TemplateView):
     model = Contact
-    template_name = 'students/payment.html'
+    template_name = 'repayer/payment.html'
 
     def get_context_data(self, **kwargs):
         context = super(PaymentDetails, self).get_context_data(**kwargs)
@@ -205,7 +205,7 @@ class PaymentDetails(UgvStudentMixin, TemplateView):
         payment_contact = self.account.payment_contact
 
         if payment_contact == master_contact or self.account.is_ugv_student:
-            context['rvk_form'] = RevokeMandateForm(instance=payment_contact)
+            context['rvk_form'] = RuckRevokeMandateForm(instance=self.account)
 
         if self.request.POST:
             form = PaymentForm(self.request.POST, instance=self.account)
@@ -281,7 +281,7 @@ class Onboarding(UgvStudentMixin, View):
         context = self.get_context_data(**kwargs)
         account = context.get('sf_account')
 
-        if account.review_completed:
+        if account.student_approved:
             return redirect('integration:dashboard')
 
         return render(request, self.template, context)

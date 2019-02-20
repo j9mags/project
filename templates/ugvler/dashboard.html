@@ -38,7 +38,23 @@
         <div class="mdl-cell mdl-cell--12-col">
           <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
         </div>
-        {% include 'snippets/student_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" %}
+          <div class="mdl-card mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+            <div class="mdl-card__supporting-text mdl-grid">
+            {% if not account.sepalastschriftmandat_erteilt_auto %}
+              <div class="mdl-cell mdl-cell--12-col">
+                <p class="mdl-typography--body-2">
+                  {% trans 'Authorize us to collect the monthly payments by direct debit from your account.' %}</p>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+                <a href="{{ master_contact.sepamandate_url_auto}}"
+                   class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised mdl-color-text--white">{% trans 'Grant mandate' %}</a>
+              </div>
+            {% else %}
+              {% include 'snippets/repayer_payment.html' %}
+            {% endif %}
+          </div>
+        </div>
+        {# include 'snippets/student_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" #}
       </div>
     </div>
 
