@@ -539,8 +539,8 @@ class Account(models.Model, PerishableTokenMixin):
         to_skip = []
         if self.is_person_account:
             to_skip.extend(['name'])
-        # else:
-        #     to_skip.extend(['cspassword_token_pc', 'cspassword_time_pc', 'cancel_bank_account_pc'])
+        else:
+            to_skip.extend(['cancel_bank_account_pc'])
 
         for field_name in to_skip:
             update_fields.remove(field_name)
