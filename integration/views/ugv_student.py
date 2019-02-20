@@ -130,7 +130,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         self.get_context_data(**kwargs)
-        if not self.account.review_completed:
+        if not self.account.student_approved:
             step = 'sepa'
             return redirect('integration:onboarding', step=step)
 

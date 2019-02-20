@@ -275,6 +275,8 @@ class Onboarding(RepayerMixin, View):
             account.billing_postal_code = data.get('billing_zip')
             account.billing_country = data.get('billing_country')
 
+            account.initial_review_completed = True
+
             try:
                 account.save()
             except Exception as e:
