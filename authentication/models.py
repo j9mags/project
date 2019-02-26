@@ -16,12 +16,15 @@ from datetime import timedelta
 from uuid import uuid4
 
 from authtools.models import AbstractEmailUser
-try:
-    from pandas.io import json
-except:
-    pass
 
 from integration.models import RecordType, Account, Contact, Contract, Lead, Application
+
+PANDAS_MISSING = False
+
+try:
+    from pandas.io import json
+except ModuleNotFoundError as e:
+    PANDAS_MISSING = True
 
 
 class User(AbstractEmailUser):
@@ -31,14 +34,14 @@ class User(AbstractEmailUser):
     @property
     def is_student(self):
         return Account.students.filter(Q(unimailadresse=self.email) | (
-                Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
-            person_email=self.email))).exists()
+            Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
+                person_email=self.email))).exists()
 
     @property
     def is_ugv_student(self):
         return Account.ugv_students.filter(Q(unimailadresse=self.email) | (
-                Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
-            person_email=self.email))).exists()
+            Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
+                person_email=self.email))).exists()
 
     @property
     def is_repayer(self):
@@ -55,12 +58,12 @@ class User(AbstractEmailUser):
             rc = Contact.university_staff.get(email=self.email)
         elif self.is_student:
             rc = Account.students.get(Q(unimailadresse=self.email) | (
-                    Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
-                person_email=self.email)))
+                Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
+                    person_email=self.email)))
         elif self.is_ugv_student:
             rc = Account.ugv_students.get(Q(unimailadresse=self.email) | (
-                    Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
-                person_email=self.email)))
+                Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
+                    person_email=self.email)))
         elif self.is_repayer:
             rc = Account.repayers.get(person_email=self.email)
         return rc
@@ -109,7 +112,7 @@ class CsvUpload(models.Model):
         headers = {
             'ap': CsvUpload.expected_application_headers,
             'st': CsvUpload.expected_student_headers
-            }.get(upload_type, ['Wrong'])
+        }.get(upload_type, ['Wrong'])
         headers_checked = 0
 
         for header in data.keys():
@@ -237,7 +240,7 @@ class CsvUpload(models.Model):
             )
             contracts.update({acc.immatrikulationsnummer: ctr})
 
-        Account.objects.bulk_create(accs)
+        Account.students.bulk_create(accs, 50)
 
         ctc_to_insert = []
         ctr_to_insert = []
@@ -280,7 +283,7 @@ class CsvUpload(models.Model):
             raise exceptions.ObjectDoesNotExist()
         languages = {'Deutsch': 'German', 'Englisch': 'English'}
         sex = {'weiblich': 'Female', 'männlich': 'Male', 'geschlechtsneutral': 'Third gender'}
-        boolean_answer = {'Ja': True, 'Nein': False}
+        boolean_answer = {'Ja': True, 'Yes': True}
 
         university = self.user.srecord.account
         courses = {}
@@ -322,7 +325,8 @@ class CsvUpload(models.Model):
             lead.postal_country = row.get('Aktuelles Land')
             lead.kommunicationssprache = languages.get(row.get('Kommunikationssprache'))
             lead.phone = row.get('Handynummer')
-            lead.email = row.get('private E-Mail-Adresse').lower() if row.get('private E-Mail-Adresse') is not None else None
+            lead.email = row.get('private E-Mail-Adresse').lower() \
+                if row.get('private E-Mail-Adresse') is not None else None
             lead.university_status = row.get('Hochschulstatus')
             lead.status = 'Applicant'
 
@@ -355,9 +359,12 @@ class CsvUpload(models.Model):
             pattern = re.compile("|".join(rep.keys()))
             app.start_of_study_trig = pattern.sub(lambda m: rep[re.escape(m.group(0))], row.get('Studienbeginn'))
             start_of_study = dateutil.parser.parse('1st ' + app.start_of_study_trig).date()
-            candidates = [c for c in contracts.get(app.studiengang_ref) if c.application_form_display_name == row.get('Vertrag') and c.valid_from < start_of_study]
+            candidates = [
+                c for c in contracts.get(app.studiengang_ref)
+                if c.application_form_display_name == row.get('Vertrag') and c.valid_from < start_of_study
+            ]
             if candidates:
-                app.contract_ref = candidates[len(candidates)-1]
+                app.contract_ref = candidates[len(candidates) - 1]
             if app.studiengang_ref is not None and app.contract_ref is None:
                 raise Exception(_('No valid contract found. Please check the spelling.'))
 
@@ -393,7 +400,8 @@ class CsvUpload(models.Model):
     #         course.university = university
     #         course.name = row.get('Name des Studiengangs')
     #         course.start_of_studies = row.get(
-    #             'Startdatum des Studiengangs')  # datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
+    #             'Startdatum des Studiengangs'
+    #         )  # datetime.strptime(row.get('Startdatum des Studiengangs'), '%d.%m.%Y')
     #         course.standard_period_of_study = row.get('Regelstudienzeit (in Semestern)')
     #
     #         courses.append(course)

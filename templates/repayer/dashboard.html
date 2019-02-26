@@ -67,7 +67,7 @@
           <div class="mdl-cell mdl-cell--12-col">
             <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
           </div>
-          <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+          <div class="mdl-card mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
             <div class="mdl-card__supporting-text mdl-grid">
                 {% if not account.sepalastschriftmandat_erteilt_auto %}
                   <div class="mdl-cell mdl-cell--12-col">
@@ -79,30 +79,7 @@
                        class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised mdl-color-text--white">{% trans 'Grant mandate' %}</a>
                   </div>
                 {% else %}
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Bank Name') value=master_contact.bank_account.bank_name %}
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Country Code') value=master_contact.bank_account.country_code %}
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Account Number(last 2 digits)') value=master_contact.bank_account.account_number %}
-                  </div>
-                  <div class="mdl-cell mdl-cell--12-col">
-                    <span class="mdl-typography--title">{% trans 'Billing address' %}</span>
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.billing_street %}
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Postal code') value=account.billing_postal_code %}
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('City') value=account.billing_city %}
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Country') value=account.billing_country %}
-                  </div>
+                  {% include 'snippets/repayer_payment.html' %}
                 {% endif %}
             </div>
           </div>

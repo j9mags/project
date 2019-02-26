@@ -3,7 +3,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{{ contact.name|default:_('New contact') }}{% endblock %}
+{% block title %}{{ account.name }}{% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
@@ -23,19 +23,14 @@
     <form method="post">
         {% csrf_token %}
         <div class="mdl-card__supporting-text mdl-grid">
-            {% if not account.is_ugv %}
-                <div class="mdl-cell">
-                    {% include 'snippets/input.html' with field=form.email type='email'%}
-                </div>
-            {% endif %}
             <div class="mdl-cell">
-                {% include 'snippets/input.html' with field=form.mobile_phone type='phone' %}
+                {% include 'snippets/input.html' with field=form.person_mobile_phone type='phone' %}
             </div>
             <div class="mdl-cell">
                 {% include 'snippets/input.html' with label=_('Phone') field=form.phone type='phone' %}
             </div>
             <div class="mdl-cell--8-col">
-                {% include 'snippets/address.html' with label=_('Address') street=form.mailing_street zip=form.mailing_postal_code city=form.mailing_city country=form.mailing_country %}
+                {% include 'snippets/address.html' with label=_('Address') street=form.shipping_street zip=form.shipping_postal_code city=form.shipping_city country=form.shipping_country %}
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">

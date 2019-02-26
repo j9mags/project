@@ -130,7 +130,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         self.get_context_data(**kwargs)
-        if not self.account.review_completed:
+        if not self.account.student_approved:
             step = 'sepa'
             return redirect('integration:onboarding', step=step)
 
@@ -138,7 +138,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        form = StudentRevokeMandateForm(request.POST, instance=context['master_contact'])
+        form = RuckRevokeMandateForm(request.POST, instance=self.account)
 
         if form.is_valid():
             form.save()
@@ -149,7 +149,7 @@ class Dashboard(UgvStudentMixin, TemplateView):
 
 class ContactDetails(UgvStudentMixin, TemplateView):
     model = Contact
-    template_name = 'students/contact.html'
+    template_name = 'ugvler/contact.html'
 
     def get_context_data(self, **kwargs):
         pk = kwargs.get('pk')
@@ -160,20 +160,21 @@ class ContactDetails(UgvStudentMixin, TemplateView):
 
         self.account = self.get_queryset()
 
-        if pk != 'new':
-            contact = self.account.contact_set.filter(pk=pk)
-            if not contact.exists():
-                raise ObjectDoesNotExist()
+        # if pk != 'new':
+        #     contact = self.account.contact_set.filter(pk=pk)
+        #     if not contact.exists():
+        #         raise ObjectDoesNotExist()
 
-            contact = contact.first()
-        else:
-            contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
-                              account=self.account)
+        #     contact = contact.first()
+        # else:
+        #     contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
+        #                       account=self.account)
+
         if self.request.POST:
-            form = StudentContactForm(self.request.POST, instance=contact)
+            form = PersonContactForm(self.request.POST, instance=self.account)
         else:
-            form = StudentContactForm(instance=contact)
-        context.update(contact=contact, form=form)
+            form = PersonContactForm(instance=self.account)
+        context.update(form=form, account=self.account)
 
         return context
 
@@ -192,7 +193,7 @@ class ContactDetails(UgvStudentMixin, TemplateView):
 
 class PaymentDetails(UgvStudentMixin, TemplateView):
     model = Contact
-    template_name = 'students/payment.html'
+    template_name = 'repayer/payment.html'
 
     def get_context_data(self, **kwargs):
         context = super(PaymentDetails, self).get_context_data(**kwargs)
@@ -204,12 +205,12 @@ class PaymentDetails(UgvStudentMixin, TemplateView):
         payment_contact = self.account.payment_contact
 
         if payment_contact == master_contact or self.account.is_ugv_student:
-            context['rvk_form'] = StudentRevokeMandateForm(instance=payment_contact)
+            context['rvk_form'] = RuckRevokeMandateForm(instance=self.account)
 
         if self.request.POST:
-            form = StudentPaymentForm(self.request.POST, instance=self.account)
+            form = PaymentForm(self.request.POST, instance=self.account)
         else:
-            form = StudentPaymentForm(instance=self.account)
+            form = PaymentForm(instance=self.account)
         context.update(account=self.account, form=form)
 
         if payment_contact:
@@ -280,7 +281,7 @@ class Onboarding(UgvStudentMixin, View):
         context = self.get_context_data(**kwargs)
         account = context.get('sf_account')
 
-        if account.review_completed:
+        if account.student_approved:
             return redirect('integration:dashboard')
 
         return render(request, self.template, context)
@@ -395,4 +396,3 @@ class UploadFile(UgvStudentMixin, View):
             message=_('Upload failed')
         )
         return render(request, self.template_name, context)
-

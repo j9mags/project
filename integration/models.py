@@ -1,21 +1,32 @@
 from __future__ import unicode_literals
+
+from django.db import connections
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
-from django.db import connections
 
 from . import managers
 
 
 class PerishableTokenMixin:
+    @property
+    def cs_token(self):
+        # return self.cspassword_token_pc if self.is_person_account else self.cspassword_token
+        return self.cspassword_token
+
     def is_token_expired(self):
-        if not self.cspassword_token:
+        token = self.cs_token
+        if not token:
             return True
-        if not self.cspassword_time:
+
+        # time = self.cspassword_time_pc if self.is_person_account else self.cspassword_time
+        time = self.cspassword_time
+        if not time:
             return True
-        if self.cspassword_time < timezone.now():
+
+        if time < timezone.now():
             return True
 
         return False
@@ -23,6 +34,20 @@ class PerishableTokenMixin:
     def request_new_password(self):
         self.password_change_requested = True
         self.save()
+
+    def clear_token(self):
+        self.cspassword_time = None
+        self.cspassword_token = None
+
+        # if self.is_person_account:
+        #     self.cspassword_time_pc = None
+        #     self.cspassword_token_pc = None
+
+    @property
+    def update_fields(self):
+        rc = ['cspassword_token', 'cspassword_time', 'recordcreated']
+        # if self.is_person_account:
+        #     rc.extend(['cspassword_token_pc', 'cspassword_time_pc'])
 
 
 class Choices:
@@ -97,7 +122,12 @@ class Choices:
                ('Venezuela', _('Venezuela')), ('Vereinigte Arabische Emirate', _('Vereinigte Arabische Emirate')),
                ('Vereinigte Staaten', _('Vereinigte Staaten')), ('Vereinigtes Königreich', _('Vereinigtes Königreich')),
                ('Vietnam', _('Vietnam')), ('Weißrussland', _('Weißrussland')), ('Westsahara', _('Westsahara')),
-               ('Zentralafrikanische Republik', _('Zentralafrikanische Republik')), ('Zypern', _('Zypern'))]
+               ('Zentralafrikanische Republik', _('Zentralafrikanische Republik')), ('Zypern', _('Zypern')),
+               ('Grönland', _('Grönland')), ('Macua', _('Macua')), ('St. Helena', _('St. Helena')),
+               ('Turks- und Caicosinseln', _('Turks- und Caicosinseln')), ('Gibralta', _('Gibralta')),
+               ('Jersey', _('Jersey')), ('Guernsey', _('Guernsey')), ('Faröer', _('Faröer')),
+               ('Hongkong', _('Hongkong')), ('Bermuda', _('Bermuda')), ('(Französisch-) Guayana', _('(Französisch-) Guayana')),
+               ('Britische Jungferninseln', _('Britische Jungferninseln')), ('Gebiet Taiwan', _('Gebiet Taiwan'))]
     Gender = [('weiblich', _('female')), ('männlich', _('male')), ('geschlechtsneutral', _('non-binary'))]
     Biological_Sex = [('Female', _('female')), ('Male', _('male')), ('Third gender', _('non-binary'))]
     Nationality = [('afghanisch', _('afghanisch')), ('ägyptisch', _('ägyptisch')), ('albanisch', _('albanisch')),
@@ -200,7 +230,14 @@ class Choices:
                    ('amerikanisch', _('amerikanisch')), ('britisch', _('britisch')),
                    ('vietnamesisch', _('vietnamesisch')),
                    ('weißrussisch', _('weißrussisch')), ('zentralafrikanisch', _('zentralafrikanisch')),
-                   ('zyprisch', _('zyprisch'))]
+                   ('zyprisch', _('zyprisch')),
+                   ('grönländisch', _('grönländisch')), ('macuanisch', _('macuanisch')),
+                   ('von St. Helena', _('von St. Helena')),
+                   ('von Turks- und Caicosinseln', _('von Turks- und Caicosinseln')), ('gibraltisch', _('gibraltisch')),
+                   ('von Jersey', _('von Jersey')), ('guernseyer', _('guernseyer')), ('faröisch', _('faröisch')),
+                   ('honkonger', _('honkonger')), ('bermudisch', _('bermudisch')),
+                   ('von den britischen Jungferninseln', _('von den britischen Jungferninseln')),
+                   ('taiwanesisch', _('taiwanesisch')), ('(französisch-) guayanisch', _('(französisch-) guayanisch'))]
     Language = [('German', _('Deutsch')), ('English', _('English'))]
     LanguageCode = [('German', 'DE'), ('English', 'EN')]
     Salutation = [('Mr.', _('Mr.')), ('Ms.', _('Ms.')), ('Mrs.', _('Mrs.')), ('Dr.', _('Dr.')), ('Prof.', _('Prof.'))]
@@ -225,10 +262,11 @@ class Choices:
     DiscountType = [('Discount Tuition Fee', _('Discount Tuition Fee')),
                     ('Discount Semester Fee', _('Discount Semester Fee'))]
     LeadStatus = [('Prospect', _('Prospect')), ('Applicant', _('Applicant')), ('Nurturing', _('Nurturing')),
-                  ('Pending', _('Pending')), ('Qualified', _('Qualifiziert')), ('Unqualified', _('Unqualifiziert'))]
+                  ('Pending', _('Pending')), ('Qualified', _('Qualifiziert')), ('Unqualified', _('Unqualifiziert')),
+                  ('ISA Application Withdrawal', _('ISA Application Withdrawal'))]
     UGVStatus = [('Not applied yet', _('Not applied yet')), ('Confirmed applicant', _('Confirmed applicant')),
                  ('Rejected applicant', _('Rejected applicant')), ('Accepted applicant', _('Accepted applicant')),
-                 ('Already student', _('Already student'))]
+                 ('Already student', _('Already student')), ('Application Withdrawal', _('Application Withdrawal'))]
     CustomerType = [('CS', 'CS'), ('CeG', 'CeG'), ('CS+CeG', 'CS+CeG')]
     ContractPeriod = [('Semester', _('Semester')), ('All Upfront', _('All Upfront')),
                       ('One year Upfront', _('One year Upfront'))]
@@ -453,6 +491,13 @@ class Account(models.Model, PerishableTokenMixin):
                                            blank=True, null=True)
     password_change_requested = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
+    # cspassword_time_pc = models.DateTimeField(db_column='CSPasswordTime__pc', verbose_name='CS Password Time',
+    #                                           default=None, blank=True, null=True)
+    # cspassword_token_pc = models.CharField(db_column='CSPasswordToken__pc', max_length=100,
+    #                                        default='', verbose_name='CS Password Token', blank=True, null=True)
+    cancel_bank_account_pc = models.BooleanField(db_column='CancelBankAccount__pc', verbose_name='Cancel Bank Account',
+                                                 default=models.DEFAULTED_ON_CREATE)
+
     initial_review_completed_auto = models.BooleanField(custom=True, verbose_name='Initial review completed',
                                                         sf_read_only=models.READ_ONLY)
     semester_fee_new = models.DecimalField(custom=True, max_digits=18, decimal_places=2, verbose_name=_('Semester Fee'),
@@ -490,8 +535,16 @@ class Account(models.Model, PerishableTokenMixin):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         update_fields = update_fields or [x.attname for x in self._meta.fields if not x.primary_key]
-        if self.is_person_account and ('name' in update_fields):
-            update_fields.remove('name')
+
+        to_skip = []
+        if self.is_person_account:
+            to_skip.extend(['name'])
+        else:
+            to_skip.extend(['cancel_bank_account_pc'])
+
+        for field_name in to_skip:
+            update_fields.remove(field_name)
+
         return super(Account, self).save(force_insert=force_insert, force_update=force_update, using=using,
                                          update_fields=update_fields)
 
@@ -500,8 +553,9 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def is_student(self):
-        return self.record_type.developer_name == 'Sofortzahler' or \
-               (self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto)
+        return self.record_type.developer_name == 'Sofortzahler' or (
+            self.record_type.developer_name == 'UGVStudents' and self.has_sofortzahler_contract_auto
+        )
 
     @property
     def is_ugv_student(self):
@@ -706,7 +760,12 @@ class Contact(models.Model, PerishableTokenMixin):
     @property
     def address_html(self):
         return '{self.mailing_street}<br>{self.mailing_city}, {self.mailing_postal_code}<br>{self.mailing_country}'.format(
-            self=self)
+            self=self
+        )
+
+    @property
+    def is_person_account(self):
+        return False
 
 
 class CustomerBankAccount(models.Model):

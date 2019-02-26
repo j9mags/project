@@ -1,6 +1,7 @@
 from django.db.models import Q
 from salesforce.backend.manager import SalesforceManager
 
+
 DefaultManager = SalesforceManager
 
 
@@ -15,14 +16,14 @@ class StudentManager(DefaultManager):
     def get_queryset(self):
         return super(StudentManager, self).get_queryset().filter(
             Q(record_type__developer_name='Sofortzahler') | (
-                    Q(record_type__developer_name='UGVStudents') & Q(has_sofortzahler_contract_auto=True)))
+                Q(record_type__developer_name='UGVStudents') & Q(has_sofortzahler_contract_auto=True)))
 
 
 class UGVStudentManager(DefaultManager):
 
     def get_queryset(self):
-        return super(UGVStudentManager, self).get_queryset().filter(Q(record_type__developer_name='UGVStudents')
-                                                                 & Q(has_sofortzahler_contract_auto=False))
+        return super(UGVStudentManager, self).get_queryset().filter(
+            Q(record_type__developer_name='UGVStudents') & Q(has_sofortzahler_contract_auto=False))
 
 
 class RepayerManager(DefaultManager):

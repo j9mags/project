@@ -1,9 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 
-import pandas
-from numpy import nan
-from pandas.io import json
+try:
+    import pandas
+    from numpy import nan
+    from pandas.io import json
+except:
+    pass
+
 import logging
 
 from authentication.models import CsvUpload
@@ -141,7 +145,18 @@ class StudentContactForm(forms.ModelForm):
         self.fields['mailing_country'].widget.choices[0] = ("", "")
 
 
-class StudentPaymentForm(forms.ModelForm):
+class PersonContactForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['person_mobile_phone', 'phone', 'shipping_street',
+                  'shipping_city', 'shipping_postal_code', 'shipping_country']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['shipping_country'].widget.choices[0] = ("", "")
+
+
+class PaymentForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['billing_street', 'billing_city', 'billing_postal_code', 'billing_country']
@@ -151,12 +166,21 @@ class StudentPaymentForm(forms.ModelForm):
         self.fields['billing_country'].widget.choices[0] = ("", "")
 
 
-class StudentRevokeMandateForm(forms.ModelForm):
+class SofortRevokeMandateForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ['cancel_bank_account']
         labels = {
             'cancel_bank_account': _('I do want to revoke this mandate.')
+        }
+
+
+class RuckRevokeMandateForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['cancel_bank_account_pc']
+        labels = {
+            'cancel_bank_account_pc': _('I do want to revoke this mandate.')
         }
 
 
