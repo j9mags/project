@@ -368,6 +368,9 @@ class Onboarding(UgvStudentMixin, View):
 
             return redirect('integration:onboarding', step='sepa')
         elif step == 'sepa':
+            self.account.student_approved = True
+            self.account.save()
+
             return redirect(self.account.get_student_contact().sepamandate_url_auto)
 
 

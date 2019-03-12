@@ -26,7 +26,6 @@
         {% include 'snippets/field-text.html' with label=_('Email') value=account.unimailadresse %}
       {% endif %}
     </div>
-    {% if not account.is_ugv %}
     <div class="mdl-cell">
       {% if form and form_class != 'UploadForm' %}
         {% include 'snippets/select.html' with field=form.status %}
@@ -34,7 +33,6 @@
         {% include 'snippets/field-text.html' with label=_('Status') value=account.status %}
       {% endif %}
     </div>
-    {% endif %}
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.course.name %}
     </div>
