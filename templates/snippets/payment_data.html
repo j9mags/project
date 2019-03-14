@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<div class="mdl-cell mdl-cell--12-col">
+  <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
+</div>
+  <div class="mdl-card mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+    <div class="mdl-card__supporting-text mdl-grid">
+    {% if account.sepalastschriftmandat_erteilt_auto %}
+      {% if account.cancel_bank_account_pc %}
+        <div class="mdl-cell mdl-cell--12-col">
+          <p class="mdl-typography--body-2">
+            {% trans 'The change of payment data is being processed. Once the processing has been confirmed by our payment service provider, a new mandate can be granted here. This can take about 15 minutes and will be communicated by E-mail.' %}</p>
+        </div>
+      {% else %}
+        {% include 'snippets/repayer_payment.html' %}
+      {% endif %}
+    {% else %}
+      <div class="mdl-cell mdl-cell--12-col">
+        <p class="mdl-typography--body-2">
+          {% trans 'Authorize us to collect the monthly payments by direct debit from your account.' %}</p>
+      </div>
+      <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center">
+        <a href="{{ master_contact.sepamandate_url_auto}}"
+          class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised mdl-color-text--white">{% trans 'Grant mandate' %}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>

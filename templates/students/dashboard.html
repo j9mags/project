@@ -57,7 +57,14 @@
           </div>
         </div>
         {% elif payment_contact == master_contact %}
-          {% include 'snippets/student_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" %}
+          {% if payment_contact.cancel_bank_account %}
+            <div class="mdl-cell mdl-cell--12-col">
+              <p class="mdl-typography--body-2">
+                {% trans 'The change of payment data is being processed. Once the processing has been confirmed by our payment service provider, a new mandate can be granted here. This can take about 15 minutes and will be communicated by E-mail.' %}</p>
+            </div>
+          {% else %}
+            {% include 'snippets/student_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" %}
+          {% endif %}
         {% else %}
           <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
             <h5 class="mdl-typography--headline">{% trans 'Someone else is paying for you' %}</h5>
