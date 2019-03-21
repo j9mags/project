@@ -1,0 +1,37 @@
+{% load i18n %}
+
+<div class="mdl-cell mdl-cell--12-col">
+  <h5 class="mdl-typography--headline">{% trans 'Contact data' %}</h5>
+</div>
+<div class="mdl-card mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
+  <div class="mdl-card__supporting-text mdl-grid">
+  <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Mobile phone') value=account.person_mobile_phone %}
+    </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Phone') value=account.phone %}
+    </div>    
+    <div class="mdl-cell mdl-cell--12-col">
+      <span class="mdl-typography--title">{% trans 'Address' %}</span>
+    </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.shipping_street %}
+    </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Postal code') value=account.shipping_postal_code %}
+    </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('City') value=account.shipping_city %}
+    </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Country') value=account.shipping_country %}
+    </div>
+  </div>
+
+  <div class="mdl-card__menu">
+    <a href="{% url 'integration:contact' pk=account.pk %}" title="{% trans 'Edit' %}" 
+       class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+      <i class="material-icons">edit</i>
+    </a>
+  </div>
+</div>

@@ -36,34 +36,15 @@
                     {% include 'snippets/field-text.html' with label=_('Name') value=account.name %}
                   </div>
                   <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Phone') value=account.phone %}
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Mobile Phone') value=account.person_mobile_phone %}
-                  </div>
-                  <div class="mdl-cell">
                     {% include 'snippets/field-text.html' with label=_('Email') value=account.person_email %}
                   </div>
                   <div class="mdl-cell">
                     {% include 'snippets/field-text.html' with label=_('Language') value=account.kommunikationssprache %}
                   </div>
-                  <div class="mdl-cell mdl-cell--12-col">
-                    <span class="mdl-typography--title">{% trans 'Contact Address' %}</span>
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Street and House number') value=account.shipping_street %}
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Postal code') value=account.shipping_postal_code %}
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('City') value=account.shipping_city %}
-                  </div>
-                  <div class="mdl-cell">
-                    {% include 'snippets/field-text.html' with label=_('Country') value=account.shipping_country %}
-                  </div>
               </div>
           </div>
+          {% include 'snippets/repayer_contact.html' %}
+
           {% include 'snippets/payment_data.html' %}
         </div>
     </div>
