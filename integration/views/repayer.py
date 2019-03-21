@@ -240,7 +240,6 @@ class Onboarding(RepayerMixin, View):
             try:
                 form.save()
             except Exception as e:
-                print(e)
                 form.add_error(None, str(e))
                 return render(request, self.template, context)
             lang = languages.get(form.cleaned_data.get('kommunikationssprache'), 'en')
@@ -275,17 +274,23 @@ class Onboarding(RepayerMixin, View):
             account.billing_postal_code = data.get('billing_zip')
             account.billing_country = data.get('billing_country')
 
-            account.initial_review_completed = True
-
             try:
                 account.save()
             except Exception as e:
-                print(e)
                 form.add_error(None, str(e))
                 return render(request, self.template, context)
 
             return redirect('integration:onboarding', step='sepa')
         elif step == 'sepa':
+            account = context.get('sf_account')
+            account.initial_review_completed = True
+
+            try:
+                account.save()
+            except Exception as e:
+                form.add_error(None, str(e))
+                return render(request, self.template, context)
+
             return redirect(self.account.get_repayer_contact().sepamandate_url_auto)
 
 
@@ -321,6 +326,48 @@ class Dashboard(RepayerMixin, TemplateView):
             context.update(display_dlg=True)
         return render(request, self.template_name, context=context)
 
+class ContactDetails(RepayerMixin, TemplateView):
+    model = Contact
+    template_name = 'repayer/contact.html'
+
+    def get_context_data(self, **kwargs):
+        pk = kwargs.get('pk')
+        if not pk:
+            raise SuspiciousOperation()
+        context = super(ContactDetails, self).get_context_data(**kwargs)
+        context['ignore_drawer'] = True
+
+        self.account = self.get_queryset()
+
+        # if pk != 'new':
+        #     contact = self.account.contact_set.filter(pk=pk)
+        #     if not contact.exists():
+        #         raise ObjectDoesNotExist()
+
+        #     contact = contact.first()
+        # else:
+        #     contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
+        #                       account=self.account)
+
+        if self.request.POST:
+            form = PersonContactForm(self.request.POST, instance=self.account)
+        else:
+            form = PersonContactForm(instance=self.account)
+        context.update(form=form, account=self.account)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        form = context.get('form')
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('integration:dashboard')
+            except Exception as e:
+                form.add_error(None, str(e))
+        return render(request, self.template_name, context)
 
 class PaymentDetails(RepayerMixin, TemplateView):
     model = Contact
