@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 16:10+0000\n"
+"POT-Creation-Date: 2019-03-22 16:02+0000\n"
 "PO-Revision-Date: 2018-09-17 12:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -173,6 +173,7 @@ msgstr "Persönliche E-Mail-Adresse"
 #: integration/forms.py:90 integration/forms.py:105 integration/forms.py:210
 #: integration/models.py:683 templates/snippets/contact_card.html:10
 #: templates/snippets/person_contact.html:6
+#: templates/snippets/repayer_contact.html:9
 #: templates/snippets/student_contact.html:11
 #: templates/staff/dashboard_students.html:37
 msgid "Mobile phone"
@@ -185,15 +186,17 @@ msgstr "Telefonnummer"
 #: integration/forms.py:93 integration/forms.py:108 integration/forms.py:113
 #: integration/forms.py:205 integration/models.py:416 integration/models.py:422
 #: integration/models.py:442 integration/models.py:687
-#: templates/repayer/dashboard.html:54
 #: templates/snippets/person_contact.html:15
+#: templates/snippets/repayer_contact.html:18
 #: templates/snippets/repayer_payment.html:16
 #: templates/snippets/student_contact.html:20
 #: templates/snippets/student_payment.html:18
 msgid "Street and House number"
 msgstr "Straße und Hausnummer"
 
-#: integration/forms.py:93 templates/snippets/person_contact.html:12
+#: integration/forms.py:93 templates/repayer/contact.html:33
+#: templates/snippets/person_contact.html:12
+#: templates/snippets/repayer_contact.html:15
 #: templates/snippets/student_account_create.html:50
 #: templates/snippets/student_contact.html:17
 #: templates/students/contact.html:38
@@ -204,8 +207,8 @@ msgstr "Adresse"
 #: integration/forms.py:94 integration/forms.py:109 integration/forms.py:114
 #: integration/forms.py:206 integration/models.py:417 integration/models.py:423
 #: integration/models.py:443 integration/models.py:688
-#: templates/repayer/dashboard.html:60
 #: templates/snippets/person_contact.html:21
+#: templates/snippets/repayer_contact.html:24
 #: templates/snippets/repayer_payment.html:22
 #: templates/snippets/student_contact.html:26
 #: templates/snippets/student_payment.html:24
@@ -213,8 +216,8 @@ msgid "City"
 msgstr "Stadt"
 
 #: integration/forms.py:95 integration/forms.py:110 integration/forms.py:115
-#: templates/repayer/dashboard.html:57
 #: templates/snippets/person_contact.html:18
+#: templates/snippets/repayer_contact.html:21
 #: templates/snippets/repayer_payment.html:19
 #: templates/snippets/student_contact.html:23
 #: templates/snippets/student_payment.html:21
@@ -224,16 +227,15 @@ msgstr "PLZ"
 #: integration/forms.py:96 integration/forms.py:111 integration/forms.py:116
 #: integration/forms.py:208 integration/models.py:419 integration/models.py:425
 #: integration/models.py:446 integration/models.py:690
-#: templates/repayer/dashboard.html:63
 #: templates/snippets/person_contact.html:24
+#: templates/snippets/repayer_contact.html:27
 #: templates/snippets/repayer_payment.html:25
 #: templates/snippets/student_contact.html:29
 #: templates/snippets/student_payment.html:27
 msgid "Country"
 msgstr "Land"
 
-#: integration/forms.py:108 templates/repayer/dashboard.html:51
-#: templates/repayer/onboarding_data.html:20
+#: integration/forms.py:108 templates/repayer/onboarding_data.html:20
 msgid "Contact Address"
 msgstr "Kontaktadresse"
 
@@ -2279,7 +2281,7 @@ msgstr "Genehmigt"
 msgid "Not Approved"
 msgstr "Nicht Genehmigt"
 
-#: integration/models.py:277 templates/repayer/dashboard.html:86
+#: integration/models.py:277 templates/repayer/dashboard.html:67
 msgid "New"
 msgstr "Neu"
 
@@ -2829,7 +2831,7 @@ msgstr "Die Änderungen gelten für die ausgewählten Studierenden"
 #: templates/dialogs/bulk-actions.html:16
 #: templates/dialogs/revoke-mandate.html:17
 #: templates/dialogs/update-semester-fee.html:13
-#: templates/repayer/payment.html:33
+#: templates/repayer/contact.html:38 templates/repayer/payment.html:33
 #: templates/snippets/student_discounts.html:23
 #: templates/snippets/student_discounts.html:47
 #: templates/staff/upload_review.html:59 templates/students/contact.html:43
@@ -2933,6 +2935,23 @@ msgstr "Wähle ein neues Passwort"
 msgid "Set"
 msgstr "Bestätigen"
 
+#: templates/repayer/contact.html:30 templates/snippets/person_contact.html:9
+#: templates/snippets/repayer_contact.html:12
+#: templates/snippets/student_contact.html:14
+#: templates/staff/dashboard_ugvapplications.html:36
+#: templates/staff/dashboard_ugvers.html:37
+#: templates/staff/ugvapplication_review.html:42
+#: templates/students/contact.html:35 templates/ugvler/contact.html:30
+msgid "Phone"
+msgstr "Telefon"
+
+#: templates/repayer/contact.html:40 templates/repayer/payment.html:35
+#: templates/snippets/stepper.html:23 templates/staff/upload_review.html:63
+#: templates/students/contact.html:45 templates/students/payment.html:35
+#: templates/ugvler/contact.html:40
+msgid "Back"
+msgstr "Zurück"
+
 #: templates/repayer/dashboard.html:6 templates/students/dashboard.html:6
 #: templates/ugvler/dashboard.html:6
 msgid "My CHANCEN Account"
@@ -2960,20 +2979,7 @@ msgstr "Deine Daten"
 msgid "Requests and Repayment"
 msgstr "Anträge und Rückzahlung"
 
-#: templates/repayer/dashboard.html:39 templates/snippets/person_contact.html:9
-#: templates/snippets/student_contact.html:14
-#: templates/staff/dashboard_ugvapplications.html:36
-#: templates/staff/dashboard_ugvers.html:37
-#: templates/staff/ugvapplication_review.html:42
-#: templates/students/contact.html:35 templates/ugvler/contact.html:30
-msgid "Phone"
-msgstr "Telefon"
-
-#: templates/repayer/dashboard.html:42
-msgid "Mobile Phone"
-msgstr "Handynummer"
-
-#: templates/repayer/dashboard.html:45
+#: templates/repayer/dashboard.html:39
 #: templates/snippets/student_account.html:24
 #: templates/snippets/student_account.html:26
 #: templates/staff/dashboard_ugvapplications.html:35
@@ -2982,27 +2988,29 @@ msgstr "Handynummer"
 msgid "Email"
 msgstr "E-Mail"
 
-#: templates/repayer/dashboard.html:48
+#: templates/repayer/dashboard.html:42
 #: templates/snippets/student_account.html:77
 #: templates/staff/dashboard_students.html:39
 #: templates/staff/dashboard_ugvers.html:38
 msgid "Language"
 msgstr "Kommunikationssprache"
 
-#: templates/repayer/dashboard.html:76 templates/ugvler/dashboard.html:45
+#: templates/repayer/dashboard.html:57 templates/ugvler/dashboard.html:45
 msgid "No contracts found"
 msgstr "Keine Verträge gefunden"
 
-#: templates/repayer/dashboard.html:83
+#: templates/repayer/dashboard.html:64
 msgid "Open cases"
 msgstr "Offene Fälle"
 
-#: templates/repayer/dashboard.html:94
+#: templates/repayer/dashboard.html:75
 msgid "Closed cases"
 msgstr "Abgeschlossene Fälle"
 
 #: templates/repayer/onboarding_data.html:5
-#: templates/snippets/contact_card.html:8 templates/students/dashboard.html:30
+#: templates/snippets/contact_card.html:8
+#: templates/snippets/repayer_contact.html:4
+#: templates/students/dashboard.html:30
 #: templates/students/onboarding_data.html:23
 #: templates/ugvler/dashboard.html:30
 msgid "Contact data"
@@ -3012,12 +3020,6 @@ msgstr "Kontaktdaten"
 #: templates/students/dashboard.html:39 templates/students/payment.html:6
 msgid "Payment data"
 msgstr "Zahlungsdaten"
-
-#: templates/repayer/payment.html:35 templates/snippets/stepper.html:23
-#: templates/staff/upload_review.html:63 templates/students/contact.html:45
-#: templates/students/payment.html:35 templates/ugvler/contact.html:40
-msgid "Back"
-msgstr "Zurück"
 
 #: templates/repayer/payment.html:40 templates/students/payment.html:40
 msgid "Revoke mandate"
@@ -3065,6 +3067,7 @@ msgstr "Beschreibung"
 #: templates/snippets/case_card.html:36 templates/snippets/case_card.html:46
 #: templates/snippets/contact_card.html:28
 #: templates/snippets/person_contact.html:29
+#: templates/snippets/repayer_contact.html:32
 #: templates/snippets/student_contact.html:34
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -3121,15 +3124,17 @@ msgstr "Immatrikulationsgebühr"
 msgid "No file chosen"
 msgstr "Keine Datei ausgewählt"
 
-#: templates/snippets/payment_data.html:12 templates/students/dashboard.html:63
+#: templates/snippets/payment_data.html:12 templates/students/dashboard.html:65
 msgid ""
 "The change of payment data is being processed. Once the processing has been "
 "confirmed by our payment service provider, a new mandate can be granted "
-"here. This can take about 15 minutes and will be communicated by E-mail."
+"here. This can take up to 15 minutes, is communicated by e-mail and is "
+"possible after reloading this page."
 msgstr ""
-"Die Änderung der Zahlungsdaten wird bearbeitet. Sobald die Bearbeitung von unserem "
-"Zahlungsdienstleister bestätigt wurde, kann hier ein neues Mandat vergeben werden. "
-"Das kann etwa 15 Minuten dauern und wird per E-mail mitgeteilt."
+"Die Änderung der Zahlungsdaten wird bearbeitet. Sobald die Bearbeitung von "
+"unserem Zahlungsdienstleister bestätigt wurde, kann hier ein neues Mandat "
+"vergeben werden. Das kann bis zu 15 Minuten dauern, wird per E-mail "
+"mitgeteilt und ist nach dem erneuten Laden dieser Seite möglich."
 
 #: templates/snippets/payment_data.html:20
 msgid ""
@@ -3298,7 +3303,7 @@ msgid "View invoices"
 msgstr "Rechnungen ansehen"
 
 #: templates/staff/dashboard_invoices.html:13
-#: templates/students/dashboard.html:81
+#: templates/students/dashboard.html:86
 msgid "No invoices found"
 msgstr "Keine Rechnungen gefunden"
 
@@ -3427,7 +3432,7 @@ msgstr ""
 "Sollte jemand anderes deine Studiengebühren bezahlen, sende ihm bitte "
 "folgenden Link zu und schließe dieses Fenster."
 
-#: templates/students/dashboard.html:70
+#: templates/students/dashboard.html:75
 msgid "Someone else is paying for you"
 msgstr "Jemand anderes bezahlt für dich"
 
@@ -3455,6 +3460,9 @@ msgid ""
 msgstr ""
 "Bitte autorisiere uns, die Studiengebühren mittels SEPA-Lastschriftmandat "
 "von Deinem Konto einzuziehen."
+
+#~ msgid "Mobile Phone"
+#~ msgstr "Handynummer"
 
 #~ msgid "Income Changed"
 #~ msgstr "Einkommensveränderung mitteilen"
