@@ -9,7 +9,7 @@
       {% if account.cancel_bank_account_pc %}
         <div class="mdl-cell mdl-cell--12-col">
           <p class="mdl-typography--body-2">
-            {% trans 'The change of payment data is being processed. Once the processing has been confirmed by our payment service provider, a new mandate can be granted here. This can take about 15 minutes and will be communicated by E-mail.' %}</p>
+            {% trans 'The change of payment data is being processed. Once the processing has been confirmed by our payment service provider, a new mandate can be granted here. This can take up to 15 minutes, is communicated by e-mail and is possible after reloading this page.' %}</p>
         </div>
       {% else %}
         {% include 'snippets/repayer_payment.html' %}
