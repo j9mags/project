@@ -15,7 +15,28 @@
         </div>
         <div class="mdl-dialog__actions">
             <input type="submit" value="{% trans 'Confirm' %}"
-                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white">
+                   class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white"
+                   id="confirm_revoke">
         </div>
     </form>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript">
+
+        {% if account.is_person_account %}
+            var chkRevoke = '#{{ form.cancel_bank_account_pc.id_for_label }}';
+        {% else %}
+            var chkRevoke = '#{{ form.cancel_bank_account.id_for_label }}';
+        {% endif %}
+
+        $('#confirm_revoke').attr('disabled', 'disabled');
+        $(chkRevoke).click(function(){
+            if($(this).prop('checked')  === false){
+                $('#confirm_revoke').attr('disabled', 'disabled');
+            }else {
+                $('#confirm_revoke').removeAttr('disabled');
+            }
+        });
+    </script>
+
 </dialog>

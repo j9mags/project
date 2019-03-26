@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^contact/(?P<pk>(.+)|(new))/$', dispatch_by_user(
         student.ContactDetails.as_view(),
         ugv_student.ContactDetails.as_view(),
-        None,  # repayer.ContactDetails.as_view(),
+        repayer.ContactDetails.as_view(),
         None
     ), name='contact'),
     url(r'^payment/$', dispatch_by_user(
