@@ -35,7 +35,8 @@ img {
 
 .chancen-layout .mdl-layout__header,
 .chancen-layout .mdl-layout__header .mdl-layout__drawer-button {
-  color: white;
+  background-color: rgb(25,51,0);
+    color: white;
 }
 
 .chancen-layout .mdl-layout-title {
@@ -85,7 +86,8 @@ img {
           justify-content: flex-end;
   padding: 16px;
   height: 151px;
-  background: url(/assets/material/imgs/sidenav.svg);
+    /*New background rgb added*/
+  background: rgb(25, 51, 0); /*url(/assets/material/imgs/sidenav.svg);*/
   color: white;
 }
 /* .chancen-drawer-logo {
@@ -525,4 +527,31 @@ td.csp-table--action {
 
 .chancen--hide {
     display: none!important;
+}
+
+/*what I added new.*/
+
+.mdl-data-table th {
+
+    font-size: 17px;
+}
+
+.mdl-color--grey-100 {
+    background-color: rgb(237,237,237);
+}
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+    color: rgb(25, 51, 0);
+}
+
+.mdl-selectfield--floating-label.is-focused .mdl-selectfield__label, .mdl-selectfield--floating-label.is-dirty .mdl-selectfield__label {
+    font-size: 18px;
+    top: 4px;
+    visibility: visible;
+}
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label, .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+    color: rgb(139,195,74);
+    font-size: 18px;
+    top: 4px;
+    visibility: visible;
 }
