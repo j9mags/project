@@ -67,9 +67,9 @@
     {% else %}
     <div class="chancen-drawer mdl-layout__drawer">
       <header class="chancen-drawer-header mdl-color--primary-300">
-        <!-- div class="chancen-drawer-logo">
-          <img src="{% static 'img/favicon.png' %}" class="chancen-logo">
-        </div -->
+          <a class="chancen-drawer-logo chancen-services--logo" href="https://chancen-eg.de">
+              <img src="{% static 'img/favicon.png' %}" class="chancen-logo">
+          </a>
 
         <div class="chancen-avatar-dropdown">
           <span>{{ user.email }}</span>
@@ -90,7 +90,7 @@
         {% block navigation %}
         {% endblock %}
         <div class="mdl-layout-spacer"></div>
-        <a class="chancen-services--logo" href="https://chancen-eg.de"><img src="{% static 'img/chancen-services--logo.png' %}"></a>
+        <!-- a class="chancen-services--logo" href="https://chancen-eg.de"><img src="{% static 'img/chancen-services--logo.png' %}"></a -->
       </nav>
     </div>
     {% endif %}

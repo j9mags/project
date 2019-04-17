@@ -21,6 +21,8 @@ html, body {
 img {
   max-width: 100%;
   height: auto;
+    display: block;
+margin: 0 auto;
 }
 
 .chancen-avatar {
@@ -30,7 +32,8 @@ img {
 }
 
 .chancen-layout {
-  background: url(/assets/material/imgs/background.svg);
+  background-image: url(/assets/material/imgs/iStock_000043009118_Full.jpg);
+    background-size: 100% auto;
 }
 
 .chancen-layout .mdl-layout__header,
@@ -89,6 +92,8 @@ img {
     /*New background rgb added*/
   background: rgb(25, 51, 0); /*url(/assets/material/imgs/sidenav.svg);*/
   color: white;
+       width: 100%;
+    height: 27%;
 }
 /* .chancen-drawer-logo {
     width: 100%;
@@ -551,7 +556,7 @@ td.csp-table--action {
 }
 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
     color: rgb(139,195,74);
-    font-size: 18px;
+    font-size: 12px;
     top: 4px;
     visibility: visible;
 }
