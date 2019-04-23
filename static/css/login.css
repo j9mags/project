@@ -5,11 +5,8 @@ body {
 .top {
     position: absolute;
     left: 50%;
-    top: 32px;
     transform: translate(-50%, 0);
     perspective: 1000px;
-    width: 330px;
-    height: 125px;
 }
 
 .container {
@@ -72,7 +69,8 @@ body {
 
 .mdl-card {
     width: 330px;
-    height: 375px;
+    /*height: 375px;*/
+    height: 295px;
 }
 
 .mdl-card__title .mdl-button--icon {
@@ -87,4 +85,12 @@ body {
 
 a:hover {
     cursor: pointer;
+}
+
+/*.mdl-card__media {
+    margin: 0;
+}
+*/
+.mdl-card__media > img {
+  max-width: 40%;
 }
