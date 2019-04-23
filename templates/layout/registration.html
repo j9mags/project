@@ -7,22 +7,10 @@
 {% endblock %}
 
 {% block layout %}
-  <div class="demo-card chancen-layout mdl-layout mdl-js-layout">
-
-    <section class="top">
-      <div class="mdl-card mdl-shadow--6dp mdl-color--primary mdl-color-text--white relative">
-          <figure class="demo-card mdl-card__media mdl-color--primary">
-              <img src="{% static 'img/favicon.png' %}">
-          </figure>
-          <div class="mdl-card__title mdl-color-text--white">
-              <h1 class="mdl-card__title-text">Willkommen im Chancen</h1>
-           </div>
-
-      </div>
-
-    </section>
-
-
+  <div class="chancen-layout mdl-layout mdl-js-layout">
+      <section class="top">
+          <img src="{% static 'img/chancen-services--logo__dark.png' %}">
+      </section>
     {% block registration %}
     {% endblock %}
   </div>
