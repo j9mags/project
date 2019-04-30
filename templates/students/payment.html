@@ -35,10 +35,11 @@
                class="mdl-button">{% trans 'Back' %}</a>
             <div class="mdl-layout-spacer"></div>
 
-            <div id="btn-revoke-mandate-tt"><button id="btn-revoke-mandate" {% if open_payments > 0 %}disabled{% endif %}
+            <div id="btn-revoke-mandate-tt">{% if not account.active_payment_helper %}
+                <button id="btn-revoke-mandate" {% if open_payments > 0 %}disabled{% endif %}
                     class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
                 {% trans 'Revoke mandate' %}
-            </button></div>
+            </button>{% endif %}</div>
         </div>
     </form>
 </div>

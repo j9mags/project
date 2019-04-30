@@ -7,7 +7,7 @@
 
 {% block content %}
 
-  {% if not account.has_active_payment %}
+  {% if not account.has_payment_contact %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
       <div class="mdl-snackbar__text">
           {% trans 'You have not authorized us to debit your account. Without permission from you we cannot debit the payments due which are essential part of your ISA (e.g. membership share or repayments).' %}

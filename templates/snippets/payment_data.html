@@ -14,6 +14,8 @@
       {% else %}
         {% include 'snippets/repayer_payment.html' %}
       {% endif %}
+    {% elif account.active_payment_helper %}
+      {% include 'snippets/repayer_payment.html' %}
     {% else %}
       <div class="mdl-cell mdl-cell--12-col">
         <p class="mdl-typography--body-2">

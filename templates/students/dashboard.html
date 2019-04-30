@@ -7,7 +7,7 @@
 
 {% block content %}
 
-  {% if not account.has_active_payment %}
+  {% if not account.has_payment_contact %}
     <div id="snackbar" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
       <div class="mdl-snackbar__text">
           {% trans 'You have not authorised us to debit an account for your tuition fees. Without permission from the account holder we cannot debit your tuition fees from an account and you are not able to start your studies.' %}
@@ -38,7 +38,9 @@
         <div class="mdl-cell mdl-cell--12-col">
           <h5 class="mdl-typography--headline">{% trans 'Payment data' %}</h5>
         </div>
-        {% if not payment_contact %}
+        {% if account.active_payment_helper %}
+          {% include 'snippets/student_payment.html' with class="mdl-cell csp--full-width" %}
+        {% elif not payment_contact %}
         <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">
           <div class="mdl-cell mdl-cell--12-col">
             <p class="mdl-typography--body-2">
@@ -57,7 +59,7 @@
           </div>
         </div>
         {% elif payment_contact == master_contact %}
-          {% if master_contact.cancel_bank_account %}
+          {% if payment_contact.cancel_bank_account %}
           <div class="mdl-card mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
             <div class="mdl-card__supporting-text mdl-grid">          
               <div class="mdl-cell mdl-cell--12-col">
@@ -68,7 +70,7 @@
             </div>
           </div>
           {% else %}
-            {% include 'snippets/student_payment.html' with ba=master_contact.bank_account class="mdl-cell csp--full-width" %}
+            {% include 'snippets/student_payment.html' with ba=payment_contact.bank_account class="mdl-cell csp--full-width" %}
           {% endif %}
         {% else %}
           <div class="mdl-color--white mdl-shadow--6dp mdl-cell--12-col csp--full-width mdl-grid">

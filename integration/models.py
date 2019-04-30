@@ -604,8 +604,8 @@ class Account(models.Model, PerishableTokenMixin):
         return None
 
     @property
-    def has_active_payment(self):
-        return self.active_payment_helper or self.payment_contact.zahlungskontakt_auto
+    def has_payment_contact(self):
+        return self.sepalastschriftmandat_erteilt_auto if self.is_repayer_or_ugv else (self.active_payment_helper or self.zahlungskontakt_ref is not None)
 
     @property
     def active_contract(self):
