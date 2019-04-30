@@ -131,7 +131,7 @@ class Dashboard(StudentMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        form = SofortRevokeMandateForm(request.POST, instance=context['master_contact'])
+        form = SofortRevokeMandateForm(request.POST, instance=context['payment_contact'])
 
         if form.is_valid():
             form.save()
