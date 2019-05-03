@@ -33,15 +33,15 @@ class User(AbstractEmailUser):
 
     @property
     def is_student(self):
-        return Account.students.filter(Q(unimailadresse=self.email) | (
-            Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
-                person_email=self.email))).exists()
+        return Account.students.filter(Q(unimailadresse=self.email)).exists()  # | (
+            # Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
+            #     person_email=self.email))).exists()
 
     @property
     def is_ugv_student(self):
-        return Account.ugv_students.filter(Q(unimailadresse=self.email) | (
-            Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
-                person_email=self.email))).exists()
+        return Account.ugv_students.filter(Q(person_email=self.email)).exists()  # | (
+            # Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
+            #     person_email=self.email))).exists()
 
     @property
     def is_repayer(self):
@@ -57,13 +57,13 @@ class User(AbstractEmailUser):
         if self.is_unistaff:
             rc = Contact.university_staff.get(email=self.email)
         elif self.is_student:
-            rc = Account.students.get(Q(unimailadresse=self.email) | (
-                Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
-                    person_email=self.email)))
+            rc = Account.students.get(unimailadresse=self.email)  # Q(unimailadresse=self.email) | (
+                # Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=True) & Q(
+                #     person_email=self.email)))
         elif self.is_ugv_student:
-            rc = Account.ugv_students.get(Q(unimailadresse=self.email) | (
-                Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
-                    person_email=self.email)))
+            rc = Account.ugv_students.get(person_email=self.email)  # Q(unimailadresse=self.email) | (
+                # Q(is_person_account=True) & Q(has_sofortzahler_contract_auto=False) & Q(
+                #     person_email=self.email)))
         elif self.is_repayer:
             rc = Account.repayers.get(person_email=self.email)
         return rc
