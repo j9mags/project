@@ -29,7 +29,7 @@ class HtmlToImageView(View):
         for html in sources:
             imgkit.from_string(html, tmp_fname, options={"xvfb": ""})
             with open(tmp_fname, 'rb') as img:
-                data[img_format].append(base64.encodebytes(img.read()))
+                data[img_format].append(base64.b64encode(img.read()).decode('utf-8'))
 
         return JsonResponse(data)
 
