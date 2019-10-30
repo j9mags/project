@@ -132,23 +132,24 @@
         "use strict";
         const start_date = document.querySelector('#id_effective_start_trig'),
               end_date = document.querySelector('#id_effective_end');
+        console.log(start_date.value);
+        console.log(end_date.value);
 
         var dialogStart = new mdDateTimePicker.default({
           type: 'date',
-          init: moment(start_date.value !== "" ? start_date.value : ''),
+          init: start_date.value !== "" ? moment(start_date.value) : moment(),
           past: moment().subtract(5, 'years'),
           future: end_date.value !== "" ? moment(end_date.value) : moment().add(5, 'years'),
           trigger: start_date
-        });
-        console.log(dialogStart);
-        var dialogEnd = new mdDateTimePicker.default({
+        }), 
+        dialogEnd = new mdDateTimePicker.default({
           type: 'date',
-          init: moment(end_date.value !== "" ? end_date.value : ''),
+          init: end_date.value !== "" ? moment(end_date.value) : moment(),
           past: start_date.value !== "" ? moment(start_date.value) : moment().subtract(5, 'years'),
           future: moment().add(5, 'years'),
           trigger: end_date
         });
-        console.log(dialogEnd);
+        
 
         start_date.addEventListener('onOk', function(d) {
           this.value = dialogStart.time.format("YYYY-MM-DD");
@@ -158,7 +159,7 @@
         start_date.addEventListener('onCancel', function(d) {
           if (! this.value) {
             this.parentNode.classList.remove('is-dirty');
-            start_date.removeAttribute('readonly');
+            
           }
         });
 
@@ -186,6 +187,8 @@
                 if (openDialog != null) {
                     openDialog.hide();
                     openDialog = null;
+                    start_date.removeAttribute('readonly');
+                    end_date.removeAttribute('readonly');
                 }
             }
         }
