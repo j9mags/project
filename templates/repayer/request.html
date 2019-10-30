@@ -134,7 +134,7 @@
         var dialogStart = new mdDateTimePicker.default({
           type: 'date',
           init: moment(),
-          past: moment(),
+          past: moment().subtract(5, 'years'),
           future: moment().add(5, 'years'),
           trigger: start_date
         });
@@ -154,7 +154,7 @@
         var dialogEnd = new mdDateTimePicker.default({
           type: 'date',
           init: moment(),
-          past: moment(),
+          past: moment().subtract(5, 'years'),
           future: moment().add(5, 'years'),
           trigger: end_date
         });
