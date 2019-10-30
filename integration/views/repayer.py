@@ -431,9 +431,11 @@ class NewRequest(RepayerMixin, TemplateView):
 
         if self.request.POST:
             data = self.request.POST.copy()
-
-            data['effective_start_trig'] = datetime.date.fromisoformat(data['effective_start_trig']) if data['effective_start_trig'] else ''
-            data['effective_end'] = datetime.date.fromisoformat(data['effective_end']) if data['effective_end'] else ''
+            
+            if data['effective_start_trig']:
+                data['effective_start_trig'] = datetime.date(*(int(x) for x in data['effective_start_trig'].split('-')))
+            if data['effective_end']:
+                data['effective_end'] = datetime.date(*(int(x) for x in data['effective_end'].split('-')))
             
             form = RepayerCaseForm(data, self.request.FILES, instance=case)
         else:
