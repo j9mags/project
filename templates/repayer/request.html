@@ -130,45 +130,65 @@
     <script defer>
       !function() {
         "use strict";
-        const start_date = document.querySelector('#id_effective_start_trig');
+        const start_date = document.querySelector('#id_effective_start_trig'),
+              end_date = document.querySelector('#id_effective_end');
+
         var dialogStart = new mdDateTimePicker.default({
           type: 'date',
-          init: moment(),
+          init: moment(start_date.value !== "" ? start_date.value : ''),
           past: moment().subtract(5, 'years'),
-          future: moment().add(5, 'years'),
+          future: end_date.value !== "" ? moment(end_date.value) : moment().add(5, 'years'),
           trigger: start_date
         });
-        start_date.addEventListener('focus', function() {
-          dialogStart.toggle();
-        });
-        start_date.addEventListener('onOk', function(d) {
-          this.value = dialogStart.time.format("YYYY-MM-DD");
-          this.parentNode.classList.add('is-dirty');
-        });
-        start_date.addEventListener('onCancel', function(d) {
-          if (! this.value)
-            this.parentNode.classList.remove('is-dirty');
-        });
-
-        const end_date = document.querySelector('#id_effective_end');
+        console.log(dialogStart);
         var dialogEnd = new mdDateTimePicker.default({
           type: 'date',
-          init: moment(),
-          past: moment().subtract(5, 'years'),
+          init: moment(end_date.value !== "" ? end_date.value : ''),
+          past: start_date.value !== "" ? moment(start_date.value) : moment().subtract(5, 'years'),
           future: moment().add(5, 'years'),
           trigger: end_date
         });
-        end_date.addEventListener('focus', function() {
-          dialogEnd.toggle();
+        console.log(dialogEnd);
+
+        start_date.addEventListener('onOk', function(d) {
+          this.value = dialogStart.time.format("YYYY-MM-DD");
+          this.parentNode.classList.add('is-dirty');
+          dialogEnd._past = dialogStart.time;
         });
+        start_date.addEventListener('onCancel', function(d) {
+          if (! this.value) {
+            this.parentNode.classList.remove('is-dirty');
+            start_date.removeAttribute('readonly');
+          }
+        });
+
         end_date.addEventListener('onOk', function(d) {
           this.value = dialogEnd.time.format("YYYY-MM-DD");
           this.parentNode.classList.add('is-dirty');
+          dialogStart._future = dialogEnd.time;
         });
         end_date.addEventListener('onCancel', function(d) {
           if (! this.value)
             this.parentNode.classList.remove('is-dirty');
         });
+
+        var openDialog = null;
+        document.onclick = function(e) {
+            if (e.target == start_date) {
+                start_date.setAttribute('readonly', '');
+                dialogStart.show();
+                openDialog = dialogStart;
+            } else if (e.target == end_date) {
+                end_date.setAttribute('readonly', '');
+                dialogEnd.show();
+                openDialog = dialogEnd;
+            } else if (! document.querySelector('#mddtp-picker__date').contains(e.target)) {
+                if (openDialog != null) {
+                    openDialog.hide();
+                    openDialog = null;
+                }
+            }
+        }
 
         const request_type = document.querySelector('#id_type');
         const relevant_income_cell = document.querySelector('#relevant_income_cell');
