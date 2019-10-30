@@ -15,6 +15,7 @@ from ..forms import *
 from ..models import Case, RecordType, ContentVersion, FeedItem, Contact
 
 import base64
+import datetime
 
 
 class RepayerMixin(LoginRequiredMixin):
@@ -429,7 +430,12 @@ class NewRequest(RepayerMixin, TemplateView):
                         account=self.account, contact=self.account.master_contact)
 
         if self.request.POST:
-            form = RepayerCaseForm(self.request.POST, self.request.FILES, instance=case)
+            data = self.request.POST.copy()
+
+            data['effective_start_trig'] = datetime.date.fromisoformat(data['effective_start_trig']) if data['effective_start_trig'] else ''
+            data['effective_end'] = datetime.date.fromisoformat(data['effective_end']) if data['effective_end'] else ''
+            
+            form = RepayerCaseForm(data, self.request.FILES, instance=case)
         else:
             initial = {
                 'subject': case.subject or '',
@@ -439,6 +445,7 @@ class NewRequest(RepayerMixin, TemplateView):
                 'relevant_income_trig': case.relevant_income_trig or '',
                 'description': case.description or '',
             }
+            print(initial)
             form = RepayerCaseForm(instance=case, initial=initial)
         context.update(case=case, form=form)
 
@@ -467,6 +474,7 @@ class NewRequest(RepayerMixin, TemplateView):
                 field = data.get('fields')
                 field = field and field[0].lower()
                 field = field if field in form.fields else None
+
                 form.add_error(field, (data.get('message')))
                 return render(request, self.template_name, context)
             except Exception as e:
@@ -496,4 +504,5 @@ class NewRequest(RepayerMixin, TemplateView):
                     return render(request, self.template_name, context)
 
             return redirect('integration:dashboard')
+
         return render(request, self.template_name, context)
