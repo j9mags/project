@@ -18,6 +18,7 @@ from .models import Case
 
 _logger = logging.getLogger(__name__)
 
+
 SalutationChoices = [('', '')] + Choices.Salutation
 CountryChoices = [('', '')] + Choices.Country
 GenderChoices = [('', '')] + Choices.Gender
@@ -97,7 +98,14 @@ class StudentOnboardingForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['mailing_country'].widget.choices[0] = ("", "")
+        #  self.fields['mailing_country'].widget.choices[0] = ("", "")
+
+        sorted_countries = sorted(CountryChoices, key = lambda x: x[1])
+        sorted_nationalities = sorted(NationalityChoices, key = lambda x: x[1])
+
+        self.fields['birth_country'].choices = sorted_countries
+        self.fields['mailing_country'].choices = sorted_countries
+        self.fields['nationality'].choices = sorted_nationalities
 
 
 class RepayerOnboardingForm(forms.Form):
@@ -117,8 +125,12 @@ class RepayerOnboardingForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['shipping_country'].widget.choices[0] = ("", "")
-        self.fields['billing_country'].widget.choices[0] = ("", "")
+        # self.fields['shipping_country'].widget.choices[0] = ("", "")
+        # self.fields['billing_country'].widget.choices[0] = ("", "")
+
+        sorted_countries = sorted(CountryChoices, key = lambda x: x[1])
+        self.fields['shipping_country'].choices = sorted_countries
+        self.fields['billing_country'].choices = sorted_countries
 
 
 class StudentAccountForm(forms.Form):
@@ -142,7 +154,9 @@ class StudentContactForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['mailing_country'].widget.choices[0] = ("", "")
+        
+        sorted_countries = sorted(CountryChoices, key = lambda x: x[1])
+        self.fields['mailing_country'].choices = sorted_countries
 
 
 class PersonContactForm(forms.ModelForm):
@@ -153,7 +167,9 @@ class PersonContactForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['shipping_country'].widget.choices[0] = ("", "")
+
+        sorted_countries = sorted(CountryChoices, key = lambda x: x[1])
+        self.fields['shipping_country'].choices = sorted_countries
 
 
 class PaymentForm(forms.ModelForm):
@@ -163,7 +179,9 @@ class PaymentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['billing_country'].widget.choices[0] = ("", "")
+
+        sorted_countries = sorted(CountryChoices, key = lambda x: x[1])
+        self.fields['billing_country'].choices = sorted_countries
 
 
 class SofortRevokeMandateForm(forms.ModelForm):
@@ -215,6 +233,9 @@ class CreateStudentForm(forms.Form):
             choices=[(o.pk, o.name) for o in university.get_active_courses()],
             required=True
         )
+
+        sorted_countries = sorted(CountryChoices, key = lambda x: x[1])
+        self.fields['country'].choices = sorted_countries
 
 
 class DiscountForm(forms.ModelForm):
