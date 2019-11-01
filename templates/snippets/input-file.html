@@ -19,5 +19,7 @@
   {% endif %}
   {% if field.errors %}
     <span class="mdl-textfield__error">{{ field.errors | first | escape }}</span>
+    {% elif field.field.required %}
+    <span class="mdl-textfield__error">{% trans 'This field is required.' %}</span>
   {% endif %}
 </div>
