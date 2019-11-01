@@ -27,7 +27,7 @@
 </div>
 
 <div class="mdl-card mdl-shadow--6dp mdl-cell--12-col">
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" onsubmit="return validate_required()">
         {% csrf_token %}
         {% if case.all_questions %}
         <div class="mdl-card__supporting-text mdl-grid">
@@ -58,7 +58,7 @@
                 {% include 'snippets/input.html' with field=form.effective_end type='date' %}
             </div>
             <div id="relevant_income_cell" class="mdl-cell mdl-cell--4-col chancen--hide">
-                {% include 'snippets/input.html' with field=form.relevant_income_trig type='number' %}
+                {% include 'snippets/input.html' with field=form.relevant_income_trig type='number' help_as_error='true' %}
             </div>
             
             <div class="mdl-cell mdl-cell--12-col">
@@ -112,7 +112,7 @@
         <div class="mdl-card__actions mdl-card--border mdl-dialog__actions">
             <input type="submit" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white"
                    value="{% trans 'Submit' %}">
-            <a href="{% url 'integration:dashboard' %}"
+            <a href="{% url 'integration:dashboard' %}?v=support"
                class="mdl-button">{% trans 'Discard' %}</a>
         </div>
     </form>
@@ -128,6 +128,36 @@
     <script src="{% static '/js/mdDateTimePicker.min.js' %}"></script>
 
     <script defer>
+      function validate_required() {
+        let val = true;
+        let el = document.querySelector('#id_type');
+        let msg = '{% trans "" %}';
+        if (! el.value) {
+          if (! el.parentNode.classList.contains('is-invalid')) {
+            el.parentNode.classList.add('is-invalid');
+          }
+          val = false;
+        } else if (el.value == 'Income Changed') {
+          el = document.querySelector('#id_relevant_income_trig');
+          if (! el.value) {
+            if (! el.parentNode.classList.contains('is-invalid')) {
+              el.parentNode.classList.add('is-invalid');
+            }
+            val = false;
+          }
+        }
+
+        ['#id_subject', '#id_effective_start_trig'].forEach(function (sel, index) {
+          el = document.querySelector(sel);
+          if (! el.value) {
+            if (! el.parentNode.classList.contains('is-invalid')) {
+              el.parentNode.classList.add('is-invalid');
+            }
+            val = false;
+          }
+        });
+        return val;
+      }
       !function() {
         "use strict";
         const start_date = document.querySelector('#id_effective_start_trig'),

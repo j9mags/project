@@ -302,6 +302,12 @@ class Dashboard(RepayerMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = self.get_repayer_context()
         context.update(super(Dashboard, self).get_context_data(**kwargs))
+
+        panel = self.request.GET.get('v')
+        if panel not in ('account', 'contracts', 'support'):
+            panel = 'account'
+        context.update(panel=panel)
+
         return context
 
     def get(self, request, *args, **kwargs):
@@ -424,7 +430,7 @@ class NewRequest(RepayerMixin, TemplateView):
         if (pk is not None):
             case = Case.objects.get(pk=pk)
             if case.is_locked:
-                return reverse('integration:dashboard')
+                return reverse('integration:dashboard') + '?v=support'
         else:
             case = Case(record_type=RecordType.objects.get(sobject_type='Case', developer_name='Ruckzahler'),
                         account=self.account, contact=self.account.master_contact)
@@ -464,7 +470,7 @@ class NewRequest(RepayerMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        if context == reverse('integration:dashboard'):
+        if context == reverse('integration:dashboard') + '?v=support':
             return redirect(context)
 
         form = context.get('form')
@@ -505,6 +511,6 @@ class NewRequest(RepayerMixin, TemplateView):
                     form.add_error(None, str(e.message))
                     return render(request, self.template_name, context)
 
-            return redirect('integration:dashboard')
+            return redirect(reverse('integration:dashboard') + '?v=support')
 
         return render(request, self.template_name, context)

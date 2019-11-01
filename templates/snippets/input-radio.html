@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="mdl-radiofield {% if field.errors %}is-invalid{% endif %}">
     {% for opt in field.field.choices %}
     <div>
@@ -17,6 +19,10 @@
     {% if field.errors %}
     <div class="mdl-cell--12-col">
         <span class="mdl-radiofield__error">{{ field.errors | first | escape }}</span>
+    </div>
+    {% elif field.field.required %}
+    <div class="mdl-cell--12-col">
+        <span class="mdl-radiofield__error">{% trans 'This field is required.' %}</span>
     </div>
     {% endif %}
 </div>

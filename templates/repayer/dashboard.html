@@ -21,14 +21,14 @@
 
   <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
     <div class="mdl-tabs__tab-bar">
-        <a id="account-tab" href="#account-panel" class="mdl-tabs__tab is-active">{% trans 'Your data' %}</a>
-        <a id="contracts-tab" href="#contracts-panel" class="mdl-tabs__tab">{% trans 'Contracts' %}</a>
-        <a id="support-tab" href="#support-panel" class="mdl-tabs__tab">{% trans 'Requests and Repayment' %}
+        <a id="account-tab" href="#account-panel" class="mdl-tabs__tab{% if panel == 'account' %} is-active{% endif %}">{% trans 'Your data' %}</a>
+        <a id="contracts-tab" href="#contracts-panel" class="mdl-tabs__tab{% if panel == 'contracts' %} is-active{% endif %}">{% trans 'Contracts' %}</a>
+        <a id="support-tab" href="#support-panel" class="mdl-tabs__tab{% if panel == 'support' %} is-active{% endif %}">{% trans 'Requests and Repayment' %}
           {% if clarification_needed %}<i class="material-icons mdl-color-text--accent">notification_important</i>{% endif %}
         </a>
     </div>
 
-    <div class="mdl-tabs__panel {% if not account.sepalastschriftmandat_erteilt_auto %}has-snack{% endif %} is-active" id="account-panel">
+    <div class="mdl-tabs__panel{% if not account.sepalastschriftmandat_erteilt_auto %} has-snack{% endif %}{% if panel == 'account' %} is-active{% endif %}" id="account-panel">
         <div class="mdl-grid">
           <div class="mdl-color--white mdl-shadow--6dp mdl-cell mdl-cell--12-col {{ class }}">
               <div class="mdl-card__supporting-text mdl-grid">
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div class="mdl-tabs__panel" id="contracts-panel">
+    <div class="mdl-tabs__panel{% if panel == 'contracts' %} is-active{% endif %}" id="contracts-panel">
       {% for contract in contracts %}
         {% include 'snippets/contract_card.html' %}
       {% empty %}
@@ -59,7 +59,7 @@
       {% endfor %}
     </div>
 
-    <div class="mdl-tabs__panel" id="support-panel">
+    <div class="mdl-tabs__panel{% if panel == 'support' %} is-active{% endif %}" id="support-panel">
       <div class="mdl-grid">
         <h5 class="mdl-typography--headline">{% trans 'Open cases' %}</h5>
         <div class="mdl-layout-spacer"></div>

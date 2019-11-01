@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label {% if field.errors %} is-dirty {% endif %}">
     <input class="mdl-date-textfield__input" 
            type="text" 
@@ -17,5 +19,7 @@
 
     {% if field.errors %}
         <span class="mdl-date-textfield__error">{{ field.errors | first | escape }}</span>
-    {% endif %}
+     {% elif field.field.required %}
+        <span class="mdl-date-textfield__error">{% trans 'This field is required.' %}</span>
+   {% endif %}
 </div>

@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="mdl-selectfield mdl-js-selectfield mdl-selectfield--floating-label{% if field.errors %} is-invalid{% endif %}">
     <select id="{{ field.id_for_label }}" class="mdl-selectfield__select" name="{{ field.html_name }}">
         {% for opt in field %}
@@ -13,5 +15,7 @@
     {% endif %}
     {% if field.errors %}
         <span class="mdl-selectfield__error">{{ field.errors | first | escape }}</span>
+    {% elif field.field.required %}
+        <span class="mdl-selectfield__error">{% trans 'This field is required.' %}</span>
     {% endif %}
 </div>
