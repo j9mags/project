@@ -160,16 +160,6 @@ class ContactDetails(UgvStudentMixin, TemplateView):
 
         self.account = self.get_queryset()
 
-        # if pk != 'new':
-        #     contact = self.account.contact_set.filter(pk=pk)
-        #     if not contact.exists():
-        #         raise ObjectDoesNotExist()
-
-        #     contact = contact.first()
-        # else:
-        #     contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
-        #                       account=self.account)
-
         if self.request.POST:
             form = PersonContactForm(self.request.POST, instance=self.account)
         else:

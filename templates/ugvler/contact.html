@@ -29,6 +29,9 @@
             <div class="mdl-cell">
                 {% include 'snippets/input.html' with label=_('Phone') field=form.phone type='phone' %}
             </div>
+            <div class="mdl-cell">
+                {% include 'snippets/select.html' with field=form.kommunikationssprache %}
+            </div>
             <div class="mdl-cell--8-col">
                 {% include 'snippets/address.html' with label=_('Address') street=form.shipping_street zip=form.shipping_postal_code city=form.shipping_city country=form.shipping_country %}
             </div>

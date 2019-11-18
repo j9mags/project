@@ -146,6 +146,13 @@ class StudentContractForm(forms.Form):
         )
 
 
+class AccountCommunicationLanguageForm(forms.ModelForm):
+    
+    class Meta:
+        model = Account
+        fields = ['kommunikationssprache',]
+
+
 class StudentContactForm(forms.ModelForm):
     class Meta:
         model = Contact
@@ -162,7 +169,7 @@ class StudentContactForm(forms.ModelForm):
 class PersonContactForm(forms.ModelForm):
     class Meta:
         model = Account
-        fields = ['person_mobile_phone', 'phone', 'shipping_street',
+        fields = ['person_mobile_phone', 'phone', 'shipping_street', 'kommunikationssprache',
                   'shipping_city', 'shipping_postal_code', 'shipping_country']
 
     def __init__(self, *args, **kwargs):

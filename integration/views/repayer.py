@@ -341,25 +341,17 @@ class ContactDetails(RepayerMixin, TemplateView):
         pk = kwargs.get('pk')
         if not pk:
             raise SuspiciousOperation()
+        
         context = super(ContactDetails, self).get_context_data(**kwargs)
         context['ignore_drawer'] = True
 
         self.account = self.get_queryset()
 
-        # if pk != 'new':
-        #     contact = self.account.contact_set.filter(pk=pk)
-        #     if not contact.exists():
-        #         raise ObjectDoesNotExist()
-
-        #     contact = contact.first()
-        # else:
-        #     contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
-        #                       account=self.account)
-
         if self.request.POST:
             form = PersonContactForm(self.request.POST, instance=self.account)
         else:
             form = PersonContactForm(instance=self.account)
+        
         context.update(form=form, account=self.account)
 
         return context

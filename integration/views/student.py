@@ -162,24 +162,36 @@ class ContactDetails(StudentMixin, TemplateView):
         else:
             contact = Contact(record_type=RecordType.objects.get(sobject_type='Contact', developer_name='Sofortzahler'),
                               account=self.account)
+        
         if self.request.POST:
-            form = StudentContactForm(self.request.POST, instance=contact)
+            contact_form = StudentContactForm(self.request.POST, instance=contact)
+            account_form = AccountCommunicationLanguageForm(self.request.POST, instance=self.account)
         else:
-            form = StudentContactForm(instance=contact)
-        context.update(contact=contact, form=form)
+            contact_form = StudentContactForm(instance=contact)
+            account_form = AccountCommunicationLanguageForm(instance=self.account)
+        
+        context.update(contact=contact, form=contact_form, lang_form=account_form)
 
         return context
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        form = context.get('form')
-        if form.is_valid():
+        contact_form = context.get('form')
+        lang_form = context.get('lang_form')
+        
+        if lang_form.is_valid() and contact_form.is_valid():
             try:
-                form.save()
+                lang_form.save()
+            except Exception as e:
+                lang_form.add_error(None, str(e))
+
+            try:
+                contact_form.save()
                 return redirect('integration:dashboard')
             except Exception as e:
-                form.add_error(None, str(e))
+                contact_form.add_error(None, str(e))
+        
         return render(request, self.template_name, context)
 
 

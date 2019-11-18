@@ -34,6 +34,12 @@
             <div class="mdl-cell">
                 {% include 'snippets/input.html' with label=_('Phone') field=form.phone type='phone' %}
             </div>
+            <div class="mdl-cell">
+                {% include 'snippets/select.html' with field=lang_form.kommunikationssprache %}
+            </div>
+            {% if not account.is_ugv %}
+                <div class="mdl-cell--3-col-desktop"></div>
+            {% endif %}
             <div class="mdl-cell--8-col">
                 {% include 'snippets/address.html' with label=_('Address') street=form.mailing_street zip=form.mailing_postal_code city=form.mailing_city country=form.mailing_country %}
             </div>
