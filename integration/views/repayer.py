@@ -59,6 +59,21 @@ class RepayerMixin(LoginRequiredMixin):
         cases = self.account.get_open_cases()
         closed_cases = self.account.get_closed_cases()
 
+        translated_sexes = dict(Choices.Biological_Sex)
+        translated_nationalities = dict(Choices.Nationality)
+        translated_languages = dict(Choices.Language)
+        translated_countries = dict(Choices.Country)
+
+        self.account.translated_sex = translated_sexes.get(self.account.master_contact.biological_sex,
+                                                           self.account.master_contact.biological_sex)
+        self.account.translated_nationality = translated_nationalities.get(self.account.citizenship, self.account.citizenship)
+        self.account.translated_shipping_country = translated_countries.get(self.account.shipping_country, self.account.shipping_country)
+        self.account.translated_billing_country = translated_countries.get(self.account.billing_country, self.account.billing_country)
+        self.account.translated_language = translated_languages.get(self.account.kommunikationssprache,
+                                                                    self.account.kommunikationssprache)
+        self.account.master_contact.translated_mailing_country = translated_countries.get(self.account.master_contact.mailing_country, 
+                                                                                          self.account.master_contact.mailing_country)
+
         context['account'] = self.account
         context['master_contact'] = self.account.master_contact
         context['contracts'] = contracts

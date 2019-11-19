@@ -8,6 +8,9 @@
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Phone') value=account.phone %}
     </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Communication Language') value=account.translated_language %}
+    </div>
     <div class="mdl-cell mdl-cell--12-col">
       <span class="mdl-typography--title">{% trans 'Address' %}</span>
     </div>
@@ -21,7 +24,7 @@
       {% include 'snippets/field-text.html' with label=_('City') value=account.shipping_city %}
     </div>
     <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Country') value=account.shipping_country %}
+      {% include 'snippets/field-text.html' with label=_('Country') value=account.translated_shipping_country %}
     </div>
   </div>
 

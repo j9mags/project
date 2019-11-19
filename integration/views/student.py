@@ -91,6 +91,7 @@ class Dashboard(StudentMixin, TemplateView):
         account.translated_sex = account.geschlecht
         account.translated_nationality = translated_nationalities.get(account.staatsangehoerigkeit, account.staatsangehoerigkeit)
         account.translated_language = translated_languages.get(account.kommunikationssprache, account.kommunikationssprache)
+        account.translated_billing_country = translated_countries.get(account.billing_country, account.billing_country)
         contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)
 
         contract = self.account.active_contract

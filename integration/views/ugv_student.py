@@ -74,6 +74,8 @@ class UgvStudentMixin(LoginRequiredMixin):
         account.translated_nationality = translated_nationalities.get(account.citizenship, account.citizenship)
         account.translated_language = translated_languages.get(account.kommunikationssprache,
                                                                account.kommunikationssprache)
+        account.translated_billing_country = translated_countries.get(account.billing_country, account.billing_country)
+        account.translated_shipping_country = translated_countries.get(account.shipping_country, account.shipping_country)
         contact.translated_mailing_country = translated_countries.get(contact.mailing_country, contact.mailing_country)
 
         context['account'] = account

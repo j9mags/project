@@ -13,6 +13,9 @@
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Phone') value=contact.phone %}
     </div>
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Communication Language') value=account.translated_language %}
+    </div>
     <div class="mdl-cell mdl-cell--12-col">
       <span class="mdl-typography--title">{% trans 'Address' %}</span>
     </div>
