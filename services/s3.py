@@ -10,6 +10,4 @@ def upload(fname, fcontent):
     fd.write(fcontent)
     fd.close()
 
-    print(s3b3s.exists(fname))
-
     return s3b3s.url(fname)
