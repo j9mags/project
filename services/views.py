@@ -5,9 +5,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 from xhtml2pdf import pisa
 from io import StringIO
+
 import base64
 import imgkit
 import json
+
+from integration.models import ContentVersion
+from .s3 import upload
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -53,3 +57,35 @@ class HtmlToPDFView(View):
         
         bstream = open(tmp_fname, 'rb').read()
         return JsonResponse({'pdf': base64.encodebytes(bstream).decode('utf-8')})
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UploadToS3(View):
+
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+
+        if pk is None:
+            return JsonResponse(status=400, data={"error": "MissingRecordId"})
+        
+        try:
+            cv = ContentVersion.objects.get(pk=pk)
+        except:
+            return JsonResponse(status=404, data={"error": "ContentVersionNotFound"})
+
+        payload = json.loads(request.body.decode('utf-8'))
+        sobject = payload.get("sobject", None)
+        parentId = payload.get("parentId", None)
+        path = (sobject + '/' if sobject is not None else '') + \
+               (parentId + '/' if parentId is not None else '') + \
+               cv.path_on_client
+        
+        try:
+            blob = cv.fetch_content()
+            url = upload(path, blob)
+        except Exception as e:
+            return JsonResponse(status=500, data={"error": "UnknownError", "message": str(e)})
+
+        return JsonResponse({"url": url})

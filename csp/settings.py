@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'salesforce',
     'authtools',
     'loginas',
+    'storages',
 
     'integration.apps.IntegrationConfig',
     'authentication.apps.AuthenticationConfig',
