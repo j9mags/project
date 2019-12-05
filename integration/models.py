@@ -1290,6 +1290,14 @@ class ContentVersion(models.Model):
     def meta(self):
         return self._meta
 
+    def fetch_content(self):
+        session = connections['salesforce'].sf_session
+        url = session.auth.instance_url + self.version_data
+        rc = handle_api_exceptions(url, session.get)
+
+        return rc.content
+
+
 
 class FeedItem(models.Model):
     parent = models.ForeignKey(Case, models.DO_NOTHING, sf_read_only=models.NOT_UPDATEABLE)
