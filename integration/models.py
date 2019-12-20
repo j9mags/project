@@ -7,6 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 from salesforce import models
 from salesforce.backend.driver import handle_api_exceptions
 
+from decimal import Decimal
+
 from . import managers
 
 
@@ -1100,6 +1102,14 @@ class Contract(models.Model):
     def attachment(self):
         return Attachment.objects.filter(parent_id=self.pk).last()
 
+    @property
+    def relevant_income(self):
+        return self.annual_minimal_income_indexed or self.minimal_relevant_income
+
+    @property
+    def gross_income(self):
+        return 28000  # self.relevant_income / Decimal('.91') / Decimal('.788')
+
 
 class Rabatt(models.Model):
     is_deleted = models.BooleanField(verbose_name='Deleted', sf_read_only=models.READ_ONLY, default=False)
@@ -1203,12 +1213,12 @@ class Case(models.Model):
     case_number = models.CharField(max_length=30, verbose_name=_('Case number'), sf_read_only=models.READ_ONLY)
     contact = models.ForeignKey('Contact', models.DO_NOTHING, blank=True, null=True)
     account = models.ForeignKey(Account, models.DO_NOTHING, blank=True, null=True)
-    type = models.CharField(max_length=40, verbose_name='Case Type', choices=Choices.CaseType, blank=False, null=True)
+    type = models.CharField(max_length=40, verbose_name=_('Case Type'), choices=Choices.CaseType, blank=False, null=True)
     record_type = models.ForeignKey('RecordType', models.DO_NOTHING, blank=True, null=True)
     status = models.CharField(max_length=40, default=models.DEFAULTED_ON_CREATE, choices=Choices.CaseStatus,
                               blank=True, null=True)
-    subject = models.CharField(max_length=255, blank=False, null=True)
-    description = models.TextField(blank=True, null=True)
+    subject = models.CharField(max_length=255, blank=False, null=True, verbose_name=_('Subject'))
+    description = models.TextField(blank=True, null=True, verbose_name=_('Description'))
     is_closed = models.BooleanField(verbose_name='Closed', sf_read_only=models.READ_ONLY, default=False)
     closed_date = models.DateTimeField(sf_read_only=models.READ_ONLY, blank=True, null=True)
     is_escalated = models.BooleanField(verbose_name='Escalated', default=models.DEFAULTED_ON_CREATE)

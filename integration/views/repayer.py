@@ -441,6 +441,10 @@ class NewRequest(RepayerMixin, TemplateView):
         else:
             case = Case(record_type=RecordType.objects.get(sobject_type='Case', developer_name='Ruckzahler'),
                         account=self.account, contact=self.account.master_contact)
+        
+        ruckzahler = [x for x in context.get('contracts', []) if x.is_ruckzahler]
+        ruckzahler = ruckzahler and ruckzahler[0]
+        context.update(relevant_income=ruckzahler.annual_minimal_income_indexed, gross_income=ruckzahler.gross_income)
 
         if self.request.POST:
             data = self.request.POST.copy()
@@ -460,7 +464,6 @@ class NewRequest(RepayerMixin, TemplateView):
                 'relevant_income_trig': case.relevant_income_trig or '',
                 'description': case.description or '',
             }
-            print(initial)
             form = RepayerCaseForm(instance=case, initial=initial)
         context.update(case=case, form=form)
 

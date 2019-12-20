@@ -21,9 +21,9 @@
 {% endif %}
 
 <div class="mdl-grid">
-    <p><b>{% trans 'Communicate change in income' %}:</b> Hast du Informationen in Bezug auf dein voraussichtliches Bruttojahreseinkommen und deine Beschäftigungsart (nicht selbstständig oder ausschließlich selbstständig), bist du hier richtig.</p>
-    <p><b>{% trans 'Communicate change of personal situation' %}:</b> Hier kannst du uns Veränderungen deiner persönlichen Daten mitteilen die nicht standardmäßig im Portal freigeschaltet sind. Du bist hier richtig, wenn du zum Beispiel einen anderen Namen angenommen hast oder sich deine Staatsangehörigkeit oder biologisches Geschlecht geändert hat.</p>
-    <p><b>{% trans 'Request temporary exemption from interim payments' %}:</b> Hier bist du richtig, wenn du dich für das Jahr 2019 vorläufig von den Abschlagszahlungen befreien lassen willst, weil du dein maßgebliches Mindesteinkommen unterschreiten wirst oder einen Härtefallantrag gemäß §19 stellen möchtest. Solltest du ein weiteres Studium /Weiterbildung anstreben oder ein Kind erwarten, kannst du uns das hier mitteilen. Dein maßgebliches Mindesteinkommen liegt zunächst bei 21.000 € pro Jahr (das entspricht etwa 28.000 € / brutto, wenn du angestellt bist) (Angestellt / Selbstständig), kann durch persönliche Gründe aber höher liegen</p>
+    <p><b>{% trans 'Communicate change in income' %}:</b> {% blocktrans %}If you have information regarding your expected gross annual income and your type of employment (not self-employed or exclusively self-employed), you have come to the right place.{% endblocktrans %}</p>
+    <p><b>{% trans 'Communicate change of personal situation' %}:</b> {% blocktrans %}Here you can inform us about changes of your personal data which are not activated by default in the portal. You are in the right place here if, for example, you have changed your name, nationality or biological sex.{% endblocktrans %}</p>
+    <p><b>{% trans 'Request temporary exemption from interim payments' %}:</b> {% blocktrans with relevant=relevant_income|floatformat:0 gross=gross_income|floatformat:0 %}You are in the right place here if you want to be temporarily exempted from advance payments because you will fall below your relevant minimum income or if you want to file a hardship claim according to §19. If you are planning to continue your studies or are expecting a child, you can inform us here. Your relevant minimum income is initially {{ relevant }} € per year (this corresponds to about {{ gross }} € / gross if you are employed) (employed / self-employed), but can be higher for personal reasons.{% endblocktrans %}</p>
 </div>
 
 <div class="mdl-card mdl-shadow--6dp mdl-cell--12-col">
@@ -45,7 +45,7 @@
         {% endif %}
         <div class="mdl-card__supporting-text mdl-grid">
             <div class="mdl-cell mdl-cell--6-col">
-                {% include 'snippets/select.html' with field=form.type type='email'%}
+                {% include 'snippets/select.html' with field=form.type %}
             </div>
             <div class="mdl-cell mdl-cell--6-col">
                 {% include 'snippets/input.html' with field=form.subject type='text' %}
@@ -70,23 +70,27 @@
 
             <div class="mdl-cell mdl-cell--12-col">
                 <span id="income" class="chancen--hide">
-                    Als Nachweise sind die folgenden Dokumente hilfreich:<br>
-                    <ul><li>Einkommenssteuerbescheid</li>
-                    <li>Bei einer nicht selbständigen Tätigkeit wären das ein vollständiger Arbeitsvertrag und eine aktuelle Lohnabrechnung.</li>
-                    <li>Bei einer ausschließlich selbstständigen Tätigkeit sind eine behördliche Bestätigung deiner freiberuflichen oder gewerblichen Tätigkeit sowie eine Umsatzplanung hilfreich.</li></ul>
+                    {% trans 'The following documents are helpful as evidence:' %}<br>
+                    <ul>
+                        <li>{% trans 'Income tax assessment' %}</li>
+                        <li>{% trans 'If you are not self-employed, this would be a full employment contract and a current pay slip.' %}</li>
+                        <li>{% trans 'If you are exclusively self-employed, an official confirmation of your freelance or commercial activity as well as a business plan are helpful.' %}</li>
+                    </ul>
                 </span>
                 <span id="person" class="chancen--hide">
-                    Hilfreiche Dokumente sind hier eine Meldebescheinigung oder eine Urkunde, aus welcher der alte und neue Name oder deine alte und neue Nationalität / sexuelle Identität hervorgehen (z.B. eine Eheurkunde oder ein alter und neuer Pass). 
+                    {% trans 'Helpful documents here are a certificate of registration or a document showing the old and new name or your old and new nationality / sexual identity (e.g. a marriage certificate or an old and new passport).' %}
                 </span>
                 <span id="exemption" class="chancen--hide">
-                    Als Nachweise brauchen wir hierfür neben den extra aufgeführten Dokumenten idealerweise eine Bescheinigung über die Aus/Weiterbildung (z.B. Immatrikulationsbescheinigung oder zumindest Informationen zum angestrebten Programm wie Umfang, Dauer, Beginn, Bezeichnung, Vollzeit/Teilzeit) oder über die Einkommenssituation (vgl. 1 oder Kündigungsschreiben oder Nachweis vom Arbeitsamt oder Nachweis über Mutterschutz/ Elternzeit) von dir und gegebenenfalls die deines*r Partners*in, wenn du eine Erhöhung des Mindesteinkommens nach § 12 (1) geltend machen willst.<br>
-                    Dein maßgebliches Mindesteinkommen liegt zunächst bei 21.000 € pro Jahr (entspricht etwa 28.000 € / brutto, wenn du angestellt bist) und kann sich durch die folgenden Gründe erhöhen (eine Verringerung ist nicht möglich):<br>
-                    <ul><li>Leben in einer eingetragen Lebenspartnerschaft oder Heirat (+2.400 € / Jahr - Einkommen des*r Partners*in) -> offizielle Bestätigung/ Urkunde + Nachweis über das Einkommen deines*r Partners*in</li>
-                    <li>Kinder (+ (2.400 € / Jahr) * Anzahl Kinder) - Einkommen des Partners) ) -> Geburtsurkunde, Sorgerechtserklärung + Nachweis über das Einkommen deines*r Partners*in</li>
-                    <li>Beginn deiner BAföG-Rückzahlungen (+1.260 €/Jahr) -> BAföG Dokument mit Zahlungsaufforderung</li>
-                    <li>Verpflichtung, monatliche Unterhaltszahlungen von über 200 € je Person (Partner*in/Kind) zu leisten -> Nachweise über rechtliche Verpflichtung (z.B. Gerichtsurteil) und tatsächliche Zahlung der Beträge (z.B. Kontoauszüge)</li>
-                    <li>eine dauerhafte gesundheitliche Beeinträchtigung (Behinderung gemäß § 12 (4))</li></ul>
-                    Falls du dich aus anderen Gründen für das Jahr 2019 von den Rückzahlungen befreien lassen willst (du also mehr als dein individuelles  Mindesteinkommen verdienst, aktuell aber trotzdem keine Abschlagszahlungen leisten kannst), kannst du hier einen Härtefallantrag gemäß § 19 stellen. Bitte beschreibe deine Situation und lade zum Beleg möglichst aussagekräftige Dokumente hoch. Generell zählen hierzu Kosten, die dein zur Verfügung stehendes Einkommen stark mindern, ohne von dir verursacht worden zu sein (beispielsweise Pflegekosten für Familienangehörige).
+                    {% trans 'In addition to the documents listed separately, we ideally need a certificate of education/further education (e.g. certificate of enrolment or at least information on the intended programme such as scope, duration, start, name, full-time/part-time) or on the income situation (cf. 1 or letter of termination or proof from the employment office or proof of maternity/parental leave) from you and possibly that of your partner, if you want to claim an increase in the minimum income according to § 12 (1).'%}<br>
+                    {% blocktrans with relevant=relevant_income|floatformat:0 gross=gross_income|floatformat:0 %}Your relevant minimum income is initially {{ relevant }} € per year (equivalent to about {{ gross }} € / gross if you are employed) and may increase for the following reasons (a reduction is not possible):{% endblocktrans %}<br>
+                    <ul>
+                        <li>{% trans 'Living in a registered partnership or marriage (+2.400 € / year - income of your partner*in) -> official confirmation/ certificate + proof of income of your partner*in' %}</li>
+                        <li>{% trans 'Children (+ (2.400 € / year) * number of children) - income of the partner) ) -> Birth certificate, custody declaration + proof of income of your partner' %}</li>
+                        <li>{% trans 'Start of your BAföG repayments (+1.260 €/year) -> BAföG document with request for payment' %}</li>
+                        <li>{% trans 'Obligation to make monthly maintenance payments of more than 200 € per person (partner*in/child) -> Proof of legal obligation (e.g. court decision) and actual payment of the amounts (e.g. bank statements)' %}</li>
+                        <li>{% trans 'a permanent health impairment (disability according to § 12 (4))' %}</li>
+                    </ul>
+                    {% trans 'If you want to be exempted from repayments for other reasons (i.e. you earn more than your individual minimum income, but still cannot make any advance payments at present), you can file a hardship application here in accordance with § 19. Please describe your situation and upload documents that are as meaningful as possible as proof. In general, this includes costs that significantly reduce your available income without being caused by you (e.g. care costs for family members).' %}
                 </span>
             </div>
 
@@ -131,7 +135,6 @@
       function validate_required() {
         let val = true;
         let el = document.querySelector('#id_type');
-        let msg = '{% trans "" %}';
         if (! el.value) {
           if (! el.parentNode.classList.contains('is-invalid')) {
             el.parentNode.classList.add('is-invalid');

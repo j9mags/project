@@ -7,7 +7,7 @@
         {% endfor %}
     </select>
     <div class="mdl-selectfield__icon"><i class="material-icons">arrow_drop_down</i></div>
-    <label class="mdl-selectfield__label" for="{{ field.id_for_label }}">{{  label | default:field.label }}
+    <label class="mdl-selectfield__label" for="{{ field.id_for_label }}">{% firstof label field.label %}
         {% if field.field.required %}<span class="mdl-color-text--red">*</span>{% endif %}
     </label>
     {% if field.help_text %}
