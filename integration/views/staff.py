@@ -347,9 +347,7 @@ class DashboardUGVApplications(StaffMixin, TemplateView):
 
         # apps = Application.objects.filter(hochschule_ref=self.contact.account, lead_ref__isnull=False)
         leads = Lead.ugv_students.filter(
-            Q(active_application__hochschule_ref=self.contact.account),
-            ~Q(status='ISA Application Withdrawal')
-        ).order_by('-pk')
+            Q(active_application__hochschule_ref=self.contact.account)).order_by('-pk')
         if q:
             context.update(q=q)
             leads = leads.filter(

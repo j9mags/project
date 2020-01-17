@@ -35,7 +35,8 @@ class RepayerManager(DefaultManager):
 class UGVLeadManager(DefaultManager):
 
     def get_queryset(self):
-        return super(UGVLeadManager, self).get_queryset().filter(record_type__developer_name='UGVStudents',
+        return super(UGVLeadManager, self).get_queryset().filter(~Q(status='ISA Application Withdrawal'),
+                                                                 record_type__developer_name='UGVStudents',
                                                                  is_converted=False)
 
 
