@@ -365,6 +365,9 @@ class Lead(models.Model):
     risk_not_with_chancen = models.BooleanField(custom=True, db_column='RiskNotWithCHANCENeG__c',
                                                 verbose_name=_('Risk not with CHANCEN eG'),
                                                 default=models.DEFAULTED_ON_CREATE)
+    
+    exclude_from_portal = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+
 
     objects = managers.DefaultManager()
     ugv_students = managers.UGVLeadManager()
@@ -522,6 +525,8 @@ class Account(models.Model, PerishableTokenMixin):
     applicant_template_id = models.CharField(custom=True, max_length=18, blank=True, null=True)
     applicant_upload_functionality_enabled = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
     citizenship = models.CharField(custom=True, max_length=255, choices=Choices.Nationality, blank=True, null=True)
+
+    exclude_from_portal = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
 
     objects = managers.DefaultManager()
     universities = managers.UniversityManager()
