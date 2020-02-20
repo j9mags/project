@@ -15,7 +15,7 @@ class StudentManager(DefaultManager):
 
     def get_queryset(self):
         return super(StudentManager, self).get_queryset().filter(
-            Q(record_type__developer_name='Sofortzahler'))  # | (
+            Q(record_type__developer_name='Sofortzahler'), exclude_from_portal=False)  # | (
                 # Q(record_type__developer_name='UGVStudents') & Q(has_sofortzahler_contract_auto=True)))
 
 
@@ -23,7 +23,7 @@ class UGVStudentManager(DefaultManager):
 
     def get_queryset(self):
         return super(UGVStudentManager, self).get_queryset().filter(
-            Q(record_type__developer_name='UGVStudents'))  # & Q(has_sofortzahler_contract_auto=False))
+            Q(record_type__developer_name='UGVStudents'), exclude_from_portal=False)  # & Q(has_sofortzahler_contract_auto=False))
 
 
 class RepayerManager(DefaultManager):
@@ -37,10 +37,11 @@ class UGVLeadManager(DefaultManager):
     def get_queryset(self):
         return super(UGVLeadManager, self).get_queryset().filter(~Q(status='ISA Application Withdrawal'),
                                                                  record_type__developer_name='UGVStudents',
+                                                                 exclude_from_portal=False,
                                                                  is_converted=False)
 
 
 class UGVSofortzahlerManager(DefaultManager):
 
     def get_queryset(self):
-        return super(UGVSofortzahlerManager, self).get_queryset().filter(record_type__developer_name='UGVStudents')
+        return super(UGVSofortzahlerManager, self).get_queryset().filter(record_type__developer_name='UGVStudents', exclude_from_portal=False)
