@@ -135,6 +135,22 @@ class RepayerOnboardingForm(forms.Form):
 
 class StudentAccountForm(forms.Form):
     status = forms.ChoiceField(choices=Choices.AccountStatus)
+    exmatriculation_date = forms.DateField(required=False, label=_('Exmatriculation/Dropout Date'))
+
+    def clean(self):
+        cleaned_data = super(StudentAccountForm, self).clean()
+        
+        status = cleaned_data.get('status')
+        date = cleaned_data.get('exmatriculation_date');
+
+        if status not in Account.exmatriculated_states:
+            cleaned_data.pop('exmatriculation_date')
+        elif not date:
+            self.add_error('exmatriculation_date', forms.ValidationError(_(
+                'An Exmatriculation / Dropout date must be providing when selecting one of these states.')))
+        
+        return cleaned_data
+
 
 
 class StudentContractForm(forms.Form):

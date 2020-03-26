@@ -666,21 +666,35 @@ class StudentReview(StaffMixin, DetailView):
             account.translated_nationality = translated_nationalities.get(account.citizenship,
                                                                           account.citizenship)
 
-        payload = self.request.POST if 'status' in self.request.POST else {'status': account.status}
-        context.update(acc_form=StudentAccountForm(payload))
+        payload = self.request.POST if 'status' in self.request.POST else {
+            'status': account.status, 
+            'exmatriculation_date': account.exmatriculation_or_dropout_date
+        }
+
+        context.update(acc_form=StudentAccountForm(payload), exmatriculated_states=Account.exmatriculated_states)
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_staff_context()
         context.update(self.get_context_data(object=self.object, **kwargs))
+
         if 'status' in request.POST:
-            ctr_form = context.get('acc_form')
-            if ctr_form.is_valid():
+            acc_form = context.get('acc_form')
+
+            if acc_form.is_valid():
                 account = context.get('account')
-                account.status = ctr_form.cleaned_data.get('status')
+                account.status = acc_form.cleaned_data.get('status')
+
+                account.exmatriculation_or_dropout_date = acc_form.cleaned_data.get('exmatriculation_date') if 'exmatriculation_date' in acc_form.cleaned_data else None
+                
                 account.save()
-                context.update(message=_('Student matriculation Status successfully updated.'))
+                
+                context.update(message=_('Student matriculation data successfully updated.'))
+                context.update(acc_form=StudentAccountForm({
+                    'status': account.status, 
+                    'exmatriculation_date': account.exmatriculation_or_dropout_date
+                }))
         elif 'contract' in request.POST:
             if request.POST.get('discount_type') == Choices.DiscountType[1][0]:
                 dsc_form = context.get('dsc_form_str')

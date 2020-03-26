@@ -14,11 +14,14 @@
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('University') value=account.hochschule_ref.name %}
     </div>
-    {% if not account.is_ugv %}
+    {% if not account.is_repayer_or_ugv %}
     <div class="mdl-cell">
       {% include 'snippets/field-text.html' with label=_('Matriculation number') value=account.immatrikulationsnummer %}
     </div>
     {% endif %}
+    <div class="mdl-cell">
+      {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.course.name %}
+    </div>
     <div class="mdl-cell">
       {% if account.is_ugv_student %}
         {% include 'snippets/field-text.html' with label=_('Email') value=account.person_email %}
@@ -33,8 +36,12 @@
         {% include 'snippets/field-text.html' with label=_('Status') value=account.status %}
       {% endif %}
     </div>
-    <div class="mdl-cell">
-      {% include 'snippets/field-text.html' with label=_('Degree Course') value=account.course.name %}
+    <div id="exmatriculation-date" class="mdl-cell chancen--hide">
+      {% if form and form_class != 'UploadForm' %}
+        {% include 'snippets/input.html' with field=form.exmatriculation_date type='date'%}
+      {% else %}
+        {% include 'snippets/field-text.html' with label=_('Exmatriculation/Dropout Date') value=account.exmatriculation_or_dropout_date type='date' %}
+      {% endif %}
     </div>
     {% if contract %}
     <div class="mdl-cell">

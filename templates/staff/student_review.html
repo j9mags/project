@@ -5,7 +5,76 @@
 
 {% block title %}{{ account.name }}{% endblock %}
 
+{% block extrahead %}
+{{ block.super }}
+  <link rel="stylesheet" href="{% static '/css/mdDateTimePicker.min.css' %}" />
+{% endblock %}
+
+
 {% block content %}
   {{ block.super }}
   {% include "snippets/student_account.html" with class="csp--full-width" form=acc_form %}
+{% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rome/2.1.22/rome.js"></script>
+    <script src="{% static '/js/mdDateTimePicker.min.js' %}"></script>
+
+    <script defer>
+      !function() {
+        "use strict";
+        const exmatriculation_date = document.querySelector('#id_exmatriculation_date');
+        var exmatriculated_states = {{ exmatriculated_states|safe }};
+        console.log(exmatriculated_states);
+
+        var picker = new mdDateTimePicker.default({
+          type: 'date',
+          init: exmatriculation_date.value !== "" ? moment(exmatriculation_date.value) : moment(),
+          past: moment().subtract(5, 'years'),
+          future: moment().add(5, 'years'),
+          trigger: exmatriculation_date
+        });
+        exmatriculation_date.addEventListener('onOk', function(d) {
+          this.value = picker.time.format("YYYY-MM-DD");
+          this.parentNode.classList.add('is-dirty');
+        });
+        exmatriculation_date.addEventListener('onCancel', function(d) {
+          if (! this.value) {
+            this.parentNode.classList.remove('is-dirty');
+          }
+        });
+
+        var openDialog = null;
+        document.onclick = function(e) {
+          if (e.target == exmatriculation_date) {
+            exmatriculation_date.setAttribute('readonly', '');
+            picker.show();
+            openDialog = picker;
+          } else if (! document.querySelector('#mddtp-picker__date').contains(e.target)) {
+            if (openDialog != null) {
+              openDialog.hide();
+              openDialog = null;
+              exmatriculation_date.removeAttribute('readonly');
+            }
+          }
+        }
+
+        const status = document.querySelector('#id_status');
+        const exmatriculation_date_div = document.querySelector('#exmatriculation-date');
+        function processStatus(value) {
+          if (exmatriculated_states.includes(value)) {
+            exmatriculation_date_div.classList.remove('chancen--hide');
+          } else {
+            exmatriculation_date_div.classList.add('chancen--hide');
+          }
+        }
+        status.addEventListener('change', function() {
+            processStatus(this.value);
+        });
+        processStatus(status.value);
+      }();
+    </script>
+
 {% endblock %}

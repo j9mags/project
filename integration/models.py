@@ -409,6 +409,8 @@ class Application(models.Model):
 
 
 class Account(models.Model, PerishableTokenMixin):
+    exmatriculated_states = ['Exmatrikuliert', 'Abgebrochen']
+
     record_type = models.ForeignKey(RecordType, models.DO_NOTHING, blank=True, null=True,
                                     limit_choices_to={'sobject_type': 'Account'})
 
@@ -527,6 +529,8 @@ class Account(models.Model, PerishableTokenMixin):
     citizenship = models.CharField(custom=True, max_length=255, choices=Choices.Nationality, blank=True, null=True)
 
     exclude_from_portal = models.BooleanField(custom=True, default=models.DEFAULTED_ON_CREATE)
+    exmatriculation_or_dropout_date = models.DateField(custom=True, verbose_name=_('Exmatriculation/Dropout Date'), blank=True, null=True)
+
 
     objects = managers.DefaultManager()
     universities = managers.UniversityManager()
@@ -618,7 +622,7 @@ class Account(models.Model, PerishableTokenMixin):
     def active_contract(self):
         if self.is_student:
             return self.contract_account_set.filter(record_type__developer_name='Sofortzahler').first()
-        elif self.is_ugv_student:
+        elif self.is_ugv_student or self.is_repayer:
             return self.contract_account_set.filter(record_type__developer_name='Ruckzahler').first()
         return None
 
@@ -630,9 +634,7 @@ class Account(models.Model, PerishableTokenMixin):
 
     @property
     def course(self):
-        if self.is_student or self.is_ugv_student:
-            return self.active_contract.studiengang_ref if self.active_contract else None
-        return None
+        return self.active_contract.studiengang_ref if self.active_contract else None
 
     @property
     def review_completed(self):
